@@ -1,0 +1,2327 @@
+Archive member included to satisfy reference by file (symbol)
+
+/usr/lib/gcc/arm-none-eabi/4.9.2/../../../../arm-none-eabi/lib/libg.a(lib_a-errno.o)
+                              build/arm/syscalls.o (__errno)
+/usr/lib/gcc/arm-none-eabi/4.9.2/../../../../arm-none-eabi/lib/libg.a(lib_a-impure.o)
+                              /usr/lib/gcc/arm-none-eabi/4.9.2/../../../../arm-none-eabi/lib/libg.a(lib_a-errno.o) (_impure_ptr)
+/usr/lib/gcc/arm-none-eabi/4.9.2/../../../../arm-none-eabi/lib/libg.a(lib_a-init.o)
+                              build/arm/startup_XMC4500.o (__libc_init_array)
+/usr/lib/gcc/arm-none-eabi/4.9.2/../../../../arm-none-eabi/lib/libg.a(lib_a-memcpy-stub.o)
+                              build/arm/xmc_eth_mac.o (memcpy)
+/usr/lib/gcc/arm-none-eabi/4.9.2/../../../../arm-none-eabi/lib/libg.a(lib_a-memset.o)
+                              build/arm/xmc_usbd.o (memset)
+
+Allocating common symbols
+Common symbol       size              file
+
+dma0_event_handlers
+                    0x20              build/arm/xmc_dma.o
+dma1_event_handlers
+                    0x10              build/arm/xmc_dma.o
+event_handler_list  0x80              build/arm/xmc4_scu.o
+usbd_init           0x4               build/arm/xmc_usbd.o
+xmc_device          0x208             build/arm/xmc_usbd.o
+
+Discarded input sections
+
+ .text          0x0000000000000000        0x0 build/arm/main.o
+ .data          0x0000000000000000        0x0 build/arm/main.o
+ .bss           0x0000000000000000        0x0 build/arm/main.o
+ .comment       0x0000000000000000       0x39 build/arm/main.o
+ .text          0x0000000000000000        0x0 build/arm/led_module.o
+ .data          0x0000000000000000        0x0 build/arm/led_module.o
+ .bss           0x0000000000000000        0x0 build/arm/led_module.o
+ .rodata.LED_conf
+                0x0000000000000000        0xc build/arm/led_module.o
+ .text.led_init
+                0x0000000000000000       0x24 build/arm/led_module.o
+ .comment       0x0000000000000000       0x39 build/arm/led_module.o
+ .text          0x0000000000000000        0x0 build/arm/PID_controller.o
+ .data          0x0000000000000000        0x0 build/arm/PID_controller.o
+ .bss           0x0000000000000000        0x0 build/arm/PID_controller.o
+ .debug_line    0x0000000000000000        0x0 build/arm/PID_controller.o
+ .debug_str     0x0000000000000000       0xf3 build/arm/PID_controller.o
+ .comment       0x0000000000000000       0x39 build/arm/PID_controller.o
+ .ARM.attributes
+                0x0000000000000000       0x37 build/arm/PID_controller.o
+ .text          0x0000000000000000        0x0 build/arm/syscalls.o
+ .data          0x0000000000000000        0x0 build/arm/syscalls.o
+ .bss           0x0000000000000000        0x0 build/arm/syscalls.o
+ .text._sbrk    0x0000000000000000       0x68 build/arm/syscalls.o
+ .bss.heap_ptr.4326
+                0x0000000000000000        0x4 build/arm/syscalls.o
+ .comment       0x0000000000000000       0x39 build/arm/syscalls.o
+ .text          0x0000000000000000        0x0 build/arm/xmc4_eru.o
+ .data          0x0000000000000000        0x0 build/arm/xmc4_eru.o
+ .bss           0x0000000000000000        0x0 build/arm/xmc4_eru.o
+ .text.XMC_ERU_Enable
+                0x0000000000000000       0x24 build/arm/xmc4_eru.o
+ .text.XMC_ERU_Disable
+                0x0000000000000000       0x24 build/arm/xmc4_eru.o
+ .debug_info    0x0000000000000000      0x4ae build/arm/xmc4_eru.o
+ .debug_abbrev  0x0000000000000000      0x13b build/arm/xmc4_eru.o
+ .debug_loc     0x0000000000000000       0xa0 build/arm/xmc4_eru.o
+ .debug_aranges
+                0x0000000000000000       0x28 build/arm/xmc4_eru.o
+ .debug_ranges  0x0000000000000000       0x18 build/arm/xmc4_eru.o
+ .debug_line    0x0000000000000000      0x159 build/arm/xmc4_eru.o
+ .debug_str     0x0000000000000000      0x5af build/arm/xmc4_eru.o
+ .comment       0x0000000000000000       0x39 build/arm/xmc4_eru.o
+ .debug_frame   0x0000000000000000       0x58 build/arm/xmc4_eru.o
+ .ARM.attributes
+                0x0000000000000000       0x37 build/arm/xmc4_eru.o
+ .text          0x0000000000000000        0x0 build/arm/xmc4_flash.o
+ .data          0x0000000000000000        0x0 build/arm/xmc4_flash.o
+ .bss           0x0000000000000000        0x0 build/arm/xmc4_flash.o
+ .text.XMC_FLASH_lEnterPageModeCommand
+                0x0000000000000000       0x20 build/arm/xmc4_flash.o
+ .text.XMC_FLASH_lLoadPageCommand
+                0x0000000000000000       0x30 build/arm/xmc4_flash.o
+ .text.XMC_FLASH_lWritePageCommand
+                0x0000000000000000       0x44 build/arm/xmc4_flash.o
+ .text.XMC_FLASH_lWriteUCBPageCommand
+                0x0000000000000000       0x44 build/arm/xmc4_flash.o
+ .text.XMC_FLASH_lEraseSectorCommand
+                0x0000000000000000       0x58 build/arm/xmc4_flash.o
+ .text.XMC_FLASH_lDisableSectorWriteProtectionCommand
+                0x0000000000000000       0x64 build/arm/xmc4_flash.o
+ .text.XMC_FLASH_lDisableReadProtectionCommand
+                0x0000000000000000       0x60 build/arm/xmc4_flash.o
+ .text.XMC_FLASH_lClearStatusCommand
+                0x0000000000000000       0x20 build/arm/xmc4_flash.o
+ .text.XMC_FLASH_ClearStatus
+                0x0000000000000000        0xc build/arm/xmc4_flash.o
+ .text.XMC_FLASH_GetStatus
+                0x0000000000000000       0x1c build/arm/xmc4_flash.o
+ .text.XMC_FLASH_EnableEvent
+                0x0000000000000000       0x30 build/arm/xmc4_flash.o
+ .text.XMC_FLASH_DisableEvent
+                0x0000000000000000       0x30 build/arm/xmc4_flash.o
+ .text.XMC_FLASH_ProgramPage
+                0x0000000000000000       0x64 build/arm/xmc4_flash.o
+ .text.XMC_FLASH_EraseSector
+                0x0000000000000000       0x30 build/arm/xmc4_flash.o
+ .text.XMC_FLASH_lErasePhysicalSectorCommand
+                0x0000000000000000       0x58 build/arm/xmc4_flash.o
+ .text.XMC_FLASH_lRepairPhysicalSectorCommand
+                0x0000000000000000       0x58 build/arm/xmc4_flash.o
+ .text.XMC_FLASH_ErasePhysicalSector
+                0x0000000000000000       0x30 build/arm/xmc4_flash.o
+ .text.XMC_FLASH_RepairPhysicalSector
+                0x0000000000000000       0x10 build/arm/xmc4_flash.o
+ .text.XMC_FLASH_EraseUCB
+                0x0000000000000000       0x70 build/arm/xmc4_flash.o
+ .text.XMC_FLASH_Reset
+                0x0000000000000000       0x20 build/arm/xmc4_flash.o
+ .text.XMC_FLASH_InstallProtection
+                0x0000000000000000       0x7c build/arm/xmc4_flash.o
+ .text.XMC_FLASH_ConfirmProtection
+                0x0000000000000000       0x6c build/arm/xmc4_flash.o
+ .text.XMC_FLASH_VerifyReadProtection
+                0x0000000000000000       0x48 build/arm/xmc4_flash.o
+ .text.XMC_FLASH_VerifyWriteProtection
+                0x0000000000000000       0x84 build/arm/xmc4_flash.o
+ .text.XMC_FLASH_ResumeProtection
+                0x0000000000000000       0x20 build/arm/xmc4_flash.o
+ .debug_info    0x0000000000000000      0x849 build/arm/xmc4_flash.o
+ .debug_abbrev  0x0000000000000000      0x1c2 build/arm/xmc4_flash.o
+ .debug_loc     0x0000000000000000      0x830 build/arm/xmc4_flash.o
+ .debug_aranges
+                0x0000000000000000       0xe0 build/arm/xmc4_flash.o
+ .debug_ranges  0x0000000000000000       0xd0 build/arm/xmc4_flash.o
+ .debug_line    0x0000000000000000      0x3d8 build/arm/xmc4_flash.o
+ .debug_str     0x0000000000000000      0xab6 build/arm/xmc4_flash.o
+ .comment       0x0000000000000000       0x39 build/arm/xmc4_flash.o
+ .debug_frame   0x0000000000000000      0x3bc build/arm/xmc4_flash.o
+ .ARM.attributes
+                0x0000000000000000       0x37 build/arm/xmc4_flash.o
+ .text          0x0000000000000000        0x0 build/arm/xmc4_gpio.o
+ .data          0x0000000000000000        0x0 build/arm/xmc4_gpio.o
+ .bss           0x0000000000000000        0x0 build/arm/xmc4_gpio.o
+ .text.XMC_GPIO_Init
+                0x0000000000000000      0x140 build/arm/xmc4_gpio.o
+ .text.XMC_GPIO_SetOutputStrength
+                0x0000000000000000       0x84 build/arm/xmc4_gpio.o
+ .debug_info    0x0000000000000000      0x422 build/arm/xmc4_gpio.o
+ .debug_abbrev  0x0000000000000000      0x11b build/arm/xmc4_gpio.o
+ .debug_loc     0x0000000000000000       0xb8 build/arm/xmc4_gpio.o
+ .debug_aranges
+                0x0000000000000000       0x28 build/arm/xmc4_gpio.o
+ .debug_ranges  0x0000000000000000       0x18 build/arm/xmc4_gpio.o
+ .debug_line    0x0000000000000000      0x12d build/arm/xmc4_gpio.o
+ .debug_str     0x0000000000000000      0x71e build/arm/xmc4_gpio.o
+ .comment       0x0000000000000000       0x39 build/arm/xmc4_gpio.o
+ .debug_frame   0x0000000000000000       0x60 build/arm/xmc4_gpio.o
+ .ARM.attributes
+                0x0000000000000000       0x37 build/arm/xmc4_gpio.o
+ .text          0x0000000000000000        0x0 build/arm/xmc4_rtc.o
+ .data          0x0000000000000000        0x0 build/arm/xmc4_rtc.o
+ .bss           0x0000000000000000        0x0 build/arm/xmc4_rtc.o
+ .text.XMC_RTC_IsRunning
+                0x0000000000000000       0x24 build/arm/xmc4_rtc.o
+ .text.XMC_SCU_GetMirrorStatus
+                0x0000000000000000       0x18 build/arm/xmc4_rtc.o
+ .text.XMC_RTC_Enable
+                0x0000000000000000        0xc build/arm/xmc4_rtc.o
+ .text.XMC_RTC_Disable
+                0x0000000000000000        0xc build/arm/xmc4_rtc.o
+ .text.XMC_RTC_IsEnabled
+                0x0000000000000000       0x10 build/arm/xmc4_rtc.o
+ .text.XMC_RTC_Init
+                0x0000000000000000       0xa4 build/arm/xmc4_rtc.o
+ .text.XMC_RTC_EnableEvent
+                0x0000000000000000       0x30 build/arm/xmc4_rtc.o
+ .text.XMC_RTC_DisableEvent
+                0x0000000000000000       0x30 build/arm/xmc4_rtc.o
+ .text.XMC_RTC_ClearEvent
+                0x0000000000000000       0x30 build/arm/xmc4_rtc.o
+ .debug_info    0x0000000000000000      0x6b0 build/arm/xmc4_rtc.o
+ .debug_abbrev  0x0000000000000000      0x1e5 build/arm/xmc4_rtc.o
+ .debug_loc     0x0000000000000000      0x264 build/arm/xmc4_rtc.o
+ .debug_aranges
+                0x0000000000000000       0x60 build/arm/xmc4_rtc.o
+ .debug_ranges  0x0000000000000000       0x50 build/arm/xmc4_rtc.o
+ .debug_line    0x0000000000000000      0x231 build/arm/xmc4_rtc.o
+ .debug_str     0x0000000000000000      0x475 build/arm/xmc4_rtc.o
+ .comment       0x0000000000000000       0x39 build/arm/xmc4_rtc.o
+ .debug_frame   0x0000000000000000      0x138 build/arm/xmc4_rtc.o
+ .ARM.attributes
+                0x0000000000000000       0x37 build/arm/xmc4_rtc.o
+ .text          0x0000000000000000        0x0 build/arm/xmc4_scu.o
+ .data          0x0000000000000000        0x0 build/arm/xmc4_scu.o
+ .bss           0x0000000000000000        0x0 build/arm/xmc4_scu.o
+ .text.XMC_SCU_CLOCK_GetUsbClockSource
+                0x0000000000000000       0x1c build/arm/xmc4_scu.o
+ .text.XMC_SCU_CLOCK_GetWdtClockSource
+                0x0000000000000000       0x1c build/arm/xmc4_scu.o
+ .text.XMC_SCU_CLOCK_GetExternalOutputClockSource
+                0x0000000000000000       0x20 build/arm/xmc4_scu.o
+ .text.XMC_SCU_CLOCK_GetSystemClockFrequency
+                0x0000000000000000       0x28 build/arm/xmc4_scu.o
+ .text.XMC_SCU_CLOCK_GetCpuClockFrequency
+                0x0000000000000000       0x18 build/arm/xmc4_scu.o
+ .text.XMC_SCU_lDelay
+                0x0000000000000000       0x44 build/arm/xmc4_scu.o
+ .text.XMC_SCU_INTERRUPT_EnableEvent
+                0x0000000000000000       0x24 build/arm/xmc4_scu.o
+ .text.XMC_SCU_INTERRUPT_DisableEvent
+                0x0000000000000000       0x24 build/arm/xmc4_scu.o
+ .text.XMC_SCU_INTERRUPT_TriggerEvent
+                0x0000000000000000       0x24 build/arm/xmc4_scu.o
+ .text.XMC_SCU_INTERUPT_GetEventStatus
+                0x0000000000000000       0x18 build/arm/xmc4_scu.o
+ .text.XMC_SCU_INTERRUPT_ClearEventStatus
+                0x0000000000000000       0x24 build/arm/xmc4_scu.o
+ .text.XMC_SCU_GetBootMode
+                0x0000000000000000       0x1c build/arm/xmc4_scu.o
+ .text.XMC_SCU_SetBootMode
+                0x0000000000000000       0x20 build/arm/xmc4_scu.o
+ .text.XMC_SCU_ReadGPR
+                0x0000000000000000       0x24 build/arm/xmc4_scu.o
+ .text.XMC_SCU_WriteGPR
+                0x0000000000000000       0x28 build/arm/xmc4_scu.o
+ .text.XMC_SCU_EnableOutOfRangeComparator
+                0x0000000000000000       0x38 build/arm/xmc4_scu.o
+ .text.XMC_SCU_DisableOutOfRangeComparator
+                0x0000000000000000       0x38 build/arm/xmc4_scu.o
+ .text.XMC_SCU_CalibrateTemperatureSensor
+                0x0000000000000000       0x2c build/arm/xmc4_scu.o
+ .text.XMC_SCU_EnableTemperatureSensor
+                0x0000000000000000       0x20 build/arm/xmc4_scu.o
+ .text.XMC_SCU_DisableTemperatureSensor
+                0x0000000000000000       0x20 build/arm/xmc4_scu.o
+ .text.XMC_SCU_IsTemperatureSensorEnabled
+                0x0000000000000000       0x28 build/arm/xmc4_scu.o
+ .text.XMC_SCU_IsTemperatureSensorReady
+                0x0000000000000000       0x28 build/arm/xmc4_scu.o
+ .text.XMC_SCU_StartTemperatureMeasurement
+                0x0000000000000000       0x4c build/arm/xmc4_scu.o
+ .text.XMC_SCU_GetTemperatureMeasurement
+                0x0000000000000000       0x38 build/arm/xmc4_scu.o
+ .text.XMC_SCU_IsTemperatureSensorBusy
+                0x0000000000000000       0x28 build/arm/xmc4_scu.o
+ .text.XMC_SCU_WriteToRetentionMemory
+                0x0000000000000000       0x4c build/arm/xmc4_scu.o
+ .text.XMC_SCU_ReadFromRetentionMemory
+                0x0000000000000000       0x48 build/arm/xmc4_scu.o
+ .text.XMC_SCU_CLOCK_Init
+                0x0000000000000000       0xb4 build/arm/xmc4_scu.o
+ .text.XMC_SCU_TRAP_Enable
+                0x0000000000000000       0x24 build/arm/xmc4_scu.o
+ .text.XMC_SCU_TRAP_Disable
+                0x0000000000000000       0x24 build/arm/xmc4_scu.o
+ .text.XMC_SCU_TRAP_GetStatus
+                0x0000000000000000       0x18 build/arm/xmc4_scu.o
+ .text.XMC_SCU_TRAP_Trigger
+                0x0000000000000000       0x24 build/arm/xmc4_scu.o
+ .text.XMC_SCU_TRAP_ClearStatus
+                0x0000000000000000       0x24 build/arm/xmc4_scu.o
+ .text.XMC_SCU_PARITY_ClearStatus
+                0x0000000000000000       0x24 build/arm/xmc4_scu.o
+ .text.XMC_SCU_PARITY_GetStatus
+                0x0000000000000000       0x18 build/arm/xmc4_scu.o
+ .text.XMC_SCU_PARITY_Enable
+                0x0000000000000000       0x24 build/arm/xmc4_scu.o
+ .text.XMC_SCU_PARITY_Disable
+                0x0000000000000000       0x24 build/arm/xmc4_scu.o
+ .text.XMC_SCU_PARITY_EnableTrapGeneration
+                0x0000000000000000       0x24 build/arm/xmc4_scu.o
+ .text.XMC_SCU_PARITY_DisableTrapGeneration
+                0x0000000000000000       0x24 build/arm/xmc4_scu.o
+ .text.XMC_SCU_INTERRUPT_EnableNmiRequest
+                0x0000000000000000       0x24 build/arm/xmc4_scu.o
+ .text.XMC_SCU_INTERRUPT_DisableNmiRequest
+                0x0000000000000000       0x24 build/arm/xmc4_scu.o
+ .text.XMC_SCU_RESET_AssertPeripheralReset
+                0x0000000000000000       0x4c build/arm/xmc4_scu.o
+ .text.XMC_SCU_RESET_DeassertPeripheralReset
+                0x0000000000000000       0x4c build/arm/xmc4_scu.o
+ .text.XMC_SCU_RESET_IsPeripheralResetAsserted
+                0x0000000000000000       0x48 build/arm/xmc4_scu.o
+ .text.XMC_SCU_CLOCK_GetSystemPllClockFrequency
+                0x0000000000000000       0x7c build/arm/xmc4_scu.o
+ .text.XMC_SCU_CLOCK_GetSystemPllClockSourceFrequency
+                0x0000000000000000       0x30 build/arm/xmc4_scu.o
+ .text.XMC_SCU_CLOCK_GetUsbPllClockFrequency
+                0x0000000000000000       0x54 build/arm/xmc4_scu.o
+ .text.XMC_SCU_CLOCK_GetCcuClockFrequency
+                0x0000000000000000       0x2c build/arm/xmc4_scu.o
+ .text.XMC_SCU_CLOCK_GetUsbClockFrequency
+                0x0000000000000000       0x48 build/arm/xmc4_scu.o
+ .text.XMC_SCU_CLOCK_GetEbuClockFrequency
+                0x0000000000000000       0x28 build/arm/xmc4_scu.o
+ .text.XMC_SCU_CLOCK_GetWdtClockFrequency
+                0x0000000000000000       0x58 build/arm/xmc4_scu.o
+ .text.XMC_SCU_CLOCK_GetExternalOutputClockFrequency
+                0x0000000000000000       0x74 build/arm/xmc4_scu.o
+ .text.XMC_SCU_CLOCK_GetPeripheralClockFrequency
+                0x0000000000000000       0x20 build/arm/xmc4_scu.o
+ .text.XMC_SCU_CLOCK_SetSystemClockSource
+                0x0000000000000000       0x28 build/arm/xmc4_scu.o
+ .text.XMC_SCU_CLOCK_SetUsbClockSource
+                0x0000000000000000       0x28 build/arm/xmc4_scu.o
+ .text.XMC_SCU_CLOCK_SetWdtClockSource
+                0x0000000000000000       0x28 build/arm/xmc4_scu.o
+ .text.XMC_SCU_CLOCK_SetExternalOutputClockSource
+                0x0000000000000000       0x28 build/arm/xmc4_scu.o
+ .text.XMC_SCU_CLOCK_SetSystemPllClockSource
+                0x0000000000000000       0x40 build/arm/xmc4_scu.o
+ .text.XMC_SCU_HIB_SetRtcClockSource
+                0x0000000000000000       0x3c build/arm/xmc4_scu.o
+ .text.XMC_SCU_HIB_SetStandbyClockSource
+                0x0000000000000000       0x3c build/arm/xmc4_scu.o
+ .text.XMC_SCU_CLOCK_SetSystemClockDivider
+                0x0000000000000000       0x28 build/arm/xmc4_scu.o
+ .text.XMC_SCU_CLOCK_SetCcuClockDivider
+                0x0000000000000000       0x28 build/arm/xmc4_scu.o
+ .text.XMC_SCU_CLOCK_SetCpuClockDivider
+                0x0000000000000000       0x28 build/arm/xmc4_scu.o
+ .text.XMC_SCU_CLOCK_SetPeripheralClockDivider
+                0x0000000000000000       0x28 build/arm/xmc4_scu.o
+ .text.XMC_SCU_CLOCK_SetUsbClockDivider
+                0x0000000000000000       0x28 build/arm/xmc4_scu.o
+ .text.XMC_SCU_CLOCK_SetEbuClockDivider
+                0x0000000000000000       0x28 build/arm/xmc4_scu.o
+ .text.XMC_SCU_CLOCK_SetWdtClockDivider
+                0x0000000000000000       0x28 build/arm/xmc4_scu.o
+ .text.XMC_SCU_CLOCK_SetExternalOutputClockDivider
+                0x0000000000000000       0x30 build/arm/xmc4_scu.o
+ .text.XMC_SCU_CLOCK_EnableClock
+                0x0000000000000000       0x20 build/arm/xmc4_scu.o
+ .text.XMC_SCU_CLOCK_DisableClock
+                0x0000000000000000       0x20 build/arm/xmc4_scu.o
+ .text.XMC_SCU_CLOCK_IsClockEnabled
+                0x0000000000000000       0x2c build/arm/xmc4_scu.o
+ .text.XMC_SCU_CLOCK_EnableUsbPll
+                0x0000000000000000       0x20 build/arm/xmc4_scu.o
+ .text.XMC_SCU_CLOCK_DisableUsbPll
+                0x0000000000000000       0x20 build/arm/xmc4_scu.o
+ .text.XMC_SCU_CLOCK_StartUsbPll
+                0x0000000000000000       0x74 build/arm/xmc4_scu.o
+ .text.XMC_SCU_CLOCK_StopUsbPll
+                0x0000000000000000       0x1c build/arm/xmc4_scu.o
+ .text.XMC_SCU_CLOCK_SetBackupClockCalibrationMode
+                0x0000000000000000       0x4c build/arm/xmc4_scu.o
+ .text.XMC_SCU_POWER_EnableUsb
+                0x0000000000000000       0x1c build/arm/xmc4_scu.o
+ .text.XMC_SCU_POWER_DisableUsb
+                0x0000000000000000       0x1c build/arm/xmc4_scu.o
+ .text.XMC_SCU_CLOCK_IsUsbPllLocked
+                0x0000000000000000       0x24 build/arm/xmc4_scu.o
+ .text.XMC_SCU_HIB_EnableHibernateDomain
+                0x0000000000000000       0x54 build/arm/xmc4_scu.o
+ .text.XMC_SCU_HIB_DisableHibernateDomain
+                0x0000000000000000       0x2c build/arm/xmc4_scu.o
+ .text.XMC_SCU_HIB_IsHibernateDomainEnabled
+                0x0000000000000000       0x3c build/arm/xmc4_scu.o
+ .text.XMC_SCU_HIB_EnableInternalSlowClock
+                0x0000000000000000       0x30 build/arm/xmc4_scu.o
+ .text.XMC_SCU_HIB_DisableInternalSlowClock
+                0x0000000000000000       0x30 build/arm/xmc4_scu.o
+ .text.XMC_SCU_CLOCK_EnableLowPowerOscillator
+                0x0000000000000000       0x74 build/arm/xmc4_scu.o
+ .text.XMC_SCU_CLOCK_DisableLowPowerOscillator
+                0x0000000000000000       0x30 build/arm/xmc4_scu.o
+ .text.XMC_SCU_CLOCK_EnableHighPerformanceOscillator
+                0x0000000000000000       0x60 build/arm/xmc4_scu.o
+ .text.XMC_SCU_CLOCK_DisableHighPerformanceOscillator
+                0x0000000000000000       0x1c build/arm/xmc4_scu.o
+ .text.XMC_SCU_CLOCK_EnableSystemPll
+                0x0000000000000000       0x20 build/arm/xmc4_scu.o
+ .text.XMC_SCU_CLOCK_DisableSystemPll
+                0x0000000000000000       0x20 build/arm/xmc4_scu.o
+ .text.XMC_SCU_CLOCK_StartSystemPll
+                0x0000000000000000      0x1a0 build/arm/xmc4_scu.o
+ .text.XMC_SCU_CLOCK_StopSystemPll
+                0x0000000000000000       0x1c build/arm/xmc4_scu.o
+ .text.XMC_SCU_CLOCK_StepSystemPllFrequency
+                0x0000000000000000       0x2c build/arm/xmc4_scu.o
+ .text.XMC_SCU_CLOCK_IsSystemPllLocked
+                0x0000000000000000       0x24 build/arm/xmc4_scu.o
+ .text.XMC_SCU_INTERRUPT_SetEventHandler
+                0x0000000000000000       0x58 build/arm/xmc4_scu.o
+ .text.XMC_SCU_IRQHandler
+                0x0000000000000000       0x60 build/arm/xmc4_scu.o
+ .debug_info    0x0000000000000000     0x1ce0 build/arm/xmc4_scu.o
+ .debug_abbrev  0x0000000000000000      0x2b4 build/arm/xmc4_scu.o
+ .debug_loc     0x0000000000000000     0x1e30 build/arm/xmc4_scu.o
+ .debug_aranges
+                0x0000000000000000      0x318 build/arm/xmc4_scu.o
+ .debug_ranges  0x0000000000000000      0x308 build/arm/xmc4_scu.o
+ .debug_line    0x0000000000000000      0xa5f build/arm/xmc4_scu.o
+ .debug_str     0x0000000000000000     0x1d59 build/arm/xmc4_scu.o
+ .comment       0x0000000000000000       0x39 build/arm/xmc4_scu.o
+ .debug_frame   0x0000000000000000      0xdb8 build/arm/xmc4_scu.o
+ .ARM.attributes
+                0x0000000000000000       0x37 build/arm/xmc4_scu.o
+ COMMON         0x0000000000000000       0x80 build/arm/xmc4_scu.o
+ .text          0x0000000000000000        0x0 build/arm/xmc_can.o
+ .data          0x0000000000000000        0x0 build/arm/xmc_can.o
+ .bss           0x0000000000000000        0x0 build/arm/xmc_can.o
+ .text.XMC_CAN_PanelControl
+                0x0000000000000000       0x3c build/arm/xmc_can.o
+ .text.XMC_CAN_NODE_EnableConfigurationChange
+                0x0000000000000000       0x20 build/arm/xmc_can.o
+ .text.XMC_CAN_NODE_DisableConfigurationChange
+                0x0000000000000000       0x20 build/arm/xmc_can.o
+ .text.max      0x0000000000000000       0x20 build/arm/xmc_can.o
+ .text.min      0x0000000000000000       0x20 build/arm/xmc_can.o
+ .text.XMC_CAN_NODE_NominalBitTimeConfigure
+                0x0000000000000000      0x1c4 build/arm/xmc_can.o
+ .text.XMC_CAN_AllocateMOtoNodeList
+                0x0000000000000000       0x38 build/arm/xmc_can.o
+ .text.XMC_CAN_Disable
+                0x0000000000000000       0x20 build/arm/xmc_can.o
+ .text.XMC_CAN_Enable
+                0x0000000000000000       0x34 build/arm/xmc_can.o
+ .text.XMC_CAN_Init
+                0x0000000000000000       0xd4 build/arm/xmc_can.o
+ .text.XMC_CAN_MO_SetIdentifier
+                0x0000000000000000       0x68 build/arm/xmc_can.o
+ .text.XMC_CAN_MO_GetIdentifier
+                0x0000000000000000       0x40 build/arm/xmc_can.o
+ .text.XMC_CAN_MO_GetAcceptanceMask
+                0x0000000000000000       0x50 build/arm/xmc_can.o
+ .text.XMC_CAN_MO_SetAcceptanceMask
+                0x0000000000000000       0x70 build/arm/xmc_can.o
+ .text.XMC_CAN_MO_Config
+                0x0000000000000000      0x110 build/arm/xmc_can.o
+ .text.XMC_CAN_MO_UpdateData
+                0x0000000000000000       0x70 build/arm/xmc_can.o
+ .text.XMC_CAN_MO_Transmit
+                0x0000000000000000       0x5c build/arm/xmc_can.o
+ .text.XMC_CAN_MO_ReceiveData
+                0x0000000000000000       0x98 build/arm/xmc_can.o
+ .text.XMC_CAN_MO_Receive
+                0x0000000000000000      0x1a0 build/arm/xmc_can.o
+ .text.XMC_CAN_NODE_EnableEvent
+                0x0000000000000000       0x38 build/arm/xmc_can.o
+ .text.XMC_CAN_NODE_DisableEvent
+                0x0000000000000000       0x3c build/arm/xmc_can.o
+ .text.XMC_CAN_TXFIFO_Transmit
+                0x0000000000000000       0x78 build/arm/xmc_can.o
+ .text.XMC_CAN_TXFIFO_ConfigMOBaseObject
+                0x0000000000000000       0x50 build/arm/xmc_can.o
+ .text.XMC_CAN_RXFIFO_ConfigMOBaseObject
+                0x0000000000000000       0x50 build/arm/xmc_can.o
+ .text.XMC_CAN_TXFIFO_ConfigMOSlaveObject
+                0x0000000000000000       0x50 build/arm/xmc_can.o
+ .text.XMC_CAN_GATEWAY_InitSourceObject
+                0x0000000000000000       0x64 build/arm/xmc_can.o
+ .debug_info    0x0000000000000000     0x10d3 build/arm/xmc_can.o
+ .debug_abbrev  0x0000000000000000      0x257 build/arm/xmc_can.o
+ .debug_loc     0x0000000000000000      0x912 build/arm/xmc_can.o
+ .debug_aranges
+                0x0000000000000000       0xe8 build/arm/xmc_can.o
+ .debug_ranges  0x0000000000000000       0xd8 build/arm/xmc_can.o
+ .debug_line    0x0000000000000000      0x4c1 build/arm/xmc_can.o
+ .debug_str     0x0000000000000000      0xfc8 build/arm/xmc_can.o
+ .comment       0x0000000000000000       0x39 build/arm/xmc_can.o
+ .debug_frame   0x0000000000000000      0x408 build/arm/xmc_can.o
+ .ARM.attributes
+                0x0000000000000000       0x37 build/arm/xmc_can.o
+ .text          0x0000000000000000        0x0 build/arm/xmc_ccu4.o
+ .data          0x0000000000000000        0x0 build/arm/xmc_ccu4.o
+ .bss           0x0000000000000000        0x0 build/arm/xmc_ccu4.o
+ .text.XMC_CCU4_StartPrescaler
+                0x0000000000000000       0x20 build/arm/xmc_ccu4.o
+ .text.XMC_CCU4_SLICE_SetDitherCompareValue
+                0x0000000000000000       0x1c build/arm/xmc_ccu4.o
+ .text.XMC_CCU4_lAssertReset
+                0x0000000000000000       0x68 build/arm/xmc_ccu4.o
+ .text.XMC_CCU4_lDeassertReset
+                0x0000000000000000       0x68 build/arm/xmc_ccu4.o
+ .text.XMC_CCU4_EnableModule
+                0x0000000000000000       0x1c build/arm/xmc_ccu4.o
+ .text.XMC_CCU4_DisableModule
+                0x0000000000000000       0x14 build/arm/xmc_ccu4.o
+ .text.XMC_CCU4_Init
+                0x0000000000000000       0x3c build/arm/xmc_ccu4.o
+ .text.XMC_CCU4_SetModuleClock
+                0x0000000000000000       0x34 build/arm/xmc_ccu4.o
+ .text.XMC_CCU4_SetMultiChannelShadowTransferMode
+                0x0000000000000000       0x38 build/arm/xmc_ccu4.o
+ .text.XMC_CCU4_SLICE_CompareInit
+                0x0000000000000000       0x6c build/arm/xmc_ccu4.o
+ .text.XMC_CCU4_SLICE_CaptureInit
+                0x0000000000000000       0x4c build/arm/xmc_ccu4.o
+ .text.XMC_CCU4_SLICE_StartConfig
+                0x0000000000000000       0x5c build/arm/xmc_ccu4.o
+ .text.XMC_CCU4_SLICE_StopConfig
+                0x0000000000000000       0x58 build/arm/xmc_ccu4.o
+ .text.XMC_CCU4_SLICE_LoadConfig
+                0x0000000000000000       0x34 build/arm/xmc_ccu4.o
+ .text.XMC_CCU4_SLICE_ModulationConfig
+                0x0000000000000000       0x80 build/arm/xmc_ccu4.o
+ .text.XMC_CCU4_SLICE_CountConfig
+                0x0000000000000000       0x34 build/arm/xmc_ccu4.o
+ .text.XMC_CCU4_SLICE_GateConfig
+                0x0000000000000000       0x34 build/arm/xmc_ccu4.o
+ .text.XMC_CCU4_SLICE_Capture0Config
+                0x0000000000000000       0x34 build/arm/xmc_ccu4.o
+ .text.XMC_CCU4_SLICE_Capture1Config
+                0x0000000000000000       0x34 build/arm/xmc_ccu4.o
+ .text.XMC_CCU4_SLICE_DirectionConfig
+                0x0000000000000000       0x34 build/arm/xmc_ccu4.o
+ .text.XMC_CCU4_SLICE_StatusBitOverrideConfig
+                0x0000000000000000       0x30 build/arm/xmc_ccu4.o
+ .text.XMC_CCU4_SLICE_TrapConfig
+                0x0000000000000000       0x74 build/arm/xmc_ccu4.o
+ .text.XMC_CCU4_SLICE_ConfigureStatusBitOverrideEvent
+                0x0000000000000000       0xc4 build/arm/xmc_ccu4.o
+ .text.XMC_CCU4_SLICE_ConfigureEvent
+                0x0000000000000000       0xd4 build/arm/xmc_ccu4.o
+ .text.XMC_CCU4_SLICE_SetInput
+                0x0000000000000000       0x50 build/arm/xmc_ccu4.o
+ .text.XMC_CCU4_SLICE_SetTimerRepeatMode
+                0x0000000000000000       0x38 build/arm/xmc_ccu4.o
+ .text.XMC_CCU4_SLICE_SetTimerCountingMode
+                0x0000000000000000       0x38 build/arm/xmc_ccu4.o
+ .text.XMC_CCU4_SLICE_GetCaptureRegisterValue
+                0x0000000000000000       0x24 build/arm/xmc_ccu4.o
+ .text.XMC_CCU4_SLICE_GetLastCapturedTimerValue
+                0x0000000000000000       0x8c build/arm/xmc_ccu4.o
+ .text.XMC_CCU4_GetCapturedValueFromFifo
+                0x0000000000000000       0x38 build/arm/xmc_ccu4.o
+ .text.XMC_CCU4_SLICE_EnableDithering
+                0x0000000000000000       0x5c build/arm/xmc_ccu4.o
+ .text.XMC_CCU4_SLICE_SetPrescaler
+                0x0000000000000000       0x3c build/arm/xmc_ccu4.o
+ .text.XMC_CCU4_SLICE_SetInterruptNode
+                0x0000000000000000       0xb0 build/arm/xmc_ccu4.o
+ .text.XMC_CCU4_SLICE_SetPassiveLevel
+                0x0000000000000000       0x34 build/arm/xmc_ccu4.o
+ .debug_info    0x0000000000000000     0x1541 build/arm/xmc_ccu4.o
+ .debug_abbrev  0x0000000000000000      0x1fc build/arm/xmc_ccu4.o
+ .debug_loc     0x0000000000000000      0xbf0 build/arm/xmc_ccu4.o
+ .debug_aranges
+                0x0000000000000000      0x128 build/arm/xmc_ccu4.o
+ .debug_ranges  0x0000000000000000      0x118 build/arm/xmc_ccu4.o
+ .debug_line    0x0000000000000000      0x4dc build/arm/xmc_ccu4.o
+ .debug_str     0x0000000000000000     0x18b1 build/arm/xmc_ccu4.o
+ .comment       0x0000000000000000       0x39 build/arm/xmc_ccu4.o
+ .debug_frame   0x0000000000000000      0x548 build/arm/xmc_ccu4.o
+ .ARM.attributes
+                0x0000000000000000       0x37 build/arm/xmc_ccu4.o
+ .text          0x0000000000000000        0x0 build/arm/xmc_ccu8.o
+ .data          0x0000000000000000        0x0 build/arm/xmc_ccu8.o
+ .bss           0x0000000000000000        0x0 build/arm/xmc_ccu8.o
+ .text.XMC_CCU8_StartPrescaler
+                0x0000000000000000       0x20 build/arm/xmc_ccu8.o
+ .text.XMC_CCU8_SLICE_StopTimer
+                0x0000000000000000       0x20 build/arm/xmc_ccu8.o
+ .text.XMC_CCU8_SLICE_SetDitherCompareValue
+                0x0000000000000000       0x1c build/arm/xmc_ccu8.o
+ .text.XMC_CCU8_lAssertReset
+                0x0000000000000000       0x38 build/arm/xmc_ccu8.o
+ .text.XMC_CCU8_lDeassertReset
+                0x0000000000000000       0x38 build/arm/xmc_ccu8.o
+ .text.XMC_CCU8_EnableModule
+                0x0000000000000000       0x1c build/arm/xmc_ccu8.o
+ .text.XMC_CCU8_DisableModule
+                0x0000000000000000       0x14 build/arm/xmc_ccu8.o
+ .text.XMC_CCU8_Init
+                0x0000000000000000       0x3c build/arm/xmc_ccu8.o
+ .text.XMC_CCU8_SetModuleClock
+                0x0000000000000000       0x34 build/arm/xmc_ccu8.o
+ .text.XMC_CCU8_SLICE_CompareInit
+                0x0000000000000000       0x74 build/arm/xmc_ccu8.o
+ .text.XMC_CCU8_SLICE_CaptureInit
+                0x0000000000000000       0x50 build/arm/xmc_ccu8.o
+ .text.XMC_CCU8_SLICE_SetOutPath
+                0x0000000000000000       0x38 build/arm/xmc_ccu8.o
+ .text.XMC_CCU8_SetMultiChannelShadowTransferMode
+                0x0000000000000000       0x38 build/arm/xmc_ccu8.o
+ .text.XMC_CCU8_SLICE_StartConfig
+                0x0000000000000000       0x5c build/arm/xmc_ccu8.o
+ .text.XMC_CCU8_SLICE_StopConfig
+                0x0000000000000000       0x58 build/arm/xmc_ccu8.o
+ .text.XMC_CCU8_SLICE_LoadConfig
+                0x0000000000000000       0x34 build/arm/xmc_ccu8.o
+ .text.XMC_CCU8_SLICE_LoadSelector
+                0x0000000000000000       0x34 build/arm/xmc_ccu8.o
+ .text.XMC_CCU8_SLICE_ModulationConfig
+                0x0000000000000000       0x90 build/arm/xmc_ccu8.o
+ .text.XMC_CCU8_SLICE_CountConfig
+                0x0000000000000000       0x34 build/arm/xmc_ccu8.o
+ .text.XMC_CCU8_SLICE_GateConfig
+                0x0000000000000000       0x34 build/arm/xmc_ccu8.o
+ .text.XMC_CCU8_SLICE_Capture0Config
+                0x0000000000000000       0x34 build/arm/xmc_ccu8.o
+ .text.XMC_CCU8_SLICE_Capture1Config
+                0x0000000000000000       0x34 build/arm/xmc_ccu8.o
+ .text.XMC_CCU8_SLICE_DirectionConfig
+                0x0000000000000000       0x34 build/arm/xmc_ccu8.o
+ .text.XMC_CCU8_SLICE_StatusBitOverrideConfig
+                0x0000000000000000       0x30 build/arm/xmc_ccu8.o
+ .text.XMC_CCU8_SLICE_TrapConfig
+                0x0000000000000000       0x74 build/arm/xmc_ccu8.o
+ .text.XMC_CCU8_SLICE_ConfigureStatusBitOverrideEvent
+                0x0000000000000000       0xc4 build/arm/xmc_ccu8.o
+ .text.XMC_CCU8_SLICE_ConfigureEvent
+                0x0000000000000000       0xd4 build/arm/xmc_ccu8.o
+ .text.XMC_CCU8_SLICE_SetInput
+                0x0000000000000000       0x50 build/arm/xmc_ccu8.o
+ .text.XMC_CCU8_SLICE_SetTimerRepeatMode
+                0x0000000000000000       0x3c build/arm/xmc_ccu8.o
+ .text.XMC_CCU8_SLICE_SetTimerCountingMode
+                0x0000000000000000       0x3c build/arm/xmc_ccu8.o
+ .text.XMC_CCU8_SLICE_SetTimerPeriodMatch
+                0x0000000000000000       0x1c build/arm/xmc_ccu8.o
+ .text.XMC_CCU8_SLICE_GetCaptureRegisterValue
+                0x0000000000000000       0x24 build/arm/xmc_ccu8.o
+ .text.XMC_CCU8_SLICE_GetLastCapturedTimerValue
+                0x0000000000000000       0x8c build/arm/xmc_ccu8.o
+ .text.XMC_CCU8_GetCapturedValueFromFifo
+                0x0000000000000000       0x38 build/arm/xmc_ccu8.o
+ .text.XMC_CCU8_SLICE_EnableDithering
+                0x0000000000000000       0x5c build/arm/xmc_ccu8.o
+ .text.XMC_CCU8_SLICE_SetPrescaler
+                0x0000000000000000       0x3c build/arm/xmc_ccu8.o
+ .text.XMC_CCU8_SLICE_SetTimerCompareMatch
+                0x0000000000000000       0x30 build/arm/xmc_ccu8.o
+ .text.XMC_CCU8_SLICE_GetTimerCompareMatch
+                0x0000000000000000       0x30 build/arm/xmc_ccu8.o
+ .text.XMC_CCU8_SLICE_SetInterruptNode
+                0x0000000000000000       0xb8 build/arm/xmc_ccu8.o
+ .text.XMC_CCU8_SLICE_SetPassiveLevel
+                0x0000000000000000       0x40 build/arm/xmc_ccu8.o
+ .text.XMC_CCU8_SLICE_DeadTimeInit
+                0x0000000000000000       0x2c build/arm/xmc_ccu8.o
+ .text.XMC_CCU8_SLICE_ConfigureDeadTime
+                0x0000000000000000       0x30 build/arm/xmc_ccu8.o
+ .text.XMC_CCU8_SLICE_SetDeadTimeValue
+                0x0000000000000000       0x44 build/arm/xmc_ccu8.o
+ .text.XMC_CCU8_SLICE_SetDeadTimePrescaler
+                0x0000000000000000       0x30 build/arm/xmc_ccu8.o
+ .text.XMC_CCU8_SLICE_ConfigureStatusBitOutput
+                0x0000000000000000       0x30 build/arm/xmc_ccu8.o
+ .debug_info    0x0000000000000000     0x1c60 build/arm/xmc_ccu8.o
+ .debug_abbrev  0x0000000000000000      0x21e build/arm/xmc_ccu8.o
+ .debug_loc     0x0000000000000000      0xfcc build/arm/xmc_ccu8.o
+ .debug_aranges
+                0x0000000000000000      0x180 build/arm/xmc_ccu8.o
+ .debug_ranges  0x0000000000000000      0x170 build/arm/xmc_ccu8.o
+ .debug_line    0x0000000000000000      0x5be build/arm/xmc_ccu8.o
+ .debug_str     0x0000000000000000     0x1fff build/arm/xmc_ccu8.o
+ .comment       0x0000000000000000       0x39 build/arm/xmc_ccu8.o
+ .debug_frame   0x0000000000000000      0x6f8 build/arm/xmc_ccu8.o
+ .ARM.attributes
+                0x0000000000000000       0x37 build/arm/xmc_ccu8.o
+ .text          0x0000000000000000        0x0 build/arm/xmc_common.o
+ .data          0x0000000000000000        0x0 build/arm/xmc_common.o
+ .bss           0x0000000000000000        0x0 build/arm/xmc_common.o
+ .text.XMC_PRIOARRAY_GetHead
+                0x0000000000000000       0x28 build/arm/xmc_common.o
+ .text.XMC_PRIOARRAY_GetItemPriority
+                0x0000000000000000       0x28 build/arm/xmc_common.o
+ .text.XMC_PRIOARRAY_GetItemNext
+                0x0000000000000000       0x28 build/arm/xmc_common.o
+ .text.XMC_LIST_Init
+                0x0000000000000000       0x18 build/arm/xmc_common.o
+ .text.XMC_LIST_GetHead
+                0x0000000000000000       0x18 build/arm/xmc_common.o
+ .text.XMC_LIST_GetTail
+                0x0000000000000000       0x3c build/arm/xmc_common.o
+ .text.XMC_LIST_Add
+                0x0000000000000000       0x34 build/arm/xmc_common.o
+ .text.XMC_LIST_Remove
+                0x0000000000000000       0x60 build/arm/xmc_common.o
+ .text.XMC_LIST_Insert
+                0x0000000000000000       0x3c build/arm/xmc_common.o
+ .text.XMC_PRIOARRAY_Init
+                0x0000000000000000       0xac build/arm/xmc_common.o
+ .text.XMC_PRIOARRAY_Add
+                0x0000000000000000       0xb0 build/arm/xmc_common.o
+ .text.XMC_PRIOARRAY_Remove
+                0x0000000000000000       0x64 build/arm/xmc_common.o
+ .debug_info    0x0000000000000000      0x45e build/arm/xmc_common.o
+ .debug_abbrev  0x0000000000000000      0x107 build/arm/xmc_common.o
+ .debug_loc     0x0000000000000000      0x438 build/arm/xmc_common.o
+ .debug_aranges
+                0x0000000000000000       0x78 build/arm/xmc_common.o
+ .debug_ranges  0x0000000000000000       0x68 build/arm/xmc_common.o
+ .debug_line    0x0000000000000000      0x217 build/arm/xmc_common.o
+ .debug_str     0x0000000000000000      0x344 build/arm/xmc_common.o
+ .comment       0x0000000000000000       0x39 build/arm/xmc_common.o
+ .debug_frame   0x0000000000000000      0x1e8 build/arm/xmc_common.o
+ .ARM.attributes
+                0x0000000000000000       0x37 build/arm/xmc_common.o
+ .text          0x0000000000000000        0x0 build/arm/xmc_dac.o
+ .data          0x0000000000000000        0x0 build/arm/xmc_dac.o
+ .bss           0x0000000000000000        0x0 build/arm/xmc_dac.o
+ .text.XMC_DAC_CH_EnableOutput
+                0x0000000000000000       0x30 build/arm/xmc_dac.o
+ .text.XMC_DAC_CH_EnablePatternSignOutput
+                0x0000000000000000       0x30 build/arm/xmc_dac.o
+ .text.XMC_DAC_CH_DisablePatternSignOutput
+                0x0000000000000000       0x30 build/arm/xmc_dac.o
+ .text.XMC_DAC_CH_SetRampStart
+                0x0000000000000000       0x28 build/arm/xmc_dac.o
+ .text.XMC_DAC_CH_SetRampStop
+                0x0000000000000000       0x3c build/arm/xmc_dac.o
+ .text.XMC_DAC_CH_SetTrigger
+                0x0000000000000000       0x34 build/arm/xmc_dac.o
+ .text.XMC_DAC_CH_SetMode
+                0x0000000000000000       0x34 build/arm/xmc_dac.o
+ .text.XMC_DAC_Enable
+                0x0000000000000000       0x18 build/arm/xmc_dac.o
+ .text.XMC_DAC_Disable
+                0x0000000000000000       0x18 build/arm/xmc_dac.o
+ .text.XMC_DAC_IsEnabled
+                0x0000000000000000       0x30 build/arm/xmc_dac.o
+ .text.XMC_DAC_CH_Init
+                0x0000000000000000       0x48 build/arm/xmc_dac.o
+ .text.XMC_DAC_CH_SetFrequency
+                0x0000000000000000       0x60 build/arm/xmc_dac.o
+ .text.XMC_DAC_CH_SetRampFrequency
+                0x0000000000000000       0x50 build/arm/xmc_dac.o
+ .text.XMC_DAC_CH_StartSingleValueMode
+                0x0000000000000000       0x24 build/arm/xmc_dac.o
+ .text.XMC_DAC_CH_StartDataMode
+                0x0000000000000000       0x60 build/arm/xmc_dac.o
+ .text.XMC_DAC_CH_StartRampMode
+                0x0000000000000000       0x84 build/arm/xmc_dac.o
+ .text.XMC_DAC_CH_StartPatternMode
+                0x0000000000000000       0x90 build/arm/xmc_dac.o
+ .text.XMC_DAC_CH_StartNoiseMode
+                0x0000000000000000       0x60 build/arm/xmc_dac.o
+ .text.XMC_DAC_CH_SetPattern
+                0x0000000000000000       0xa0 build/arm/xmc_dac.o
+ .debug_info    0x0000000000000000      0xac9 build/arm/xmc_dac.o
+ .debug_abbrev  0x0000000000000000      0x20f build/arm/xmc_dac.o
+ .debug_loc     0x0000000000000000      0x650 build/arm/xmc_dac.o
+ .debug_aranges
+                0x0000000000000000       0xb0 build/arm/xmc_dac.o
+ .debug_ranges  0x0000000000000000       0xa0 build/arm/xmc_dac.o
+ .debug_line    0x0000000000000000      0x2fe build/arm/xmc_dac.o
+ .debug_str     0x0000000000000000      0xb2b build/arm/xmc_dac.o
+ .comment       0x0000000000000000       0x39 build/arm/xmc_dac.o
+ .debug_frame   0x0000000000000000      0x2dc build/arm/xmc_dac.o
+ .ARM.attributes
+                0x0000000000000000       0x37 build/arm/xmc_dac.o
+ .text          0x0000000000000000        0x0 build/arm/xmc_dma.o
+ .data          0x0000000000000000        0x0 build/arm/xmc_dma.o
+ .bss           0x0000000000000000        0x0 build/arm/xmc_dma.o
+ .text.XMC_DMA_GetEventStatus
+                0x0000000000000000       0x1c build/arm/xmc_dma.o
+ .text.XMC_DMA_GetChannelsTransferCompleteStatus
+                0x0000000000000000       0x1c build/arm/xmc_dma.o
+ .text.XMC_DMA_GetChannelsBlockCompleteStatus
+                0x0000000000000000       0x1c build/arm/xmc_dma.o
+ .text.XMC_DMA_GetChannelsSourceTransactionCompleteStatus
+                0x0000000000000000       0x1c build/arm/xmc_dma.o
+ .text.XMC_DMA_GetChannelsDestinationTransactionCompleteStatus
+                0x0000000000000000       0x1c build/arm/xmc_dma.o
+ .text.XMC_DMA_GetChannelsErrorStatus
+                0x0000000000000000       0x1c build/arm/xmc_dma.o
+ .text.XMC_DMA_Init
+                0x0000000000000000       0x14 build/arm/xmc_dma.o
+ .text.XMC_DMA_Enable
+                0x0000000000000000       0x38 build/arm/xmc_dma.o
+ .text.XMC_DMA_Disable
+                0x0000000000000000       0x38 build/arm/xmc_dma.o
+ .text.XMC_DMA_IsEnabled
+                0x0000000000000000       0x94 build/arm/xmc_dma.o
+ .text.XMC_DMA_EnableRequestLine
+                0x0000000000000000       0x98 build/arm/xmc_dma.o
+ .text.XMC_DMA_DisableRequestLine
+                0x0000000000000000       0x54 build/arm/xmc_dma.o
+ .text.XMC_DMA_ClearRequestLine
+                0x0000000000000000       0x78 build/arm/xmc_dma.o
+ .text.XMC_DMA_GetOverrunStatus
+                0x0000000000000000       0x60 build/arm/xmc_dma.o
+ .text.XMC_DMA_ClearOverrunStatus
+                0x0000000000000000       0x50 build/arm/xmc_dma.o
+ .text.XMC_DMA_CH_Disable
+                0x0000000000000000       0x3c build/arm/xmc_dma.o
+ .text.XMC_DMA_CH_IsEnabled
+                0x0000000000000000       0x34 build/arm/xmc_dma.o
+ .text.XMC_DMA_CH_Init
+                0x0000000000000000      0x408 build/arm/xmc_dma.o
+ .text.XMC_DMA_CH_Suspend
+                0x0000000000000000       0x3c build/arm/xmc_dma.o
+ .text.XMC_DMA_CH_Resume
+                0x0000000000000000       0x3c build/arm/xmc_dma.o
+ .text.XMC_DMA_CH_IsSuspended
+                0x0000000000000000       0x38 build/arm/xmc_dma.o
+ .text.XMC_DMA_CH_EnableEvent
+                0x0000000000000000       0x60 build/arm/xmc_dma.o
+ .text.XMC_DMA_CH_DisableEvent
+                0x0000000000000000       0x60 build/arm/xmc_dma.o
+ .text.XMC_DMA_CH_ClearEventStatus
+                0x0000000000000000       0x4c build/arm/xmc_dma.o
+ .text.XMC_DMA_CH_GetEventStatus
+                0x0000000000000000       0x5c build/arm/xmc_dma.o
+ .text.XMC_DMA_CH_EnableSourceGather
+                0x0000000000000000       0x5c build/arm/xmc_dma.o
+ .text.XMC_DMA_CH_DisableSourceGather
+                0x0000000000000000       0x3c build/arm/xmc_dma.o
+ .text.XMC_DMA_CH_EnableDestinationScatter
+                0x0000000000000000       0x5c build/arm/xmc_dma.o
+ .text.XMC_DMA_CH_DisableDestinationScatter
+                0x0000000000000000       0x3c build/arm/xmc_dma.o
+ .text.XMC_DMA_CH_TriggerSourceRequest
+                0x0000000000000000       0x5c build/arm/xmc_dma.o
+ .text.XMC_DMA_CH_TriggerDestinationRequest
+                0x0000000000000000       0x5c build/arm/xmc_dma.o
+ .text.XMC_DMA_CH_EnableSourceAddressReload
+                0x0000000000000000       0x3c build/arm/xmc_dma.o
+ .text.XMC_DMA_CH_DisableSourceAddressReload
+                0x0000000000000000       0x3c build/arm/xmc_dma.o
+ .text.XMC_DMA_CH_EnableDestinationAddressReload
+                0x0000000000000000       0x3c build/arm/xmc_dma.o
+ .text.XMC_DMA_CH_DisableDestinationAddressReload
+                0x0000000000000000       0x3c build/arm/xmc_dma.o
+ .text.XMC_DMA_CH_RequestLastMultiblockTransfer
+                0x0000000000000000       0x3c build/arm/xmc_dma.o
+ .text.XMC_DMA_CH_SetEventHandler
+                0x0000000000000000       0x44 build/arm/xmc_dma.o
+ .text.XMC_DMA_CH_ClearSourcePeripheralRequest
+                0x0000000000000000       0x38 build/arm/xmc_dma.o
+ .text.XMC_DMA_CH_ClearDestinationPeripheralRequest
+                0x0000000000000000       0x38 build/arm/xmc_dma.o
+ .text.XMC_DMA_IRQHandler
+                0x0000000000000000      0x218 build/arm/xmc_dma.o
+ .debug_info    0x0000000000000000     0x161c build/arm/xmc_dma.o
+ .debug_abbrev  0x0000000000000000      0x2ab build/arm/xmc_dma.o
+ .debug_loc     0x0000000000000000      0xe00 build/arm/xmc_dma.o
+ .debug_aranges
+                0x0000000000000000      0x158 build/arm/xmc_dma.o
+ .debug_ranges  0x0000000000000000      0x148 build/arm/xmc_dma.o
+ .debug_line    0x0000000000000000      0x5aa build/arm/xmc_dma.o
+ .debug_str     0x0000000000000000     0x15d7 build/arm/xmc_dma.o
+ .comment       0x0000000000000000       0x39 build/arm/xmc_dma.o
+ .debug_frame   0x0000000000000000      0x638 build/arm/xmc_dma.o
+ .ARM.attributes
+                0x0000000000000000       0x37 build/arm/xmc_dma.o
+ COMMON         0x0000000000000000       0x30 build/arm/xmc_dma.o
+ .text          0x0000000000000000        0x0 build/arm/xmc_dsd.o
+ .data          0x0000000000000000        0x0 build/arm/xmc_dsd.o
+ .bss           0x0000000000000000        0x0 build/arm/xmc_dsd.o
+ .text.XMC_DSD_Enable
+                0x0000000000000000       0x14 build/arm/xmc_dsd.o
+ .text.XMC_DSD_Disable
+                0x0000000000000000       0x14 build/arm/xmc_dsd.o
+ .text.XMC_DSD_EnableClock
+                0x0000000000000000       0x30 build/arm/xmc_dsd.o
+ .text.XMC_DSD_DisableClock
+                0x0000000000000000       0x30 build/arm/xmc_dsd.o
+ .text.XMC_DSD_Init
+                0x0000000000000000       0x1c build/arm/xmc_dsd.o
+ .text.XMC_DSD_IsEnabled
+                0x0000000000000000       0x30 build/arm/xmc_dsd.o
+ .text.XMC_DSD_Generator_Init
+                0x0000000000000000       0x30 build/arm/xmc_dsd.o
+ .text.XMC_DSD_CH_Init
+                0x0000000000000000       0x84 build/arm/xmc_dsd.o
+ .text.XMC_DSD_CH_MainFilter_Init
+                0x0000000000000000       0x6c build/arm/xmc_dsd.o
+ .text.XMC_DSD_CH_Timestamp_Init
+                0x0000000000000000       0x38 build/arm/xmc_dsd.o
+ .text.XMC_DSD_CH_AuxFilter_Init
+                0x0000000000000000       0x30 build/arm/xmc_dsd.o
+ .text.XMC_DSD_CH_Integrator_Init
+                0x0000000000000000       0x60 build/arm/xmc_dsd.o
+ .text.XMC_DSD_CH_Rectify_Init
+                0x0000000000000000       0x40 build/arm/xmc_dsd.o
+ .text.XMC_DSD_CH_GetResult_TS
+                0x0000000000000000       0x44 build/arm/xmc_dsd.o
+ .text.XMC_DSD_CH_GetResult_TS_Time
+                0x0000000000000000       0x80 build/arm/xmc_dsd.o
+ .debug_info    0x0000000000000000      0xe78 build/arm/xmc_dsd.o
+ .debug_abbrev  0x0000000000000000      0x1e6 build/arm/xmc_dsd.o
+ .debug_loc     0x0000000000000000      0x528 build/arm/xmc_dsd.o
+ .debug_aranges
+                0x0000000000000000       0x90 build/arm/xmc_dsd.o
+ .debug_ranges  0x0000000000000000       0x80 build/arm/xmc_dsd.o
+ .debug_line    0x0000000000000000      0x28d build/arm/xmc_dsd.o
+ .debug_str     0x0000000000000000      0xc16 build/arm/xmc_dsd.o
+ .comment       0x0000000000000000       0x39 build/arm/xmc_dsd.o
+ .debug_frame   0x0000000000000000      0x254 build/arm/xmc_dsd.o
+ .ARM.attributes
+                0x0000000000000000       0x37 build/arm/xmc_dsd.o
+ .text          0x0000000000000000        0x0 build/arm/xmc_ebu.o
+ .data          0x0000000000000000        0x0 build/arm/xmc_ebu.o
+ .bss           0x0000000000000000        0x0 build/arm/xmc_ebu.o
+ .text.XMC_EBU_Enable
+                0x0000000000000000       0x24 build/arm/xmc_ebu.o
+ .text.XMC_EBU_Init
+                0x0000000000000000       0x34 build/arm/xmc_ebu.o
+ .text.XMC_EBU_ConfigureSdram
+                0x0000000000000000       0x2c build/arm/xmc_ebu.o
+ .text.XMC_EBU_ConfigureRegion
+                0x0000000000000000       0x5c build/arm/xmc_ebu.o
+ .debug_info    0x0000000000000000      0xd1f build/arm/xmc_ebu.o
+ .debug_abbrev  0x0000000000000000      0x1ac build/arm/xmc_ebu.o
+ .debug_loc     0x0000000000000000      0x158 build/arm/xmc_ebu.o
+ .debug_aranges
+                0x0000000000000000       0x38 build/arm/xmc_ebu.o
+ .debug_ranges  0x0000000000000000       0x28 build/arm/xmc_ebu.o
+ .debug_line    0x0000000000000000      0x18a build/arm/xmc_ebu.o
+ .debug_str     0x0000000000000000      0xf12 build/arm/xmc_ebu.o
+ .comment       0x0000000000000000       0x39 build/arm/xmc_ebu.o
+ .debug_frame   0x0000000000000000       0xa8 build/arm/xmc_ebu.o
+ .ARM.attributes
+                0x0000000000000000       0x37 build/arm/xmc_ebu.o
+ .text          0x0000000000000000        0x0 build/arm/xmc_ecat.o
+ .data          0x0000000000000000        0x0 build/arm/xmc_ecat.o
+ .bss           0x0000000000000000        0x0 build/arm/xmc_ecat.o
+ .debug_info    0x0000000000000000       0x9b build/arm/xmc_ecat.o
+ .debug_abbrev  0x0000000000000000       0x4b build/arm/xmc_ecat.o
+ .debug_aranges
+                0x0000000000000000       0x18 build/arm/xmc_ecat.o
+ .debug_line    0x0000000000000000       0xa0 build/arm/xmc_ecat.o
+ .debug_str     0x0000000000000000      0x19f build/arm/xmc_ecat.o
+ .comment       0x0000000000000000       0x39 build/arm/xmc_ecat.o
+ .ARM.attributes
+                0x0000000000000000       0x37 build/arm/xmc_ecat.o
+ .text          0x0000000000000000        0x0 build/arm/xmc_eru.o
+ .data          0x0000000000000000        0x0 build/arm/xmc_eru.o
+ .bss           0x0000000000000000        0x0 build/arm/xmc_eru.o
+ .text.XMC_ERU_ETL_Init
+                0x0000000000000000       0x4c build/arm/xmc_eru.o
+ .text.XMC_ERU_OGU_Init
+                0x0000000000000000       0x28 build/arm/xmc_eru.o
+ .text.XMC_ERU_ETL_SetInput
+                0x0000000000000000       0x4c build/arm/xmc_eru.o
+ .text.XMC_ERU_ETL_SetSource
+                0x0000000000000000       0x34 build/arm/xmc_eru.o
+ .text.XMC_ERU_ETL_SetEdgeDetection
+                0x0000000000000000       0x34 build/arm/xmc_eru.o
+ .text.XMC_ERU_ETL_SetStatusFlagMode
+                0x0000000000000000       0x34 build/arm/xmc_eru.o
+ .text.XMC_ERU_ETL_EnableOutputTrigger
+                0x0000000000000000       0x48 build/arm/xmc_eru.o
+ .text.XMC_ERU_ETL_DisableOutputTrigger
+                0x0000000000000000       0x28 build/arm/xmc_eru.o
+ .text.XMC_ERU_OGU_EnablePatternDetection
+                0x0000000000000000       0x4c build/arm/xmc_eru.o
+ .text.XMC_ERU_OGU_DisablePatternDetection
+                0x0000000000000000       0x2c build/arm/xmc_eru.o
+ .text.XMC_ERU_OGU_EnablePeripheralTrigger
+                0x0000000000000000       0x38 build/arm/xmc_eru.o
+ .text.XMC_ERU_OGU_DisablePeripheralTrigger
+                0x0000000000000000       0x2c build/arm/xmc_eru.o
+ .text.XMC_ERU_OGU_SetServiceRequestMode
+                0x0000000000000000       0x38 build/arm/xmc_eru.o
+ .debug_info    0x0000000000000000      0xa70 build/arm/xmc_eru.o
+ .debug_abbrev  0x0000000000000000      0x1cc build/arm/xmc_eru.o
+ .debug_loc     0x0000000000000000      0x494 build/arm/xmc_eru.o
+ .debug_aranges
+                0x0000000000000000       0x80 build/arm/xmc_eru.o
+ .debug_ranges  0x0000000000000000       0x70 build/arm/xmc_eru.o
+ .debug_line    0x0000000000000000      0x1d8 build/arm/xmc_eru.o
+ .debug_str     0x0000000000000000      0xc05 build/arm/xmc_eru.o
+ .comment       0x0000000000000000       0x39 build/arm/xmc_eru.o
+ .debug_frame   0x0000000000000000      0x210 build/arm/xmc_eru.o
+ .ARM.attributes
+                0x0000000000000000       0x37 build/arm/xmc_eru.o
+ .text          0x0000000000000000        0x0 build/arm/xmc_eth_mac.o
+ .data          0x0000000000000000        0x0 build/arm/xmc_eth_mac.o
+ .bss           0x0000000000000000        0x0 build/arm/xmc_eth_mac.o
+ .text.XMC_ETH_MAC_Reset
+                0x0000000000000000       0x40 build/arm/xmc_eth_mac.o
+ .text.XMC_ETH_MAC_SetAddress
+                0x0000000000000000       0x2c build/arm/xmc_eth_mac.o
+ .text.XMC_SCU_CLOCK_GetSystemClockFrequency
+                0x0000000000000000       0x28 build/arm/xmc_eth_mac.o
+ .text.XMC_SCU_CLOCK_GetEthernetClockFrequency
+                0x0000000000000000       0x10 build/arm/xmc_eth_mac.o
+ .text.XCM_ETH_MAC_IsNormalEvent
+                0x0000000000000000       0x28 build/arm/xmc_eth_mac.o
+ .text.XCM_ETH_MAC_IsAbnormalEvent
+                0x0000000000000000       0x28 build/arm/xmc_eth_mac.o
+ .text.XMC_ETH_MAC_Init
+                0x0000000000000000       0x94 build/arm/xmc_eth_mac.o
+ .text.XMC_ETH_MAC_InitRxDescriptors
+                0x0000000000000000       0xb0 build/arm/xmc_eth_mac.o
+ .text.XMC_ETH_MAC_InitTxDescriptors
+                0x0000000000000000       0xa0 build/arm/xmc_eth_mac.o
+ .text.XMC_ETH_MAC_SetAddressPerfectFilter
+                0x0000000000000000       0x48 build/arm/xmc_eth_mac.o
+ .text.XMC_ETH_MAC_SetAddressHashFilter
+                0x0000000000000000       0x2c build/arm/xmc_eth_mac.o
+ .text.XMC_ETH_MAC_SendFrame
+                0x0000000000000000      0x188 build/arm/xmc_eth_mac.o
+ .text.XMC_ETH_MAC_ReadFrame
+                0x0000000000000000       0xa0 build/arm/xmc_eth_mac.o
+ .text.XMC_ETH_MAC_GetRxFrameSize
+                0x0000000000000000       0x70 build/arm/xmc_eth_mac.o
+ .text.XMC_ETH_MAC_SetManagmentClockDivider
+                0x0000000000000000       0xa0 build/arm/xmc_eth_mac.o
+ .text.XMC_ETH_MAC_Enable
+                0x0000000000000000       0x20 build/arm/xmc_eth_mac.o
+ .text.XMC_ETH_MAC_Disable
+                0x0000000000000000       0x20 build/arm/xmc_eth_mac.o
+ .text.XMC_ETH_MAC_ReadPhy
+                0x0000000000000000       0x74 build/arm/xmc_eth_mac.o
+ .text.XMC_ETH_MAC_WritePhy
+                0x0000000000000000       0x78 build/arm/xmc_eth_mac.o
+ .text.XMC_ETH_MAC_FlushTx
+                0x0000000000000000       0x4c build/arm/xmc_eth_mac.o
+ .text.XMC_ETH_MAC_FlushRx
+                0x0000000000000000       0x4c build/arm/xmc_eth_mac.o
+ .text.XMC_ETH_MAC_SetWakeUpFrameFilter
+                0x0000000000000000       0x38 build/arm/xmc_eth_mac.o
+ .text.XMC_ETH_MAC_EnableEvent
+                0x0000000000000000       0x70 build/arm/xmc_eth_mac.o
+ .text.XMC_ETH_MAC_DisableEvent
+                0x0000000000000000       0x48 build/arm/xmc_eth_mac.o
+ .text.XMC_ETH_MAC_ClearEventStatus
+                0x0000000000000000       0x5c build/arm/xmc_eth_mac.o
+ .text.XMC_ETH_MAC_GetEventStatus
+                0x0000000000000000       0x3c build/arm/xmc_eth_mac.o
+ .text.XMC_ETH_MAC_ReturnRxDescriptor
+                0x0000000000000000       0x38 build/arm/xmc_eth_mac.o
+ .text.XMC_ETH_MAC_ReturnTxDescriptor
+                0x0000000000000000       0x38 build/arm/xmc_eth_mac.o
+ .text.XMC_ETH_MAC_IsTxDescriptorOwnedByDma
+                0x0000000000000000       0x28 build/arm/xmc_eth_mac.o
+ .text.XMC_ETH_MAC_SetVLANTag
+                0x0000000000000000       0x20 build/arm/xmc_eth_mac.o
+ .text.XMC_ETH_MAC_InitPTP
+                0x0000000000000000       0xcc build/arm/xmc_eth_mac.o
+ .text.XMC_ETH_MAC_GetPTPTime
+                0x0000000000000000       0x48 build/arm/xmc_eth_mac.o
+ .text.XMC_ETH_MAC_UpdatePTPTime
+                0x0000000000000000       0x78 build/arm/xmc_eth_mac.o
+ .text.XMC_ETH_MAC_SetPTPAlarm
+                0x0000000000000000       0x48 build/arm/xmc_eth_mac.o
+ .text.XMC_ETH_MAC_AdjustPTPClock
+                0x0000000000000000       0x60 build/arm/xmc_eth_mac.o
+ .text.XMC_ETH_MAC_GetPTPStatus
+                0x0000000000000000       0x1c build/arm/xmc_eth_mac.o
+ .text.XMC_ETH_MAC_GetRxTimeStamp
+                0x0000000000000000       0x4c build/arm/xmc_eth_mac.o
+ .text.XMC_ETH_MAC_GetTxTimeStamp
+                0x0000000000000000       0x4c build/arm/xmc_eth_mac.o
+ .debug_info    0x0000000000000000     0x197a build/arm/xmc_eth_mac.o
+ .debug_abbrev  0x0000000000000000      0x284 build/arm/xmc_eth_mac.o
+ .debug_loc     0x0000000000000000      0xcdc build/arm/xmc_eth_mac.o
+ .debug_aranges
+                0x0000000000000000      0x148 build/arm/xmc_eth_mac.o
+ .debug_ranges  0x0000000000000000      0x138 build/arm/xmc_eth_mac.o
+ .debug_line    0x0000000000000000      0x53b build/arm/xmc_eth_mac.o
+ .debug_str     0x0000000000000000     0x1d3e build/arm/xmc_eth_mac.o
+ .comment       0x0000000000000000       0x39 build/arm/xmc_eth_mac.o
+ .debug_frame   0x0000000000000000      0x5e8 build/arm/xmc_eth_mac.o
+ .ARM.attributes
+                0x0000000000000000       0x37 build/arm/xmc_eth_mac.o
+ .text          0x0000000000000000        0x0 build/arm/xmc_fce.o
+ .data          0x0000000000000000        0x0 build/arm/xmc_fce.o
+ .bss           0x0000000000000000        0x0 build/arm/xmc_fce.o
+ .text.XMC_FCE_Init
+                0x0000000000000000       0x2c build/arm/xmc_fce.o
+ .text.XMC_FCE_Disable
+                0x0000000000000000       0x20 build/arm/xmc_fce.o
+ .text.XMC_FCE_Enable
+                0x0000000000000000       0x20 build/arm/xmc_fce.o
+ .text.XMC_FCE_CalculateCRC8
+                0x0000000000000000       0x58 build/arm/xmc_fce.o
+ .text.XMC_FCE_CalculateCRC16
+                0x0000000000000000       0x64 build/arm/xmc_fce.o
+ .text.XMC_FCE_CalculateCRC32
+                0x0000000000000000       0x64 build/arm/xmc_fce.o
+ .text.XMC_FCE_TriggerMismatch
+                0x0000000000000000       0x4c build/arm/xmc_fce.o
+ .text.XMC_FCE_LittleEndian16bit
+                0x0000000000000000       0xa0 build/arm/xmc_fce.o
+ .text.XMC_FCE_LittleEndian32bit
+                0x0000000000000000       0xb4 build/arm/xmc_fce.o
+ .debug_info    0x0000000000000000      0x6a3 build/arm/xmc_fce.o
+ .debug_abbrev  0x0000000000000000      0x1a7 build/arm/xmc_fce.o
+ .debug_loc     0x0000000000000000      0x2dc build/arm/xmc_fce.o
+ .debug_aranges
+                0x0000000000000000       0x60 build/arm/xmc_fce.o
+ .debug_ranges  0x0000000000000000       0x50 build/arm/xmc_fce.o
+ .debug_line    0x0000000000000000      0x25c build/arm/xmc_fce.o
+ .debug_str     0x0000000000000000      0x7c5 build/arm/xmc_fce.o
+ .comment       0x0000000000000000       0x39 build/arm/xmc_fce.o
+ .debug_frame   0x0000000000000000      0x160 build/arm/xmc_fce.o
+ .ARM.attributes
+                0x0000000000000000       0x37 build/arm/xmc_fce.o
+ .text          0x0000000000000000        0x0 build/arm/xmc_gpio.o
+ .data          0x0000000000000000        0x0 build/arm/xmc_gpio.o
+ .bss           0x0000000000000000        0x0 build/arm/xmc_gpio.o
+ .text.XMC_GPIO_SetMode
+                0x0000000000000000       0x80 build/arm/xmc_gpio.o
+ .text.XMC_GPIO_SetHardwareControl
+                0x0000000000000000       0x44 build/arm/xmc_gpio.o
+ .debug_info    0x0000000000000000      0x39d build/arm/xmc_gpio.o
+ .debug_abbrev  0x0000000000000000      0x10c build/arm/xmc_gpio.o
+ .debug_loc     0x0000000000000000       0xb8 build/arm/xmc_gpio.o
+ .debug_aranges
+                0x0000000000000000       0x28 build/arm/xmc_gpio.o
+ .debug_ranges  0x0000000000000000       0x18 build/arm/xmc_gpio.o
+ .debug_line    0x0000000000000000      0x11b build/arm/xmc_gpio.o
+ .debug_str     0x0000000000000000      0x5cc build/arm/xmc_gpio.o
+ .comment       0x0000000000000000       0x39 build/arm/xmc_gpio.o
+ .debug_frame   0x0000000000000000       0x60 build/arm/xmc_gpio.o
+ .ARM.attributes
+                0x0000000000000000       0x37 build/arm/xmc_gpio.o
+ .text          0x0000000000000000        0x0 build/arm/xmc_hrpwm.o
+ .data          0x0000000000000000        0x0 build/arm/xmc_hrpwm.o
+ .bss           0x0000000000000000        0x0 build/arm/xmc_hrpwm.o
+ .debug_info    0x0000000000000000       0x9b build/arm/xmc_hrpwm.o
+ .debug_abbrev  0x0000000000000000       0x4b build/arm/xmc_hrpwm.o
+ .debug_aranges
+                0x0000000000000000       0x18 build/arm/xmc_hrpwm.o
+ .debug_line    0x0000000000000000       0xa0 build/arm/xmc_hrpwm.o
+ .debug_str     0x0000000000000000      0x1a0 build/arm/xmc_hrpwm.o
+ .comment       0x0000000000000000       0x39 build/arm/xmc_hrpwm.o
+ .ARM.attributes
+                0x0000000000000000       0x37 build/arm/xmc_hrpwm.o
+ .text          0x0000000000000000        0x0 build/arm/xmc_i2c.o
+ .data          0x0000000000000000        0x0 build/arm/xmc_i2c.o
+ .bss           0x0000000000000000        0x0 build/arm/xmc_i2c.o
+ .text.XMC_USIC_CH_GetTransmitBufferStatus
+                0x0000000000000000       0x20 build/arm/xmc_i2c.o
+ .text.XMC_USIC_CH_SetMode
+                0x0000000000000000       0x28 build/arm/xmc_i2c.o
+ .text.XMC_I2C_CH_ClearStatusFlag
+                0x0000000000000000       0x20 build/arm/xmc_i2c.o
+ .text.XMC_I2C_CH_Init
+                0x0000000000000000       0x50 build/arm/xmc_i2c.o
+ .text.XMC_I2C_CH_SetSlaveAddress
+                0x0000000000000000       0x40 build/arm/xmc_i2c.o
+ .text.XMC_I2C_CH_GetSlaveAddress
+                0x0000000000000000       0x40 build/arm/xmc_i2c.o
+ .text.XMC_I2C_CH_SetBaudrate
+                0x0000000000000000       0x78 build/arm/xmc_i2c.o
+ .text.XMC_I2C_CH_MasterStart
+                0x0000000000000000       0x68 build/arm/xmc_i2c.o
+ .text.XMC_I2C_CH_MasterRepeatedStart
+                0x0000000000000000       0x68 build/arm/xmc_i2c.o
+ .text.XMC_I2C_CH_MasterStop
+                0x0000000000000000       0x4c build/arm/xmc_i2c.o
+ .text.XMC_I2C_CH_MasterTransmit
+                0x0000000000000000       0x4c build/arm/xmc_i2c.o
+ .text.XMC_I2C_CH_SlaveTransmit
+                0x0000000000000000       0x54 build/arm/xmc_i2c.o
+ .text.XMC_I2C_CH_MasterReceiveAck
+                0x0000000000000000       0x4c build/arm/xmc_i2c.o
+ .text.XMC_I2C_CH_MasterReceiveNack
+                0x0000000000000000       0x4c build/arm/xmc_i2c.o
+ .text.XMC_I2C_CH_GetReceivedData
+                0x0000000000000000       0x34 build/arm/xmc_i2c.o
+ .text.XMC_I2C_CH_Stop
+                0x0000000000000000       0x34 build/arm/xmc_i2c.o
+ .text.XMC_I2C_CH_EnableEvent
+                0x0000000000000000       0x38 build/arm/xmc_i2c.o
+ .text.XMC_I2C_CH_DisableEvent
+                0x0000000000000000       0x3c build/arm/xmc_i2c.o
+ .debug_info    0x0000000000000000      0xa59 build/arm/xmc_i2c.o
+ .debug_abbrev  0x0000000000000000      0x277 build/arm/xmc_i2c.o
+ .debug_loc     0x0000000000000000      0x600 build/arm/xmc_i2c.o
+ .debug_aranges
+                0x0000000000000000       0xa8 build/arm/xmc_i2c.o
+ .debug_ranges  0x0000000000000000       0x98 build/arm/xmc_i2c.o
+ .debug_line    0x0000000000000000      0x2c6 build/arm/xmc_i2c.o
+ .debug_str     0x0000000000000000      0xc32 build/arm/xmc_i2c.o
+ .comment       0x0000000000000000       0x39 build/arm/xmc_i2c.o
+ .debug_frame   0x0000000000000000      0x2b8 build/arm/xmc_i2c.o
+ .ARM.attributes
+                0x0000000000000000       0x37 build/arm/xmc_i2c.o
+ .text          0x0000000000000000        0x0 build/arm/xmc_i2s.o
+ .data          0x0000000000000000        0x0 build/arm/xmc_i2s.o
+ .bss           0x0000000000000000        0x0 build/arm/xmc_i2s.o
+ .text.XMC_USIC_CH_GetTransmitBufferStatus
+                0x0000000000000000       0x20 build/arm/xmc_i2s.o
+ .text.XMC_USIC_CH_SetMode
+                0x0000000000000000       0x28 build/arm/xmc_i2s.o
+ .text.XMC_I2S_CH_ClearStatusFlag
+                0x0000000000000000       0x20 build/arm/xmc_i2s.o
+ .text.XMC_I2S_CH_Init
+                0x0000000000000000       0x94 build/arm/xmc_i2s.o
+ .text.XMC_I2S_CH_SetBaudrate
+                0x0000000000000000       0x4c build/arm/xmc_i2s.o
+ .text.XMC_I2S_CH_SetSystemWordLength
+                0x0000000000000000       0xb4 build/arm/xmc_i2s.o
+ .text.XMC_I2S_CH_Transmit
+                0x0000000000000000       0x5c build/arm/xmc_i2s.o
+ .text.XMC_I2S_CH_GetReceivedData
+                0x0000000000000000       0x34 build/arm/xmc_i2s.o
+ .text.XMC_I2S_CH_Stop
+                0x0000000000000000       0x34 build/arm/xmc_i2s.o
+ .text.XMC_I2S_CH_EnableEvent
+                0x0000000000000000       0x38 build/arm/xmc_i2s.o
+ .text.XMC_I2S_CH_DisableEvent
+                0x0000000000000000       0x3c build/arm/xmc_i2s.o
+ .debug_info    0x0000000000000000      0x911 build/arm/xmc_i2s.o
+ .debug_abbrev  0x0000000000000000      0x1fe build/arm/xmc_i2s.o
+ .debug_loc     0x0000000000000000      0x3c4 build/arm/xmc_i2s.o
+ .debug_aranges
+                0x0000000000000000       0x70 build/arm/xmc_i2s.o
+ .debug_ranges  0x0000000000000000       0x60 build/arm/xmc_i2s.o
+ .debug_line    0x0000000000000000      0x266 build/arm/xmc_i2s.o
+ .debug_str     0x0000000000000000      0xad4 build/arm/xmc_i2s.o
+ .comment       0x0000000000000000       0x39 build/arm/xmc_i2s.o
+ .debug_frame   0x0000000000000000      0x1b8 build/arm/xmc_i2s.o
+ .ARM.attributes
+                0x0000000000000000       0x37 build/arm/xmc_i2s.o
+ .text          0x0000000000000000        0x0 build/arm/xmc_ledts.o
+ .data          0x0000000000000000        0x0 build/arm/xmc_ledts.o
+ .bss           0x0000000000000000        0x0 build/arm/xmc_ledts.o
+ .text.XMC_LEDTS_InitGlobal
+                0x0000000000000000       0x44 build/arm/xmc_ledts.o
+ .text.XMC_LEDTS_InitLED
+                0x0000000000000000       0x50 build/arm/xmc_ledts.o
+ .text.XMC_LEDTS_InitTSBasic
+                0x0000000000000000       0x58 build/arm/xmc_ledts.o
+ .text.XMC_LEDTS_InitTSAdvanced
+                0x0000000000000000       0x6c build/arm/xmc_ledts.o
+ .text.XMC_LEDTS_StartCounter
+                0x0000000000000000       0x24 build/arm/xmc_ledts.o
+ .text.XMC_LEDTS_StopCounter
+                0x0000000000000000       0x1c build/arm/xmc_ledts.o
+ .text.XMC_LEDTS_ReadInterruptFlag
+                0x0000000000000000       0x1c build/arm/xmc_ledts.o
+ .text.XMC_LEDTS_SetActivePADNo
+                0x0000000000000000       0x34 build/arm/xmc_ledts.o
+ .text.XMC_LEDTS_ClearInterruptFlag
+                0x0000000000000000       0x1c build/arm/xmc_ledts.o
+ .text.XMC_LEDTS_SetLEDLinePattern
+                0x0000000000000000       0x6c build/arm/xmc_ledts.o
+ .text.XMC_LEDTS_SetColumnBrightness
+                0x0000000000000000       0x6c build/arm/xmc_ledts.o
+ .text.XMC_LEDTS_SetCommonOscillationWindow
+                0x0000000000000000       0x38 build/arm/xmc_ledts.o
+ .text.XMC_LEDTS_ReadFNCOL
+                0x0000000000000000       0x28 build/arm/xmc_ledts.o
+ .text.XMC_LEDTS_SetNumOfLEDColumns
+                0x0000000000000000       0x30 build/arm/xmc_ledts.o
+ .text.XMC_LEDTS_ReadTSVAL
+                0x0000000000000000       0x1c build/arm/xmc_ledts.o
+ .text.XMC_LEDTS_SetOscillationWindow
+                0x0000000000000000       0x6c build/arm/xmc_ledts.o
+ .debug_info    0x0000000000000000      0xb42 build/arm/xmc_ledts.o
+ .debug_abbrev  0x0000000000000000      0x231 build/arm/xmc_ledts.o
+ .debug_loc     0x0000000000000000      0x5b4 build/arm/xmc_ledts.o
+ .debug_aranges
+                0x0000000000000000       0x98 build/arm/xmc_ledts.o
+ .debug_ranges  0x0000000000000000       0x88 build/arm/xmc_ledts.o
+ .debug_line    0x0000000000000000      0x298 build/arm/xmc_ledts.o
+ .debug_str     0x0000000000000000      0xc71 build/arm/xmc_ledts.o
+ .comment       0x0000000000000000       0x39 build/arm/xmc_ledts.o
+ .debug_frame   0x0000000000000000      0x28c build/arm/xmc_ledts.o
+ .ARM.attributes
+                0x0000000000000000       0x37 build/arm/xmc_ledts.o
+ .text          0x0000000000000000        0x0 build/arm/xmc_posif.o
+ .data          0x0000000000000000        0x0 build/arm/xmc_posif.o
+ .bss           0x0000000000000000        0x0 build/arm/xmc_posif.o
+ .text.XMC_POSIF_Stop
+                0x0000000000000000       0x20 build/arm/xmc_posif.o
+ .text.XMC_POSIF_Enable
+                0x0000000000000000       0x40 build/arm/xmc_posif.o
+ .text.XMC_POSIF_Disable
+                0x0000000000000000       0x3c build/arm/xmc_posif.o
+ .text.XMC_POSIF_Init
+                0x0000000000000000       0x24 build/arm/xmc_posif.o
+ .text.XMC_POSIF_HSC_Init
+                0x0000000000000000       0x40 build/arm/xmc_posif.o
+ .text.XMC_POSIF_QD_Init
+                0x0000000000000000       0x54 build/arm/xmc_posif.o
+ .text.XMC_POSIF_MCM_Init
+                0x0000000000000000       0x40 build/arm/xmc_posif.o
+ .text.XMC_POSIF_SelectInputSource
+                0x0000000000000000       0x54 build/arm/xmc_posif.o
+ .text.XMC_POSIF_SetInterruptNode
+                0x0000000000000000       0x48 build/arm/xmc_posif.o
+ .debug_info    0x0000000000000000      0xa79 build/arm/xmc_posif.o
+ .debug_abbrev  0x0000000000000000      0x227 build/arm/xmc_posif.o
+ .debug_loc     0x0000000000000000      0x318 build/arm/xmc_posif.o
+ .debug_aranges
+                0x0000000000000000       0x60 build/arm/xmc_posif.o
+ .debug_ranges  0x0000000000000000       0x50 build/arm/xmc_posif.o
+ .debug_line    0x0000000000000000      0x228 build/arm/xmc_posif.o
+ .debug_str     0x0000000000000000      0xc49 build/arm/xmc_posif.o
+ .comment       0x0000000000000000       0x39 build/arm/xmc_posif.o
+ .debug_frame   0x0000000000000000      0x16c build/arm/xmc_posif.o
+ .ARM.attributes
+                0x0000000000000000       0x37 build/arm/xmc_posif.o
+ .text          0x0000000000000000        0x0 build/arm/xmc_rtc.o
+ .data          0x0000000000000000        0x0 build/arm/xmc_rtc.o
+ .bss           0x0000000000000000        0x0 build/arm/xmc_rtc.o
+ .text.XMC_SCU_GetMirrorStatus
+                0x0000000000000000       0x18 build/arm/xmc_rtc.o
+ .text.XMC_RTC_Start
+                0x0000000000000000       0x28 build/arm/xmc_rtc.o
+ .text.XMC_RTC_Stop
+                0x0000000000000000       0x28 build/arm/xmc_rtc.o
+ .text.XMC_RTC_SetPrescaler
+                0x0000000000000000       0x34 build/arm/xmc_rtc.o
+ .text.XMC_RTC_SetTime
+                0x0000000000000000       0x44 build/arm/xmc_rtc.o
+ .text.XMC_RTC_GetTime
+                0x0000000000000000       0x28 build/arm/xmc_rtc.o
+ .text.XMC_RTC_GetTimeStdFormat
+                0x0000000000000000       0x80 build/arm/xmc_rtc.o
+ .text.XMC_RTC_SetAlarm
+                0x0000000000000000       0x44 build/arm/xmc_rtc.o
+ .text.XMC_RTC_GetAlarm
+                0x0000000000000000       0x28 build/arm/xmc_rtc.o
+ .text.XMC_RTC_GetAlarmStdFormat
+                0x0000000000000000       0x74 build/arm/xmc_rtc.o
+ .text.XMC_RTC_GetEventStatus
+                0x0000000000000000       0x18 build/arm/xmc_rtc.o
+ .debug_info    0x0000000000000000      0x784 build/arm/xmc_rtc.o
+ .debug_abbrev  0x0000000000000000      0x1d1 build/arm/xmc_rtc.o
+ .debug_loc     0x0000000000000000      0x340 build/arm/xmc_rtc.o
+ .debug_aranges
+                0x0000000000000000       0x70 build/arm/xmc_rtc.o
+ .debug_ranges  0x0000000000000000       0x60 build/arm/xmc_rtc.o
+ .debug_line    0x0000000000000000      0x278 build/arm/xmc_rtc.o
+ .debug_str     0x0000000000000000      0x47a build/arm/xmc_rtc.o
+ .comment       0x0000000000000000       0x39 build/arm/xmc_rtc.o
+ .debug_frame   0x0000000000000000      0x194 build/arm/xmc_rtc.o
+ .ARM.attributes
+                0x0000000000000000       0x37 build/arm/xmc_rtc.o
+ .text          0x0000000000000000        0x0 build/arm/xmc_sdmmc.o
+ .data          0x0000000000000000        0x0 build/arm/xmc_sdmmc.o
+ .bss           0x0000000000000000        0x0 build/arm/xmc_sdmmc.o
+ .text.XMC_SDMMC_SetDataLineTimeout
+                0x0000000000000000       0x34 build/arm/xmc_sdmmc.o
+ .text.XMC_SDMMC_GetPowerStatus
+                0x0000000000000000       0x2c build/arm/xmc_sdmmc.o
+ .text.XMC_SDMMC_Enable
+                0x0000000000000000       0x18 build/arm/xmc_sdmmc.o
+ .text.XMC_SDMMC_Disable
+                0x0000000000000000       0x18 build/arm/xmc_sdmmc.o
+ .text.XMC_SDMMC_Init
+                0x0000000000000000       0x58 build/arm/xmc_sdmmc.o
+ .text.XMC_SDMMC_EnableEventStatus
+                0x0000000000000000       0x3c build/arm/xmc_sdmmc.o
+ .text.XMC_SDMMC_DisableEventStatus
+                0x0000000000000000       0x44 build/arm/xmc_sdmmc.o
+ .text.XMC_SDMMC_EnableEvent
+                0x0000000000000000       0x40 build/arm/xmc_sdmmc.o
+ .text.XMC_SDMMC_DisableEvent
+                0x0000000000000000       0x44 build/arm/xmc_sdmmc.o
+ .text.XMC_SDMMC_ClearEvent
+                0x0000000000000000       0x3c build/arm/xmc_sdmmc.o
+ .text.XMC_SDMMC_GetEvent
+                0x0000000000000000       0x54 build/arm/xmc_sdmmc.o
+ .text.XMC_SDMMC_GetR2Response
+                0x0000000000000000       0x34 build/arm/xmc_sdmmc.o
+ .text.XMC_SDMMC_SendCommand
+                0x0000000000000000       0x28 build/arm/xmc_sdmmc.o
+ .text.XMC_SDMMC_SetDataTransferMode
+                0x0000000000000000       0x84 build/arm/xmc_sdmmc.o
+ .debug_info    0x0000000000000000      0xb49 build/arm/xmc_sdmmc.o
+ .debug_abbrev  0x0000000000000000      0x241 build/arm/xmc_sdmmc.o
+ .debug_loc     0x0000000000000000      0x4cc build/arm/xmc_sdmmc.o
+ .debug_aranges
+                0x0000000000000000       0x88 build/arm/xmc_sdmmc.o
+ .debug_ranges  0x0000000000000000       0x78 build/arm/xmc_sdmmc.o
+ .debug_line    0x0000000000000000      0x26a build/arm/xmc_sdmmc.o
+ .debug_str     0x0000000000000000     0x106e build/arm/xmc_sdmmc.o
+ .comment       0x0000000000000000       0x39 build/arm/xmc_sdmmc.o
+ .debug_frame   0x0000000000000000      0x22c build/arm/xmc_sdmmc.o
+ .ARM.attributes
+                0x0000000000000000       0x37 build/arm/xmc_sdmmc.o
+ .text          0x0000000000000000        0x0 build/arm/xmc_spi.o
+ .data          0x0000000000000000        0x0 build/arm/xmc_spi.o
+ .bss           0x0000000000000000        0x0 build/arm/xmc_spi.o
+ .text.XMC_USIC_CH_GetTransmitBufferStatus
+                0x0000000000000000       0x20 build/arm/xmc_spi.o
+ .text.XMC_USIC_CH_SetMode
+                0x0000000000000000       0x28 build/arm/xmc_spi.o
+ .text.XMC_SPI_CH_ClearStatusFlag
+                0x0000000000000000       0x20 build/arm/xmc_spi.o
+ .text.XMC_SPI_CH_Init
+                0x0000000000000000       0x68 build/arm/xmc_spi.o
+ .text.XMC_SPI_CH_SetBaudrate
+                0x0000000000000000       0x3c build/arm/xmc_spi.o
+ .text.XMC_SPI_CH_EnableSlaveSelect
+                0x0000000000000000       0x2c build/arm/xmc_spi.o
+ .text.XMC_SPI_CH_DisableSlaveSelect
+                0x0000000000000000       0x24 build/arm/xmc_spi.o
+ .text.XMC_SPI_CH_Transmit
+                0x0000000000000000       0x6c build/arm/xmc_spi.o
+ .text.XMC_SPI_CH_GetReceivedData
+                0x0000000000000000       0x34 build/arm/xmc_spi.o
+ .text.XMC_SPI_CH_SetInterwordDelay
+                0x0000000000000000      0x130 build/arm/xmc_spi.o
+ .text.XMC_SPI_CH_Stop
+                0x0000000000000000       0x34 build/arm/xmc_spi.o
+ .text.XMC_SPI_CH_EnableEvent
+                0x0000000000000000       0x34 build/arm/xmc_spi.o
+ .text.XMC_SPI_CH_DisableEvent
+                0x0000000000000000       0x38 build/arm/xmc_spi.o
+ .debug_info    0x0000000000000000      0xa27 build/arm/xmc_spi.o
+ .debug_abbrev  0x0000000000000000      0x218 build/arm/xmc_spi.o
+ .debug_loc     0x0000000000000000      0x466 build/arm/xmc_spi.o
+ .debug_aranges
+                0x0000000000000000       0x80 build/arm/xmc_spi.o
+ .debug_ranges  0x0000000000000000       0x70 build/arm/xmc_spi.o
+ .debug_line    0x0000000000000000      0x292 build/arm/xmc_spi.o
+ .debug_str     0x0000000000000000      0xcbe build/arm/xmc_spi.o
+ .comment       0x0000000000000000       0x39 build/arm/xmc_spi.o
+ .debug_frame   0x0000000000000000      0x200 build/arm/xmc_spi.o
+ .ARM.attributes
+                0x0000000000000000       0x37 build/arm/xmc_spi.o
+ .text          0x0000000000000000        0x0 build/arm/xmc_uart.o
+ .data          0x0000000000000000        0x0 build/arm/xmc_uart.o
+ .bss           0x0000000000000000        0x0 build/arm/xmc_uart.o
+ .text.XMC_USIC_CH_GetTransmitBufferStatus
+                0x0000000000000000       0x20 build/arm/xmc_uart.o
+ .text.XMC_USIC_CH_SetMode
+                0x0000000000000000       0x28 build/arm/xmc_uart.o
+ .text.XMC_UART_CH_ClearStatusFlag
+                0x0000000000000000       0x1c build/arm/xmc_uart.o
+ .text.XMC_UART_CH_Init
+                0x0000000000000000       0xa8 build/arm/xmc_uart.o
+ .text.XMC_UART_CH_SetBaudrate
+                0x0000000000000000       0x44 build/arm/xmc_uart.o
+ .text.XMC_UART_CH_Transmit
+                0x0000000000000000       0x4c build/arm/xmc_uart.o
+ .text.XMC_UART_CH_GetReceivedData
+                0x0000000000000000       0x34 build/arm/xmc_uart.o
+ .text.XMC_UART_CH_Stop
+                0x0000000000000000       0x34 build/arm/xmc_uart.o
+ .text.XMC_UART_CH_EnableEvent
+                0x0000000000000000       0x34 build/arm/xmc_uart.o
+ .text.XMC_UART_CH_DisableEvent
+                0x0000000000000000       0x38 build/arm/xmc_uart.o
+ .debug_info    0x0000000000000000      0x85e build/arm/xmc_uart.o
+ .debug_abbrev  0x0000000000000000      0x1fe build/arm/xmc_uart.o
+ .debug_loc     0x0000000000000000      0x368 build/arm/xmc_uart.o
+ .debug_aranges
+                0x0000000000000000       0x68 build/arm/xmc_uart.o
+ .debug_ranges  0x0000000000000000       0x58 build/arm/xmc_uart.o
+ .debug_line    0x0000000000000000      0x228 build/arm/xmc_uart.o
+ .debug_str     0x0000000000000000      0xa88 build/arm/xmc_uart.o
+ .comment       0x0000000000000000       0x39 build/arm/xmc_uart.o
+ .debug_frame   0x0000000000000000      0x190 build/arm/xmc_uart.o
+ .ARM.attributes
+                0x0000000000000000       0x37 build/arm/xmc_uart.o
+ .text          0x0000000000000000        0x0 build/arm/xmc_usbd.o
+ .data          0x0000000000000000        0x0 build/arm/xmc_usbd.o
+ .bss           0x0000000000000000        0x0 build/arm/xmc_usbd.o
+ .bss.XMC_USBD_EP_OUT_BUFFERSIZE
+                0x0000000000000000       0x1c build/arm/xmc_usbd.o
+ .bss.XMC_USBD_EP_IN_BUFFERSIZE
+                0x0000000000000000       0x1c build/arm/xmc_usbd.o
+ USB_RAM        0x0000000000000000      0xe00 build/arm/xmc_usbd.o
+ .rodata.Driver_USBD0
+                0x0000000000000000       0x40 build/arm/xmc_usbd.o
+ .text.XMC_USBD_lDeviceActive
+                0x0000000000000000       0x6c build/arm/xmc_usbd.o
+ .text.XMC_USBD_lReadFifo
+                0x0000000000000000       0xe8 build/arm/xmc_usbd.o
+ .text.XMC_USBD_lWriteFifo
+                0x0000000000000000       0xa4 build/arm/xmc_usbd.o
+ .text.XMC_USBD_lFlushTXFifo
+                0x0000000000000000       0x7c build/arm/xmc_usbd.o
+ .text.XMC_USBD_lFlushRXFifo
+                0x0000000000000000       0x68 build/arm/xmc_usbd.o
+ .text.XMC_USBD_lAssignTXFifo
+                0x0000000000000000       0x70 build/arm/xmc_usbd.o
+ .text.XMC_USBD_lUnassignFifo
+                0x0000000000000000       0x38 build/arm/xmc_usbd.o
+ .text.XMC_USBD_lStartReadXfer
+                0x0000000000000000      0x178 build/arm/xmc_usbd.o
+ .text.XMC_USBD_lStartWriteXfer
+                0x0000000000000000      0x194 build/arm/xmc_usbd.o
+ .text.XMC_USBD_lHandleUSBReset
+                0x0000000000000000      0x14c build/arm/xmc_usbd.o
+ .text.XMC_USBD_lHandleOTGInt
+                0x0000000000000000       0x48 build/arm/xmc_usbd.o
+ .text.XMC_USBD_lHandleEnumDone
+                0x0000000000000000       0x78 build/arm/xmc_usbd.o
+ .text.XMC_USBD_lHandleOEPInt
+                0x0000000000000000      0x1b8 build/arm/xmc_usbd.o
+ .text.XMC_USBD_lHandleIEPInt
+                0x0000000000000000      0x1b8 build/arm/xmc_usbd.o
+ .text.XMC_USBD_lHandleRxFLvl
+                0x0000000000000000       0x80 build/arm/xmc_usbd.o
+ .text.XMC_USBD_IRQHandler
+                0x0000000000000000      0x14c build/arm/xmc_usbd.o
+ .text.XMC_USBD_Enable
+                0x0000000000000000       0x14 build/arm/xmc_usbd.o
+ .text.XMC_USBD_Disable
+                0x0000000000000000       0x14 build/arm/xmc_usbd.o
+ .text.XMC_USBD_ClearEvent
+                0x0000000000000000       0xc8 build/arm/xmc_usbd.o
+ .text.XMC_USBD_lClearEventOTG
+                0x0000000000000000       0x28 build/arm/xmc_usbd.o
+ .text.XMC_USBD_ClearEventINEP
+                0x0000000000000000       0x2c build/arm/xmc_usbd.o
+ .text.XMC_USBD_ClearEventOUTEP
+                0x0000000000000000       0x30 build/arm/xmc_usbd.o
+ .text.XMC_USBD_EnableEventOUTEP
+                0x0000000000000000       0x30 build/arm/xmc_usbd.o
+ .text.XMC_USBD_EnableEventINEP
+                0x0000000000000000       0x30 build/arm/xmc_usbd.o
+ .text.XMC_USBD_GetCapabilities
+                0x0000000000000000       0x68 build/arm/xmc_usbd.o
+ .text.XMC_USBD_Init
+                0x0000000000000000      0x23c build/arm/xmc_usbd.o
+ .text.XMC_USBD_Uninitialize
+                0x0000000000000000       0x3c build/arm/xmc_usbd.o
+ .text.XMC_USBD_DeviceConnect
+                0x0000000000000000       0x34 build/arm/xmc_usbd.o
+ .text.XMC_USBD_DeviceDisconnect
+                0x0000000000000000       0x34 build/arm/xmc_usbd.o
+ .text.XMC_USBD_DeviceGetState
+                0x0000000000000000       0x64 build/arm/xmc_usbd.o
+ .text.XMC_USBD_EndpointReadStart
+                0x0000000000000000       0x8c build/arm/xmc_usbd.o
+ .text.XMC_USBD_EndpointRead
+                0x0000000000000000       0x78 build/arm/xmc_usbd.o
+ .text.XMC_USBD_EndpointWrite
+                0x0000000000000000       0xa8 build/arm/xmc_usbd.o
+ .text.XMC_USBD_DeviceSetAddress
+                0x0000000000000000       0x4c build/arm/xmc_usbd.o
+ .text.XMC_USBD_EndpointStall
+                0x0000000000000000      0x14c build/arm/xmc_usbd.o
+ .text.XMC_USBD_EndpointAbort
+                0x0000000000000000       0x88 build/arm/xmc_usbd.o
+ .text.XMC_USBD_EndpointConfigure
+                0x0000000000000000      0x2f4 build/arm/xmc_usbd.o
+ .text.XMC_USBD_EndpointUnconfigure
+                0x0000000000000000      0x170 build/arm/xmc_usbd.o
+ .text.XMC_USBD_GetFrameNumber
+                0x0000000000000000       0x2c build/arm/xmc_usbd.o
+ .text.XMC_USBD_IsEnumDone
+                0x0000000000000000       0x38 build/arm/xmc_usbd.o
+ .debug_info    0x0000000000000000     0x374b build/arm/xmc_usbd.o
+ .debug_abbrev  0x0000000000000000      0x3e6 build/arm/xmc_usbd.o
+ .debug_loc     0x0000000000000000      0xd34 build/arm/xmc_usbd.o
+ .debug_aranges
+                0x0000000000000000      0x158 build/arm/xmc_usbd.o
+ .debug_ranges  0x0000000000000000      0x148 build/arm/xmc_usbd.o
+ .debug_line    0x0000000000000000      0x7b8 build/arm/xmc_usbd.o
+ .debug_str     0x0000000000000000     0x241b build/arm/xmc_usbd.o
+ .comment       0x0000000000000000       0x39 build/arm/xmc_usbd.o
+ .debug_frame   0x0000000000000000      0x5fc build/arm/xmc_usbd.o
+ .ARM.attributes
+                0x0000000000000000       0x37 build/arm/xmc_usbd.o
+ COMMON         0x0000000000000000      0x20c build/arm/xmc_usbd.o
+ .text          0x0000000000000000        0x0 build/arm/xmc_usic.o
+ .data          0x0000000000000000        0x0 build/arm/xmc_usic.o
+ .bss           0x0000000000000000        0x0 build/arm/xmc_usic.o
+ .text.XMC_USIC_CH_SetInputTriggerCombinationMode
+                0x0000000000000000       0x3c build/arm/xmc_usic.o
+ .text.XMC_USIC_CH_SetBRGInputClockSource
+                0x0000000000000000       0x28 build/arm/xmc_usic.o
+ .text.XMC_USIC_CH_Enable
+                0x0000000000000000       0x98 build/arm/xmc_usic.o
+ .text.XMC_USIC_CH_Disable
+                0x0000000000000000       0x24 build/arm/xmc_usic.o
+ .text.XMC_USIC_CH_SetBaudrate
+                0x0000000000000000       0xe0 build/arm/xmc_usic.o
+ .text.XMC_USIC_CH_ConfigExternalInputSignalToBRG
+                0x0000000000000000       0x50 build/arm/xmc_usic.o
+ .text.XMC_USIC_CH_TXFIFO_Configure
+                0x0000000000000000       0x50 build/arm/xmc_usic.o
+ .text.XMC_USIC_CH_RXFIFO_Configure
+                0x0000000000000000       0x54 build/arm/xmc_usic.o
+ .text.XMC_USIC_CH_TXFIFO_SetSizeTriggerLimit
+                0x0000000000000000       0x44 build/arm/xmc_usic.o
+ .text.XMC_USIC_CH_RXFIFO_SetSizeTriggerLimit
+                0x0000000000000000       0x44 build/arm/xmc_usic.o
+ .text.XMC_USIC_CH_SetInterruptNodePointer
+                0x0000000000000000       0x38 build/arm/xmc_usic.o
+ .text.XMC_USIC_CH_TXFIFO_SetInterruptNodePointer
+                0x0000000000000000       0x3c build/arm/xmc_usic.o
+ .text.XMC_USIC_CH_RXFIFO_SetInterruptNodePointer
+                0x0000000000000000       0x3c build/arm/xmc_usic.o
+ .text.XMC_USIC_Enable
+                0x0000000000000000       0x54 build/arm/xmc_usic.o
+ .text.XMC_USIC_Disable
+                0x0000000000000000       0x54 build/arm/xmc_usic.o
+ .debug_info    0x0000000000000000      0xb5d build/arm/xmc_usic.o
+ .debug_abbrev  0x0000000000000000      0x1eb build/arm/xmc_usic.o
+ .debug_loc     0x0000000000000000      0x52a build/arm/xmc_usic.o
+ .debug_aranges
+                0x0000000000000000       0x90 build/arm/xmc_usic.o
+ .debug_ranges  0x0000000000000000       0x80 build/arm/xmc_usic.o
+ .debug_line    0x0000000000000000      0x2f7 build/arm/xmc_usic.o
+ .debug_str     0x0000000000000000     0x1011 build/arm/xmc_usic.o
+ .comment       0x0000000000000000       0x39 build/arm/xmc_usic.o
+ .debug_frame   0x0000000000000000      0x254 build/arm/xmc_usic.o
+ .ARM.attributes
+                0x0000000000000000       0x37 build/arm/xmc_usic.o
+ .text          0x0000000000000000        0x0 build/arm/xmc_vadc.o
+ .data          0x0000000000000000        0x0 build/arm/xmc_vadc.o
+ .bss           0x0000000000000000        0x0 build/arm/xmc_vadc.o
+ .text.XMC_VADC_GROUP_ExternalMuxControlInit
+                0x0000000000000000       0x6c build/arm/xmc_vadc.o
+ .text.XMC_VADC_GROUP_ScanEnableArbitrationSlot
+                0x0000000000000000       0x24 build/arm/xmc_vadc.o
+ .text.XMC_VADC_GROUP_ScanDisableArbitrationSlot
+                0x0000000000000000       0x24 build/arm/xmc_vadc.o
+ .text.XMC_VADC_GROUP_BackgroundEnableArbitrationSlot
+                0x0000000000000000       0x24 build/arm/xmc_vadc.o
+ .text.XMC_VADC_GROUP_BackgroundDisableArbitrationSlot
+                0x0000000000000000       0x24 build/arm/xmc_vadc.o
+ .text.XMC_VADC_GROUP_QueueEnableArbitrationSlot
+                0x0000000000000000       0x24 build/arm/xmc_vadc.o
+ .text.XMC_VADC_GROUP_QueueDisableArbitrationSlot
+                0x0000000000000000       0x24 build/arm/xmc_vadc.o
+ .text.XMC_VADC_GROUP_QueueFlushEntries
+                0x0000000000000000       0x34 build/arm/xmc_vadc.o
+ .rodata.g_xmc_vadc_group_array
+                0x0000000000000000       0x10 build/arm/xmc_vadc.o
+ .text.XMC_VADC_GLOBAL_EnableModule
+                0x0000000000000000        0xc build/arm/xmc_vadc.o
+ .text.XMC_VADC_GLOBAL_DisableModule
+                0x0000000000000000        0xc build/arm/xmc_vadc.o
+ .text.XMC_VADC_GLOBAL_Init
+                0x0000000000000000       0x54 build/arm/xmc_vadc.o
+ .text.XMC_VADC_GLOBAL_InputClassInit
+                0x0000000000000000       0x48 build/arm/xmc_vadc.o
+ .text.XMC_VADC_GLOBAL_StartupCalibration
+                0x0000000000000000       0x60 build/arm/xmc_vadc.o
+ .text.XMC_VADC_GLOBAL_SetBoundaries
+                0x0000000000000000       0x34 build/arm/xmc_vadc.o
+ .text.XMC_VADC_GLOBAL_SetIndividualBoundary
+                0x0000000000000000       0x64 build/arm/xmc_vadc.o
+ .text.XMC_VADC_GLOBAL_SetCompareValue
+                0x0000000000000000       0x38 build/arm/xmc_vadc.o
+ .text.XMC_VADC_GLOBAL_GetCompareResult
+                0x0000000000000000       0x38 build/arm/xmc_vadc.o
+ .text.XMC_VADC_GLOBAL_BindGroupToEMux
+                0x0000000000000000       0x58 build/arm/xmc_vadc.o
+ .text.XMC_VADC_GLOBAL_SetResultEventInterruptNode
+                0x0000000000000000       0x4c build/arm/xmc_vadc.o
+ .text.XMC_VADC_GLOBAL_BackgroundSetReqSrcEventInterruptNode
+                0x0000000000000000       0x48 build/arm/xmc_vadc.o
+ .text.XMC_VADC_GROUP_Init
+                0x0000000000000000       0x68 build/arm/xmc_vadc.o
+ .text.XMC_VADC_GROUP_InputClassInit
+                0x0000000000000000       0xb8 build/arm/xmc_vadc.o
+ .text.XMC_VADC_GROUP_SetPowerMode
+                0x0000000000000000       0x38 build/arm/xmc_vadc.o
+ .text.XMC_VADC_GROUP_SetSyncSlave
+                0x0000000000000000       0x44 build/arm/xmc_vadc.o
+ .text.XMC_VADC_GROUP_SetSyncMaster
+                0x0000000000000000       0x2c build/arm/xmc_vadc.o
+ .text.XMC_VADC_GROUP_CheckSlaveReadiness
+                0x0000000000000000       0x5c build/arm/xmc_vadc.o
+ .text.XMC_VADC_GROUP_IgnoreSlaveReadiness
+                0x0000000000000000       0x5c build/arm/xmc_vadc.o
+ .text.XMC_VADC_GROUP_EnableChannelSyncRequest
+                0x0000000000000000       0x40 build/arm/xmc_vadc.o
+ .text.XMC_VADC_GROUP_DisableChannelSyncRequest
+                0x0000000000000000       0x40 build/arm/xmc_vadc.o
+ .text.XMC_VADC_GROUP_IsConverterBusy
+                0x0000000000000000       0x30 build/arm/xmc_vadc.o
+ .text.XMC_VADC_GROUP_SetBoundaries
+                0x0000000000000000       0x50 build/arm/xmc_vadc.o
+ .text.XMC_VADC_GROUP_SetIndividualBoundary
+                0x0000000000000000       0x64 build/arm/xmc_vadc.o
+ .text.XMC_VADC_GROUP_TriggerServiceRequest
+                0x0000000000000000       0x50 build/arm/xmc_vadc.o
+ .text.XMC_VADC_GROUP_ScanInit
+                0x0000000000000000       0x9c build/arm/xmc_vadc.o
+ .text.XMC_VADC_GROUP_ScanSelectTrigger
+                0x0000000000000000       0x40 build/arm/xmc_vadc.o
+ .text.XMC_VADC_GROUP_ScanSelectTriggerEdge
+                0x0000000000000000       0x40 build/arm/xmc_vadc.o
+ .text.XMC_VADC_GROUP_ScanSelectGating
+                0x0000000000000000       0x40 build/arm/xmc_vadc.o
+ .text.XMC_VADC_GROUP_ScanSequenceAbort
+                0x0000000000000000       0x80 build/arm/xmc_vadc.o
+ .text.XMC_VADC_GROUP_ScanGetNumChannelsPending
+                0x0000000000000000       0x54 build/arm/xmc_vadc.o
+ .text.XMC_VADC_GROUP_ScanSetReqSrcEventInterruptNode
+                0x0000000000000000       0x38 build/arm/xmc_vadc.o
+ .text.XMC_VADC_GROUP_ScanRemoveChannel
+                0x0000000000000000       0x38 build/arm/xmc_vadc.o
+ .text.XMC_VADC_GLOBAL_BackgroundInit
+                0x0000000000000000       0xfc build/arm/xmc_vadc.o
+ .text.XMC_VADC_GLOBAL_BackgroundSelectTrigger
+                0x0000000000000000       0x40 build/arm/xmc_vadc.o
+ .text.XMC_VADC_GLOBAL_BackgroundSelectTriggerEdge
+                0x0000000000000000       0x40 build/arm/xmc_vadc.o
+ .text.XMC_VADC_GLOBAL_BackgroundSelectGating
+                0x0000000000000000       0x40 build/arm/xmc_vadc.o
+ .text.XMC_VADC_GLOBAL_BackgroundAbortSequence
+                0x0000000000000000       0xb0 build/arm/xmc_vadc.o
+ .text.XMC_VADC_GLOBAL_BackgroundGetNumChannelsPending
+                0x0000000000000000       0x70 build/arm/xmc_vadc.o
+ .text.XMC_VADC_GROUP_QueueInit
+                0x0000000000000000       0x9c build/arm/xmc_vadc.o
+ .text.XMC_VADC_GROUP_QueueSelectTrigger
+                0x0000000000000000       0x40 build/arm/xmc_vadc.o
+ .text.XMC_VADC_GROUP_QueueSelectTriggerEdge
+                0x0000000000000000       0x40 build/arm/xmc_vadc.o
+ .text.XMC_VADC_GROUP_QueueSelectGating
+                0x0000000000000000       0x40 build/arm/xmc_vadc.o
+ .text.XMC_VADC_GROUP_QueueGetLength
+                0x0000000000000000       0x50 build/arm/xmc_vadc.o
+ .text.XMC_VADC_GROUP_QueueAbortSequence
+                0x0000000000000000       0x68 build/arm/xmc_vadc.o
+ .text.XMC_VADC_GROUP_QueueRemoveChannel
+                0x0000000000000000       0x98 build/arm/xmc_vadc.o
+ .text.XMC_VADC_GROUP_QueueGetNextChannel
+                0x0000000000000000       0x54 build/arm/xmc_vadc.o
+ .text.XMC_VADC_GROUP_QueueGetInterruptedChannel
+                0x0000000000000000       0x38 build/arm/xmc_vadc.o
+ .text.XMC_VADC_GROUP_QueueSetReqSrcEventInterruptNode
+                0x0000000000000000       0x38 build/arm/xmc_vadc.o
+ .text.XMC_VADC_GROUP_ChannelInit
+                0x0000000000000000       0xc8 build/arm/xmc_vadc.o
+ .text.XMC_VADC_GROUP_SetChannelAlias
+                0x0000000000000000       0x58 build/arm/xmc_vadc.o
+ .text.XMC_VADC_GROUP_ChannelIsResultOutOfBounds
+                0x0000000000000000       0x60 build/arm/xmc_vadc.o
+ .text.XMC_VADC_GROUP_ChannelSetInputReference
+                0x0000000000000000       0x44 build/arm/xmc_vadc.o
+ .text.XMC_VADC_GROUP_ChannelSetResultRegister
+                0x0000000000000000       0x40 build/arm/xmc_vadc.o
+ .text.XMC_VADC_GROUP_ChannelSetIclass
+                0x0000000000000000       0x40 build/arm/xmc_vadc.o
+ .text.XMC_VADC_GROUP_ChannelGetResultRegister
+                0x0000000000000000       0x2c build/arm/xmc_vadc.o
+ .text.XMC_VADC_GROUP_ChannelTriggerEvent
+                0x0000000000000000       0x34 build/arm/xmc_vadc.o
+ .text.XMC_VADC_GROUP_ChannelSetEventInterruptNode
+                0x0000000000000000       0x48 build/arm/xmc_vadc.o
+ .text.XMC_VADC_GROUP_ChannelTriggerEventGenCriteria
+                0x0000000000000000       0x44 build/arm/xmc_vadc.o
+ .text.XMC_VADC_GROUP_ChannelSetBoundarySelection
+                0x0000000000000000       0x64 build/arm/xmc_vadc.o
+ .text.XMC_VADC_GROUP_AddResultToFifo
+                0x0000000000000000       0x3c build/arm/xmc_vadc.o
+ .text.XMC_VADC_GROUP_SetResultFastCompareValue
+                0x0000000000000000       0x44 build/arm/xmc_vadc.o
+ .text.XMC_VADC_GROUP_GetFastCompareResult
+                0x0000000000000000       0x3c build/arm/xmc_vadc.o
+ .text.XMC_VADC_GROUP_SetResultSubtractionValue
+                0x0000000000000000       0x38 build/arm/xmc_vadc.o
+ .text.XMC_VADC_GROUP_SetResultInterruptNode
+                0x0000000000000000       0x90 build/arm/xmc_vadc.o
+ .text.XMC_VADC_GROUP_GetResultFifoTail
+                0x0000000000000000       0x8c build/arm/xmc_vadc.o
+ .text.XMC_VADC_GROUP_GetResultFifoHead
+                0x0000000000000000       0x60 build/arm/xmc_vadc.o
+ .text.XMC_VADC_GROUP_IsResultRegisterFifoHead
+                0x0000000000000000       0x60 build/arm/xmc_vadc.o
+ .debug_info    0x0000000000000000     0x2e3d build/arm/xmc_vadc.o
+ .debug_abbrev  0x0000000000000000      0x275 build/arm/xmc_vadc.o
+ .debug_loc     0x0000000000000000     0x1a6c build/arm/xmc_vadc.o
+ .debug_aranges
+                0x0000000000000000      0x278 build/arm/xmc_vadc.o
+ .debug_ranges  0x0000000000000000      0x268 build/arm/xmc_vadc.o
+ .debug_line    0x0000000000000000      0x9a9 build/arm/xmc_vadc.o
+ .debug_str     0x0000000000000000     0x266a build/arm/xmc_vadc.o
+ .comment       0x0000000000000000       0x39 build/arm/xmc_vadc.o
+ .debug_frame   0x0000000000000000      0xbac build/arm/xmc_vadc.o
+ .ARM.attributes
+                0x0000000000000000       0x37 build/arm/xmc_vadc.o
+ .text          0x0000000000000000        0x0 build/arm/xmc_wdt.o
+ .data          0x0000000000000000        0x0 build/arm/xmc_wdt.o
+ .bss           0x0000000000000000        0x0 build/arm/xmc_wdt.o
+ .text.XMC_WDT_Enable
+                0x0000000000000000       0x18 build/arm/xmc_wdt.o
+ .text.XMC_WDT_Disable
+                0x0000000000000000       0x18 build/arm/xmc_wdt.o
+ .text.XMC_WDT_Init
+                0x0000000000000000       0x30 build/arm/xmc_wdt.o
+ .debug_info    0x0000000000000000      0x37d build/arm/xmc_wdt.o
+ .debug_abbrev  0x0000000000000000      0x16d build/arm/xmc_wdt.o
+ .debug_loc     0x0000000000000000       0xa8 build/arm/xmc_wdt.o
+ .debug_aranges
+                0x0000000000000000       0x30 build/arm/xmc_wdt.o
+ .debug_ranges  0x0000000000000000       0x20 build/arm/xmc_wdt.o
+ .debug_line    0x0000000000000000      0x17a build/arm/xmc_wdt.o
+ .debug_str     0x0000000000000000      0x64c build/arm/xmc_wdt.o
+ .comment       0x0000000000000000       0x39 build/arm/xmc_wdt.o
+ .debug_frame   0x0000000000000000       0x6c build/arm/xmc_wdt.o
+ .ARM.attributes
+                0x0000000000000000       0x37 build/arm/xmc_wdt.o
+ .text          0x0000000000000000        0x0 build/arm/system_XMC4500.o
+ .data          0x0000000000000000        0x0 build/arm/system_XMC4500.o
+ .bss           0x0000000000000000        0x0 build/arm/system_XMC4500.o
+ .comment       0x0000000000000000       0x39 build/arm/system_XMC4500.o
+ .text          0x0000000000000000        0x0 build/arm/startup_XMC4500.o
+ .data          0x0000000000000000        0x0 build/arm/startup_XMC4500.o
+ .bss           0x0000000000000000        0x0 build/arm/startup_XMC4500.o
+ .text          0x0000000000000000       0x10 /usr/lib/gcc/arm-none-eabi/4.9.2/../../../../arm-none-eabi/lib/libg.a(lib_a-errno.o)
+ .data          0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.2/../../../../arm-none-eabi/lib/libg.a(lib_a-errno.o)
+ .bss           0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.2/../../../../arm-none-eabi/lib/libg.a(lib_a-errno.o)
+ .debug_info    0x0000000000000000      0x889 /usr/lib/gcc/arm-none-eabi/4.9.2/../../../../arm-none-eabi/lib/libg.a(lib_a-errno.o)
+ .debug_abbrev  0x0000000000000000      0x18f /usr/lib/gcc/arm-none-eabi/4.9.2/../../../../arm-none-eabi/lib/libg.a(lib_a-errno.o)
+ .debug_aranges
+                0x0000000000000000       0x20 /usr/lib/gcc/arm-none-eabi/4.9.2/../../../../arm-none-eabi/lib/libg.a(lib_a-errno.o)
+ .debug_line    0x0000000000000000      0x15c /usr/lib/gcc/arm-none-eabi/4.9.2/../../../../arm-none-eabi/lib/libg.a(lib_a-errno.o)
+ .debug_str     0x0000000000000000      0x531 /usr/lib/gcc/arm-none-eabi/4.9.2/../../../../arm-none-eabi/lib/libg.a(lib_a-errno.o)
+ .comment       0x0000000000000000       0x39 /usr/lib/gcc/arm-none-eabi/4.9.2/../../../../arm-none-eabi/lib/libg.a(lib_a-errno.o)
+ .debug_frame   0x0000000000000000       0x20 /usr/lib/gcc/arm-none-eabi/4.9.2/../../../../arm-none-eabi/lib/libg.a(lib_a-errno.o)
+ .ARM.attributes
+                0x0000000000000000       0x30 /usr/lib/gcc/arm-none-eabi/4.9.2/../../../../arm-none-eabi/lib/libg.a(lib_a-errno.o)
+ .text          0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.2/../../../../arm-none-eabi/lib/libg.a(lib_a-impure.o)
+ .data          0x0000000000000000      0x430 /usr/lib/gcc/arm-none-eabi/4.9.2/../../../../arm-none-eabi/lib/libg.a(lib_a-impure.o)
+ .bss           0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.2/../../../../arm-none-eabi/lib/libg.a(lib_a-impure.o)
+ .rodata        0x0000000000000000        0x4 /usr/lib/gcc/arm-none-eabi/4.9.2/../../../../arm-none-eabi/lib/libg.a(lib_a-impure.o)
+ .rodata.str1.4
+                0x0000000000000000        0x2 /usr/lib/gcc/arm-none-eabi/4.9.2/../../../../arm-none-eabi/lib/libg.a(lib_a-impure.o)
+ .debug_info    0x0000000000000000      0x894 /usr/lib/gcc/arm-none-eabi/4.9.2/../../../../arm-none-eabi/lib/libg.a(lib_a-impure.o)
+ .debug_abbrev  0x0000000000000000      0x180 /usr/lib/gcc/arm-none-eabi/4.9.2/../../../../arm-none-eabi/lib/libg.a(lib_a-impure.o)
+ .debug_aranges
+                0x0000000000000000       0x18 /usr/lib/gcc/arm-none-eabi/4.9.2/../../../../arm-none-eabi/lib/libg.a(lib_a-impure.o)
+ .debug_line    0x0000000000000000      0x141 /usr/lib/gcc/arm-none-eabi/4.9.2/../../../../arm-none-eabi/lib/libg.a(lib_a-impure.o)
+ .debug_str     0x0000000000000000      0x549 /usr/lib/gcc/arm-none-eabi/4.9.2/../../../../arm-none-eabi/lib/libg.a(lib_a-impure.o)
+ .comment       0x0000000000000000       0x39 /usr/lib/gcc/arm-none-eabi/4.9.2/../../../../arm-none-eabi/lib/libg.a(lib_a-impure.o)
+ .ARM.attributes
+                0x0000000000000000       0x30 /usr/lib/gcc/arm-none-eabi/4.9.2/../../../../arm-none-eabi/lib/libg.a(lib_a-impure.o)
+ .data          0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.2/../../../../arm-none-eabi/lib/libg.a(lib_a-init.o)
+ .bss           0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.2/../../../../arm-none-eabi/lib/libg.a(lib_a-init.o)
+ .comment       0x0000000000000000       0x39 /usr/lib/gcc/arm-none-eabi/4.9.2/../../../../arm-none-eabi/lib/libg.a(lib_a-init.o)
+ .text          0x0000000000000000       0xf0 /usr/lib/gcc/arm-none-eabi/4.9.2/../../../../arm-none-eabi/lib/libg.a(lib_a-memcpy-stub.o)
+ .data          0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.2/../../../../arm-none-eabi/lib/libg.a(lib_a-memcpy-stub.o)
+ .bss           0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.2/../../../../arm-none-eabi/lib/libg.a(lib_a-memcpy-stub.o)
+ .debug_info    0x0000000000000000      0x131 /usr/lib/gcc/arm-none-eabi/4.9.2/../../../../arm-none-eabi/lib/libg.a(lib_a-memcpy-stub.o)
+ .debug_abbrev  0x0000000000000000       0xab /usr/lib/gcc/arm-none-eabi/4.9.2/../../../../arm-none-eabi/lib/libg.a(lib_a-memcpy-stub.o)
+ .debug_loc     0x0000000000000000      0x217 /usr/lib/gcc/arm-none-eabi/4.9.2/../../../../arm-none-eabi/lib/libg.a(lib_a-memcpy-stub.o)
+ .debug_aranges
+                0x0000000000000000       0x20 /usr/lib/gcc/arm-none-eabi/4.9.2/../../../../arm-none-eabi/lib/libg.a(lib_a-memcpy-stub.o)
+ .debug_line    0x0000000000000000      0x181 /usr/lib/gcc/arm-none-eabi/4.9.2/../../../../arm-none-eabi/lib/libg.a(lib_a-memcpy-stub.o)
+ .debug_str     0x0000000000000000      0x1b1 /usr/lib/gcc/arm-none-eabi/4.9.2/../../../../arm-none-eabi/lib/libg.a(lib_a-memcpy-stub.o)
+ .comment       0x0000000000000000       0x39 /usr/lib/gcc/arm-none-eabi/4.9.2/../../../../arm-none-eabi/lib/libg.a(lib_a-memcpy-stub.o)
+ .debug_frame   0x0000000000000000       0x38 /usr/lib/gcc/arm-none-eabi/4.9.2/../../../../arm-none-eabi/lib/libg.a(lib_a-memcpy-stub.o)
+ .ARM.attributes
+                0x0000000000000000       0x30 /usr/lib/gcc/arm-none-eabi/4.9.2/../../../../arm-none-eabi/lib/libg.a(lib_a-memcpy-stub.o)
+ .text          0x0000000000000000       0xf4 /usr/lib/gcc/arm-none-eabi/4.9.2/../../../../arm-none-eabi/lib/libg.a(lib_a-memset.o)
+ .data          0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.2/../../../../arm-none-eabi/lib/libg.a(lib_a-memset.o)
+ .bss           0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.2/../../../../arm-none-eabi/lib/libg.a(lib_a-memset.o)
+ .debug_info    0x0000000000000000      0x117 /usr/lib/gcc/arm-none-eabi/4.9.2/../../../../arm-none-eabi/lib/libg.a(lib_a-memset.o)
+ .debug_abbrev  0x0000000000000000       0x9f /usr/lib/gcc/arm-none-eabi/4.9.2/../../../../arm-none-eabi/lib/libg.a(lib_a-memset.o)
+ .debug_loc     0x0000000000000000      0x198 /usr/lib/gcc/arm-none-eabi/4.9.2/../../../../arm-none-eabi/lib/libg.a(lib_a-memset.o)
+ .debug_aranges
+                0x0000000000000000       0x20 /usr/lib/gcc/arm-none-eabi/4.9.2/../../../../arm-none-eabi/lib/libg.a(lib_a-memset.o)
+ .debug_line    0x0000000000000000      0x16d /usr/lib/gcc/arm-none-eabi/4.9.2/../../../../arm-none-eabi/lib/libg.a(lib_a-memset.o)
+ .debug_str     0x0000000000000000      0x18c /usr/lib/gcc/arm-none-eabi/4.9.2/../../../../arm-none-eabi/lib/libg.a(lib_a-memset.o)
+ .comment       0x0000000000000000       0x39 /usr/lib/gcc/arm-none-eabi/4.9.2/../../../../arm-none-eabi/lib/libg.a(lib_a-memset.o)
+ .debug_frame   0x0000000000000000       0x30 /usr/lib/gcc/arm-none-eabi/4.9.2/../../../../arm-none-eabi/lib/libg.a(lib_a-memset.o)
+ .ARM.attributes
+                0x0000000000000000       0x30 /usr/lib/gcc/arm-none-eabi/4.9.2/../../../../arm-none-eabi/lib/libg.a(lib_a-memset.o)
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+FLASH_1_cached   0x0000000008000000 0x0000000000100000 xr
+FLASH_1_uncached 0x000000000c000000 0x0000000000100000 xr
+PSRAM_1          0x0000000010000000 0x0000000000010000 !xr
+DSRAM_1_system   0x0000000020000000 0x0000000000010000 !xr
+DSRAM_2_comm     0x0000000030000000 0x0000000000008000 !xr
+*default*        0x0000000000000000 0xffffffffffffffff
+
+Linker script and memory map
+
+LOAD build/arm/main.o
+LOAD build/arm/led_module.o
+LOAD build/arm/PID_controller.o
+LOAD build/arm/syscalls.o
+LOAD build/arm/xmc4_eru.o
+LOAD build/arm/xmc4_flash.o
+LOAD build/arm/xmc4_gpio.o
+LOAD build/arm/xmc4_rtc.o
+LOAD build/arm/xmc4_scu.o
+LOAD build/arm/xmc_can.o
+LOAD build/arm/xmc_ccu4.o
+LOAD build/arm/xmc_ccu8.o
+LOAD build/arm/xmc_common.o
+LOAD build/arm/xmc_dac.o
+LOAD build/arm/xmc_dma.o
+LOAD build/arm/xmc_dsd.o
+LOAD build/arm/xmc_ebu.o
+LOAD build/arm/xmc_ecat.o
+LOAD build/arm/xmc_eru.o
+LOAD build/arm/xmc_eth_mac.o
+LOAD build/arm/xmc_fce.o
+LOAD build/arm/xmc_gpio.o
+LOAD build/arm/xmc_hrpwm.o
+LOAD build/arm/xmc_i2c.o
+LOAD build/arm/xmc_i2s.o
+LOAD build/arm/xmc_ledts.o
+LOAD build/arm/xmc_posif.o
+LOAD build/arm/xmc_rtc.o
+LOAD build/arm/xmc_sdmmc.o
+LOAD build/arm/xmc_spi.o
+LOAD build/arm/xmc_uart.o
+LOAD build/arm/xmc_usbd.o
+LOAD build/arm/xmc_usic.o
+LOAD build/arm/xmc_vadc.o
+LOAD build/arm/xmc_wdt.o
+LOAD build/arm/system_XMC4500.o
+LOAD build/arm/startup_XMC4500.o
+LOAD /usr/lib/gcc/arm-none-eabi/4.9.2/../../../../arm-none-eabi/lib/libm.a
+START GROUP
+LOAD /usr/lib/gcc/arm-none-eabi/4.9.2/libgcc.a
+LOAD /usr/lib/gcc/arm-none-eabi/4.9.2/../../../../arm-none-eabi/lib/libg.a
+LOAD /usr/lib/gcc/arm-none-eabi/4.9.2/../../../../arm-none-eabi/lib/libc.a
+END GROUP
+                0x0000000000000800                stack_size = 0x800
+
+.text           0x0000000008000000      0x7a8 load address 0x000000000c000000
+                0x0000000008000000                sText = .
+ *(.reset)
+ .reset         0x0000000008000000      0x2b2 build/arm/startup_XMC4500.o
+                0x0000000008000000                __Vectors
+                0x0000000008000200                Reset_Handler
+                0x00000000080002b0                VADC0_C0_3_IRQHandler
+                0x00000000080002b0                DSD0_7_IRQHandler
+                0x00000000080002b0                DebugMon_Handler
+                0x00000000080002b0                VADC0_C0_0_IRQHandler
+                0x00000000080002b0                CAN0_4_IRQHandler
+                0x00000000080002b0                VADC0_G2_0_IRQHandler
+                0x00000000080002b0                USIC0_5_IRQHandler
+                0x00000000080002b0                POSIF0_0_IRQHandler
+                0x00000000080002b0                POSIF1_0_IRQHandler
+                0x00000000080002b0                HardFault_Handler
+                0x00000000080002b0                VADC0_G1_1_IRQHandler
+                0x00000000080002b0                SysTick_Handler
+                0x00000000080002b0                PendSV_Handler
+                0x00000000080002b0                NMI_Handler
+                0x00000000080002b0                USIC1_3_IRQHandler
+                0x00000000080002b0                CCU40_2_IRQHandler
+                0x00000000080002b0                SCU_0_IRQHandler
+                0x00000000080002b0                ERU0_0_IRQHandler
+                0x00000000080002b0                CCU41_0_IRQHandler
+                0x00000000080002b0                USIC1_5_IRQHandler
+                0x00000000080002b0                DSD0_4_IRQHandler
+                0x00000000080002b0                CCU80_1_IRQHandler
+                0x00000000080002b0                CCU81_0_IRQHandler
+                0x00000000080002b0                UsageFault_Handler
+                0x00000000080002b0                USIC0_0_IRQHandler
+                0x00000000080002b0                POSIF1_1_IRQHandler
+                0x00000000080002b0                ERU0_2_IRQHandler
+                0x00000000080002b0                CCU81_1_IRQHandler
+                0x00000000080002b0                ERU1_1_IRQHandler
+                0x00000000080002b0                VADC0_G2_3_IRQHandler
+                0x00000000080002b0                VADC0_G2_2_IRQHandler
+                0x00000000080002b0                CCU42_3_IRQHandler
+                0x00000000080002b0                ERU0_3_IRQHandler
+                0x00000000080002b0                DSD0_5_IRQHandler
+                0x00000000080002b0                CAN0_6_IRQHandler
+                0x00000000080002b0                CCU43_0_IRQHandler
+                0x00000000080002b0                VADC0_G0_1_IRQHandler
+                0x00000000080002b0                CCU81_2_IRQHandler
+                0x00000000080002b0                USIC2_4_IRQHandler
+                0x00000000080002b0                CCU81_3_IRQHandler
+                0x00000000080002b0                CCU42_1_IRQHandler
+                0x00000000080002b0                USIC1_1_IRQHandler
+                0x00000000080002b0                USIC2_5_IRQHandler
+                0x00000000080002b0                CCU40_0_IRQHandler
+                0x00000000080002b0                CAN0_0_IRQHandler
+                0x00000000080002b0                ERU1_0_IRQHandler
+                0x00000000080002b0                CCU42_2_IRQHandler
+                0x00000000080002b0                Default_Handler
+                0x00000000080002b0                USIC1_4_IRQHandler
+                0x00000000080002b0                ERU1_3_IRQHandler
+                0x00000000080002b0                USIC1_0_IRQHandler
+                0x00000000080002b0                POSIF0_1_IRQHandler
+                0x00000000080002b0                VADC0_G0_0_IRQHandler
+                0x00000000080002b0                DSD0_2_IRQHandler
+                0x00000000080002b0                CCU80_3_IRQHandler
+                0x00000000080002b0                CCU41_3_IRQHandler
+                0x00000000080002b0                CCU80_2_IRQHandler
+                0x00000000080002b0                VADC0_G1_3_IRQHandler
+                0x00000000080002b0                VADC0_G0_3_IRQHandler
+                0x00000000080002b0                GPDMA0_0_IRQHandler
+                0x00000000080002b0                PMU0_0_IRQHandler
+                0x00000000080002b0                CAN0_7_IRQHandler
+                0x00000000080002b0                DSD0_1_IRQHandler
+                0x00000000080002b0                CCU41_2_IRQHandler
+                0x00000000080002b0                VADC0_C0_1_IRQHandler
+                0x00000000080002b0                CCU43_2_IRQHandler
+                0x00000000080002b0                USIC2_2_IRQHandler
+                0x00000000080002b0                MemManage_Handler
+                0x00000000080002b0                VADC0_G3_1_IRQHandler
+                0x00000000080002b0                DAC0_0_IRQHandler
+                0x00000000080002b0                SVC_Handler
+                0x00000000080002b0                VADC0_G3_3_IRQHandler
+                0x00000000080002b0                ERU1_2_IRQHandler
+                0x00000000080002b0                CCU41_1_IRQHandler
+                0x00000000080002b0                DSD0_6_IRQHandler
+                0x00000000080002b0                CCU43_1_IRQHandler
+                0x00000000080002b0                VADC0_G1_2_IRQHandler
+                0x00000000080002b0                USIC2_3_IRQHandler
+                0x00000000080002b0                CAN0_2_IRQHandler
+                0x00000000080002b0                USIC2_0_IRQHandler
+                0x00000000080002b0                VADC0_G0_2_IRQHandler
+                0x00000000080002b0                VADC0_G2_1_IRQHandler
+                0x00000000080002b0                CAN0_3_IRQHandler
+                0x00000000080002b0                ETH0_0_IRQHandler
+                0x00000000080002b0                USIC0_3_IRQHandler
+                0x00000000080002b0                DSD0_0_IRQHandler
+                0x00000000080002b0                VADC0_C0_2_IRQHandler
+                0x00000000080002b0                CCU42_0_IRQHandler
+                0x00000000080002b0                FCE0_0_IRQHandler
+                0x00000000080002b0                VADC0_G1_0_IRQHandler
+                0x00000000080002b0                USB0_0_IRQHandler
+                0x00000000080002b0                CAN0_5_IRQHandler
+                0x00000000080002b0                CCU80_0_IRQHandler
+                0x00000000080002b0                CCU40_1_IRQHandler
+                0x00000000080002b0                USIC2_1_IRQHandler
+                0x00000000080002b0                USIC0_1_IRQHandler
+                0x00000000080002b0                VADC0_G3_2_IRQHandler
+                0x00000000080002b0                CCU40_3_IRQHandler
+                0x00000000080002b0                BusFault_Handler
+                0x00000000080002b0                LEDTS0_0_IRQHandler
+                0x00000000080002b0                USIC0_4_IRQHandler
+                0x00000000080002b0                CCU43_3_IRQHandler
+                0x00000000080002b0                ERU0_1_IRQHandler
+                0x00000000080002b0                VADC0_G3_0_IRQHandler
+                0x00000000080002b0                USIC1_2_IRQHandler
+                0x00000000080002b0                DSD0_3_IRQHandler
+                0x00000000080002b0                SDMMC0_0_IRQHandler
+                0x00000000080002b0                CAN0_1_IRQHandler
+                0x00000000080002b0                USIC0_2_IRQHandler
+                0x00000000080002b0                DAC0_1_IRQHandler
+                0x00000000080002b0                GPDMA1_0_IRQHandler
+ *(.text .text.* .gnu.linkonce.t.*)
+ *fill*         0x00000000080002b2        0x2 
+ .text.wait     0x00000000080002b4       0x60 build/arm/main.o
+                0x00000000080002b4                wait
+ .text.main     0x0000000008000314       0x20 build/arm/main.o
+                0x0000000008000314                main
+ .text.XMC_GPIO_ToggleOutput
+                0x0000000008000334       0x24 build/arm/led_module.o
+ .text.led_toggle
+                0x0000000008000358       0x20 build/arm/led_module.o
+                0x0000000008000358                led_toggle
+ .text._init    0x0000000008000378        0xc build/arm/syscalls.o
+                0x0000000008000378                _init
+ .text.delay    0x0000000008000384       0x28 build/arm/system_XMC4500.o
+ .text.SystemInit
+                0x00000000080003ac       0x20 build/arm/system_XMC4500.o
+                0x00000000080003ac                SystemInit
+ .text.SystemCoreSetup
+                0x00000000080003cc       0x70 build/arm/system_XMC4500.o
+                0x00000000080003cc                SystemCoreSetup
+ .text.SystemCoreClockSetup
+                0x000000000800043c      0x204 build/arm/system_XMC4500.o
+                0x000000000800043c                SystemCoreClockSetup
+ .text.SystemCoreClockUpdate
+                0x0000000008000640       0xd4 build/arm/system_XMC4500.o
+                0x0000000008000640                SystemCoreClockUpdate
+ .text.OSCHP_GetFrequency
+                0x0000000008000714       0x14 build/arm/system_XMC4500.o
+                0x0000000008000714                OSCHP_GetFrequency
+ .text          0x0000000008000728       0x80 /usr/lib/gcc/arm-none-eabi/4.9.2/../../../../arm-none-eabi/lib/libg.a(lib_a-init.o)
+                0x0000000008000728                __libc_init_array
+ *(.init)
+ *(.fini)
+ *crtbegin.o(.ctors)
+ *crtbegin?.o(.ctors)
+ *(EXCLUDE_FILE(*crtend.o *crtend?.o) .ctors)
+ *(SORT(.ctors.*))
+ *(.ctors)
+ *crtbegin.o(.dtors)
+ *crtbegin?.o(.dtors)
+ *(EXCLUDE_FILE(*crtend.o *crtend?.o) .dtors)
+ *(SORT(.dtors.*))
+ *(.dtors)
+ *(.rodata .rodata.*)
+ *(.gnu.linkonce.r*)
+                0x00000000080007a8                . = ALIGN (0x4)
+
+.glue_7         0x00000000080007a8        0x0 load address 0x000000000c0007a8
+ .glue_7        0x00000000080007a8        0x0 linker stubs
+
+.glue_7t        0x00000000080007a8        0x0 load address 0x000000000c0007a8
+ .glue_7t       0x00000000080007a8        0x0 linker stubs
+
+.vfp11_veneer   0x00000000080007a8        0x0 load address 0x000000000c0007a8
+ .vfp11_veneer  0x00000000080007a8        0x0 linker stubs
+
+.v4_bx          0x00000000080007a8        0x0 load address 0x000000000c0007a8
+ .v4_bx         0x00000000080007a8        0x0 linker stubs
+
+.iplt           0x00000000080007a8        0x0 load address 0x000000000c0007a8
+ .iplt          0x00000000080007a8        0x0 build/arm/main.o
+
+.rel.dyn        0x00000000080007a8        0x0 load address 0x000000000c0007a8
+ .rel.iplt      0x00000000080007a8        0x0 build/arm/main.o
+
+.ARM.extab
+ *(.ARM.extab* .gnu.linkonce.armextab.*)
+                0x00000000080007a8                __exidx_start = .
+
+.ARM.exidx
+ *(.ARM.exidx* .gnu.linkonce.armexidx.*)
+                0x00000000080007a8                __exidx_end = .
+
+Stack           0x0000000010000000      0x800
+                0x0000000010000000                __stack_start = .
+                0x0000000010000800                . = (. + stack_size)
+ *fill*         0x0000000010000000      0x800 
+                0x0000000010000800                __stack_end = .
+                0x0000000010000800                __initial_sp = .
+
+.ram_code       0x0000000010000800        0x0 load address 0x000000000c0007a8
+                0x0000000010000800                . = ALIGN (0x4)
+                0x0000000010000800                __ram_code_start = .
+ *(.ram_code)
+                0x0000000010000800                __ram_code_end = .
+                0x000000000c0007a8                __ram_code_load = LOADADDR (.ram_code)
+                0x0000000000000000                __ram_code_size = (__ram_code_end - __ram_code_start)
+
+PSRAM_DATA      0x0000000010000800        0x0 load address 0x000000000c0007a8
+                0x0000000010000800                . = ALIGN (0x4)
+                0x0000000010000800                __data3_start = .
+ *(PSRAM_DATA)
+                0x0000000010000800                __data3_end = .
+                0x000000000c0007a8                __data3_load = LOADADDR (PSRAM_DATA)
+                0x0000000000000000                __data3_size = (__data3_end - __data3_start)
+
+PSRAM_BSS       0x0000000010000800        0x0 load address 0x000000000c0007a8
+                0x0000000010000800                . = ALIGN (0x4)
+                0x0000000010000800                __bss3_start = .
+ *(PSRAM_BSS)
+                0x0000000010000800                __bss3_end = .
+                0x0000000010000800                . = ALIGN (0x8)
+                0x0000000010000800                Heap_Bank3_Start = .
+                0x0000000000000000                __bss3_size = (__bss3_end - __bss3_start)
+
+.data           0x0000000020000000        0x0 load address 0x000000000c0007a8
+                0x0000000020000000                . = ALIGN (0x4)
+                0x0000000020000000                __data_start = .
+ *(.data)
+ *(.data*)
+ *(*.data)
+ *(.gnu.linkonce.d*)
+                0x0000000020000000                . = ALIGN (0x4)
+                0x0000000020000000                PROVIDE (__preinit_array_start, .)
+ *(.preinit_array)
+                0x0000000020000000                PROVIDE (__preinit_array_end, .)
+                0x0000000020000000                . = ALIGN (0x4)
+                0x0000000020000000                PROVIDE (__init_array_start, .)
+ *(SORT(.init_array.*))
+ *(.init_array)
+                0x0000000020000000                PROVIDE (__init_array_end, .)
+                0x0000000020000000                . = ALIGN (0x4)
+                [!provide]                        PROVIDE (__fini_array_start, .)
+ *(SORT(.fini_array.*))
+ *(.fini_array)
+                [!provide]                        PROVIDE (__fini_array_end, .)
+                0x0000000020000000                __data_end = .
+                0x000000000c0007a8                __data_load = LOADADDR (.data)
+                0x0000000000000000                __data_size = (__data_end - __data_start)
+
+.igot.plt       0x0000000020000000        0x0 load address 0x000000000c0007a8
+ .igot.plt      0x0000000020000000        0x0 build/arm/main.o
+
+.bss            0x0000000020000000        0x0 load address 0x000000000c0007a8
+                0x0000000020000000                . = ALIGN (0x4)
+                0x0000000020000000                __bss_start = .
+ *(.bss)
+ *(.bss*)
+ *(COMMON)
+ *(.gnu.linkonce.b*)
+                0x0000000020000000                __bss_end = .
+                0x0000000020000000                . = ALIGN (0x8)
+                0x0000000020000000                Heap_Bank1_Start = .
+                0x0000000000000000                __bss_size = (__bss_end - __bss_start)
+
+.no_init        0x000000002000ffc0       0x14
+                0x000000002000ffc0                Heap_Bank1_End = .
+ *(.no_init)
+ .no_init       0x000000002000ffc0       0x14 build/arm/system_XMC4500.o
+                0x000000002000ffc0                SystemCoreClock
+                0x000000002000ffc4                g_chipid
+
+DSRAM2_DATA     0x0000000030000000        0x0 load address 0x000000000c0007a8
+                0x0000000030000000                . = ALIGN (0x4)
+                0x0000000030000000                __data2_start = .
+ *(DSRAM2_DATA)
+                0x0000000030000000                __data2_end = .
+                0x000000000c0007a8                __data2_load = LOADADDR (DSRAM2_DATA)
+                0x0000000000000000                __data2_size = (__data2_end - __data2_start)
+
+DSRAM2_BSS      0x0000000030000000        0x0 load address 0x000000000c0007a8
+                0x0000000030000000                . = ALIGN (0x4)
+                0x0000000030000000                __bss2_start = .
+ *(ETH_RAM)
+ *(USB_RAM)
+ *(DSRAM2_BSS)
+                0x0000000030000000                __bss2_end = .
+                0x0000000030000000                . = ALIGN (0x8)
+                0x0000000030000000                Heap_Bank2_Start = .
+                0x0000000000000000                __bss2_size = (__bss2_end - __bss2_start)
+                0x000000000000ffc0                Heap_Bank1_Size = (Heap_Bank1_End - Heap_Bank1_Start)
+                0x0000000000008000                Heap_Bank2_Size = (LENGTH (DSRAM_2_comm) - (Heap_Bank2_Start - ORIGIN (DSRAM_2_comm)))
+                0x000000000000f800                Heap_Bank3_Size = (LENGTH (PSRAM_1) - (Heap_Bank3_Start - ORIGIN (PSRAM_1)))
+
+/DISCARD/
+ *(.comment)
+
+.stab
+ *(.stab)
+
+.stabstr
+ *(.stabstr)
+
+.debug
+ *(.debug)
+
+.line
+ *(.line)
+
+.debug_srcinfo
+ *(.debug_srcinfo)
+
+.debug_sfnames
+ *(.debug_sfnames)
+
+.debug_aranges  0x0000000000000000      0x108
+ *(.debug_aranges)
+ .debug_aranges
+                0x0000000000000000       0x28 build/arm/main.o
+ .debug_aranges
+                0x0000000000000028       0x30 build/arm/led_module.o
+ .debug_aranges
+                0x0000000000000058       0x28 build/arm/syscalls.o
+ .debug_aranges
+                0x0000000000000080       0x48 build/arm/system_XMC4500.o
+ .debug_aranges
+                0x00000000000000c8       0x20 build/arm/startup_XMC4500.o
+ .debug_aranges
+                0x00000000000000e8       0x20 /usr/lib/gcc/arm-none-eabi/4.9.2/../../../../arm-none-eabi/lib/libg.a(lib_a-init.o)
+
+.debug_pubnames
+ *(.debug_pubnames)
+
+.debug_pubtypes
+ *(.debug_pubtypes)
+
+.debug_info     0x0000000000000000     0x108a
+ *(.debug_info .gnu.linkonce.wi.*)
+ .debug_info    0x0000000000000000      0x111 build/arm/main.o
+ .debug_info    0x0000000000000111      0x43b build/arm/led_module.o
+ .debug_info    0x000000000000054c      0x10b build/arm/syscalls.o
+ .debug_info    0x0000000000000657      0x8d1 build/arm/system_XMC4500.o
+ .debug_info    0x0000000000000f28       0x5d build/arm/startup_XMC4500.o
+ .debug_info    0x0000000000000f85      0x105 /usr/lib/gcc/arm-none-eabi/4.9.2/../../../../arm-none-eabi/lib/libg.a(lib_a-init.o)
+
+.debug_abbrev   0x0000000000000000      0x522
+ *(.debug_abbrev)
+ .debug_abbrev  0x0000000000000000       0xa3 build/arm/main.o
+ .debug_abbrev  0x00000000000000a3      0x16b build/arm/led_module.o
+ .debug_abbrev  0x000000000000020e       0xa5 build/arm/syscalls.o
+ .debug_abbrev  0x00000000000002b3      0x1a1 build/arm/system_XMC4500.o
+ .debug_abbrev  0x0000000000000454       0x14 build/arm/startup_XMC4500.o
+ .debug_abbrev  0x0000000000000468       0xba /usr/lib/gcc/arm-none-eabi/4.9.2/../../../../arm-none-eabi/lib/libg.a(lib_a-init.o)
+
+.debug_line     0x0000000000000000      0x64b
+ *(.debug_line)
+ .debug_line    0x0000000000000000       0xee build/arm/main.o
+ .debug_line    0x00000000000000ee      0x139 build/arm/led_module.o
+ .debug_line    0x0000000000000227       0x8f build/arm/syscalls.o
+ .debug_line    0x00000000000002b6      0x224 build/arm/system_XMC4500.o
+ .debug_line    0x00000000000004da       0x85 build/arm/startup_XMC4500.o
+ .debug_line    0x000000000000055f       0xec /usr/lib/gcc/arm-none-eabi/4.9.2/../../../../arm-none-eabi/lib/libg.a(lib_a-init.o)
+
+.debug_frame    0x0000000000000000      0x234
+ *(.debug_frame)
+ .debug_frame   0x0000000000000000       0x54 build/arm/main.o
+ .debug_frame   0x0000000000000054       0x78 build/arm/led_module.o
+ .debug_frame   0x00000000000000cc       0x54 build/arm/syscalls.o
+ .debug_frame   0x0000000000000120       0xe0 build/arm/system_XMC4500.o
+ .debug_frame   0x0000000000000200       0x34 /usr/lib/gcc/arm-none-eabi/4.9.2/../../../../arm-none-eabi/lib/libg.a(lib_a-init.o)
+
+.debug_str      0x0000000000000000      0xbfc
+ *(.debug_str)
+ .debug_str     0x0000000000000000      0x164 build/arm/main.o
+                                        0x1aa (size before relaxing)
+ .debug_str     0x0000000000000164      0x59f build/arm/led_module.o
+                                        0x730 (size before relaxing)
+ .debug_str     0x0000000000000703       0x5e build/arm/syscalls.o
+                                        0x1c5 (size before relaxing)
+ .debug_str     0x0000000000000761      0x35c build/arm/system_XMC4500.o
+                                        0x530 (size before relaxing)
+ .debug_str     0x0000000000000abd      0x13f /usr/lib/gcc/arm-none-eabi/4.9.2/../../../../arm-none-eabi/lib/libg.a(lib_a-init.o)
+                                        0x1d7 (size before relaxing)
+
+.debug_loc      0x0000000000000000      0x43a
+ *(.debug_loc)
+ .debug_loc     0x0000000000000000       0x88 build/arm/main.o
+ .debug_loc     0x0000000000000088       0xd8 build/arm/led_module.o
+ .debug_loc     0x0000000000000160       0x94 build/arm/syscalls.o
+ .debug_loc     0x00000000000001f4      0x1a4 build/arm/system_XMC4500.o
+ .debug_loc     0x0000000000000398       0xa2 /usr/lib/gcc/arm-none-eabi/4.9.2/../../../../arm-none-eabi/lib/libg.a(lib_a-init.o)
+
+.debug_macinfo
+ *(.debug_macinfo)
+
+.debug_ranges   0x0000000000000000       0x88
+ *(.debug_ranges)
+ .debug_ranges  0x0000000000000000       0x18 build/arm/main.o
+ .debug_ranges  0x0000000000000018       0x20 build/arm/led_module.o
+ .debug_ranges  0x0000000000000038       0x18 build/arm/syscalls.o
+ .debug_ranges  0x0000000000000050       0x38 build/arm/system_XMC4500.o
+
+.debug_weaknames
+ *(.debug_weaknames)
+
+.debug_funcnames
+ *(.debug_funcnames)
+
+.debug_typenames
+ *(.debug_typenames)
+
+.debug_varnames
+ *(.debug_varnames)
+
+.build_attributes
+                0x0000000000000000      0x131
+ *(.ARM.attributes)
+ .ARM.attributes
+                0x0000000000000000       0x37 build/arm/main.o
+ .ARM.attributes
+                0x0000000000000037       0x37 build/arm/led_module.o
+ .ARM.attributes
+                0x000000000000006e       0x37 build/arm/syscalls.o
+ .ARM.attributes
+                0x00000000000000a5       0x37 build/arm/system_XMC4500.o
+ .ARM.attributes
+                0x00000000000000dc       0x25 build/arm/startup_XMC4500.o
+ .ARM.attributes
+                0x0000000000000101       0x30 /usr/lib/gcc/arm-none-eabi/4.9.2/../../../../arm-none-eabi/lib/libg.a(lib_a-init.o)
+OUTPUT(build/arm/arm.elf elf32-littlearm)
