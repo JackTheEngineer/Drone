@@ -93,7 +93,7 @@ end
 def compile_command_for_arm()
   compile_command = "#{ARM_GCC}"
   compile_command += " -c"
+  compile_command += " #{arm_include_dirs().pathmap('-I %p')}"
   compile_command += " #{ARM_COMPILE_OPTIONS}"
-  compile_command += "#{arm_include_dirs().pathmap(' -I %p')}"
   return compile_command
 end

@@ -2,8 +2,10 @@
 require File.expand_path('./common_definitions.rb', File.dirname(__FILE__))
 
 
-
-ARM_GCC = "arm-none-eabi-gcc"
+ARM_BASE = '/home/jakov/bin/gcc-arm-none-eabi-4_9-2014q4/bin/'
+ARM_GCC = "#{ARM_BASE}arm-none-eabi-gcc"
+ARM_OBJCOPY = "#{ARM_BASE}arm-none-eabi-objcopy"
+ARM_SIZE = "#{ARM_BASE}arm-none-eabi-size"
 # =======================================================================
 #  ARM Assembler Options Definition
 # =======================================================================
@@ -34,7 +36,6 @@ ARM_COMPILE_OPTIONS = [
   '-std=gnu99',
   '-mfloat-abi=softfp',
   '-pipe',
-  '-c',
   '-fmessage-length=0',
   '-mcpu=cortex-m4',
   '-mfpu=fpv4-sp-d16',
@@ -56,11 +57,13 @@ ARM_LINK_OPTIONS = [
 '-mcpu=cortex-m4', 
 '-mthumb',
 '-g', 
+'-specs=nano.specs',
 '-gdwarf-2',
 ].join(' ')
 
 LINK_LIBS = [
-  '-lm'
+  '-lm',
+
 ].join(' ')
 
 # ================================

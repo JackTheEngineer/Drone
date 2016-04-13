@@ -5,17 +5,16 @@ require File.expand_path('./arm_target_definitions.rb', File.dirname(__FILE__))
 import File.expand_path('./common_subtasks.rake', File.dirname(__FILE__))
 
 rule ".siz" => -> (sizfile){return sizfile.ext(".elf")} do |task|
-  sh "arm-none-eabi-size --format=berkeley #{task.source}"
-  CLEAN.include("#{task.name}")
+  sh "#{ARM_SIZE} --format=berkeley #{task.source}"
 end
 
 rule ".bin" => ->(binfile){return binfile.ext(".elf")} do |task|
-  sh "arm-none-eabi-objcopy -O binary #{task.source} #{task.name}"
+  sh "#{ARM_OBJCOPY} -O binary #{task.source} #{task.name}"
 
 end
 
 rule ".hex" => [->(hexfile){ return hexfile.ext(".elf")}] do |task|
-  sh "arm-none-eabi-objcopy -O ihex #{task.source} #{task.name}"
+  sh "#{ARM_OBJCOPY} -O ihex #{task.source} #{task.name}"
 
 end
 

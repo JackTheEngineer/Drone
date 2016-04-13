@@ -8,7 +8,7 @@ const XMC_GPIO_CONFIG_t LED_conf = {
 		.output_strength = XMC_GPIO_OUTPUT_STRENGTH_STRONG_SOFT_EDGE,
 };
 
-void led_init(void){
+void leds_init(void){
 	XMC_GPIO_Init(XMC_GPIO_PORT1, 0, &LED_conf);
 	XMC_GPIO_Init(XMC_GPIO_PORT1, 1, &LED_conf);
 }

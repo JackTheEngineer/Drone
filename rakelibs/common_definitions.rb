@@ -22,7 +22,14 @@ UNITY_SOURCE_DIRS = Rake::FileList.new("#{UNITY_ROOT}src/", "#{UNITY_ROOT}extras
 UNITY_SOURCES = Rake::FileList.new("#{UNITY_ROOT}src/unity.c", "#{UNITY_ROOT}extras/fixture/src/unity_fixture.c")
 
 TESTS = {
-    "PID_controller" => [
-     "PID_controller",
+    "pid_controller" => [
+     "pid_controller",
     ],
+  "fake_motion_sensor" => [
+       "fake_motion_sensor",
+       "motion_sensor"
+   ],  
+  "motion_sensor" => [
+       "motion_sensor",
+   ], 
 }

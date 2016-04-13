@@ -3,3 +3,6 @@
 .cproject
 consolelog
 Debug/**
+build/**
+.settings/**
+vendor/**

@@ -7,5 +7,6 @@ typedef enum lednumbers{
 }leds_t;
 
 void led_toggle(leds_t led);
+void leds_init(void);
 
 #endif
