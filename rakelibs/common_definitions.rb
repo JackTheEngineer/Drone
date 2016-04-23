@@ -13,7 +13,7 @@ TEST_DIR = 'test/'
 SUPPORT_DIR = TEST_DIR + 'support/'
 TEST_BUILD_DIR = BUILD_DIR + 'test/'
 SOURCEGEN_DIR = BUILD_DIR + 'sourcegen/'
-SCRIPTS_DIR = "scripts/"
+SCRIPTS_DIR = "rakelibs/"
 RUNNER_TEMPLATE = "#{SCRIPTS_DIR}runner_template.c"
 TARGET_LIBS = "XMC_Libs/"
 XMC_OBJS = Rake::FileList.new("XMC_objects/*.o")
@@ -27,7 +27,7 @@ TESTS = {
     ],
   "fake_motion_sensor" => [
        "fake_motion_sensor",
-       "motion_sensor"
+       "motion_sensor",
    ],  
   "motion_sensor" => [
        "motion_sensor",

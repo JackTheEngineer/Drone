@@ -70,7 +70,7 @@ def compile_command_for_test()
   compile_command += " -c"
   compile_command += " #{LOCAL_COMPILER_OPTIONS}"
   compile_command += " #{test_include_dirs().pathmap( "-I %p")}"
-  compile_command += " -I-"
+  compile_command += " -I- "
   return compile_command
 end
 

@@ -20,5 +20,5 @@ void motion_sensor_set_data_zero(Sensordata_t *sensordata){
 }
 
 void motion_senor_get_data(Sensordata_t *sensordata){
-
+    
 }

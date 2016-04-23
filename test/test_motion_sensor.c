@@ -7,17 +7,17 @@
 #include "test_helper.h"
 #include "motion_sensor.h"
 
-TEST_GROUP(fake_motion_sensor);
+TEST_GROUP(motion_sensor);
 Sensordata_t sensordata_container;
 Sensordata_t* sensordata = &sensordata_container;
 
-TEST_SETUP(fake_motion_sensor){
+TEST_SETUP(motion_sensor){
 }
 
-TEST_TEAR_DOWN(fake_motion_sensor){
+TEST_TEAR_DOWN(motion_sensor){
 }
 
-TEST(fake_motion_sensor, set_zero_should_set_all_values_to_zero){
+TEST(motion_sensor, set_zero_should_set_all_values_to_zero){
 	sensordata->accel_data.x = 101;
 	sensordata->accel_data.y = 101;
 	sensordata->accel_data.z = 110;
@@ -41,8 +41,8 @@ TEST(fake_motion_sensor, set_zero_should_set_all_values_to_zero){
 	TEST_ASSERT_EQUAL_INT32(0, sensordata->compass_data.z);
 }
 
-TEST(fake_motion_sensor, should_write_some_values){
-	TEST_IGNORE();
+TEST(motion_sensor, should_do_nothing){
+    TEST_IGNORE();
 }
 
 

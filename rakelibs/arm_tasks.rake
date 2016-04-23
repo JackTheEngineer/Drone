@@ -4,7 +4,7 @@ require 'rake/clean'
 require File.expand_path('./arm_target_definitions.rb', File.dirname(__FILE__))
 import File.expand_path('./common_subtasks.rake', File.dirname(__FILE__))
 
-rule ".siz" => -> (sizfile){return sizfile.ext(".elf")} do |task|
+rule ".siz" => ->(sizfile){return sizfile.ext(".elf")} do |task|
   sh "#{ARM_SIZE} --format=berkeley #{task.source}"
 end
 
@@ -27,7 +27,6 @@ end
 # Compile rule for an ARM OBJ-File, which is also checking the dependencies on the .h files
 rule /#{ARM_BUILD_DIR}.*\.o/ => [
   ->(f){source_for_o_file(f, arm_sources())},
-  ARM_BUILD_DIR,
   ->(f){get_headers(source_for_o_file(f, arm_sources()),
                     arm_headers())}
   ] do |task|

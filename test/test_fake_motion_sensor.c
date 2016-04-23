@@ -6,6 +6,7 @@
  */
 #include "test_helper.h"
 #include "motion_sensor.h"
+#include <stdio.h>
 
 TEST_GROUP(fake_motion_sensor);
 Sensordata_t sensordata_container;
@@ -22,6 +23,5 @@ TEST(fake_motion_sensor, set_zero_should_set_all_values_to_zero){
 }
 
 TEST(fake_motion_sensor, should_write_some_values){
+
 }
-
-
