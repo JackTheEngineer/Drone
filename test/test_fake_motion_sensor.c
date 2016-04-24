@@ -6,7 +6,6 @@
  */
 #include "test_helper.h"
 #include "motion_sensor.h"
-#include <stdio.h>
 
 TEST_GROUP(fake_motion_sensor);
 Sensordata_t sensordata_container;

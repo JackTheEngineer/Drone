@@ -1,0 +1,59 @@
+/*
+ * test_drone_simulation.c
+ *
+ *  Created on: Apr 23, 2016
+ *      Author: jakov
+ */
+#include "test_helper.h"
+#include "drone_simulation.h"
+
+TEST_GROUP(drone_simulation);
+Drone_Data_t dronedata_container;
+Drone_Data_t *dronedata = &dronedata_container;
+Rotor_Speeds_t rotorspeeds_container;
+Rotor_Speeds_t *rotorspeeds = &rotorspeeds_container;
+
+TEST_SETUP(drone_simulation){
+}
+
+TEST_TEAR_DOWN(drone_simulation){
+}
+
+TEST(drone_simulation, set_zero_should_work){
+	dronedata->position.x = 12.0;
+	dronedata->position.y = 12.0;
+	dronedata->position.z = 12.0;
+	dronedata->angular_position.x = 12.0;
+	dronedata->angular_position.y = 12.0;
+	dronedata->angular_position.z = 12.0;
+	dronedata->angular_speed.x = 12.0;
+	dronedata->angular_speed.y = 12.0;
+	dronedata->angular_speed.z = 12.0;
+	dronedata->speed.x = 12.0;
+	dronedata->speed.y = 12.0;
+	dronedata->speed.z = 12.0;
+
+	drone_set_drone_data_zero(dronedata);
+
+	TEST_ASSERT_EQUAL_DOUBLE(0, dronedata->position.x);
+	TEST_ASSERT_EQUAL_DOUBLE(0, dronedata->position.y);
+	TEST_ASSERT_EQUAL_DOUBLE(0, dronedata->position.z);
+	TEST_ASSERT_EQUAL_DOUBLE(0, dronedata->angular_position.x);
+	TEST_ASSERT_EQUAL_DOUBLE(0, dronedata->angular_position.y);
+	TEST_ASSERT_EQUAL_DOUBLE(0, dronedata->angular_position.z);
+	TEST_ASSERT_EQUAL_DOUBLE(0, dronedata->angular_speed.x);
+	TEST_ASSERT_EQUAL_DOUBLE(0, dronedata->angular_speed.y);
+	TEST_ASSERT_EQUAL_DOUBLE(0, dronedata->angular_speed.z);
+	TEST_ASSERT_EQUAL_DOUBLE(0, dronedata->speed.x);
+	TEST_ASSERT_EQUAL_DOUBLE(0, dronedata->speed.y);
+	TEST_ASSERT_EQUAL_DOUBLE(0, dronedata->speed.z);
+}
+
+TEST(drone_simulation, with_no_forces_g_subtracts_z_position){
+}
+
+TEST(drone_simulation, g_acceleration_calculates_position_taking_speed){
+}
+
+TEST(drone_simulation, g_acceleration_calculates_speed){
+}

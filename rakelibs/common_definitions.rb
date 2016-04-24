@@ -32,4 +32,7 @@ TESTS = {
   "motion_sensor" => [
        "motion_sensor",
    ], 
+   "drone_simulation" => [
+      "drone_simulation",
+   ]
 }

@@ -32,6 +32,7 @@ LOCAL_COMPILER_OPTIONS = [
   '-Wno-implicit-function-declaration',
   '-Wno-missing-prototypes',
   '-Wno-missing-declarations',
+  '-DUNITY_INCLUDE_DOUBLE=1',
   '-g3 -O0',
   '-MD',  # Generate dependency files'
 ].join(" ")
