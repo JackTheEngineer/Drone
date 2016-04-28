@@ -19,6 +19,4 @@ end
 
 task :arm => elf_hex_bin_files(:arm)
 
-task :default => :test
-
 task :test => get_tests

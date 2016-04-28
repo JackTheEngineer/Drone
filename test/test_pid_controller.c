@@ -11,7 +11,6 @@ TEST_SETUP(pid_controller){
 TEST_TEAR_DOWN(pid_controller){
 } 
 
-// @todo ask about return bool policy
 TEST(pid_controller, Scheduler_should_return_true_when_okay){
     bool status = true;
 

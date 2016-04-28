@@ -20,6 +20,18 @@ void drone_set_drone_data_zero(Drone_Data_t *dronedata){
 	dronedata->speed.y = 0;
 	dronedata->speed.z = 0;
 }
-/* timestep in seconds */
+/* Differential function that calculates the Position,
+ *  speed, angular position and angular speed
+ *
+ * timestep in seconds
+ */
 void drone_calculate_next_values(Drone_Data_t *dronedata, Rotor_Speeds_t *rotorspeeds, double timestep){
+	double new_z;
+	double new_v;
+
+	new_z = dronedata->position.z + dronedata->speed.z*timestep;
+	new_v = dronedata->speed.z + GRAVITY_CONST*timestep;
+
+	dronedata->position.z = new_z;
+	dronedata->speed.z = new_v;
 }

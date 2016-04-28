@@ -49,11 +49,21 @@ TEST(drone_simulation, set_zero_should_work){
 	TEST_ASSERT_EQUAL_DOUBLE(0, dronedata->speed.z);
 }
 
-TEST(drone_simulation, with_no_forces_g_subtracts_z_position){
+TEST(drone_simulation, with_no_forces_g_iteration_is_similar_to_formula){
+	double time = 2.0;
+	uint32_t number_of_calls = (int)(time/TIMESTEP);
+	uint32_t i;
+
+	drone_set_drone_data_zero(dronedata);
+	dronedata->position.z = 100.0;
+
+	for(i = 0; i < number_of_calls; i++){
+		drone_calculate_next_values(dronedata, rotorspeeds, TIMESTEP);
+	}
+	double formula_value = (0.5)*GRAVITY_CONST*time*time + 100.0;
+	printf("formula_value: %f \n", formula_value);
+	printf("iterated value: %f \n", dronedata->position.z);
+	TEST_ASSERT_DOUBLE_WITHIN(0.1, formula_value , dronedata->position.z);
+
 }
 
-TEST(drone_simulation, g_acceleration_calculates_position_taking_speed){
-}
-
-TEST(drone_simulation, g_acceleration_calculates_speed){
-}

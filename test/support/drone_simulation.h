@@ -15,6 +15,10 @@
  * and four propellers
  */
 
+
+// Simulation Time Step im s
+#define TIMESTEP 0.005 // 5 ms
+
 // Definition of one mass
 #define INNER_MASS 0.2 // in kg, there are four of them
 #define INNER_MASS_RADIUS 0.1 // meter
