@@ -17,7 +17,7 @@
 
 
 // Simulation Time Step im s
-#define TIMESTEP 0.005 // 5 ms
+#define TIMESTEP 0.0001 // 100 us
 
 // Definition of one mass
 #define INNER_MASS 0.2 // in kg, there are four of them

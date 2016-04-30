@@ -25,7 +25,8 @@ void drone_set_drone_data_zero(Drone_Data_t *dronedata){
  *
  * timestep in seconds
  */
-void drone_calculate_next_values(Drone_Data_t *dronedata, Rotor_Speeds_t *rotorspeeds, double timestep){
+
+_STATIC_ void calculate_g_acceleration(Drone_Data_t *dronedata, double timestep){
 	double new_z;
 	double new_v;
 
@@ -34,4 +35,9 @@ void drone_calculate_next_values(Drone_Data_t *dronedata, Rotor_Speeds_t *rotors
 
 	dronedata->position.z = new_z;
 	dronedata->speed.z = new_v;
+}
+
+void drone_calculate_next_values(Drone_Data_t *dronedata, Rotor_Speeds_t *rotorspeeds, double timestep){
+	calculate_g_acceleration(dronedata, timestep);
+
 }

@@ -20,3 +20,5 @@ end
 task :arm => elf_hex_bin_files(:arm)
 
 task :test => get_tests
+
+CLEAN.include("#{BUILD_DIR}**/**/*.o", "#{BUILD_DIR}**/**/*.d", "#{BUILD_DIR}**/**/*.elf", "#{BUILD_DIR}**/**/*.hex", "#{BUILD_DIR}**/**/*.bin", "#{BUILD_DIR}**/**/*.exe")

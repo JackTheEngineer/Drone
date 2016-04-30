@@ -1,9 +1,7 @@
 .projectile 
-.project
-.cproject
 consolelog
 Debug/**
 build/**
 .settings/**
-/vendor
+/vendor/cpputest/
 .metadata/**

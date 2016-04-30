@@ -58,12 +58,15 @@ TEST(drone_simulation, with_no_forces_g_iteration_is_similar_to_formula){
 	dronedata->position.z = 100.0;
 
 	for(i = 0; i < number_of_calls; i++){
+		// The First test implementation was with a timestep of 0.0001 s
+		// This means that the timestep declaration could be a reason of failure
 		drone_calculate_next_values(dronedata, rotorspeeds, TIMESTEP);
 	}
 	double formula_value = (0.5)*GRAVITY_CONST*time*time + 100.0;
 	printf("formula_value: %f \n", formula_value);
 	printf("iterated value: %f \n", dronedata->position.z);
-	TEST_ASSERT_DOUBLE_WITHIN(0.1, formula_value , dronedata->position.z);
-
+	TEST_ASSERT_DOUBLE_WITHIN(0.01, formula_value , dronedata->position.z);
 }
 
+TEST(drone_simulation, yout){
+}
