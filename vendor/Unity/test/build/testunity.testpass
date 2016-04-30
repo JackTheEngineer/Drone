@@ -1,0 +1,335 @@
+tests/testunity.c:67:testUnitySizeInitializationReminder:PASS
+tests/testunity.c:113:testPassShouldEndImmediatelyWithPass:PASS
+tests/testunity.c:119:testTrue:PASS
+tests/testunity.c:126:testFalse:PASS
+tests/testunity.c:133:testPreviousPass:PASS
+tests/testunity.c:141:testNotVanilla:FAIL: Expression Evaluated To FALSEtests/testunity.c:138:testNotVanilla:PASS
+tests/testunity.c:148:testNotTrue:FAIL: Expected TRUE Was FALSEtests/testunity.c:145:testNotTrue:PASS
+tests/testunity.c:155:testNotFalse:FAIL: Expected FALSE Was TRUEtests/testunity.c:152:testNotFalse:PASS
+tests/testunity.c:162:testNotUnless:FAIL: Expression Evaluated To TRUEtests/testunity.c:159:testNotUnless:PASS
+tests/testunity.c:169:testNotNotEqual:FAIL: Expected Not-Equaltests/testunity.c:166:testNotNotEqual:PASS
+tests/testunity.c:176:testFail:FAIL: Expected for testingtests/testunity.c:173:testFail:PASS
+tests/testunity.c:180:testIsNull:PASS
+tests/testunity.c:194:testIsNullShouldFailIfNot:FAIL: Expected NULLtests/testunity.c:189:testIsNullShouldFailIfNot:PASS
+tests/testunity.c:203:testNotNullShouldFailIfNULL:FAIL: Expected Non-NULLtests/testunity.c:198:testNotNullShouldFailIfNULL:PASS
+tests/testunity.c:210:testIgnore:IGNOREtests/testunity.c:207:testIgnore:PASS
+tests/testunity.c:218:testIgnoreMessage:IGNORE: This is an expected TEST_IGNORE_MESSAGE string!tests/testunity.c:215:testIgnoreMessage:PASS
+tests/testunity.c:226:testNotEqualInts:FAIL: Expected 3982 Was 3983tests/testunity.c:223:testNotEqualInts:PASS
+tests/testunity.c:233:testNotEqualInt8s:FAIL: Expected -127 Was -126tests/testunity.c:230:testNotEqualInt8s:PASS
+tests/testunity.c:240:testNotEqualInt16s:FAIL: Expected -16383 Was -16382tests/testunity.c:237:testNotEqualInt16s:PASS
+tests/testunity.c:247:testNotEqualInt32s:FAIL: Expected -2147483647 Was -2147483648tests/testunity.c:244:testNotEqualInt32s:PASS
+tests/testunity.c:254:testNotEqualBits:FAIL: Expected XXXXXXXXXXXXXXXX01010101XXXXXXXX Was XXXXXXXXXXXXXXXX01011010XXXXXXXXtests/testunity.c:251:testNotEqualBits:PASS
+tests/testunity.c:266:testNotEqualUInts:FAIL: Expected 9000 Was 9001tests/testunity.c:258:testNotEqualUInts:PASS
+tests/testunity.c:278:testNotEqualUInt8s:FAIL: Expected 254 Was 255tests/testunity.c:270:testNotEqualUInt8s:PASS
+tests/testunity.c:290:testNotEqualUInt16s:FAIL: Expected 65535 Was 65534tests/testunity.c:282:testNotEqualUInt16s:PASS
+tests/testunity.c:302:testNotEqualUInt32s:FAIL: Expected 4294967295 Was 4294967294tests/testunity.c:294:testNotEqualUInt32s:PASS
+tests/testunity.c:314:testNotEqualHex8s:FAIL: Expected 0x23 Was 0x22tests/testunity.c:306:testNotEqualHex8s:PASS
+tests/testunity.c:326:testNotEqualHex8sIfSigned:FAIL: Expected 0xFE Was 0x02tests/testunity.c:318:testNotEqualHex8sIfSigned:PASS
+tests/testunity.c:338:testNotEqualHex16s:FAIL: Expected 0x1234 Was 0x1235tests/testunity.c:330:testNotEqualHex16s:PASS
+tests/testunity.c:350:testNotEqualHex16sIfSigned:FAIL: Expected 0xFC00 Was 0xFBFCtests/testunity.c:342:testNotEqualHex16sIfSigned:PASS
+tests/testunity.c:362:testNotEqualHex32s:FAIL: Expected 0x000DBBA0 Was 0x000DBBA1tests/testunity.c:354:testNotEqualHex32s:PASS
+tests/testunity.c:374:testNotEqualHex32sIfSigned:FAIL: Expected 0xFFF24460 Was 0x000DBBA1tests/testunity.c:366:testNotEqualHex32sIfSigned:PASS
+tests/testunity.c:378:testEqualInts:PASS
+tests/testunity.c:398:testEqualInt8s:PASS
+tests/testunity.c:417:testEqualInt8sWhenThereAreDifferencesOutside8Bits:PASS
+tests/testunity.c:423:testEqualInt16s:PASS
+tests/testunity.c:442:testEqualInt16sNegatives:PASS
+tests/testunity.c:461:testEqualInt16sWhenThereAreDifferencesOutside16Bits:PASS
+tests/testunity.c:467:testEqualInt32s:PASS
+tests/testunity.c:486:testEqualInt32sNegatives:PASS
+tests/testunity.c:506:testEqualUints:PASS
+tests/testunity.c:527:testEqualUint8s:PASS
+tests/testunity.c:546:testEqualUint8sWhenThereAreDifferencesOutside8Bits:PASS
+tests/testunity.c:552:testEqualUint16s:PASS
+tests/testunity.c:571:testEqualUint16sWhenThereAreDifferencesOutside16Bits:PASS
+tests/testunity.c:577:testEqualUint32s:PASS
+tests/testunity.c:596:testNotEqual:PASS
+tests/testunity.c:607:testEqualHex8s:PASS
+tests/testunity.c:626:testEqualHex8sWhenThereAreDifferencesOutside8Bits:PASS
+tests/testunity.c:632:testEqualHex8sNegatives:PASS
+tests/testunity.c:651:testEqualHex16s:PASS
+tests/testunity.c:670:testEqualHex16sWhenThereAreDifferencesOutside16Bits:PASS
+tests/testunity.c:676:testEqualHex32s:PASS
+tests/testunity.c:695:testEqualBits:PASS
+tests/testunity.c:716:testNotEqualBitHigh:FAIL: Expected 1XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX Was 0XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXtests/testunity.c:711:testNotEqualBitHigh:PASS
+tests/testunity.c:725:testNotEqualBitLow:FAIL: Expected X0XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX Was X1XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXtests/testunity.c:720:testNotEqualBitLow:PASS
+tests/testunity.c:735:testNotEqualBitsHigh:FAIL: Expected 11111111X1X1X1X11X1X1X1XXXXXXXXX Was 01010101X1X1X1X10X0X0X0XXXXXXXXXtests/testunity.c:729:testNotEqualBitsHigh:PASS
+tests/testunity.c:746:testNotEqualBitsLow:FAIL: Expected 00000000X0X0X0X00X0X0X0XXXXXXXXX Was 01010101X1X1X1X10X0X0X0XXXXXXXXXtests/testunity.c:740:testNotEqualBitsLow:PASS
+tests/testunity.c:750:testEqualShorts:PASS
+tests/testunity.c:770:testEqualUShorts:PASS
+tests/testunity.c:790:testEqualChars:PASS
+tests/testunity.c:810:testEqualUChars:PASS
+tests/testunity.c:829:testEqualPointers:PASS
+tests/testunity.c:849:testNotEqualPointers:FAIL: Expected 0x0000000012345678 Was 0x0000000012345677tests/testunity.c:846:testNotEqualPointers:PASS
+tests/testunity.c:853:testIntsWithinDelta:PASS
+tests/testunity.c:865:testIntsWithinDeltaAndCustomMessage:PASS
+tests/testunity.c:880:testIntsNotWithinDelta:FAIL: Values Not Within Delta 5 Expected 5000 Was 5006tests/testunity.c:877:testIntsNotWithinDelta:PASS
+tests/testunity.c:887:testIntsNotWithinDeltaAndCustomMessage:FAIL: Values Not Within Delta 5 Expected 5000 Was 5006. Custom Message.tests/testunity.c:884:testIntsNotWithinDeltaAndCustomMessage:PASS
+tests/testunity.c:891:testUIntsWithinDelta:PASS
+tests/testunity.c:898:testUIntsWithinDeltaAndCustomMessage:PASS
+tests/testunity.c:908:testUIntsNotWithinDelta:FAIL: Values Not Within Delta 1 Expected 2147483647 Was 2147483649tests/testunity.c:905:testUIntsNotWithinDelta:PASS
+tests/testunity.c:915:testUIntsNotWithinDeltaAndCustomMessage:FAIL: Values Not Within Delta 1 Expected 2147483647 Was 2147483649. Custom Message.tests/testunity.c:912:testUIntsNotWithinDeltaAndCustomMessage:PASS
+tests/testunity.c:922:testUIntsNotWithinDeltaEvenThoughASignedIntWouldPassSmallFirst:FAIL: Values Not Within Delta 5 Expected 1 Was 4294967295tests/testunity.c:919:testUIntsNotWithinDeltaEvenThoughASignedIntWouldPassSmallFirst:PASS
+tests/testunity.c:929:testUIntsNotWithinDeltaEvenThoughASignedIntWouldPassSmallFirstAndCustomMessage:FAIL: Values Not Within Delta 5 Expected 1 Was 4294967295. Custom Message.tests/testunity.c:926:testUIntsNotWithinDeltaEvenThoughASignedIntWouldPassSmallFirstAndCustomMessage:PASS
+tests/testunity.c:936:testUIntsNotWithinDeltaEvenThoughASignedIntWouldPassBigFirst:FAIL: Values Not Within Delta 5 Expected 4294967295 Was 1tests/testunity.c:933:testUIntsNotWithinDeltaEvenThoughASignedIntWouldPassBigFirst:PASS
+tests/testunity.c:943:testUIntsNotWithinDeltaEvenThoughASignedIntWouldPassBigFirstAndCustomMessage:FAIL: Values Not Within Delta 5 Expected 4294967295 Was 1. Custom Message.tests/testunity.c:940:testUIntsNotWithinDeltaEvenThoughASignedIntWouldPassBigFirstAndCustomMessage:PASS
+tests/testunity.c:947:testHEX32sWithinDelta:PASS
+tests/testunity.c:954:testHEX32sWithinDeltaAndCustomMessage:PASS
+tests/testunity.c:964:testHEX32sNotWithinDelta:FAIL: Values Not Within Delta 0x00000001 Expected 0x7FFFFFFF Was 0x80000001tests/testunity.c:961:testHEX32sNotWithinDelta:PASS
+tests/testunity.c:971:testHEX32sNotWithinDeltaAndCustomMessage:FAIL: Values Not Within Delta 0x00000001 Expected 0x7FFFFFFF Was 0x80000001. Custom Message.tests/testunity.c:968:testHEX32sNotWithinDeltaAndCustomMessage:PASS
+tests/testunity.c:978:testHEX32sNotWithinDeltaEvenThoughASignedIntWouldPass:FAIL: Values Not Within Delta 0x00000005 Expected 0x00000001 Was 0xFFFFFFFFtests/testunity.c:975:testHEX32sNotWithinDeltaEvenThoughASignedIntWouldPass:PASS
+tests/testunity.c:985:testHEX32sNotWithinDeltaEvenThoughASignedIntWouldPassAndCustomMessage:FAIL: Values Not Within Delta 0x00000005 Expected 0x00000001 Was 0xFFFFFFFF. Custom Message.tests/testunity.c:982:testHEX32sNotWithinDeltaEvenThoughASignedIntWouldPassAndCustomMessage:PASS
+tests/testunity.c:989:testHEX16sWithinDelta:PASS
+tests/testunity.c:996:testHEX16sWithinDeltaAndCustomMessage:PASS
+tests/testunity.c:1003:testHEX16sWithinDeltaWhenThereAreDifferenceOutsideOf16Bits:PASS
+tests/testunity.c:1008:testHEX16sWithinDeltaWhenThereAreDifferenceOutsideOf16BitsAndCustomMessage:PASS
+tests/testunity.c:1016:testHEX16sNotWithinDelta:FAIL: Values Not Within Delta 0x0002 Expected 0xFFFF Was 0x0000tests/testunity.c:1013:testHEX16sNotWithinDelta:PASS
+tests/testunity.c:1023:testHEX16sNotWithinDeltaAndCustomMessage:FAIL: Values Not Within Delta 0x0002 Expected 0xFFFF Was 0x0000. Custom Message.tests/testunity.c:1020:testHEX16sNotWithinDeltaAndCustomMessage:PASS
+tests/testunity.c:1027:testHEX8sWithinDelta:PASS
+tests/testunity.c:1034:testHEX8sWithinDeltaAndCustomMessage:PASS
+tests/testunity.c:1041:testHEX8sWithinDeltaWhenThereAreDifferenceOutsideOf8Bits:PASS
+tests/testunity.c:1046:testHEX8sWithinDeltaWhenThereAreDifferenceOutsideOf8BitsAndCustomMessage:PASS
+tests/testunity.c:1054:testHEX8sNotWithinDelta:FAIL: Values Not Within Delta 0x02 Expected 0xFF Was 0x00tests/testunity.c:1051:testHEX8sNotWithinDelta:PASS
+tests/testunity.c:1061:testHEX8sNotWithinDeltaAndCustomMessage:FAIL: Values Not Within Delta 0x02 Expected 0xFF Was 0x00. Custom Message.tests/testunity.c:1058:testHEX8sNotWithinDeltaAndCustomMessage:PASS
+tests/testunity.c:1067:testUINT32sWithinDelta:PASS
+tests/testunity.c:1074:testUINT32sWithinDeltaAndCustomMessage:PASS
+tests/testunity.c:1084:testUINT32sNotWithinDelta:FAIL: Values Not Within Delta 1 Expected 2147483647 Was 2147483649tests/testunity.c:1081:testUINT32sNotWithinDelta:PASS
+tests/testunity.c:1091:testUINT32sNotWithinDeltaAndCustomMessage:FAIL: Values Not Within Delta 1 Expected 2147483647 Was 2147483649. Custom Message.tests/testunity.c:1088:testUINT32sNotWithinDeltaAndCustomMessage:PASS
+tests/testunity.c:1098:testUINT32sNotWithinDeltaEvenThoughASignedIntWouldPass:FAIL: Values Not Within Delta 5 Expected 1 Was 4294967295tests/testunity.c:1095:testUINT32sNotWithinDeltaEvenThoughASignedIntWouldPass:PASS
+tests/testunity.c:1105:testUINT32sNotWithinDeltaEvenThoughASignedIntWouldPassAndCustomMessage:FAIL: Values Not Within Delta 5 Expected 1 Was 4294967295. Custom Message.tests/testunity.c:1102:testUINT32sNotWithinDeltaEvenThoughASignedIntWouldPassAndCustomMessage:PASS
+tests/testunity.c:1109:testUINT16sWithinDelta:PASS
+tests/testunity.c:1116:testUINT16sWithinDeltaAndCustomMessage:PASS
+tests/testunity.c:1123:testUINT16sWithinDeltaWhenThereAreDifferenceOutsideOf16Bits:PASS
+tests/testunity.c:1128:testUINT16sWithinDeltaWhenThereAreDifferenceOutsideOf16BitsAndCustomMessage:PASS
+tests/testunity.c:1136:testUINT16sNotWithinDelta:FAIL: Values Not Within Delta 2 Expected 65535 Was 0tests/testunity.c:1133:testUINT16sNotWithinDelta:PASS
+tests/testunity.c:1143:testUINT16sNotWithinDeltaAndCustomMessage:FAIL: Values Not Within Delta 2 Expected 65535 Was 0. Custom Message.tests/testunity.c:1140:testUINT16sNotWithinDeltaAndCustomMessage:PASS
+tests/testunity.c:1147:testUINT8sWithinDelta:PASS
+tests/testunity.c:1154:testUINT8sWithinDeltaAndCustomMessage:PASS
+tests/testunity.c:1161:testUINT8sWithinDeltaWhenThereAreDifferenceOutsideOf8Bits:PASS
+tests/testunity.c:1166:testUINT8sWithinDeltaWhenThereAreDifferenceOutsideOf8BitsAndCustomMessage:PASS
+tests/testunity.c:1174:testUINT8sNotWithinDelta:FAIL: Values Not Within Delta 2 Expected 255 Was 0tests/testunity.c:1171:testUINT8sNotWithinDelta:PASS
+tests/testunity.c:1181:testUINT8sNotWithinDeltaAndCustomMessage:FAIL: Values Not Within Delta 2 Expected 255 Was 0. Custom Message.tests/testunity.c:1178:testUINT8sNotWithinDeltaAndCustomMessage:PASS
+tests/testunity.c:1185:testINT32sWithinDelta:PASS
+tests/testunity.c:1192:testINT32sWithinDeltaAndCustomMessage:PASS
+tests/testunity.c:1200:testINT32sNotWithinDelta:FAIL: Values Not Within Delta 1 Expected -3 Was 1tests/testunity.c:1197:testINT32sNotWithinDelta:PASS
+tests/testunity.c:1207:testINT32sNotWithinDeltaAndDifferenceOverflows:FAIL: Values Not Within Delta 1 Expected -1 Was 2147483647tests/testunity.c:1204:testINT32sNotWithinDeltaAndDifferenceOverflows:PASS
+tests/testunity.c:1213:testINT32sNotWithinDeltaAndCustomMessage:FAIL: Values Not Within Delta 1 Expected -2 Was 1. Custom Message.tests/testunity.c:1210:testINT32sNotWithinDeltaAndCustomMessage:PASS
+tests/testunity.c:1217:testINT16sWithinDelta:PASS
+tests/testunity.c:1224:testINT16sWithinDeltaAndCustomMessage:PASS
+tests/testunity.c:1229:testINT16sWithinDeltaWhenThereAreDifferenceOutsideOf16Bits:PASS
+tests/testunity.c:1234:testINT16sWithinDeltaWhenThereAreDifferenceOutsideOf16BitsAndCustomMessage:PASS
+tests/testunity.c:1242:testINT16sNotWithinDelta:FAIL: Values Not Within Delta 2 Expected 4 Was -2tests/testunity.c:1239:testINT16sNotWithinDelta:PASS
+tests/testunity.c:1249:testINT16sNotWithinDeltaAndCustomMessage:FAIL: Values Not Within Delta 2 Expected 3 Was 0. Custom Message.tests/testunity.c:1246:testINT16sNotWithinDeltaAndCustomMessage:PASS
+tests/testunity.c:1253:testINT8sWithinDelta:PASS
+tests/testunity.c:1260:testINT8sWithinDeltaAndCustomMessage:PASS
+tests/testunity.c:1265:testINT8sWithinDeltaWhenThereAreDifferenceOutsideOf8Bits:PASS
+tests/testunity.c:1270:testINT8sWithinDeltaWhenThereAreDifferenceOutsideOf8BitsAndCustomMessage:PASS
+tests/testunity.c:1278:testINT8sNotWithinDelta:FAIL: Values Not Within Delta 2 Expected -3 Was 0tests/testunity.c:1275:testINT8sNotWithinDelta:PASS
+tests/testunity.c:1285:testINT8sNotWithinDeltaAndCustomMessage:FAIL: Values Not Within Delta 2 Expected -4 Was 0. Custom Message.tests/testunity.c:1282:testINT8sNotWithinDeltaAndCustomMessage:PASS
+tests/testunity.c:1289:testEqualStrings:PASS
+tests/testunity.c:1300:testEqualStringsLen:PASS
+tests/testunity.c:1310:testEqualStringsWithCarriageReturnsAndLineFeeds:PASS
+tests/testunity.c:1324:testNotEqualString1:FAIL: Expected 'foo' Was 'bar'tests/testunity.c:1321:testNotEqualString1:PASS
+tests/testunity.c:1331:testNotEqualStringLen1:FAIL: Expected 'foobar' Was 'foobaz'tests/testunity.c:1328:testNotEqualStringLen1:PASS
+tests/testunity.c:1338:testNotEqualString2:FAIL: Expected 'foo' Was ''tests/testunity.c:1335:testNotEqualString2:PASS
+tests/testunity.c:1345:testNotEqualStringLen2:FAIL: Expected 'foo' Was ''tests/testunity.c:1342:testNotEqualStringLen2:PASS
+tests/testunity.c:1352:testNotEqualString3:FAIL: Expected '' Was 'bar'tests/testunity.c:1349:testNotEqualString3:PASS
+tests/testunity.c:1359:testNotEqualStringLen3:FAIL: Expected '' Was 'bar'tests/testunity.c:1356:testNotEqualStringLen3:PASS
+tests/testunity.c:1366:testNotEqualString4:FAIL: Expected 'bar\r' Was 'bar\n'tests/testunity.c:1363:testNotEqualString4:PASS
+tests/testunity.c:1373:testNotEqualStringLen4:FAIL: Expected 'bar\r' Was 'bar\n'tests/testunity.c:1370:testNotEqualStringLen4:PASS
+tests/testunity.c:1382:testNotEqualString5:FAIL: Expected 'AB\0x03' Was 'AB\0x04'tests/testunity.c:1377:testNotEqualString5:PASS
+tests/testunity.c:1389:testNotEqualString_ExpectedStringIsNull:FAIL: Expected NULL Was 'bar'tests/testunity.c:1386:testNotEqualString_ExpectedStringIsNull:PASS
+tests/testunity.c:1396:testNotEqualString_ActualStringIsNull:FAIL: Expected 'foo' Was NULLtests/testunity.c:1393:testNotEqualString_ActualStringIsNull:PASS
+tests/testunity.c:1400:testEqualStringArrays:PASS
+tests/testunity.c:1417:testNotEqualStringArray1:FAIL: Element 3 Expected 'zoo' Was 'moo'tests/testunity.c:1411:testNotEqualStringArray1:PASS
+tests/testunity.c:1427:testNotEqualStringArray2:FAIL: Element 0 Expected 'foo' Was 'zoo'tests/testunity.c:1421:testNotEqualStringArray2:PASS
+tests/testunity.c:1437:testNotEqualStringArray3:FAIL: Element 3 Expected 'zoo' Was NULLtests/testunity.c:1431:testNotEqualStringArray3:PASS
+tests/testunity.c:1447:testNotEqualStringArray4:FAIL: Element 1 Expected NULL Was 'boo'tests/testunity.c:1441:testNotEqualStringArray4:PASS
+tests/testunity.c:1457:testNotEqualStringArray5:FAIL: Actual pointer was NULLtests/testunity.c:1451:testNotEqualStringArray5:PASS
+tests/testunity.c:1467:testNotEqualStringArray6:FAIL: Expected pointer to be NULLtests/testunity.c:1461:testNotEqualStringArray6:PASS
+tests/testunity.c:1471:testEqualStringArrayIfBothNulls:PASS
+tests/testunity.c:1479:testEqualMemory:PASS
+tests/testunity.c:1494:testNotEqualMemory1:FAIL: Memory Mismatch. Byte 0 Expected 0x66 Was 0x62tests/testunity.c:1491:testNotEqualMemory1:PASS
+tests/testunity.c:1501:testNotEqualMemory2:FAIL: Memory Mismatch. Byte 3 Expected 0x6C Was 0x64tests/testunity.c:1498:testNotEqualMemory2:PASS
+tests/testunity.c:1508:testNotEqualMemory3:FAIL: Expected pointer to be NULLtests/testunity.c:1505:testNotEqualMemory3:PASS
+tests/testunity.c:1515:testNotEqualMemory4:FAIL: Actual pointer was NULLtests/testunity.c:1512:testNotEqualMemory4:PASS
+tests/testunity.c:1519:testEqualIntArrays:PASS
+tests/testunity.c:1539:testNotEqualIntArraysNullExpected:FAIL: Expected pointer to be NULLtests/testunity.c:1533:testNotEqualIntArraysNullExpected:PASS
+tests/testunity.c:1549:testNotEqualIntArraysNullActual:FAIL: Actual pointer was NULLtests/testunity.c:1543:testNotEqualIntArraysNullActual:PASS
+tests/testunity.c:1559:testNotEqualIntArrays1:FAIL: Element 3 Expected -2 Was 2tests/testunity.c:1553:testNotEqualIntArrays1:PASS
+tests/testunity.c:1569:testNotEqualIntArrays2:FAIL: Element 0 Expected 1 Was 2tests/testunity.c:1563:testNotEqualIntArrays2:PASS
+tests/testunity.c:1579:testNotEqualIntArrays3:FAIL: Element 2 Expected 987 Was 986tests/testunity.c:1573:testNotEqualIntArrays3:PASS
+tests/testunity.c:1583:testEqualPtrArrays:PASS
+tests/testunity.c:1608:testNotEqualPtrArraysNullExpected:FAIL: Expected pointer to be NULLtests/testunity.c:1600:testNotEqualPtrArraysNullExpected:PASS
+tests/testunity.c:1620:testNotEqualPtrArraysNullActual:FAIL: Actual pointer was NULLtests/testunity.c:1612:testNotEqualPtrArraysNullActual:PASS
+tests/testunity.c:1633:testNotEqualPtrArrays1:FAIL: Element 3 Expected 0x00007FFF08A7E99E Was 0x00007FFF08A7E99Ftests/testunity.c:1624:testNotEqualPtrArrays1:PASS
+tests/testunity.c:1646:testNotEqualPtrArrays2:FAIL: Element 0 Expected 0x00007FFF08A7E99E Was 0x00007FFF08A7E99Ftests/testunity.c:1637:testNotEqualPtrArrays2:PASS
+tests/testunity.c:1659:testNotEqualPtrArrays3:FAIL: Element 2 Expected 0x00007FFF08A7E99E Was 0x00007FFF08A7E99Dtests/testunity.c:1650:testNotEqualPtrArrays3:PASS
+tests/testunity.c:1663:testEqualInt8Arrays:PASS
+tests/testunity.c:1683:testNotEqualInt8Arrays:FAIL: Element 3 Expected -2 Was 2tests/testunity.c:1677:testNotEqualInt8Arrays:PASS
+tests/testunity.c:1687:testEqualUIntArrays:PASS
+tests/testunity.c:1707:testNotEqualUIntArrays1:FAIL: Element 3 Expected 65132 Was 65131tests/testunity.c:1701:testNotEqualUIntArrays1:PASS
+tests/testunity.c:1717:testNotEqualUIntArrays2:FAIL: Element 0 Expected 1 Was 2tests/testunity.c:1711:testNotEqualUIntArrays2:PASS
+tests/testunity.c:1727:testNotEqualUIntArrays3:FAIL: Element 2 Expected 987 Was 986tests/testunity.c:1721:testNotEqualUIntArrays3:PASS
+tests/testunity.c:1731:testEqualInt16Arrays:PASS
+tests/testunity.c:1751:testNotEqualInt16Arrays:FAIL: Element 3 Expected 3 Was 2tests/testunity.c:1745:testNotEqualInt16Arrays:PASS
+tests/testunity.c:1755:testEqualInt32Arrays:PASS
+tests/testunity.c:1775:testNotEqualInt32Arrays:FAIL: Element 3 Expected 3 Was 2tests/testunity.c:1769:testNotEqualInt32Arrays:PASS
+tests/testunity.c:1779:testEqualUINT8Arrays:PASS
+tests/testunity.c:1799:testNotEqualUINT8Arrays1:FAIL: Element 3 Expected 127 Was 255tests/testunity.c:1793:testNotEqualUINT8Arrays1:PASS
+tests/testunity.c:1809:testNotEqualUINT8Arrays2:FAIL: Element 3 Expected 127 Was 255tests/testunity.c:1803:testNotEqualUINT8Arrays2:PASS
+tests/testunity.c:1819:testNotEqualUINT8Arrays3:FAIL: Element 3 Expected 127 Was 255tests/testunity.c:1813:testNotEqualUINT8Arrays3:PASS
+tests/testunity.c:1824:testEqualUINT16Arrays:PASS
+tests/testunity.c:1844:testNotEqualUINT16Arrays1:FAIL: Element 3 Expected 65132 Was 65131tests/testunity.c:1838:testNotEqualUINT16Arrays1:PASS
+tests/testunity.c:1854:testNotEqualUINT16Arrays2:FAIL: Element 0 Expected 1 Was 2tests/testunity.c:1848:testNotEqualUINT16Arrays2:PASS
+tests/testunity.c:1864:testNotEqualUINT16Arrays3:FAIL: Element 2 Expected 987 Was 986tests/testunity.c:1858:testNotEqualUINT16Arrays3:PASS
+tests/testunity.c:1868:testEqualUINT32Arrays:PASS
+tests/testunity.c:1888:testNotEqualUINT32Arrays1:FAIL: Element 3 Expected 65132 Was 65131tests/testunity.c:1882:testNotEqualUINT32Arrays1:PASS
+tests/testunity.c:1898:testNotEqualUINT32Arrays2:FAIL: Element 0 Expected 1 Was 2tests/testunity.c:1892:testNotEqualUINT32Arrays2:PASS
+tests/testunity.c:1908:testNotEqualUINT32Arrays3:FAIL: Element 2 Expected 987 Was 986tests/testunity.c:1902:testNotEqualUINT32Arrays3:PASS
+tests/testunity.c:1912:testEqualHEXArrays:PASS
+tests/testunity.c:1932:testNotEqualHEXArrays1:FAIL: Element 3 Expected 0x0000FE6C Was 0x0000FE6Btests/testunity.c:1926:testNotEqualHEXArrays1:PASS
+tests/testunity.c:1942:testNotEqualHEXArrays2:FAIL: Element 0 Expected 0x00000001 Was 0x00000002tests/testunity.c:1936:testNotEqualHEXArrays2:PASS
+tests/testunity.c:1952:testNotEqualHEXArrays3:FAIL: Element 2 Expected 0x000003DB Was 0x000003DAtests/testunity.c:1946:testNotEqualHEXArrays3:PASS
+tests/testunity.c:1956:testEqualHEX32Arrays:PASS
+tests/testunity.c:1976:testNotEqualHEX32Arrays1:FAIL: Element 3 Expected 0x0000FE6C Was 0x0000FE6Btests/testunity.c:1970:testNotEqualHEX32Arrays1:PASS
+tests/testunity.c:1986:testNotEqualHEX32Arrays2:FAIL: Element 0 Expected 0x00000001 Was 0x00000002tests/testunity.c:1980:testNotEqualHEX32Arrays2:PASS
+tests/testunity.c:1996:testNotEqualHEX32Arrays3:FAIL: Element 2 Expected 0x000003DB Was 0x000003DAtests/testunity.c:1990:testNotEqualHEX32Arrays3:PASS
+tests/testunity.c:2000:testEqualHEX16Arrays:PASS
+tests/testunity.c:2020:testNotEqualHEX16Arrays1:FAIL: Element 3 Expected 0xFE6C Was 0xFE6Btests/testunity.c:2014:testNotEqualHEX16Arrays1:PASS
+tests/testunity.c:2030:testNotEqualHEX16Arrays2:FAIL: Element 0 Expected 0x0001 Was 0x0002tests/testunity.c:2024:testNotEqualHEX16Arrays2:PASS
+tests/testunity.c:2040:testNotEqualHEX16Arrays3:FAIL: Element 2 Expected 0x03DB Was 0x03DAtests/testunity.c:2034:testNotEqualHEX16Arrays3:PASS
+tests/testunity.c:2044:testEqualHEX8Arrays:PASS
+tests/testunity.c:2064:testNotEqualHEX8Arrays1:FAIL: Element 3 Expected 0xFD Was 0xFCtests/testunity.c:2058:testNotEqualHEX8Arrays1:PASS
+tests/testunity.c:2074:testNotEqualHEX8Arrays2:FAIL: Element 0 Expected 0x01 Was 0x02tests/testunity.c:2068:testNotEqualHEX8Arrays2:PASS
+tests/testunity.c:2084:testNotEqualHEX8Arrays3:FAIL: Element 2 Expected 0xFE Was 0xFFtests/testunity.c:2078:testNotEqualHEX8Arrays3:PASS
+tests/testunity.c:2088:testEqualMemoryArrays:PASS
+tests/testunity.c:2108:testNotEqualMemoryArraysExpectedNull:FAIL: Expected pointer to be NULLtests/testunity.c:2102:testNotEqualMemoryArraysExpectedNull:PASS
+tests/testunity.c:2118:testNotEqualMemoryArraysActualNull:FAIL: Actual pointer was NULLtests/testunity.c:2112:testNotEqualMemoryArraysActualNull:PASS
+tests/testunity.c:2128:testNotEqualMemoryArrays1:FAIL: Memory Mismatch. Element 3 Byte 0 Expected 0xFE Was 0x02tests/testunity.c:2122:testNotEqualMemoryArrays1:PASS
+tests/testunity.c:2138:testNotEqualMemoryArrays2:FAIL: Memory Mismatch. Element 0 Byte 0 Expected 0x01 Was 0x02tests/testunity.c:2132:testNotEqualMemoryArrays2:PASS
+tests/testunity.c:2148:testNotEqualMemoryArrays3:FAIL: Memory Mismatch. Element 2 Byte 0 Expected 0xDB Was 0xDAtests/testunity.c:2142:testNotEqualMemoryArrays3:PASS
+tests/testunity.c:2152:testProtection:PASS
+tests/testunity.c:2173:testIgnoredAndThenFailInTearDown:IGNORE
+tests/testunity.c:2231:testPrintNumbers32:PASS
+tests/testunity.c:2245:testPrintNumbersUnsigned32:PASS
+tests/testunity.c:2260:testPrintNumbersInt64:PASS
+tests/testunity.c:2276:testPrintNumbersUInt64:PASS
+tests/testunity.c:2292:testEqualHex64s:PASS
+tests/testunity.c:2315:testEqualUint64s:PASS
+tests/testunity.c:2338:testEqualInt64s:PASS
+tests/testunity.c:2373:testNotEqualHex64s:FAIL: Expected 0x0000000218711A00 Was 0x000000021E66FB00tests/testunity.c:2362:testNotEqualHex64s:PASS
+tests/testunity.c:2389:testNotEqualUint64s:FAIL: Expected 9000000000 Was 9100000000tests/testunity.c:2378:testNotEqualUint64s:PASS
+tests/testunity.c:2405:testNotEqualInt64s:FAIL: Expected -9000000000 Was 9100000000tests/testunity.c:2394:testNotEqualInt64s:PASS
+tests/testunity.c:2421:testNotEqualHex64sIfSigned:FAIL: Expected 0xFFFFFFFDE78EE600 Was 0x0000000218711A00tests/testunity.c:2410:testNotEqualHex64sIfSigned:PASS
+tests/testunity.c:2426:testHEX64sWithinDelta:PASS
+tests/testunity.c:2443:testHEX64sNotWithinDelta:FAIL: Values Not Within Delta 0x0000000000000001 Expected 0x7FFFFFFFFFFFFFFF Was 0x7FFFFFFFFFFFFFFCtests/testunity.c:2437:testHEX64sNotWithinDelta:PASS
+tests/testunity.c:2454:testHEX64sNotWithinDeltaEvenThoughASignedIntWouldPass:FAIL: Values Not Within Delta 0x0000000000000005 Expected 0x0000000000000001 Was 0xFFFFFFFFFFFFFFFFtests/testunity.c:2448:testHEX64sNotWithinDeltaEvenThoughASignedIntWouldPass:PASS
+tests/testunity.c:2459:testUINT64sWithinDelta:PASS
+tests/testunity.c:2476:testUINT64sNotWithinDelta:FAIL: Values Not Within Delta 1 Expected 9223372036854775807 Was 9223372036854775804tests/testunity.c:2470:testUINT64sNotWithinDelta:PASS
+tests/testunity.c:2487:testUINT64sNotWithinDeltaEvenThoughASignedIntWouldPass:FAIL: Values Not Within Delta 5 Expected 1 Was 18446744073709551615tests/testunity.c:2481:testUINT64sNotWithinDeltaEvenThoughASignedIntWouldPass:PASS
+tests/testunity.c:2492:testINT64sWithinDelta:PASS
+tests/testunity.c:2509:testINT64sNotWithinDelta:FAIL: Values Not Within Delta 1 Expected 9223372036854775807 Was 9223372036854775804tests/testunity.c:2503:testINT64sNotWithinDelta:PASS
+tests/testunity.c:2520:testINT64sNotWithinDeltaAndDifferenceOverflows:FAIL: Values Not Within Delta 1 Expected -9223372036854775808 Was 9223372036854775807tests/testunity.c:2514:testINT64sNotWithinDeltaAndDifferenceOverflows:PASS
+tests/testunity.c:2525:testEqualHEX64Arrays:PASS
+tests/testunity.c:2543:testEqualUint64Arrays:PASS
+tests/testunity.c:2561:testEqualInt64Arrays:PASS
+tests/testunity.c:2589:testNotEqualHEX64Arrays1:FAIL: Element 3 Expected 0x000000000000FE6C Was 0x000000000000FE6Btests/testunity.c:2580:testNotEqualHEX64Arrays1:PASS
+tests/testunity.c:2603:testNotEqualHEX64Arrays2:FAIL: Element 0 Expected 0x0000000000000001 Was 0x0000000000000002tests/testunity.c:2594:testNotEqualHEX64Arrays2:PASS
+tests/testunity.c:2617:testNotEqualUint64Arrays:FAIL: Element 3 Expected 65132 Was 65131tests/testunity.c:2608:testNotEqualUint64Arrays:PASS
+tests/testunity.c:2631:testNotEqualInt64Arrays:FAIL: Element 3 Expected -65132 Was -65131tests/testunity.c:2622:testNotEqualInt64Arrays:PASS
+tests/testunity.c:2637:testFloatsWithinDelta:PASS
+tests/testunity.c:2655:testFloatsNotWithinDelta:FAIL: Values Not Within Delta tests/testunity.c:2649:testFloatsNotWithinDelta:PASS
+tests/testunity.c:2660:testFloatsEqual:PASS
+tests/testunity.c:2678:testFloatsNotEqual:FAIL: Values Not Within Delta tests/testunity.c:2672:testFloatsNotEqual:PASS
+tests/testunity.c:2689:testFloatsNotEqualNegative1:FAIL: Values Not Within Delta tests/testunity.c:2683:testFloatsNotEqualNegative1:PASS
+tests/testunity.c:2700:testFloatsNotEqualNegative2:FAIL: Values Not Within Delta tests/testunity.c:2694:testFloatsNotEqualNegative2:PASS
+tests/testunity.c:2711:testFloatsNotEqualActualNaN:FAIL: Values Not Within Delta tests/testunity.c:2705:testFloatsNotEqualActualNaN:PASS
+tests/testunity.c:2722:testFloatsNotEqualExpectedNaN:FAIL: Values Not Within Delta tests/testunity.c:2716:testFloatsNotEqualExpectedNaN:PASS
+tests/testunity.c:2733:testFloatsNotEqualBothNaN:FAIL: Values Not Within Delta tests/testunity.c:2727:testFloatsNotEqualBothNaN:PASS
+tests/testunity.c:2744:testFloatsNotEqualInfNaN:FAIL: Values Not Within Delta tests/testunity.c:2738:testFloatsNotEqualInfNaN:PASS
+tests/testunity.c:2755:testFloatsNotEqualNaNInf:FAIL: Values Not Within Delta tests/testunity.c:2749:testFloatsNotEqualNaNInf:PASS
+tests/testunity.c:2766:testFloatsNotEqualActualInf:FAIL: Values Not Within Delta tests/testunity.c:2760:testFloatsNotEqualActualInf:PASS
+tests/testunity.c:2777:testFloatsNotEqualExpectedInf:FAIL: Values Not Within Delta tests/testunity.c:2771:testFloatsNotEqualExpectedInf:PASS
+tests/testunity.c:2788:testFloatsNotEqualBothInf:FAIL: Values Not Within Delta tests/testunity.c:2782:testFloatsNotEqualBothInf:PASS
+tests/testunity.c:2799:testFloatsNotEqualPlusMinusInf:FAIL: Values Not Within Delta tests/testunity.c:2793:testFloatsNotEqualPlusMinusInf:PASS
+tests/testunity.c:2804:testFloatIsPosInf1:PASS
+tests/testunity.c:2819:testFloatIsPosInf2:FAIL: Expected Not Infinity Was Infinitytests/testunity.c:2813:testFloatIsPosInf2:PASS
+tests/testunity.c:2824:testFloatIsNegInf1:PASS
+tests/testunity.c:2839:testFloatIsNegInf2:FAIL: Expected Not Negative Infinity Was Negative Infinitytests/testunity.c:2833:testFloatIsNegInf2:PASS
+tests/testunity.c:2850:testFloatIsNotPosInf1:FAIL: Expected Infinity Was Not Infinitytests/testunity.c:2844:testFloatIsNotPosInf1:PASS
+tests/testunity.c:2855:testFloatIsNotPosInf2:PASS
+tests/testunity.c:2870:testFloatIsNotNegInf:FAIL: Expected Negative Infinity Was Not Negative Infinitytests/testunity.c:2864:testFloatIsNotNegInf:PASS
+tests/testunity.c:2875:testFloatIsNan1:PASS
+tests/testunity.c:2890:testFloatIsNan2:FAIL: Expected Not NaN Was NaNtests/testunity.c:2884:testFloatIsNan2:PASS
+tests/testunity.c:2901:testFloatIsNotNan1:FAIL: Expected NaN Was Not NaNtests/testunity.c:2895:testFloatIsNotNan1:PASS
+tests/testunity.c:2906:testFloatIsNotNan2:PASS
+tests/testunity.c:2921:testFloatInfIsNotNan:FAIL: Expected NaN Was Not NaNtests/testunity.c:2915:testFloatInfIsNotNan:PASS
+tests/testunity.c:2932:testFloatNanIsNotInf:FAIL: Expected Infinity Was Not Infinitytests/testunity.c:2926:testFloatNanIsNotInf:PASS
+tests/testunity.c:2937:testFloatIsDeterminate1:PASS
+tests/testunity.c:2954:testFloatIsDeterminate2:FAIL: Expected Not Determinate Was Determinatetests/testunity.c:2948:testFloatIsDeterminate2:PASS
+tests/testunity.c:2959:testFloatIsNotDeterminate1:PASS
+tests/testunity.c:2976:testFloatIsNotDeterminate2:FAIL: Expected Determinate Was Not Determinatetests/testunity.c:2970:testFloatIsNotDeterminate2:PASS
+tests/testunity.c:2987:testFloatTraitFailsOnInvalidTrait:FAIL: Expected Not Invalid Float Trait Was Invalid Float Traittests/testunity.c:2981:testFloatTraitFailsOnInvalidTrait:PASS
+tests/testunity.c:2993:testEqualFloatArrays:PASS
+tests/testunity.c:3020:testNotEqualFloatArraysExpectedNull:FAIL: Expected pointer to be NULLtests/testunity.c:3011:testNotEqualFloatArraysExpectedNull:PASS
+tests/testunity.c:3034:testNotEqualFloatArraysActualNull:FAIL: Actual pointer was NULLtests/testunity.c:3025:testNotEqualFloatArraysActualNull:PASS
+tests/testunity.c:3048:testNotEqualFloatArrays1:FAIL: Element 3 Values Not Within Delta tests/testunity.c:3039:testNotEqualFloatArrays1:PASS
+tests/testunity.c:3062:testNotEqualFloatArrays2:FAIL: Element 0 Values Not Within Delta tests/testunity.c:3053:testNotEqualFloatArrays2:PASS
+tests/testunity.c:3076:testNotEqualFloatArrays3:FAIL: Element 2 Values Not Within Delta tests/testunity.c:3067:testNotEqualFloatArrays3:PASS
+tests/testunity.c:3090:testNotEqualFloatArraysNegative1:FAIL: Element 3 Values Not Within Delta tests/testunity.c:3081:testNotEqualFloatArraysNegative1:PASS
+tests/testunity.c:3104:testNotEqualFloatArraysNegative2:FAIL: Element 0 Values Not Within Delta tests/testunity.c:3095:testNotEqualFloatArraysNegative2:PASS
+tests/testunity.c:3118:testNotEqualFloatArraysNegative3:FAIL: Element 2 Values Not Within Delta tests/testunity.c:3109:testNotEqualFloatArraysNegative3:PASS
+tests/testunity.c:3132:testNotEqualFloatArraysNaN:FAIL: Element 1 Values Not Within Delta tests/testunity.c:3123:testNotEqualFloatArraysNaN:PASS
+tests/testunity.c:3146:testNotEqualFloatArraysInf:FAIL: Element 1 Values Not Within Delta tests/testunity.c:3137:testNotEqualFloatArraysInf:PASS
+tests/testunity.c:3153:testDoublesWithinDelta:PASS
+tests/testunity.c:3171:testDoublesNotWithinDelta:FAIL: Values Not Within Delta tests/testunity.c:3165:testDoublesNotWithinDelta:PASS
+tests/testunity.c:3177:testDoublesEqual:PASS
+tests/testunity.c:3195:testDoublesNotEqual:FAIL: Values Not Within Delta tests/testunity.c:3189:testDoublesNotEqual:PASS
+tests/testunity.c:3206:testDoublesNotEqualNegative1:FAIL: Values Not Within Delta tests/testunity.c:3200:testDoublesNotEqualNegative1:PASS
+tests/testunity.c:3217:testDoublesNotEqualNegative2:FAIL: Values Not Within Delta tests/testunity.c:3211:testDoublesNotEqualNegative2:PASS
+tests/testunity.c:3228:testDoublesNotEqualActualNaN:FAIL: Values Not Within Delta tests/testunity.c:3222:testDoublesNotEqualActualNaN:PASS
+tests/testunity.c:3239:testDoublesNotEqualExpectedNaN:FAIL: Values Not Within Delta tests/testunity.c:3233:testDoublesNotEqualExpectedNaN:PASS
+tests/testunity.c:3250:testDoublesNotEqualBothNaN:FAIL: Values Not Within Delta tests/testunity.c:3244:testDoublesNotEqualBothNaN:PASS
+tests/testunity.c:3261:testDoublesNotEqualInfNaN:FAIL: Values Not Within Delta tests/testunity.c:3255:testDoublesNotEqualInfNaN:PASS
+tests/testunity.c:3272:testDoublesNotEqualNaNInf:FAIL: Values Not Within Delta tests/testunity.c:3266:testDoublesNotEqualNaNInf:PASS
+tests/testunity.c:3283:testDoublesNotEqualActualInf:FAIL: Values Not Within Delta tests/testunity.c:3277:testDoublesNotEqualActualInf:PASS
+tests/testunity.c:3294:testDoublesNotEqualExpectedInf:FAIL: Values Not Within Delta tests/testunity.c:3288:testDoublesNotEqualExpectedInf:PASS
+tests/testunity.c:3305:testDoublesNotEqualBothInf:FAIL: Values Not Within Delta tests/testunity.c:3299:testDoublesNotEqualBothInf:PASS
+tests/testunity.c:3316:testDoublesNotEqualPlusMinusInf:FAIL: Values Not Within Delta tests/testunity.c:3310:testDoublesNotEqualPlusMinusInf:PASS
+tests/testunity.c:3321:testDoubleIsPosInf1:PASS
+tests/testunity.c:3336:testDoubleIsPosInf2:FAIL: Expected Not Infinity Was Infinitytests/testunity.c:3330:testDoubleIsPosInf2:PASS
+tests/testunity.c:3341:testDoubleIsNegInf1:PASS
+tests/testunity.c:3356:testDoubleIsNegInf2:FAIL: Expected Not Negative Infinity Was Negative Infinitytests/testunity.c:3350:testDoubleIsNegInf2:PASS
+tests/testunity.c:3367:testDoubleIsNotPosInf1:FAIL: Expected Infinity Was Not Infinitytests/testunity.c:3361:testDoubleIsNotPosInf1:PASS
+tests/testunity.c:3372:testDoubleIsNotPosInf2:PASS
+tests/testunity.c:3387:testDoubleIsNotNegInf:FAIL: Expected Negative Infinity Was Not Negative Infinitytests/testunity.c:3381:testDoubleIsNotNegInf:PASS
+tests/testunity.c:3392:testDoubleIsNan1:PASS
+tests/testunity.c:3407:testDoubleIsNan2:FAIL: Expected Not NaN Was NaNtests/testunity.c:3401:testDoubleIsNan2:PASS
+tests/testunity.c:3418:testDoubleIsNotNan1:FAIL: Expected NaN Was Not NaNtests/testunity.c:3412:testDoubleIsNotNan1:PASS
+tests/testunity.c:3423:testDoubleIsNotNan2:PASS
+tests/testunity.c:3438:testDoubleInfIsNotNan:FAIL: Expected NaN Was Not NaNtests/testunity.c:3432:testDoubleInfIsNotNan:PASS
+tests/testunity.c:3449:testDoubleNanIsNotInf:FAIL: Expected Infinity Was Not Infinitytests/testunity.c:3443:testDoubleNanIsNotInf:PASS
+tests/testunity.c:3454:testDoubleIsDeterminate1:PASS
+tests/testunity.c:3471:testDoubleIsDeterminate2:FAIL: Expected Not Determinate Was Determinatetests/testunity.c:3465:testDoubleIsDeterminate2:PASS
+tests/testunity.c:3476:testDoubleIsNotDeterminate1:PASS
+tests/testunity.c:3493:testDoubleIsNotDeterminate2:FAIL: Expected Determinate Was Not Determinatetests/testunity.c:3487:testDoubleIsNotDeterminate2:PASS
+tests/testunity.c:3504:testDoubleTraitFailsOnInvalidTrait:FAIL: Expected Not Invalid Float Trait Was Invalid Float Traittests/testunity.c:3498:testDoubleTraitFailsOnInvalidTrait:PASS
+tests/testunity.c:3509:testEqualDoubleArrays:PASS
+tests/testunity.c:3536:testNotEqualDoubleArraysExpectedNull:FAIL: Expected pointer to be NULLtests/testunity.c:3527:testNotEqualDoubleArraysExpectedNull:PASS
+tests/testunity.c:3550:testNotEqualDoubleArraysActualNull:FAIL: Actual pointer was NULLtests/testunity.c:3541:testNotEqualDoubleArraysActualNull:PASS
+tests/testunity.c:3564:testNotEqualDoubleArrays1:FAIL: Element 3 Values Not Within Delta tests/testunity.c:3555:testNotEqualDoubleArrays1:PASS
+tests/testunity.c:3578:testNotEqualDoubleArrays2:FAIL: Element 0 Values Not Within Delta tests/testunity.c:3569:testNotEqualDoubleArrays2:PASS
+tests/testunity.c:3592:testNotEqualDoubleArrays3:FAIL: Element 2 Values Not Within Delta tests/testunity.c:3583:testNotEqualDoubleArrays3:PASS
+tests/testunity.c:3606:testNotEqualDoubleArraysNegative1:FAIL: Element 3 Values Not Within Delta tests/testunity.c:3597:testNotEqualDoubleArraysNegative1:PASS
+tests/testunity.c:3620:testNotEqualDoubleArraysNegative2:FAIL: Element 0 Values Not Within Delta tests/testunity.c:3611:testNotEqualDoubleArraysNegative2:PASS
+tests/testunity.c:3634:testNotEqualDoubleArraysNegative3:FAIL: Element 2 Values Not Within Delta tests/testunity.c:3625:testNotEqualDoubleArraysNegative3:PASS
+tests/testunity.c:3648:testNotEqualDoubleArraysNaN:FAIL: Element 1 Values Not Within Delta tests/testunity.c:3639:testNotEqualDoubleArraysNaN:PASS
+tests/testunity.c:3662:testNotEqualDoubleArraysInf:FAIL: Element 1 Values Not Within Delta tests/testunity.c:3653:testNotEqualDoubleArraysInf:PASS
+tests/testunity.c:3675:testThatDetailsCanBeHandleOneDetail:FAIL: Expected 5 Was 6. Function Detail1. Should Fail And Say Detail1tests/testunity.c:3667:testThatDetailsCanBeHandleOneDetail:PASS
+tests/testunity.c:3688:testThatDetailsCanBeHandleTwoDetails:FAIL: Expected 0x07 Was 0x08. Function Detail1 Argument Detail2. Should Fail And Say Detail1 and Detail2tests/testunity.c:3680:testThatDetailsCanBeHandleTwoDetails:PASS
+tests/testunity.c:3702:testThatDetailsCanBeHandleSingleDetailClearingTwoDetails:FAIL: Expected 'MEH' Was 'GUH'. Function DetailNew. Should Fail And Say DetailNewtests/testunity.c:3693:testThatDetailsCanBeHandleSingleDetailClearingTwoDetails:PASS
+
+-----------------------
+331 Tests 0 Failures 1 Ignored 
+OK
