@@ -40,5 +40,5 @@ I haven't ordered the Drone Hardware yet.
     Unless the Source files have their own Licensing note, or are contained within the Folders "vendor" or "XMC_Libs", they are provided with the GNU-GPL3 freedom.
 
 #### Thanks to:
-   The awesome Jakob Holderbaum who taught me TDD!
+   The awesome Jakob Holderbaum who taught me TDD!  
    Mark VanderVoord, Mike Karlesky, and Greg Williams for writing the Unity Test framework !
