@@ -12,13 +12,39 @@ task :default => :all
 task :all => :test
 
 task :flash => :arm do 
-  pid = Process.spawn("/home/jakov/bin/JLink_Linux_V510u_x86_64/JLinkGDBServer -device  XMC4500-1024 -if SWD -speed 4000")
+  pid = Process.spawn("~/bin/JLink_Linux_V510u_x86_64/JLinkGDBServer -device  XMC4500-1024 -if SWD -speed 4000")
   sh "arm-none-eabi-gdb -x gdbcommands"
   Process.kill("SIGHUP", pid)
 end
 
 task :arm => elf_hex_bin_files(:arm)
 
+TESTS = {
+    "pid_controller" => [
+     "pid_controller",
+    ],
+  "fake_motion_sensor" => [
+       "fake_motion_sensor",
+       "motion_sensor",
+   ],  
+  "motion_sensor" => [
+       "motion_sensor",
+   ], 
+   "drone_simulation" => [
+      "drone_simulation",
+   ],
+}
+
 task :test => get_tests
 
-CLEAN.include("#{BUILD_DIR}**/**/*.o", "#{BUILD_DIR}**/**/*.d", "#{BUILD_DIR}**/**/*.elf", "#{BUILD_DIR}**/**/*.hex", "#{BUILD_DIR}**/**/*.bin", "#{BUILD_DIR}**/**/*.exe")
+CLOBBER.include("#{BUILD_DIR}**/**/*.o",
+                "#{BUILD_DIR}**/**/*.d",
+                "#{BUILD_DIR}**/**/*.c")
+CLOBBER.exclude(/.*xmc.*/)
+CLEAN.include(CLOBBER,
+              "#{BUILD_DIR}**/**/*.elf",
+              "#{BUILD_DIR}**/**/*.hex",
+              "#{BUILD_DIR}**/**/*.bin",
+              "#{BUILD_DIR}**/**/*.exe",
+              "#{BUILD_DIR}**/**/*.map")
+CLEAN.exclude(/.*xmc.*/)

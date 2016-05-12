@@ -4,4 +4,6 @@ Debug/**
 build/**
 .settings/**
 /vendor/cpputest/
+/vendor/clang-checker/
 .metadata/**
+doc/

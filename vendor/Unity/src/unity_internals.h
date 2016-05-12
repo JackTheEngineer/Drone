@@ -49,6 +49,9 @@
 // We cannot use sizeof(int), because it is not yet defined
 // at this stage in the trnslation of the C program.
 // Therefore, infer it from UINT_MAX if possible.
+
+#ifndef S_SPLINT_S
+/*@ignore@*/
 #ifndef UNITY_INT_WIDTH
   #ifdef UINT_MAX
     #if (UINT_MAX == 0xFFFF)
@@ -80,6 +83,8 @@
 #endif
 #ifndef UNITY_LONG_WIDTH
   #define UNITY_LONG_WIDTH (32)
+#endif
+/*@end@*/
 #endif
 
 // Determine the size of a pointer, if not already specified,

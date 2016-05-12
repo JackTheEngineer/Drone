@@ -5,7 +5,7 @@
  *      Author: jakov
  */
 
-#include "motion_sensor.h"
+#include "../../application/sensor/motion_sensor.h"
 
 void motion_sensor_set_data_zero(Sensordata_t *sensordata){
 	sensordata->accel_data.x = 0;

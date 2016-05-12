@@ -60,9 +60,14 @@ def arm_sources()
 end
 
 def source_for_o_file(file, searched_sources)
-  return searched_sources.detect{ |f|
+  source = searched_sources.detect{ |f|
     f.pathmap("%n") == file.pathmap("%n")
   }
+  if source
+    return source
+  elsif
+    raise IOError, "The source to build the file #{source} could not be found. It may be a typo in the test-declarations.", caller 
+  end
 end
 
 def elf_hex_bin_files(targetsym)

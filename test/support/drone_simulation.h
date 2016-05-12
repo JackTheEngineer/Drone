@@ -9,39 +9,26 @@
 #define TEST_SUPPORT_DRONE_SIMULATION_H_
 
 #include "base.h"
+#include "physical_definitions.h"
 
-/* Simulation with four inner masses,
- * four outer masses
- * and four propellers
- */
 
 
 // Simulation Time Step im s
 #define TIMESTEP 0.0001 // 100 us
 
-// Definition of one mass
-#define INNER_MASS 0.2 // in kg, there are four of them
-#define INNER_MASS_RADIUS 0.1 // meter
 
-#define OUTER_MASS  0.110
 #define MOTOR_KV 1100
 #define AKKU_VOLTAGE 11
 
 #define PROPELLER_MASS 0.015 // kg
 #define PROPELLER_LENGTH 0.25 // m
-#define PROPELLER_L = 1/12 * PROPELLER_MASS * PROPELLER_LENGTH * PROPELLER_LENGTH
+#define PROPELLER_L = 1/12 * PROPELLER_MASS * SQR(PROPELLER_LENGTH)
 
 #define GRAVITY_CONST -9.81
 
-typedef struct Vector{
-	double x;
-	double y;
-	double z;
-}Vector_t;
-
 /* Used as Absoluta position from a point Zero */
 typedef struct Drone_Data{
-	Vector_t position;
+	Vector_t position_e;
 	Vector_t angular_position;
 	Vector_t speed;
 	Vector_t angular_speed;

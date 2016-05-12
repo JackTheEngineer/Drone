@@ -1,5 +1,6 @@
 
-#include "led_module.h"
+#include "../../application/led_module/led_module.h"
+
 #include "xmc_gpio.h"
 
 const XMC_GPIO_CONFIG_t LED_conf = {

@@ -33,6 +33,7 @@ rule /#{Regexp.escape(TEST_BUILD_DIR)}.+\.o$/ => [
   ] do |task|
   mkdir_p task.name.pathmap("%d")
   compile_command = compile_command_for_test()
+  sh "cppcheck --force #{task.prerequisites.first}"
   sh "#{compile_command} -o \"#{task.name}\" #{task.prerequisites.first}"
 end
 
