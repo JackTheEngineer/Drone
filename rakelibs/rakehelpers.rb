@@ -29,7 +29,7 @@ end
 def get_headers(file, headerlist)
   includes = []
   if file == nil
-    raise TypeError, "There seems to be a typo in your testname or filename declarations", caller
+    raise TypeError, "The function to get the headers of a file that got 'nil'", caller
   else
     lines = File.readlines(file)
   end
@@ -66,7 +66,7 @@ def source_for_o_file(file, searched_sources)
   if source
     return source
   elsif
-    raise IOError, "The source to build the file #{source} could not be found. It may be a typo in the test-declarations.", caller 
+    raise IOError, "The source to build the file \"#{file}\" could not be found. It may be a typo in the test-declarations.", caller 
   end
 end
 

@@ -3,6 +3,8 @@
 #define BASE_H
 
 #include <stdbool.h>
+#include <stdio.h>
+#include <math.h>
 
 typedef unsigned char uint8_t;
 typedef signed char int8_t;

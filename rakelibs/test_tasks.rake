@@ -16,8 +16,7 @@ end
 
 
 rule /#{Regexp.escape(TEST_BUILD_DIR)}runner_test_\w+\.o$/ => [->(runner_obj){source_of_runner(runner_obj)}] do |task|
-  compile_command = compile_command_for_test()
-  sh "#{compile_command} -o \"#{task.name}\" #{task.source}"
+  sh "#{compile_command_for_test(task.source, task.name)}"
 end
 
 rule /#{Regexp.escape(SOURCEGEN_DIR)}runner_test_\w+\.c$/ => ->(runnername){testname_of_runner(runnername)} do |task|
@@ -27,14 +26,13 @@ end
 
 # Compile rule for local machine OBJ-File, which is also checking the dependencies on the .h files
 rule /#{Regexp.escape(TEST_BUILD_DIR)}.+\.o$/ => [
-  ->(f){source_for_test_o_file(f)},
-  ->(f){get_headers(source_for_test_o_file(f), 
+  ->(f){source_for_o_file(f, test_sources)},
+  ->(f){get_headers(source_for_o_file(f, test_sources), 
                     test_headers())}
   ] do |task|
   mkdir_p task.name.pathmap("%d")
-  compile_command = compile_command_for_test()
   sh "cppcheck --force #{task.prerequisites.first}"
-  sh "#{compile_command} -o \"#{task.name}\" #{task.prerequisites.first}"
+  sh "#{compile_command_for_test(task.prerequisites.first, task.name)}"
 end
 
 rule ".h" => ->(f){get_headers(f, test_headers())}

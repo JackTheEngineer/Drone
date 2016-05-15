@@ -42,5 +42,6 @@ typedef struct Rotor_Speeds{
 }Rotor_Speeds_t;
 
 void drone_calculate_next_values(Drone_Data_t *dronedata, Rotor_Speeds_t *rotorspeeds, double timestep);
+void drone_set_drone_data_zero(Drone_Data_t *dronedata);
 
 #endif /* TEST_SUPPORT_DRONE_SIMULATION_H_ */

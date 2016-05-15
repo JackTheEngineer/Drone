@@ -8,7 +8,8 @@ require File.expand_path('./common_definitions.rb', File.dirname(__FILE__))
 LOCAL_GCC = "gcc"
 LOCAL_COMPILER_OPTIONS = [
   '-std=gnu11',
-#  '-Wall',
+  '$(gsl-config --cflags)',
+  '-Wall',
   '-Wextra',
   '-Werror',
   '-Wpointer-arith',
@@ -24,17 +25,20 @@ LOCAL_COMPILER_OPTIONS = [
   '-Wold-style-definition',
   '-Wmissing-prototypes',
   '-Wmissing-declarations',
-  '-Wno-unused-variable',
+  # '-Wno-unused-variable',
   '-Wno-unused-parameter',
-  '-Wno-pointer-to-int-cast',
-  '-Wno-unused-but-set-variable',
-  '-Wno-sign-compare',
-  '-Wno-implicit-function-declaration',
-  '-Wno-missing-prototypes',
-  '-Wno-missing-declarations',
+  # '-Wno-pointer-to-int-cast',
+  # '-Wno-unused-but-set-variable',
+  # '-Wno-sign-compare',
+  # '-Wno-implicit-function-declaration',
+  # '-Wno-missing-prototypes',
+  # '-Wno-missing-declarations',
   '-DUNITY_INCLUDE_DOUBLE=1',
   '-g3 -O0',
-  '-MD',  # Generate dependency files'
+].join(" ")
+
+LOCAL_GCC_COMPILE_LIBS =  [
+  '$(gsl-config --libs)',
 ].join(" ")
 
 LOCAL_LINK_OPTIONS = [

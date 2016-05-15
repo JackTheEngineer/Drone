@@ -21,14 +21,6 @@ def test_sources
   return sources_in(test_include_dirs)
 end
 
-# Helper Funcion for finding the right .c source file of the searched .o file
-def source_for_test_o_file(o_file)
-  sources = test_sources()
-  return sources.detect{|f| 
-    f.pathmap("%n") == o_file.pathmap("%n")
-  }
-end
-
 def deps_for_test(testnameexe)
     testname = testnameexe.match(/test_(\w+)\.exe$/)[1]
     source_deps = TESTS[testname]
@@ -45,7 +37,6 @@ end
 
 def source_of_runner(runner_o)
   return runner_o.pathmap("#{SOURCEGEN_DIR}%n.c")
-  # TODO: Check functionality and then delete this comment 
 end
 
 def testname_of_runner(runner_o)
@@ -64,13 +55,15 @@ def get_tests()
   return tests
 end
 
-def compile_command_for_test()
-  compile_command = ""
-  compile_command += "#{LOCAL_GCC}"
+def compile_command_for_test(c_source_file, o_file_name)
+  compile_command = "#{LOCAL_GCC}"
   compile_command += " -c"
+  compile_command += " -o #{o_file_name}"
   compile_command += " #{LOCAL_COMPILER_OPTIONS}"
   compile_command += " #{test_include_dirs().pathmap( "-I %p")}"
   compile_command += " -I- "
+  compile_command += " #{c_source_file}"
+  compile_command += " #{LOCAL_GCC_COMPILE_LIBS}"
   return compile_command
 end
 
