@@ -9,7 +9,7 @@ require File.expand_path('./rakelibs/test_target_helpers.rb', File.dirname(__FIL
 
 task :default => :all
 
-task :all => :test
+task :all => [:test, :arm]
 
 task :flash => :arm do 
   pid = Process.spawn("~/bin/JLink_Linux_V510u_x86_64/JLinkGDBServer -device  XMC4500-1024 -if SWD -speed 4000")

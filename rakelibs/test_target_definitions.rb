@@ -8,7 +8,6 @@ require File.expand_path('./common_definitions.rb', File.dirname(__FILE__))
 LOCAL_GCC = "gcc"
 LOCAL_COMPILER_OPTIONS = [
   '-std=gnu11',
-  '$(gsl-config --cflags)',
   '-Wall',
   '-Wextra',
   '-Werror',
@@ -35,10 +34,6 @@ LOCAL_COMPILER_OPTIONS = [
   # '-Wno-missing-declarations',
   '-DUNITY_INCLUDE_DOUBLE=1',
   '-g3 -O0',
-].join(" ")
-
-LOCAL_GCC_COMPILE_LIBS =  [
-  '$(gsl-config --libs)',
 ].join(" ")
 
 LOCAL_LINK_OPTIONS = [

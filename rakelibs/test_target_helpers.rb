@@ -63,7 +63,6 @@ def compile_command_for_test(c_source_file, o_file_name)
   compile_command += " #{test_include_dirs().pathmap( "-I %p")}"
   compile_command += " -I- "
   compile_command += " #{c_source_file}"
-  compile_command += " #{LOCAL_GCC_COMPILE_LIBS}"
   return compile_command
 end
 
