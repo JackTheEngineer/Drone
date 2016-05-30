@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 require 'rake'
 require 'rake/clean'
 require File.expand_path('./common_definitions.rb', File.dirname(__FILE__))
@@ -31,10 +33,10 @@ def get_headers(file, headerlist)
   if file == nil
     raise TypeError, "The function to get the headers of a file that got 'nil'", caller
   else
-    lines = File.readlines(file)
+    lines = File.readlines(file, :encoding => "UTF-8")
   end
   lines.each do |line|
-    m = line.match(/^\s*#include\s+\"\s*(.+\.[hH])\s*\"/)
+    m = line.match(/^\s*#include\s+[\"\<]\s*(.+\.[hH])\s*[\"\>]/)
     if not m.nil?
       includes << abspath_of_header(m[1], headerlist)
     end

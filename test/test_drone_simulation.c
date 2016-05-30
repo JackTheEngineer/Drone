@@ -67,3 +67,7 @@ TEST(drone_simulation, with_no_forces_g_iteration_is_similar_to_formula){
 	printf("iterated value: %f \n", dronedata->position_e.z);
 	TEST_ASSERT_DOUBLE_WITHIN(0.01, formula_value , dronedata->position_e.z);
 }
+
+TEST(drone_simulation, with_motorforces_equal_to_g_should_stand_still){
+
+}

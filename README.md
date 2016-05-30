@@ -3,14 +3,14 @@ A test driven developed Quadrocopter C Code.
 I know the build Environment to be supported by Windows and Linux. 
 
 ## Table of Content
-* Initial Idea 
-* The Philosophy
-* Development Environment 
-    * The Software Environment
+* Initial idea 
+* The coding philosophy
+* Development environment 
+    * The software environment
     * Hardware 
 * A note about licensing
 
-## Initial Idea
+## Initial idea
 This Code is supposed to fulfill three aims:
 * To share my knowledge, my Environment and the enthusiasm for and about Test Driven Development in C. 
     I am especially refering to the moments where i kept thinking that "There has to be a better way".  
@@ -19,10 +19,16 @@ This Code is supposed to fulfill three aims:
 	the code has to prove itself on a self-written Drone Simulation. 
 * To help me get a real good flying Drone. 
 
-## The Philosophy
-Clean, tested Code. As much hardwareindependency as possible. 
+## The coding philosophy
+Clean  
+tested  
+expressive  
+Code.  
+As much hardwareindependency as possible.  
+No comments whenever possible.  
+Good comments if required.  
 
-## Development Environment 
+## Development environment 
 ### The Software Environment 
 Ruby : for using Rake  
         For Windows i recommend the [rubysinstaller](http://rubyinstaller.org/)   
@@ -45,7 +51,7 @@ Jlink:          [segger-jlink](https://www.segger.com/jlink-software.html).
 Eclipse-CPP:    [eclipse C\C++ IDE](http://www.eclipse.org/downloads/packages/eclipse-ide-cc-developers/mars2)  
 and obviously - [git](https://git-scm.com/).
 
-### The Hardware
+### Hardware
 Currently the only Hardware I use is an ARM-M4-Evaluation Board by Infineon using the XMC4500.
 I haven't ordered any Drone Hardware like motors and sensors yet. 
 

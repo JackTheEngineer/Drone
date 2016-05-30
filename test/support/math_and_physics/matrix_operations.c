@@ -53,12 +53,3 @@ void Mat_mult_with_const(three_by_three_t *M, double constant){
 void Mat_add_to(three_by_three_t *M, uint8_t i, uint8_t j, double value){
 	Mat_write(M,i,j, Mat_read(M,i,j) + value);
 }
-
-
-
-
-
-
-
-
-

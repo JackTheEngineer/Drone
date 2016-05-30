@@ -1,3 +1,6 @@
+# encoding: utf-8
+
+
 ## Tasks depending the ARM-Compilation Process
 require 'rake'
 require 'rake/clean'

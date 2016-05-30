@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 require 'rake'
 require 'rake/clean'
 import './rakelibs/test_tasks.rake'
@@ -44,6 +46,9 @@ TESTS = {
    ],
    "math_helpers" => [
      "math_helpers",
+   ],
+   "propeller" => [
+     "propeller",
    ],
 }
 

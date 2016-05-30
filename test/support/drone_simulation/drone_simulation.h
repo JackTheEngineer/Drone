@@ -11,11 +11,8 @@
 #include "base.h"
 #include "physical_definitions.h"
 
-
-
 // Simulation Time Step im s
 #define TIMESTEP 0.0001 // 100 us
-
 
 #define MOTOR_KV 1100
 #define AKKU_VOLTAGE 11
