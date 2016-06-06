@@ -22,34 +22,35 @@ end
 task :arm => elf_hex_bin_files(:arm)
 
 TESTS = {
-    "pid_controller" => [
-     "pid_controller",
-    ],
-  "fake_motion_sensor" => [
-       "fake_motion_sensor",
-       "motion_sensor",
-   ],  
-  "motion_sensor" => [
-       "motion_sensor",
-   ], 
-   "drone_simulation" => [
-      "drone_simulation",
-      "drone_masses",
-   ],
-   "matrix_operations" =>[
-      "matrix_operations",
-   ],
-   "physical_helpers" => [
-     "physical_helpers",
-     "matrix_operations",
-     "math_helpers"
-   ],
-   "math_helpers" => [
-     "math_helpers",
-   ],
-   "propeller" => [
-     "propeller",
-   ],
+  "test_pid_controller" => [
+    "pid_controller",
+  ],
+  "test_fake_motion_sensor" => [
+    "fake_motion_sensor",
+    "motion_sensor",
+  ],  
+  "test_motion_sensor" => [
+    "motion_sensor",
+  ], 
+  "test_drone_simulation" => [
+    "drone_simulation",
+    "drone_masses",
+    "propeller",
+  ],
+  "test_matrix_operations" =>[
+    "matrix_operations",
+  ],
+  "test_physical_helpers" => [
+    "physical_helpers",
+    "matrix_operations",
+    "math_helpers"
+  ],
+  "test_math_helpers" => [
+    "math_helpers",
+  ],
+  "test_propeller" => [
+    "propeller",
+  ],
 }
 
 task :test => get_tests

@@ -109,7 +109,7 @@ TEST(matrix_operations, Add_to_matrix_should_do_as_said){
 
 TEST(matrix_operations, Add_to_matrix_should_do_as_said2){
 	matrix->M[1][1] = 5.2;
-	Mat_add_to(matrix, 2,2, 1.2);
+	Mat_add_to(matrix, 2, 2, 1.2);
 	TEST_ASSERT_EQUAL_DOUBLE(6.4, matrix->M[1][1]);
 }
 

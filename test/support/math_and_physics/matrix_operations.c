@@ -6,6 +6,7 @@
  */
 
 #include "matrix_operations.h"
+#include "math_helpers.h"
 
 void Mat_write(three_by_three_t *M, uint8_t i, uint8_t j, double value){
     if((i <= 3) && (j <= 3)){

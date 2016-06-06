@@ -22,15 +22,15 @@ def test_sources
 end
 
 def deps_for_test(testnameexe)
-    testname = testnameexe.match(/test_(\w+)\.exe$/)[1]
+    testname = testnameexe.match(/(\w+)\.exe$/)[1]
     source_deps = TESTS[testname]
     source_o_files = []
     if source_deps
       source_deps.each {|dep| source_o_files << "#{TEST_BUILD_DIR}#{dep.ext('.o')}"}
     end
-    runner = "#{TEST_BUILD_DIR}runner_test_#{testname}.o"
+    runner = "#{TEST_BUILD_DIR}runner_#{testname}.o"
     unity_o_files = UNITY_SOURCES.pathmap("#{TEST_BUILD_DIR}%n.o")
-    test_obj = "#{TEST_BUILD_DIR}test_#{testname}.o"
+    test_obj = "#{TEST_BUILD_DIR}#{testname}.o"
     ofiles = Rake::FileList.new(test_obj, unity_o_files, source_o_files, runner)
     return ofiles
 end
@@ -41,8 +41,8 @@ end
 
 def testname_of_runner(runner_o)
   # So it still works if you hand him a c file
-  testname = runner_o.match(/runner_test_(\w+)\.[oc]$/)[1]
-  return "#{TEST_DIR}test_#{testname}.c"
+  testname = runner_o.match(/runner_(\w+)\.[oc]$/)[1]
+  return "#{TEST_DIR}#{testname}.c"
 end
 
 def get_test_exe(test_name)
@@ -51,7 +51,7 @@ end
 
 def get_tests()
   tests = []
-  TESTS.keys.each {|testname| tests << "test_#{testname}"}
+  TESTS.keys.each {|testname| tests << "#{testname}"}
   return tests
 end
 
