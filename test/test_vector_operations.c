@@ -22,11 +22,10 @@ Vector_t *vect_2 = &vect_2_container;
 
 _STATIC_ void Test_vect_values_equal_to(double value);
 _STATIC_ void Test_vectors_equal(Vector_t * vector_1, Vector_t * vector_2);
+_STATIC_ void Set_Test_vectors_zero(void);
 
 TEST_SETUP(vector_operations){
-    Vect_set_all_values_to(vect, 0.0);
-    Vect_set_all_values_to(vect_1, 0.0);
-    Vect_set_all_values_to(vect_2, 0.0);
+    Set_Test_vectors_zero();
 }
 
 TEST_TEAR_DOWN(vector_operations){
@@ -216,6 +215,72 @@ TEST(vector_operations, Vect_copy_should_copy_vectors){
     Test_vectors_equal(vect, vect_1);
 }
 
+TEST(vector_operations, Vect_cross_multiply_index_1_should_follow_rule){
+    double i;
+    double j;
+    double k;
+    double l;
+
+    for(i = 0.0; i <= 6.0; i = i+1.0){
+        for(j = 0.0; j <= 6.0; j = j+1.0){
+            k = i+1;
+            l = j+1;
+
+            Vect_set_all_values_to(vect, 0);            
+            Vect_write_three_values(vect_1, 0, i, j);
+            Vect_write_three_values(vect_2, 0, k, l);
+            
+            Vect_cross_multiply(vect_1, vect_2, vect);
+
+            TEST_ASSERT_EQUAL_DOUBLE(Vect_read(vect, 1), i*l - k*j);
+        }
+    }
+}
+
+TEST(vector_operations, Vect_cross_multiply_index_2_should_follow_rule){
+    double i;
+    double j;
+    double k;
+    double l;
+
+    for(i = 0.0; i <= 6.0; i = i+1.0){
+        for(j = 0.0; j <= 6.0; j = j+1.0){
+            k = i+1;
+            l = j+1;
+
+            Vect_set_all_values_to(vect, 0);            
+            Vect_write_three_values(vect_1, j, 0, i);
+            Vect_write_three_values(vect_2, l, 0, k);
+            
+            Vect_cross_multiply(vect_1, vect_2, vect);
+
+            TEST_ASSERT_EQUAL_DOUBLE(Vect_read(vect, 2), i*l - k*j);
+        }
+    }
+}
+
+TEST(vector_operations, Vect_cross_multiply_index_3_should_follow_rule){
+    double i;
+    double j;
+    double k;
+    double l;
+
+    for(i = 0.0; i <= 6.0; i = i+1.0){
+        for(j = 0.0; j <= 6.0; j = j+1.0){
+            k = i+1;
+            l = j+1;
+
+            Vect_set_all_values_to(vect, 0);            
+            Vect_write_three_values(vect_1, i, j, 0);
+            Vect_write_three_values(vect_2, k, l, 0);
+            
+            Vect_cross_multiply(vect_1, vect_2, vect);
+
+            TEST_ASSERT_EQUAL_DOUBLE(Vect_read(vect, 3), i*l - k*j);
+        }
+    }
+}
+
 _STATIC_ void Test_vect_values_equal_to(double value){
     TEST_ASSERT_EQUAL_DOUBLE(value , vect->x);
     TEST_ASSERT_EQUAL_DOUBLE(value , vect->y);
@@ -228,3 +293,8 @@ _STATIC_ void Test_vectors_equal(Vector_t * vector_1, Vector_t * vector_2){
     TEST_ASSERT_EQUAL_DOUBLE(Vect_read(vector_1, 3), Vect_read(vector_2, 3));
 }
 
+_STATIC_ void Set_Test_vectors_zero(void){
+    Vect_set_all_values_to(vect_1, 0.0);
+    Vect_set_all_values_to(vect_2, 0.0);
+    Vect_set_all_values_to(vect, 0.0);
+}

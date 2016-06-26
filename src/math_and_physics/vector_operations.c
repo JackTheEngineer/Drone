@@ -79,3 +79,10 @@ void Vect_copy_from_to(Vector_t *vector_from, Vector_t *vector_to){
     vector_to->y = vector_from->y;
     vector_to->z = vector_from->z;
 }
+
+void Vect_cross_multiply(Vector_t *vector_1, Vector_t *vector_2, Vector_t *resultvector){
+    Vect_write(resultvector, 1, vector_1->y * vector_2->z - vector_1->z * vector_2->y);
+    Vect_write(resultvector, 2, vector_1->z * vector_2->x - vector_1->x * vector_2->z);
+    Vect_write(resultvector, 3, vector_1->x * vector_2->y - vector_1->y * vector_2->x);
+    
+}

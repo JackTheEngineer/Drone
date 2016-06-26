@@ -20,5 +20,5 @@ void Vect_uniform(Vector_t *vector, Vector_t *uniformed_vector);
 void Vect_write_three_values(Vector_t *vector, double value_1, double value_2, double value_3);
 void Vect_multiply(Vector_t *vector, double constant);
 void Vect_copy_from_to(Vector_t *vector_from, Vector_t *vector_to);
-
+void Vect_cross_multiply(Vector_t *vector_1, Vector_t *vector_2, Vector_t *resultvector);
 #endif
