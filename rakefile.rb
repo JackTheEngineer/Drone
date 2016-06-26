@@ -39,14 +39,15 @@ TESTS = {
   ],
   "test_matrix_operations" =>[
     "matrix_operations",
+    "vector_operations",
   ],
   "test_physical_helpers" => [
     "physical_helpers",
     "matrix_operations",
-    "math_helpers"
+    "vector_operations"
   ],
-  "test_math_helpers" => [
-    "math_helpers",
+  "test_vector_operations" => [
+    "vector_operations",
   ],
   "test_propeller" => [
     "propeller",

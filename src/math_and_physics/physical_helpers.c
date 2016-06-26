@@ -7,7 +7,8 @@
 
 #include "matrix_operations.h"
 #include "physical_helpers.h"
-#include "math_helpers.h"
+
+#include "vector_operations.h"
 
 
 void physics_calculate_moment_of_inertia(Masspoint_t *masspoints, uint32_t  number_of_masspoints, three_by_three_t *J){
@@ -25,7 +26,7 @@ void physics_calculate_moment_of_inertia(Masspoint_t *masspoints, uint32_t  numb
 
     	for(i = 1; i <= 3; i++){
             for(j = 1; j <= 3; j++){
-                Mat_add_to(J, i, j, pointmass*(r_squared*(double)kron_delta(i,j) - vect_val_of_ind(vector, j)*vect_val_of_ind(vector, i)));
+                Mat_add_to(J, i, j, pointmass*(r_squared*(double)kron_delta(i,j) - Vect_read(vector, j)*Vect_read(vector, i)));
             }   
         }
     }

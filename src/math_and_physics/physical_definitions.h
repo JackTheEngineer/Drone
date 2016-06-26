@@ -9,12 +9,7 @@
 #define TEST_PHYSICAL_DEFINITIONS_H_
 
 #include "base.h"
-
-typedef struct Vector{
-	double x;
-	double y;
-	double z;
-}Vector_t;
+#include "vector_operations.h"
 
 typedef struct Masspoint{
 	Vector_t v;

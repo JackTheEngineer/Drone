@@ -6,7 +6,7 @@
  */
 
 #include "matrix_operations.h"
-#include "math_helpers.h"
+#include "vector_operations.h"
 
 void Mat_write(three_by_three_t *M, uint8_t i, uint8_t j, double value){
     if((i <= 3) && (j <= 3)){
@@ -50,7 +50,14 @@ void Mat_mult_with_const(three_by_three_t *M, double constant){
 	}
 }
 
-
 void Mat_add_to(three_by_three_t *M, uint8_t i, uint8_t j, double value){
 	Mat_write(M,i,j, Mat_read(M,i,j) + value);
+}
+
+void Mat_times_vect(three_by_three_t *M, Vector_t *vect, Vector_t *resultvect){
+    
+}
+
+void Mat_times_mat(three_by_three_t *M1, three_by_three_t *M2){
+
 }

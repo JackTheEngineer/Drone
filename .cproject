@@ -72,11 +72,11 @@
 			<resource resourceType="PROJECT" workspacePath="/Drone"/>
 		</configuration>
 	</storageModule>
+	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
 	<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets">
 		<buildTargets>
 			<target name="arm" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
 				<buildCommand>make</buildCommand>
-				<buildArguments/>
 				<buildTarget>arm</buildTarget>
 				<stopOnError>true</stopOnError>
 				<useDefaultCommand>true</useDefaultCommand>
@@ -84,7 +84,6 @@
 			</target>
 			<target name="clean" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
 				<buildCommand>rake</buildCommand>
-				<buildArguments/>
 				<buildTarget>clean</buildTarget>
 				<stopOnError>true</stopOnError>
 				<useDefaultCommand>true</useDefaultCommand>
@@ -92,6 +91,7 @@
 			</target>
 			<target name="test" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
 				<buildCommand>rake</buildCommand>
+				<buildArguments/>
 				<buildTarget>test</buildTarget>
 				<stopOnError>true</stopOnError>
 				<useDefaultCommand>true</useDefaultCommand>
@@ -99,7 +99,6 @@
 			</target>
 			<target name="flash" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
 				<buildCommand>rake</buildCommand>
-				<buildArguments/>
 				<buildTarget>flash</buildTarget>
 				<stopOnError>true</stopOnError>
 				<useDefaultCommand>true</useDefaultCommand>
@@ -107,6 +106,7 @@
 			</target>
 			<target name="test_drone_simulation" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
 				<buildCommand>rake</buildCommand>
+				<buildArguments/>
 				<buildTarget>test_drone_simulation</buildTarget>
 				<stopOnError>true</stopOnError>
 				<useDefaultCommand>true</useDefaultCommand>
@@ -114,7 +114,6 @@
 			</target>
 			<target name="test_physical_helpers" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
 				<buildCommand>rake</buildCommand>
-				<buildArguments/>
 				<buildTarget>test_physical_helpers</buildTarget>
 				<stopOnError>true</stopOnError>
 				<useDefaultCommand>true</useDefaultCommand>
@@ -122,6 +121,7 @@
 			</target>
 			<target name="test_math_helpers" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
 				<buildCommand>rake</buildCommand>
+				<buildArguments/>
 				<buildTarget>test_math_helpers</buildTarget>
 				<stopOnError>true</stopOnError>
 				<useDefaultCommand>true</useDefaultCommand>
@@ -129,13 +129,19 @@
 			</target>
 			<target name="test_matrix_operations" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
 				<buildCommand>rake</buildCommand>
-				<buildArguments/>
 				<buildTarget>test_matrix_operations</buildTarget>
+				<stopOnError>true</stopOnError>
+				<useDefaultCommand>true</useDefaultCommand>
+				<runAllBuilders>true</runAllBuilders>
+			</target>
+			<target name="test_vector_operations" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+				<buildCommand>rake</buildCommand>
+				<buildArguments/>
+				<buildTarget>test_vector_operations</buildTarget>
 				<stopOnError>true</stopOnError>
 				<useDefaultCommand>true</useDefaultCommand>
 				<runAllBuilders>true</runAllBuilders>
 			</target>
 		</buildTargets>
 	</storageModule>
-	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
 </cproject>

@@ -17,5 +17,7 @@ void Mat_set_all_values_to(three_by_three_t *M, double value);
 void Mat_set_diag_to(three_by_three_t *M, double value);
 void Mat_mult_with_const(three_by_three_t *M, double constant);
 void Mat_add_to(three_by_three_t *M, uint8_t i, uint8_t j, double value);
+void Mat_times_vect(three_by_three_t *M, Vector_t *vect, Vector_t *resultvect);
+void Mat_times_mat(three_by_three_t *M1, three_by_three_t *M2);
 
 #endif /* TEST_SUPPORT_DRONE_SIMULATION_PHYSICAL_HELPERS_H_ */

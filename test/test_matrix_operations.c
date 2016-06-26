@@ -12,6 +12,8 @@
 
 three_by_three_t moi;
 three_by_three_t *matrix = &moi;
+Vector_t vect_container;
+Vector_t *vect = &vect_container; 
 
 TEST_GROUP(matrix_operations);
 
@@ -113,5 +115,15 @@ TEST(matrix_operations, Add_to_matrix_should_do_as_said2){
 	TEST_ASSERT_EQUAL_DOUBLE(6.4, matrix->M[1][1]);
 }
 
- 
+TEST(matrix_operations, Mat_times_vector_should_use_mathematical_rule){
+    Vector_t resultvect_container; 
+    Vector_t *resultvect = &resultvect_container;
 
+    Mat_set_all_values_to(matrix, 0.0);
+    Vect_set_all_values_to(vect, 0.0);
+    
+    Mat_times_vect(matrix, vect, resultvect);
+    
+    
+
+}
