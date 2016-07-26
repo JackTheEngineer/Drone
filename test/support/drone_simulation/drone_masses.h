@@ -16,3 +16,4 @@
 #define OUTER_MASS_RADIUS  0.25 //meter
 
 #endif /* TEST_DRONE_MASSES_H_ */
+

@@ -26,8 +26,8 @@ Masspoint_t mps[NMBR_MASSES] ={
 Masspoint_t* masspoints = mps;
 
 TEST_GROUP(physical_helper);
-three_by_three_t moi;
-three_by_three_t *mom_of_inertia = &moi;
+three_by_three_t matrix_container;
+three_by_three_t *mom_of_inertia = &matrix_container;
 
 TEST_SETUP(physical_helper){
 }
