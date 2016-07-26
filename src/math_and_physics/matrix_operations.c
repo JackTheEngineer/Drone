@@ -13,10 +13,13 @@
  *  on which the work is performed.
  */
 
-_STATIC_ void Line_a_minus_line_b_times_x(uint8_t a, uint8_t b, double x, three_by_three_t *M1);
-_STATIC_ void Line_a_minus_line_b_times_x_on_two_matrices(uint8_t a, uint8_t b, double x, three_by_three_t *M1, three_by_three_t *M2);
+_STATIC_ void _Line_a_minus_line_b_times_x(uint8_t a, uint8_t b, double x, three_by_three_t *M1);
+_STATIC_ void _Line_a_minus_line_b_times_x_on_two_matrices(uint8_t a, uint8_t b, double x, three_by_three_t *M1, three_by_three_t *M2);
 _STATIC_ double secure_division(double divident, double divisor);
-
+_STATIC_ void _Mat_exchange_lines_so_there_are_no_zeroes_on_the_diagonal(
+		three_by_three_t *M, three_by_three_t *Inverse);
+_STATIC_ void _Mat_scale_elements_linewise(three_by_three_t* Inverse, three_by_three_t* Diagonal_matrix);
+_STATIC_ void _Exchange_line_a_with_line_b(uint8_t a, uint8_t b, three_by_three_t *M);
 
 void Mat_write(three_by_three_t *M, uint8_t i, uint8_t j, double value){
     if((i <= 3) && (j <= 3) && (i>0) && (j>0)){
@@ -84,41 +87,43 @@ void Mat_inverse(three_by_three_t *M, three_by_three_t *Inverse){
     Mat_set_diag_to(Inverse, 1.0);
     
     Mat_copy(M, Temporary);
+
+    _Mat_exchange_lines_so_there_are_no_zeroes_on_the_diagonal(Temporary,Inverse);
     /* I have written the 6 Matrix operations by hand,
        because three_by_three_t is of fixed size
        and through this i am reducing the amount of
        'for' loops. */
-    Line_a_minus_line_b_times_x_on_two_matrices(
+    _Line_a_minus_line_b_times_x_on_two_matrices(
         2,
         1,
         secure_division(Mat_read(Temporary,2,1),Mat_read(Temporary,1,1)),
         Temporary,
         Inverse);
-    Line_a_minus_line_b_times_x_on_two_matrices(
+    _Line_a_minus_line_b_times_x_on_two_matrices(
         3,
         1,
         secure_division(Mat_read(Temporary,3,1),Mat_read(Temporary,1,1)),
         Temporary,
         Inverse);
-    Line_a_minus_line_b_times_x_on_two_matrices(
+    _Line_a_minus_line_b_times_x_on_two_matrices(
         3,
         2,
         secure_division(Mat_read(Temporary,3,2),Mat_read(Temporary,2,2)),
         Temporary,
         Inverse);
-    Line_a_minus_line_b_times_x_on_two_matrices(
+    _Line_a_minus_line_b_times_x_on_two_matrices(
         2,
         3,
         secure_division(Mat_read(Temporary,2,3),Mat_read(Temporary,3,3)),
         Temporary,
         Inverse);
-    Line_a_minus_line_b_times_x_on_two_matrices(
+    _Line_a_minus_line_b_times_x_on_two_matrices(
         1,
         3,
         secure_division(Mat_read(Temporary,1,3),Mat_read(Temporary,3,3)),
         Temporary,
         Inverse);
-    Line_a_minus_line_b_times_x_on_two_matrices(
+    _Line_a_minus_line_b_times_x_on_two_matrices(
         1,
         2,
         secure_division(Mat_read(Temporary,1,2),Mat_read(Temporary,2,2)),
@@ -127,9 +132,7 @@ void Mat_inverse(three_by_three_t *M, three_by_three_t *Inverse){
     // Now Temporary contains only diagonal values. This means that it's
     // only necessairy to divide the inverse matrix lines by the corresponding 
     // values on the diagonal 
-    Mat_multiply_line_a_by_x(Inverse,1,(1.0/Mat_read(Temporary,1,1)));
-    Mat_multiply_line_a_by_x(Inverse,2,(1.0/Mat_read(Temporary,2,2)));
-    Mat_multiply_line_a_by_x(Inverse,3,(1.0/Mat_read(Temporary,3,3)));
+	_Mat_scale_elements_linewise(Inverse, Temporary);
 }
 
 void Mat_times_mat(three_by_three_t *M1, three_by_three_t *M2, three_by_three_t *Result_M){
@@ -154,12 +157,12 @@ void Mat_copy(three_by_three_t *M_from, three_by_three_t *M_to){
     }
 }
 
-_STATIC_ void Line_a_minus_line_b_times_x_on_two_matrices(uint8_t a, uint8_t b, double x, three_by_three_t *M1, three_by_three_t *M2){
-    Line_a_minus_line_b_times_x(a,b,x,M1);
-    Line_a_minus_line_b_times_x(a,b,x,M2);
+_STATIC_ void _Line_a_minus_line_b_times_x_on_two_matrices(uint8_t a, uint8_t b, double x, three_by_three_t *M1, three_by_three_t *M2){
+    _Line_a_minus_line_b_times_x(a,b,x,M1);
+    _Line_a_minus_line_b_times_x(a,b,x,M2);
 }
 
-_STATIC_ void Line_a_minus_line_b_times_x(uint8_t a, uint8_t b, double x, three_by_three_t *M){
+_STATIC_ void _Line_a_minus_line_b_times_x(uint8_t a, uint8_t b, double x, three_by_three_t *M){
     uint8_t j;
     double new_value;
     for(j=1;j<=3;j++){
@@ -168,11 +171,60 @@ _STATIC_ void Line_a_minus_line_b_times_x(uint8_t a, uint8_t b, double x, three_
     }
 }
 
+_STATIC_ void _Mat_exchange_lines_so_there_are_no_zeroes_on_the_diagonal(
+		three_by_three_t *M, three_by_three_t *Inverse){
+	uint8_t i;
+	uint8_t k;
+	uint8_t line_index_with_nonzero_value = 0;
+
+	for(i=0; i<=3; i++){
+		if(Mat_read(M,i,i) == 0){
+			//Find the line index with a nonzero value
+			for(k=0; k<=3; k++){
+				if(Mat_read(M,k,i)){
+					line_index_with_nonzero_value = k;
+				}
+			}
+			_Exchange_line_a_with_line_b(i,line_index_with_nonzero_value, M);
+			_Exchange_line_a_with_line_b(i,line_index_with_nonzero_value, Inverse);
+		}
+	}
+}
+
+_STATIC_ void _Exchange_line_a_with_line_b(uint8_t a, uint8_t b, three_by_three_t *M){
+	uint8_t j;
+
+	double a1 = Mat_read(M,a,1);
+	double a2 = Mat_read(M,a,2);
+	double a3 = Mat_read(M,a,3);
+
+	for(j=0;j<=3;j++){
+		Mat_write(M, a, j, Mat_read(M,b,j));
+	}
+
+	Mat_write(M, b , 1, a1);
+	Mat_write(M, b , 2, a2);
+	Mat_write(M, b , 3, a3);
+}
+
+
+_STATIC_ void _Mat_scale_elements_linewise(three_by_three_t* Inverse,
+		three_by_three_t* Diagonal_matrix){
+	// Now Temporary contains only diagonal values. This means that it's
+	// only necessairy to divide the inverse matrix lines by the corresponding
+	// values on the diagonal
+	Mat_multiply_line_a_by_x(Inverse, 1,
+			(1.0 / Mat_read(Diagonal_matrix, 1, 1)));
+	Mat_multiply_line_a_by_x(Inverse, 2,
+			(1.0 / Mat_read(Diagonal_matrix, 2, 2)));
+	Mat_multiply_line_a_by_x(Inverse, 3,
+			(1.0 / Mat_read(Diagonal_matrix, 3, 3)));
+}
+
 _STATIC_ double secure_division(double divident, double divisor){
     if(divisor){
         return divident/divisor;
     } else {
-        printf("divisor was zero !! \n");
-        return 0;
+    	return 0;
     }
 }
