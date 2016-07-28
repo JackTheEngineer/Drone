@@ -16,6 +16,11 @@ typedef struct Masspoint{
 	double m;
 }Masspoint_t;
 
+typedef struct Force{
+	Vector_t force;
+	Vector_t point_of_application;
+};
+
 typedef struct ThreebyThree{
 	double M[3][3];
 }three_by_three_t;

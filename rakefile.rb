@@ -36,6 +36,8 @@ TESTS = {
     "drone_simulation",
     "drone_masses",
     "propeller",
+    "vector_operations",
+    "matrix_operations",
   ],
   "test_matrix_operations" =>[
     "matrix_operations",

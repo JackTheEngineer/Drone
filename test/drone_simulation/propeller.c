@@ -16,4 +16,3 @@ double propeller_force_of_rpm(double rpm){
 double propeller_rpm_of_force(double force){
     return force * 1/PROP_CONSTANT;
 }
-

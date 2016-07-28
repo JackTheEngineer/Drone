@@ -145,11 +145,11 @@ TEST(matrix_operations, Inverse_of_diagonal_matrix_should_be_one_over_diag_value
 
 	Mat_set_all_values_to(matrix, 0.0);
 	Mat_set_diag_to(matrix, 5.0);
-	print_matrix(matrix," Matrix ");
+	//print_matrix(matrix," Matrix ");
 
 	Mat_set_all_values_to(compare_matrix, 0.0);
 	Mat_set_diag_to(compare_matrix, 1.0/5.0);
-	print_matrix(compare_matrix, " compare matrix ");
+	//print_matrix(compare_matrix, " compare matrix ");
 
 	Mat_inverse(matrix, inverse_matrix);
 

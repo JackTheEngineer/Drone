@@ -10,6 +10,8 @@
 
 #include "base.h"
 #include "physical_definitions.h"
+#include "vector_operations.h"
+
 
 #define MOTOR_KV 1100
 #define AKKU_VOLTAGE 11
@@ -26,17 +28,15 @@ typedef struct Drone_Data{
 	Vector_t angular_position;
 	Vector_t speed;
 	Vector_t angular_speed;
-}Drone_Data_t;
+	Vector_t rotorspeeds[4];
+}Physical_Drone_Data_t;
 
 typedef struct Rotor_Speeds{
-	double motor_1;
-	double motor_2;
-	double motor_3;
-	double motor_4;
-}Rotor_Speeds_t;
+	double moments[4];
+}Rotor_Moments_t;
 
-void drone_set_position(double x, double y, double z, Drone_Data_t* dronedata);
-void drone_calculate_next_values(Drone_Data_t *dronedata, Rotor_Speeds_t *rotorspeeds, double timestep);
-void drone_set_drone_data_zero(Drone_Data_t *dronedata);
+void Drone_set_position(double x, double y, double z, Physical_Drone_Data_t* dronedata);
+void Drone_calculate_next_values(Physical_Drone_Data_t *dronedata, Rotor_Moments_t *rotormoments, double timestep);
+void Drone_set_drone_data_zero(Physical_Drone_Data_t *dronedata);
 
 #endif /* TEST_SUPPORT_DRONE_SIMULATION_H_ */

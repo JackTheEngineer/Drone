@@ -86,3 +86,10 @@ void Vect_cross_multiply(Vector_t *vector_1, Vector_t *vector_2, Vector_t *resul
     Vect_write(resultvector, 3, vector_1->x * vector_2->y - vector_1->y * vector_2->x);
     
 }
+
+void Vect_sum_up_list_of_vectors(Vector_t *vectorlist, Vector_t *sum_vector, uint8_t listlength){
+	uint8_t i;
+	for(i=0; i<listlength; i++){
+		Vect_add(&(vectorlist[i]), sum_vector, sum_vector);
+	}
+}

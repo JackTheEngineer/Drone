@@ -23,6 +23,7 @@ Vector_t *vect_2 = &vect_2_container;
 _STATIC_ void Test_vect_values_equal_to(double value);
 _STATIC_ void Test_vectors_equal(Vector_t * vector_1, Vector_t * vector_2);
 _STATIC_ void Set_Test_vectors_zero(void);
+_STATIC_ void _write_5_6_7_into_each_vector(Vector_t *vectorlist, uint8_t length);
 
 TEST_SETUP(vector_operations){
     Set_Test_vectors_zero();
@@ -281,6 +282,22 @@ TEST(vector_operations, Vect_cross_multiply_index_3_should_follow_rule){
     }
 }
 
+TEST(vector_operations, sum_up_list_of_Vectors_should_work){
+	Vector_t vectorlist[5];
+	Vector_t sum_vector_container;
+	Vector_t *sum_vector = &sum_vector_container;
+
+	Vector_t compare_vector_container;
+	Vector_t *compare_vector = &compare_vector_container;
+
+	_write_5_6_7_into_each_vector(vectorlist, 5);
+	Vect_write_three_values(compare_vector, 25.0, 30.0, 35.0);
+
+	Vect_sum_up_list_of_vectors(vectorlist, sum_vector, 5);
+
+	Test_vectors_equal(compare_vector, sum_vector);
+}
+
 _STATIC_ void Test_vect_values_equal_to(double value){
     TEST_ASSERT_EQUAL_DOUBLE(value , vect->x);
     TEST_ASSERT_EQUAL_DOUBLE(value , vect->y);
@@ -297,4 +314,12 @@ _STATIC_ void Set_Test_vectors_zero(void){
     Vect_set_all_values_to(vect_1, 0.0);
     Vect_set_all_values_to(vect_2, 0.0);
     Vect_set_all_values_to(vect, 0.0);
+}
+
+_STATIC_ void _write_5_6_7_into_each_vector(Vector_t *vectorlist, uint8_t length){
+	uint8_t i;
+
+	for(i=0; i<length; i++){
+		Vect_write_three_values(&(vectorlist[i]), 5, 6, 7);
+	}
 }
