@@ -5,7 +5,7 @@
  *      Author: jakov
  */
 
-#include "../../interfaces/pwm/pwm.h"
+#include "pwm.h"
 
 void PWM_Motor1_Set_Rate(uint32_t Speed){
 

@@ -93,3 +93,11 @@ void Vect_sum_up_list_of_vectors(Vector_t *vectorlist, Vector_t *sum_vector, uin
 		Vect_add(&(vectorlist[i]), sum_vector, sum_vector);
 	}
 }
+
+void Vect_set_vectorlist_to_value(Vector_t vectorlist[], uint32_t listlength, double value){
+	uint32_t i;
+
+	for(i=0; i<listlength; i++){
+		Vect_set_all_values_to(&(vectorlist[i]), value);
+	}
+}

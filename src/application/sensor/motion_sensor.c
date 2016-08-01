@@ -5,20 +5,14 @@
  *      Author: jakov
  */
 
-#include "../../application/sensor/motion_sensor.h"
+#include "motion_sensor.h"
 
-void motion_sensor_set_data_zero(Sensordata_t *sensordata){
-	sensordata->accel_data.x = 0;
-	sensordata->accel_data.y = 0;
-	sensordata->accel_data.z = 0;
-	sensordata->gyro_data.x = 0;
-	sensordata->gyro_data.y = 0;
-	sensordata->gyro_data.z = 0;
-	sensordata->compass_data.x = 0;
-	sensordata->compass_data.y = 0;
-	sensordata->compass_data.z = 0;
+void Motion_sensor_set_data_zero(Sensordata_t *sensordata){
+	Vect_set_all_values_to(&(sensordata->acceleration), 0.0);
+	Vect_set_all_values_to(&(sensordata->angle_speed), 0.0);
+	Vect_set_all_values_to(&(sensordata->magnetic_field), 0.0);
 }
 
-void motion_senor_get_data(Sensordata_t *sensordata){
+void Motion_sensor_get_data(Sensordata_t *sensordata){
     
 }

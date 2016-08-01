@@ -25,18 +25,17 @@ TESTS = {
   "test_pid_controller" => [
     "pid_controller",
   ],
-  "test_fake_motion_sensor" => [
-    "fake_motion_sensor",
-    "motion_sensor",
-  ],  
   "test_motion_sensor" => [
     "motion_sensor",
+    "vector_operations",
+    "vector_tester",
   ], 
-  "test_drone_simulation" => [
-    "drone_simulation",
+  "test_drone_physics" => [
+    "drone_physics",
     "drone_masses",
     "propeller",
     "vector_operations",
+    "vector_tester",
     "matrix_operations",
   ],
   "test_matrix_operations" =>[
@@ -50,9 +49,20 @@ TESTS = {
   ],
   "test_vector_operations" => [
     "vector_operations",
+    "vector_tester"
   ],
   "test_propeller" => [
     "propeller",
+  ],
+  "test_simulation_connection" => [
+    "simulation_connection",
+    "drone_physics",
+    "vector_operations",
+    "fake_motors",
+  ],
+  "test_fake_motors"=>[
+    "fake_motors",
+    "simulation_connection",
   ],
 }
 

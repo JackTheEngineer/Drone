@@ -5,8 +5,8 @@
  *      Author: jakov
  */
 
-#include "../../application/motor/motors.h"
+#include "motors.h"
 
-void Motors_Set_Speed(Motors_t *motorspeeds){
+void Motors_Set_Speed(Motorcontrolvalues_t *motorspeeds){
 
 }

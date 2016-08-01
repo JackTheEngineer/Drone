@@ -22,4 +22,6 @@ void Vect_multiply(Vector_t *vector, double constant);
 void Vect_copy_from_to(Vector_t *vector_from, Vector_t *vector_to);
 void Vect_cross_multiply(Vector_t *vector_1, Vector_t *vector_2, Vector_t *resultvector);
 void Vect_sum_up_list_of_vectors(Vector_t *vectorlist, Vector_t *sum_vector, uint8_t listlength);
+void Vect_set_vectorlist_to_value(Vector_t vectorlist[], uint32_t listlength, double value);
+
 #endif

@@ -23,7 +23,6 @@ This Code is supposed to fulfill three aims:
 Clean  
 tested  
 expressive  
-Code.  
 As much hardwareindependency as possible.  
 No comments whenever possible.  
 Good comments if required.  

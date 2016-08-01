@@ -7,7 +7,7 @@
 
 #include "test_helper.h"
 #include "vector_operations.h"
-
+#include "vector_tester.h"
 
 TEST_GROUP(vector_operations);
 Vector_t vector_contianer;
@@ -21,7 +21,6 @@ Vector_t *vect_2 = &vect_2_container;
 
 
 _STATIC_ void Test_vect_values_equal_to(double value);
-_STATIC_ void Test_vectors_equal(Vector_t * vector_1, Vector_t * vector_2);
 _STATIC_ void Set_Test_vectors_zero(void);
 _STATIC_ void _write_5_6_7_into_each_vector(Vector_t *vectorlist, uint8_t length);
 
@@ -302,12 +301,6 @@ _STATIC_ void Test_vect_values_equal_to(double value){
     TEST_ASSERT_EQUAL_DOUBLE(value , vect->x);
     TEST_ASSERT_EQUAL_DOUBLE(value , vect->y);
     TEST_ASSERT_EQUAL_DOUBLE(value , vect->z);
-}
-
-_STATIC_ void Test_vectors_equal(Vector_t * vector_1, Vector_t * vector_2){
-    TEST_ASSERT_EQUAL_DOUBLE(Vect_read(vector_1, 1), Vect_read(vector_2, 1));
-    TEST_ASSERT_EQUAL_DOUBLE(Vect_read(vector_1, 2), Vect_read(vector_2, 2));
-    TEST_ASSERT_EQUAL_DOUBLE(Vect_read(vector_1, 3), Vect_read(vector_2, 3));
 }
 
 _STATIC_ void Set_Test_vectors_zero(void){

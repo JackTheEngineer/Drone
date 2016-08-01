@@ -9,33 +9,15 @@
 #define SRC_SENSOR_MOTION_SENSOR_H_
 
 #include "base.h"
-
-typedef struct Accelerometer{
-	int32_t x;
-	int32_t y;
-	int32_t z;
-}Accelerometer_t;
-
-typedef struct Gyroscope{
-	int32_t x;
-	int32_t y;
-	int32_t z;
-}Gyroscope_t;
-
-typedef struct Compass{
-	int32_t x;
-	int32_t y;
-	int32_t z;
-}Compass_t;
+#include "vector_operations.h"
 
 typedef struct Sensordata{
-	Accelerometer_t accel_data;
-	Gyroscope_t gyro_data;
-	Compass_t compass_data;
+	Vector_t acceleration;
+	Vector_t angle_speed;
+	Vector_t magnetic_field;
 }Sensordata_t;
 
-void motion_senor_get_data(Sensordata_t *sensordata);
-void motion_sensor_set_data_zero(Sensordata_t *sensordata);
-
+void Motion_sensor_get_data(Sensordata_t *sensordata);
+void Motion_sensor_set_data_zero(Sensordata_t *sensordata);
 
 #endif /* SRC_SENSOR_MOTION_SENSOR_H_ */

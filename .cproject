@@ -13,12 +13,10 @@
 					<extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 					<extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 					<extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.eclipse.cdt.ui.UnityErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.eclipse.cdt.ui.Regex Error Parser" point="org.eclipse.cdt.core.ErrorParser"/>
 				</extensions>
 			</storageModule>
 			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
-				<configuration artifactName="${ProjName}" buildProperties="" description="" errorParsers="org.eclipse.cdt.core.GASErrorParser;org.eclipse.cdt.core.GmakeErrorParser;org.eclipse.cdt.core.GLDErrorParser;org.eclipse.cdt.core.VCErrorParser;org.eclipse.cdt.core.CWDLocator;org.eclipse.cdt.ui.UnityErrorParser;org.eclipse.cdt.core.GCCErrorParser;org.eclipse.cdt.ui.Regex Error Parser" id="0.1217761423" name="Default" parent="org.eclipse.cdt.build.core.prefbase.cfg">
+				<configuration artifactName="${ProjName}" buildProperties="" description="" errorParsers="org.eclipse.cdt.core.GASErrorParser;org.eclipse.cdt.core.GmakeErrorParser;org.eclipse.cdt.core.GLDErrorParser;org.eclipse.cdt.core.VCErrorParser;org.eclipse.cdt.core.CWDLocator;org.eclipse.cdt.core.GCCErrorParser" id="0.1217761423" name="Default" parent="org.eclipse.cdt.build.core.prefbase.cfg">
 					<folderInfo id="0.1217761423." name="/" resourcePath="">
 						<toolChain errorParsers="" id="org.eclipse.cdt.build.core.prefbase.toolchain.1989518941" name="No ToolChain" resourceTypeBasedDiscovery="false" superClass="org.eclipse.cdt.build.core.prefbase.toolchain">
 							<targetPlatform id="org.eclipse.cdt.build.core.prefbase.toolchain.1989518941.1081556848" name=""/>
@@ -78,6 +76,7 @@
 		<buildTargets>
 			<target name="arm" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
 				<buildCommand>make</buildCommand>
+				<buildArguments/>
 				<buildTarget>arm</buildTarget>
 				<stopOnError>true</stopOnError>
 				<useDefaultCommand>true</useDefaultCommand>
@@ -85,6 +84,7 @@
 			</target>
 			<target name="clean" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
 				<buildCommand>rake</buildCommand>
+				<buildArguments/>
 				<buildTarget>clean</buildTarget>
 				<stopOnError>true</stopOnError>
 				<useDefaultCommand>true</useDefaultCommand>
@@ -92,7 +92,6 @@
 			</target>
 			<target name="test" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
 				<buildCommand>rake</buildCommand>
-				<buildArguments/>
 				<buildTarget>test</buildTarget>
 				<stopOnError>true</stopOnError>
 				<useDefaultCommand>true</useDefaultCommand>
@@ -100,21 +99,15 @@
 			</target>
 			<target name="flash" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
 				<buildCommand>rake</buildCommand>
-				<buildTarget>flash</buildTarget>
-				<stopOnError>true</stopOnError>
-				<useDefaultCommand>true</useDefaultCommand>
-				<runAllBuilders>true</runAllBuilders>
-			</target>
-			<target name="test_drone_simulation" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
-				<buildCommand>rake</buildCommand>
 				<buildArguments/>
-				<buildTarget>test_drone_simulation</buildTarget>
+				<buildTarget>flash</buildTarget>
 				<stopOnError>true</stopOnError>
 				<useDefaultCommand>true</useDefaultCommand>
 				<runAllBuilders>true</runAllBuilders>
 			</target>
 			<target name="test_physical_helpers" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
 				<buildCommand>rake</buildCommand>
+				<buildArguments/>
 				<buildTarget>test_physical_helpers</buildTarget>
 				<stopOnError>true</stopOnError>
 				<useDefaultCommand>true</useDefaultCommand>
@@ -122,7 +115,6 @@
 			</target>
 			<target name="test_math_helpers" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
 				<buildCommand>rake</buildCommand>
-				<buildArguments/>
 				<buildTarget>test_math_helpers</buildTarget>
 				<stopOnError>true</stopOnError>
 				<useDefaultCommand>true</useDefaultCommand>
@@ -130,6 +122,7 @@
 			</target>
 			<target name="test_matrix_operations" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
 				<buildCommand>rake</buildCommand>
+				<buildArguments/>
 				<buildTarget>test_matrix_operations</buildTarget>
 				<stopOnError>true</stopOnError>
 				<useDefaultCommand>true</useDefaultCommand>
@@ -137,8 +130,22 @@
 			</target>
 			<target name="test_vector_operations" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
 				<buildCommand>rake</buildCommand>
-				<buildArguments/>
 				<buildTarget>test_vector_operations</buildTarget>
+				<stopOnError>true</stopOnError>
+				<useDefaultCommand>true</useDefaultCommand>
+				<runAllBuilders>true</runAllBuilders>
+			</target>
+			<target name="test_simulation_connection" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+				<buildCommand>rake</buildCommand>
+				<buildTarget>test_simulation_connection</buildTarget>
+				<stopOnError>true</stopOnError>
+				<useDefaultCommand>true</useDefaultCommand>
+				<runAllBuilders>true</runAllBuilders>
+			</target>
+			<target name="test_fake_motors" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+				<buildCommand>rake</buildCommand>
+				<buildArguments/>
+				<buildTarget>test_fake_motors</buildTarget>
 				<stopOnError>true</stopOnError>
 				<useDefaultCommand>true</useDefaultCommand>
 				<runAllBuilders>true</runAllBuilders>

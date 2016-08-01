@@ -20,7 +20,7 @@ Masspoint_t mps[NMBR_MASSES] ={
         },
         .m = 5.0,
     }
-}; // Inertial moment was hand-calculated once to perform a test on the calculation.
+}; // Moment of inertia was hand-calculated once to perform a test on the calculation.
 // Don't change these values !
 
 Masspoint_t* masspoints = mps;

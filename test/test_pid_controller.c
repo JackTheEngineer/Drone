@@ -12,7 +12,5 @@ TEST_TEAR_DOWN(pid_controller){
 } 
 
 TEST(pid_controller, Scheduler_should_return_true_when_okay){
-    bool status = true;
 
-    TEST_ASSERT_TRUE(status);
 }
