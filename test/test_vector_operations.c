@@ -10,14 +10,11 @@
 #include "vector_tester.h"
 
 TEST_GROUP(vector_operations);
-Vector_t vector_contianer;
-Vector_t *vect = &vector_contianer;
 
-Vector_t vect_1_container;
-Vector_t *vect_1 = &vect_1_container;
+POINTER_TO_CONTAINER(Vector_t, vect);
+POINTER_TO_CONTAINER(Vector_t, vect_1);
+POINTER_TO_CONTAINER(Vector_t, vect_2);
 
-Vector_t vect_2_container;
-Vector_t *vect_2 = &vect_2_container;
 
 
 _STATIC_ void Test_vect_values_equal_to(double value);
@@ -296,6 +293,37 @@ TEST(vector_operations, sum_up_list_of_Vectors_should_work){
 
 	Test_vectors_equal(compare_vector, sum_vector);
 }
+
+TEST(vector_operations, get_pointer_of_indexvalue_1){
+	double *ptr;
+	double *compare_ptr;
+
+	compare_ptr = &(vect->x);
+	ptr = Vect_pointer_to_index(vect, 1);
+
+	TEST_ASSERT_POINTERS_EQUAL(compare_ptr, ptr);
+}
+
+TEST(vector_operations, get_pointer_of_indexvalue_2){
+	double *ptr;
+	double *compare_ptr;
+
+	compare_ptr = &(vect->y);
+	ptr = Vect_pointer_to_index(vect, 2);
+
+	TEST_ASSERT_POINTERS_EQUAL(compare_ptr, ptr);
+}
+
+TEST(vector_operations, get_pointer_of_indexvalue_3){
+	double *ptr;
+	double *compare_ptr;
+
+	compare_ptr = &(vect->z);
+	ptr = Vect_pointer_to_index(vect, 3);
+
+	TEST_ASSERT_POINTERS_EQUAL(compare_ptr, ptr);
+}
+
 
 _STATIC_ void Test_vect_values_equal_to(double value){
     TEST_ASSERT_EQUAL_DOUBLE(value , vect->x);

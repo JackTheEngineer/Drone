@@ -6,21 +6,38 @@
  */
 
 #include "fake_motors.h"
-#include "simulation_connection.h"
+#include "simulation.h"
 
+void Motors_Init(void){
 
-void Motors_Set_Speed(Motorcontrolvalues_t *motor_values){
-	POINTER_TO_CONTAINER(Motorcurrents_t, currents);
-
-	fake_Motors_calculate_motorcurrent_of_control_value(motor_values, currents);
-	Simulation_recieve_motorcurrents(currents);
 }
 
+void Motors_Set_Speed(Motorcontrolvalues_t *motor_values){
+	Simulation_recieve(motor_values);
+}
 
-void fake_Motors_calculate_motorcurrent_of_control_value(Motorcontrolvalues_t *motor_values, Motorcurrents_t *currents){
+void fake_Motor_calculate_currents_from_controlvalues(Motor_t motors[NMBR_OF_MOTORS], Motorcontrolvalues_t *motor_values){
 	uint32_t i;
 
-	for(i=0; i<NMBR_OF_MOTORS;i++){
-		currents->currents[i] = (double)motor_values->motorspeeds[i] * VALUES_TO_CURRENTS;
+	for(i = 0; i<NMBR_OF_MOTORS; i++){
+		motors[i].current = motor_values->motorspeeds[i];
 	}
+}
+
+void fake_Motor_calculate_speeds_from_currents(Motor_t motors[NMBR_OF_MOTORS]){
+	uint32_t i;
+
+	for(i=0;i<NMBR_OF_MOTORS; i++){
+		Vect_write(&(motors[i].speed), 3, motors[i].current * CURRENT_TO_SPEED);
+	}
+}
+
+void fake_Motor_calculate_thrust_from_speed(Motor_t motors[NMBR_OF_MOTORS]){
+    uint8_t i;
+    double speed;
+
+    for(i=0; i<NMBR_OF_MOTORS; i++){
+        speed = Vect_read(&(motors[i].speed), 3);
+        Vect_write(&(motors[i].thrust), 3, (SPEED_TO_THRUST*SQR(speed))); 
+    }
 }

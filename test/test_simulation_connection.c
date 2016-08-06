@@ -5,9 +5,9 @@
  *      Author: chocolate
  */
 
+#include "drone_simulation/simulation.h"
 #include "test_helper.h"
 #include "motors.h"
-#include "simulation_connection.h"
 
 TEST_GROUP(simulation_connection);
 

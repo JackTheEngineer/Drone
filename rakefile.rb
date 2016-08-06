@@ -55,14 +55,15 @@ TESTS = {
     "propeller",
   ],
   "test_simulation_connection" => [
-    "simulation_connection",
+    "simulation",
     "drone_physics",
     "vector_operations",
     "fake_motors",
   ],
   "test_fake_motors"=>[
     "fake_motors",
-    "simulation_connection",
+    "simulation",
+    "vector_operations",
   ],
 }
 

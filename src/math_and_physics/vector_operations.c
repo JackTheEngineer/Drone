@@ -101,3 +101,19 @@ void Vect_set_vectorlist_to_value(Vector_t vectorlist[], uint32_t listlength, do
 		Vect_set_all_values_to(&(vectorlist[i]), value);
 	}
 }
+
+double *Vect_pointer_to_index(Vector_t *vect, uint8_t index){
+	switch(index){
+	case 1:
+		return &(vect->x);
+		break;
+	case 2:
+		return &(vect->y);
+		break;
+	case 3:
+		return &(vect->z);
+		break;
+	default:
+		return 0;
+	}
+}

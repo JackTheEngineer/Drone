@@ -6,7 +6,8 @@
  */
 
 #include "fake_motion_sensor.h"
-#include "simulation_connection.h"
+
+#include "../drone_simulation/simulation.h"
 
 void Motion_sensor_get_data(Sensordata_t *sensordata){
 	Simulation_write_sensordata(sensordata);

@@ -29,17 +29,14 @@ void Drone_calculate_next_values(Physical_Drone_t *drone, Rotor_Moments_t *rotor
     calculate faked motion sensor values
     Ldot = sumofmoments
     */
-/*
-	Vector_t sum_of_moments_container;
-	Vector_t *sum_of_moments = &(sum_of_moments_container);
-	Vector_t sum_of_forces_container;
-	Vector_t *sum_of_forces = &(sum_of_forces_container);
+	/*
+	POINTER_TO_CONTAINER(Vector_t, sum_of_moments);
+	POINTER_TO_CONTAINER(Vector_t, sum_of_forces);
 
 	Vector_t motor_moments[4]; 		// forces of propellers (cross multiply) radiuses [0 - 3], and moments of propellers [4 - 7]
 	Vector_t propeller_moments[4]; 	// Moments that come from inertia of the propellers
 	Vector_t forces[4]; 			// propeller forces [0 - 3]
-	*/
-
+*/
 
 }
 
