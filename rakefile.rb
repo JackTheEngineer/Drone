@@ -33,10 +33,10 @@ TESTS = {
   "test_drone_physics" => [
     "drone_physics",
     "drone_masses",
-    "propeller",
     "vector_operations",
     "vector_tester",
     "matrix_operations",
+    "physical_helpers",
   ],
   "test_matrix_operations" =>[
     "matrix_operations",
@@ -54,16 +54,19 @@ TESTS = {
   "test_propeller" => [
     "propeller",
   ],
-  "test_simulation_connection" => [
+  "test_simulation" => [
     "simulation",
     "drone_physics",
-    "vector_operations",
+    "drone_masses",
     "fake_motors",
+    "vector_operations",
+    "physical_helpers",
+    "matrix_operations",
   ],
   "test_fake_motors"=>[
     "fake_motors",
-    "simulation",
     "vector_operations",
+    "fake_simulation",
   ],
 }
 

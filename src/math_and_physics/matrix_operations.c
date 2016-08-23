@@ -80,8 +80,7 @@ void Mat_times_vect(three_by_three_t *M, Vector_t *vect, Vector_t *resultvect){
  * This Function assumes that the determinant of the matrix is not zero
  */
 void Mat_inverse(three_by_three_t *M, three_by_three_t *Inverse){
-    three_by_three_t M_temporary_container;
-    three_by_three_t *Temporary = &M_temporary_container;
+    POINTER_TO_CONTAINER(three_by_three_t, Temporary);
     
     Mat_set_all_values_to(Inverse, 0.0);
     Mat_set_diag_to(Inverse, 1.0);

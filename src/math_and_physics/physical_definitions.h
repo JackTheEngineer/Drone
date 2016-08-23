@@ -11,6 +11,8 @@
 #include "base.h"
 #include "vector_operations.h"
 
+#define NUMBER_OF_MASSPOINTS 8
+
 typedef struct Masspoint{
 	Vector_t v;
 	double m;

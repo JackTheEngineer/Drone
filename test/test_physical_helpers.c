@@ -48,3 +48,8 @@ TEST(physical_helper, calculation_of_moment_of_interia){
     TEST_ASSERT_EQUAL_DOUBLE(mom_of_inertia->M[1][2], -18.0);
     TEST_ASSERT_EQUAL_DOUBLE(mom_of_inertia->M[2][2], 80.0);
 }
+
+TEST(physical_helper, calculation_of_drone_mass_on_hardcoded_example_should_work){
+    double right_mass = 8.0;
+    TEST_ASSERT_EQUAL_DOUBLE(right_mass, physics_calculate_drone_mass(masspoints, NMBR_MASSES));
+}

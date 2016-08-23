@@ -16,7 +16,7 @@ typedef long unsigned int uint64_t;
 typedef long signed int int64_t;
 
 #define _STATIC_
-#define _INLINE_ inline
+#define _INLINE_ 
 
 #define SQR(x) ((x)*(x))
 

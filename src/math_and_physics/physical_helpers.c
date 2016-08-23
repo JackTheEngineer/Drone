@@ -10,7 +10,6 @@
 
 #include "vector_operations.h"
 
-
 void physics_calculate_moment_of_inertia(Masspoint_t *masspoints, uint32_t  number_of_masspoints, three_by_three_t *J){
 	uint8_t i;
     uint8_t j;
@@ -30,5 +29,14 @@ void physics_calculate_moment_of_inertia(Masspoint_t *masspoints, uint32_t  numb
             }   
         }
     }
+}
+
+double physics_calculate_drone_mass(const Masspoint_t *masspoints, uint32_t number_of_masspoints){
+    uint32_t i;
+    double right_mass=0;
+    for(i=0; i<number_of_masspoints; i++){
+        right_mass += masspoints[i].m;
+    }
+    return right_mass;
 }
 

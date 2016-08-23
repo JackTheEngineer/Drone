@@ -13,7 +13,7 @@
  * and four propellers
  */
 
-const Masspoint_t drone_masspoints[8] = {
+Masspoint_t drone_masspoints[NUMBER_OF_MASSPOINTS] = {
 		{
 				.v = {
 						.x = INNER_MASS_RADIUS,

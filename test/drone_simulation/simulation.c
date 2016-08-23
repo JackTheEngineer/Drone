@@ -5,36 +5,31 @@
  *      Author: chocolate
  */
 
-#include "fake_motors.h"
 #include "motion_sensor.h"
 #include "drone_physics.h"
 #include "simulation.h"
 
-// Simulation Time Step im s
+Physical_Drone_t *drone;
+
 #define TIMESTEP (double)0.0001 // 100 us
 #define SIMULATIONTIME (double)2.0
-#define ITERATIONS (int)(SIMULATIONTIME/TIMESTEP)
+#define ITERATIONS (uint32_t)(SIMULATIONTIME/TIMESTEP)
 
-POINTER_TO_CONTAINER(Physical_Drone_t, drone);
-Motor_t motors[4];
+void Simulation_init(Physical_Drone_t *dronedata_from_external){
+    drone = dronedata_from_external;
+    Drone_set_drone_data_zero(drone);
+    Drone_set_position(0, 0, 100.0, drone); // Set drone up in the sky
+}
 
-_STATIC_ void Simulation_run_value_calculations_multiple_times(Motor_t motors[NMBR_OF_MOTORS]);
-
-
-void Simulation_recieve(Motorcontrolvalues_t *motor_values){
-	/* Here the drone simulation and the motor value information gets injected,
-	 * thus makes this function not purely dependent on it's parameters.
-	 */
-	fake_Motor_calculate_currents_from_controlvalues(motors, motor_values);
-	fake_Motor_calculate_speeds_from_currents(motors);
-	Simulation_run_value_calculations_multiple_times(motors);
+void Simulation_recieve(Physical_Drone_t *drone){
+        Drone_calculate_next_values(drone, TIMESTEP);
 }
 
 void Simulation_write_sensordata(Sensordata_t *sensordata){
-
+    
 }
 
-_STATIC_ void Simulation_run_value_calculations_multiple_times(Motor_t motors[NMBR_OF_MOTORS]){
 
-}
+
+
 
