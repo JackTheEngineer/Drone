@@ -20,6 +20,9 @@ _STATIC_ void _Mat_exchange_lines_so_there_are_no_zeroes_on_the_diagonal(
 		three_by_three_t *M, three_by_three_t *Inverse);
 _STATIC_ void _Mat_scale_elements_linewise(three_by_three_t* Inverse, three_by_three_t* Diagonal_matrix);
 _STATIC_ void _Exchange_line_a_with_line_b(uint8_t a, uint8_t b, three_by_three_t *M);
+_STATIC_ void Row_vector_from_(three_by_three_t *M, uint8_t row_index, Vector_t *result_vect);
+_STATIC_ void Column_vector_from_(three_by_three_t *M, uint8_t col_index, Vector_t *result_vect);
+
 
 void Mat_write(three_by_three_t *M, uint8_t i, uint8_t j, double value){
     if((i <= 3) && (j <= 3) && (i>0) && (j>0)){
@@ -32,7 +35,6 @@ double Mat_read(three_by_three_t *M, uint8_t i, uint8_t j){
         return M->M[i-1][j-1];
     }
     return 0.0;
-    
 }
 
 void Mat_set_all_values_to(three_by_three_t *M, double value){
@@ -134,8 +136,37 @@ void Mat_inverse(three_by_three_t *M, three_by_three_t *Inverse){
 	_Mat_scale_elements_linewise(Inverse, Temporary);
 }
 
+_STATIC_ void Row_vector_from_(three_by_three_t *M, uint8_t row_index, Vector_t *result_vect){
+	uint8_t i;
+	for(i=1; i<=3; i++){
+		Vect_write(result_vect, i, Mat_read(M,row_index,i));
+	}
+
+}
+
+_STATIC_ void Column_vector_from_(three_by_three_t *M, uint8_t col_index, Vector_t *result_vect){
+	uint8_t i;
+	for(i=1; i<=3; i++){
+		Vect_write(result_vect, i, Mat_read(M,i,col_index));
+	}
+}
+
 void Mat_times_mat(three_by_three_t *M1, three_by_three_t *M2, three_by_three_t *Result_M){
-    
+	uint8_t i;
+	uint8_t j;
+	POINTER_TO_CONTAINER(three_by_three_t, helpermat);
+	POINTER_TO_CONTAINER(Vector_t, row_vect);
+	POINTER_TO_CONTAINER(Vector_t, col_vect);
+  
+	for(i=1;i<=3;i++){
+		for(j=1;j<=3;j++){
+			Row_vector_from_(M1, i, row_vect);
+			Column_vector_from_(M2, j, col_vect);
+			Mat_write(helpermat, i, j, Vect_dot(row_vect, col_vect));
+		}
+	}
+	
+	Mat_copy(helpermat, Result_M);
 }
 
 void Mat_multiply_line_a_by_x(three_by_three_t *M, uint8_t a, double x){
