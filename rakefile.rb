@@ -14,7 +14,7 @@ task :default => :all
 task :all => [:test, :arm]
 
 task :flash => :arm do 
-  pid = Process.spawn("~/bin/JLink_Linux_V510u_x86_64/JLinkGDBServer -device  XMC4500-1024 -if SWD -speed 4000")
+  pid = Process.spawn("~/bin/JLink_Linux_V510u_x86_64/JLinkGDBServer -device XMC4500-1024 -if SWD -speed 4000")
   sh "arm-none-eabi-gdb -x gdbcommands"
   Process.kill("SIGHUP", pid)
 end
