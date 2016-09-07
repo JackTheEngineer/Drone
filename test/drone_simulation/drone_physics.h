@@ -11,18 +11,7 @@
 #include "base.h"
 #include "physical_definitions.h"
 #include "drone_constants.h"
-#include "vector_operations.h"
-#include "fake_motors.h"
-
-/* Used as Absolute position from a point Zero */
-typedef struct Drone_Data{
-	Vector_t position;
-	Vector_t angular_position;
-	Vector_t speed;
-	Vector_t angular_speed;
-	Motor_t motors[NMBR_OF_MOTORS];
-}Physical_Drone_t;
-
+#include "dronedata_def.h"
 
 void Drone_set_position(double x, double y, double z, Physical_Drone_t* dronedata);
 void Drone_calculate_next_values(Physical_Drone_t *drone, double timestep);

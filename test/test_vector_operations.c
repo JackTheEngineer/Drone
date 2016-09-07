@@ -200,7 +200,7 @@ TEST(vector_operations, Vect_multiply_with_const_should_work){
         Vect_set_all_values_to(vect, 0);
         Vect_set_all_values_to(vect_1, 0);
         Vect_write_three_values(vect, 1.0, 2.0, 3.0);
-        Vect_multiply(vect, (double)i, vect_1);
+        Vect_times_const(vect, (double)i, vect_1);
         TEST_ASSERT_EQUAL_DOUBLE(1.0 * (double)i, Vect_read(vect_1, 1));
         TEST_ASSERT_EQUAL_DOUBLE(2.0 * (double)i, Vect_read(vect_1, 2));
         TEST_ASSERT_EQUAL_DOUBLE(3.0 * (double)i, Vect_read(vect_1, 3));

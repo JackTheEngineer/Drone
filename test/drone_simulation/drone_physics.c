@@ -96,7 +96,7 @@ void Drone_calculate_next_values(Physical_Drone_t *drone, double timestep){
     Rotate_Vector(angular_acceleration, &(drone->angular_position));
     
     dronemass = physics_calculate_drone_mass(drone_masspoints, NUMBER_OF_MASSPOINTS);
-    Vect_multiply(sum_of_forces, 1/dronemass, acceleration);
+    Vect_times_const(sum_of_forces, 1/dronemass, acceleration);
     Rotate_Vector(acceleration, &(drone->angular_position));
 
     Integrate_with_given_accelerations(acceleration, &(drone->speed), &(drone->position), timestep);
@@ -106,9 +106,9 @@ void Drone_calculate_next_values(Physical_Drone_t *drone, double timestep){
 _STATIC_ void Integrate_with_given_accelerations(Vector_t* acceleration, Vector_t* speed, Vector_t* position, double timestep){
 	POINTER_TO_CONTAINER(Vector_t, helpervector);
 
-	Vect_multiply(acceleration, timestep, helpervector);
+	Vect_times_const(acceleration, timestep, helpervector);
 	Vect_add_to(speed, acceleration);
-	Vect_multiply(speed, timestep, helpervector);
+	Vect_times_const(speed, timestep, helpervector);
 	Vect_add_to(position, helpervector);
 }
 	    
@@ -128,7 +128,7 @@ _STATIC_ void Calculate_Sum_of_moments(Vector_t *sum_of_moments, Motor_t motors[
         
         Vect_set_all_values_to(helpervector, 0.0);
         Vect_write(helpervector, 3, Vect_dot(&motors[i].speed,&motors[i].speed));
-        Vect_multiply(helpervector, SPEED_TO_MOMENT, helpervector);
+        Vect_times_const(helpervector, SPEED_TO_MOMENT, helpervector);
         Vect_add_to(sum_of_moments, helpervector);
     }
 }

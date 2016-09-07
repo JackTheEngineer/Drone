@@ -34,15 +34,6 @@ TEST(drone_simulation, set_zero_should_work){
 	Test_Drone_data_being_zero(drone);
 }
 
-TEST(drone_simulation, with_no_forces_g_iteration_is_similar_to_formula){
-}
-
-TEST(drone_simulation, with_motorforces_equal_to_g_should_stand_still){
-}
-
-TEST(drone_simulation, with_symmetric_motorforces_equal_to_g_should_stand_still){
-}
-
 _STATIC_ void Test_Drone_data_being_zero(Physical_Drone_t *drone){
 	POINTER_TO_CONTAINER(Vector_t, zero_vector);
 	Vect_set_all_values_to(zero_vector, 0.0);

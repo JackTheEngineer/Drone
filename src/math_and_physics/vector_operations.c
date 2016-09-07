@@ -69,7 +69,7 @@ void Vect_add(Vector_t *vect_1, Vector_t *vect_2, Vector_t *sum_vect){
 
 void Vect_uniform(Vector_t *vector, Vector_t *uniformed_vector){
     Vect_copy_from_to(vector, uniformed_vector);
-    Vect_multiply(uniformed_vector, 1/(Vect_length(vector)), uniformed_vector);    
+    Vect_times_const(uniformed_vector, 1/(Vect_length(vector)), uniformed_vector);    
 }
 
 void Vect_write_three_values(Vector_t *vector, double value_1, double value_2, double value_3){
@@ -78,7 +78,7 @@ void Vect_write_three_values(Vector_t *vector, double value_1, double value_2, d
     Vect_write(vector, 3, value_3);
 }
 
-void Vect_multiply(Vector_t *vector, double constant, Vector_t* result_vector){
+void Vect_times_const(Vector_t *vector, double constant, Vector_t* result_vector){
     Vect_write(result_vector, 1, Vect_read(vector, 1) * constant);
     Vect_write(result_vector, 2, Vect_read(vector, 2) * constant);
     Vect_write(result_vector, 3, Vect_read(vector, 3) * constant);

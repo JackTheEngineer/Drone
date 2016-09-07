@@ -13,17 +13,13 @@ _STATIC_ void fake_Motors_initailize_positions(Motor_t motors[NMBR_OF_MOTORS]);
 
 POINTER_TO_CONTAINER(Physical_Drone_t, dronedata);
 
-void Motors_Init(void){
-    /* Here the dronedata gets injected */
-    Simulation_init(dronedata);
-    fake_Motors_initailize_positions(dronedata->motors);
+Physical_Drone_t *fake_Motors_get_drone_pointer(void){
+	return dronedata;
 }
 
-_STATIC_ void fake_Motors_initailize_positions(Motor_t motors[NMBR_OF_MOTORS]){
-    Vect_write_three_values(&(motors[0].position), OUTER_MASS_RADIUS, 0 , 0);
-    Vect_write_three_values(&(motors[1].position), 0, OUTER_MASS_RADIUS, 0);
-    Vect_write_three_values(&(motors[2].position),  -OUTER_MASS_RADIUS, 0 , 0);
-    Vect_write_three_values(&(motors[3].position), 0, -OUTER_MASS_RADIUS, 0);
+void Motors_Init(void){
+    /* Here the dronedata gets injected */
+    fake_Motors_initailize_positions(dronedata->motors);
 }
 
 void Motors_Set_Speed(Motorcontrolvalues_t *motor_values){
@@ -34,11 +30,18 @@ void Motors_Set_Speed(Motorcontrolvalues_t *motor_values){
     Simulation_recieve(dronedata);
 }
 
+_STATIC_ void fake_Motors_initailize_positions(Motor_t motors[NMBR_OF_MOTORS]){
+    Vect_write_three_values(&(motors[0].position), OUTER_MASS_RADIUS, 0 , 0);
+    Vect_write_three_values(&(motors[1].position), 0, OUTER_MASS_RADIUS, 0);
+    Vect_write_three_values(&(motors[2].position),  -OUTER_MASS_RADIUS, 0 , 0);
+    Vect_write_three_values(&(motors[3].position), 0, -OUTER_MASS_RADIUS, 0);
+}
+
 void fake_Motor_calculate_currents_from_controlvalues(Motor_t motors[NMBR_OF_MOTORS], Motorcontrolvalues_t *motor_values){
 	uint32_t i;
 
 	for(i = 0; i<NMBR_OF_MOTORS; i++){
-		motors[i].current = motor_values->motorspeeds[i];
+		motors[i].current = motor_values->motorspeeds[i] * VALUES_TO_CURRENTS;
 	}
 }
 

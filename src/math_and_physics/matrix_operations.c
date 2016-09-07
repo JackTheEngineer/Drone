@@ -55,7 +55,7 @@ void Mat_set_diag_to(three_by_three_t *M, double value){
     }
 }
 
-void Mat_mult_with_const(three_by_three_t *M, double constant){
+void Mat_times_const(three_by_three_t *M, double constant){
     uint8_t i;
     uint8_t j;
     for(i = 1; i <= 3; i++){

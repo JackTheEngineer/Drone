@@ -20,7 +20,7 @@ void Vect_add_to(Vector_t *sum_vect, Vector_t *vect);
 void Vect_add(Vector_t *vect_1, Vector_t *vect_2, Vector_t *sum_vect);
 void Vect_uniform(Vector_t *vector, Vector_t *uniformed_vector);
 void Vect_write_three_values(Vector_t *vector, double value_1, double value_2, double value_3);
-void Vect_multiply(Vector_t *vector, double constant, Vector_t *result_vector);
+void Vect_times_const(Vector_t *vector, double constant, Vector_t *result_vector);
 void Vect_copy_from_to(Vector_t *vector_from, Vector_t *vector_to);
 void Vect_cross_multiply(Vector_t *vector_1, Vector_t *vector_2, Vector_t *resultvector);
 void Vect_sum_up_list_of_vectors(Vector_t *vectorlist, Vector_t *sum_vector, uint8_t listlength);

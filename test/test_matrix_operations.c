@@ -98,7 +98,7 @@ TEST(matrix_operations, set_diag_to_value_should_work){
 
 TEST(matrix_operations, multiply_with_const_should_work){
 	Mat_set_all_values_to(matrix, 1);
-	Mat_mult_with_const(matrix, 5);
+	Mat_times_const(matrix, 5);
 	uint8_t i;
 	uint8_t j;
 	for(i = 1; i <= 3; i++){
