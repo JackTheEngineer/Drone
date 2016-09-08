@@ -9,6 +9,10 @@
 #include "simulation.h"
 #include "drone_masses.h"
 
+#define VALUES_TO_CURRENTS 0.002
+#define CURRENT_TO_SPEED 10.0
+#define SPEED_TO_THRUST 0.01
+
 _STATIC_ void fake_Motors_initailize_positions(Motor_t motors[NMBR_OF_MOTORS]);
 
 POINTER_TO_CONTAINER(Physical_Drone_t, dronedata);

@@ -6,7 +6,7 @@ import File.expand_path('./common_subtasks.rake', File.dirname(__FILE__))
 
 
 rule /^test_\w+$/ => ->(f){get_test_exe(f)} do |task| 
- sh "./#{task.source}"
+  sh "./#{task.source}"
 end
 
 rule /#{Regexp.escape(TEST_BUILD_DIR)}test_\w+\.exe$/ => [->(testexe){deps_for_test(testexe)}] do |task|
