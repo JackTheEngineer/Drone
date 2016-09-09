@@ -10,17 +10,17 @@
 
 #include "physical_definitions.h"
 
-void Mat_write(three_by_three_t *M, uint8_t i, uint8_t j, double value);
-double Mat_read(three_by_three_t *M, uint8_t i, uint8_t j);
-void Mat_set_all_values_to(three_by_three_t *M, double value);
-void Mat_set_diag_to(three_by_three_t *M, double value);
-void Mat_times_const(three_by_three_t *M, double constant);
-void Mat_add_to(three_by_three_t *M, uint8_t i, uint8_t j, double value);
-void Mat_times_vect(three_by_three_t *M, Vector_t *vect, Vector_t *resultvect);
-void Mat_times_mat(three_by_three_t *M1, three_by_three_t *M2, three_by_three_t *Result_M);
-void Mat_inverse(three_by_three_t *M, three_by_three_t *Inverse);
-void Mat_copy(three_by_three_t *M_from, three_by_three_t *M_to);
-void Mat_multiply_line_a_by_x(three_by_three_t *M, uint8_t a, double x);
-
+void Mat_write(Matrix_t *M, uint8_t i, uint8_t j, double value);
+double Mat_read(Matrix_t *M, uint8_t i, uint8_t j);
+void Mat_set_all_values_to(Matrix_t *M, double value);
+void Mat_set_diag_to(Matrix_t *M, double value);
+void Mat_times_const(Matrix_t *M, double constant);
+void Mat_add_to(Matrix_t *M, uint8_t i, uint8_t j, double value);
+void Mat_times_vect(Matrix_t *M, Vector_t *vect, Vector_t *resultvect);
+void Mat_times_mat(Matrix_t *M1, Matrix_t *M2, Matrix_t *Result_M);
+void Mat_inverse(Matrix_t *M, Matrix_t *Inverse);
+void Mat_copy(Matrix_t *M_from, Matrix_t *M_to);
+void Mat_multiply_line_a_by_x(Matrix_t *M, uint8_t a, double x);
+void Mat_transpose(Matrix_t *M, Matrix_t *result_M);
 
 #endif /* MATRIX_OPERATIONS_H_ */

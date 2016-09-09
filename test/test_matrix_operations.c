@@ -7,19 +7,16 @@
 
 #include "test_helper.h"
 #include "matrix_operations.h"
+#include "matrix_tester.h"
 
-
-
-three_by_three_t matrix_container;
-three_by_three_t *matrix = &matrix_container;
+Matrix_t matrix_container;
+Matrix_t *matrix = &matrix_container;
 Vector_t vect_container;
 Vector_t *vect = &vect_container; 
 
 TEST_GROUP(matrix_operations);
 
-_STATIC_ void Mat_write_arbitrary_values_into(three_by_three_t *matrix);
-_STATIC_ void Test_Mat_equal(three_by_three_t *matrix1, three_by_three_t *matrix2);
-_STATIC_ void print_matrix(three_by_three_t *M, const char *name);
+_STATIC_ void Mat_write_one_two_three_matrix(Matrix_t *matrix);
 
 TEST_SETUP(matrix_operations){
 	Vect_set_all_values_to(vect, 0.0);
@@ -125,7 +122,7 @@ TEST(matrix_operations, Mat_times_vector_should_use_mathematical_rule){
 	Vector_t *resultvect = &resultvect_container;
 
 	Mat_set_all_values_to(matrix, 0.0);
-	Mat_write_arbitrary_values_into(matrix);
+	Mat_write_one_two_three_matrix(matrix);
 
 	Vect_write_three_values(vect, 1, 3, 5);
 
@@ -137,8 +134,8 @@ TEST(matrix_operations, Mat_times_vector_should_use_mathematical_rule){
 }
 
 TEST(matrix_operations, Inverse_of_diagonal_matrix_should_be_one_over_diag_value){
-  POINTER_TO_CONTAINER(three_by_three_t, inverse_matrix);
-  POINTER_TO_CONTAINER(three_by_three_t, compare_matrix);
+  POINTER_TO_CONTAINER(Matrix_t, inverse_matrix);
+  POINTER_TO_CONTAINER(Matrix_t, compare_matrix);
 	Mat_set_all_values_to(inverse_matrix, 0.0);
 
 	Mat_set_all_values_to(matrix, 0.0);
@@ -151,13 +148,13 @@ TEST(matrix_operations, Inverse_of_diagonal_matrix_should_be_one_over_diag_value
 
 	Mat_inverse(matrix, inverse_matrix);
 
-	print_matrix(inverse_matrix, "inverse matrix:");
+	//print_matrix(inverse_matrix, "inverse matrix:");
 	Test_Mat_equal(inverse_matrix, compare_matrix);
 }
 
 TEST(matrix_operations, Matrix_inverse_should_give_correct_results_with_zeroes_on_diagonal){
-  POINTER_TO_CONTAINER(three_by_three_t, inverse_matrix);
-  POINTER_TO_CONTAINER(three_by_three_t, compare_matrix);
+  POINTER_TO_CONTAINER(Matrix_t, inverse_matrix);
+  POINTER_TO_CONTAINER(Matrix_t, compare_matrix);
 
 	/*writing a matrix like:
 	 * 	( 0 , 2 , 0 )
@@ -185,31 +182,22 @@ TEST(matrix_operations, Matrix_inverse_should_give_correct_results_with_zeroes_o
 }
 
 TEST(matrix_operations, Matrix_copy_should_work){
-	three_by_three_t copy_to_matrix_container;
-	three_by_three_t *copy_to_matrix = &copy_to_matrix_container;
+	Matrix_t copy_to_matrix_container;
+	Matrix_t *copy_to_matrix = &copy_to_matrix_container;
 
 	Mat_set_all_values_to(copy_to_matrix, 0.0);
-	Mat_write_arbitrary_values_into(matrix);
+	Mat_write_one_two_three_matrix(matrix);
 	Mat_copy(matrix, copy_to_matrix);
 
 	Test_Mat_equal(matrix, copy_to_matrix);
 }
 
 TEST(matrix_operations, Mat_times_mat_on_example_matrices_should_work){
-	POINTER_TO_CONTAINER(three_by_three_t, compare_matrix);
+	POINTER_TO_CONTAINER(Matrix_t, compare_matrix);
 	Mat_set_all_values_to(compare_matrix, 0.0);
 	Mat_set_all_values_to(matrix, 0.0);
 
-	Mat_write(matrix, 1,1, 1.0);
-	Mat_write(matrix, 1,2, 2.0);
-	Mat_write(matrix, 1,3, 3.0);
-	Mat_write(matrix, 2,1, 4.0);
-	Mat_write(matrix, 2,2, 5.0);
-	Mat_write(matrix, 2,3, 6.0);
-	Mat_write(matrix, 3,1, 7.0);
-	Mat_write(matrix, 3,2, 8.0);
-	Mat_write(matrix, 3,3, 9.0);
-
+	Mat_write_one_two_three_matrix(matrix);
 
 	Mat_write(compare_matrix, 1,1, 30.0);
 	Mat_write(compare_matrix, 1,2, 36.0);
@@ -228,8 +216,8 @@ TEST(matrix_operations, Mat_times_mat_on_example_matrices_should_work){
 }
 
 TEST(matrix_operations, Mat_times_mat_should_work_in_correct_order){
-	POINTER_TO_CONTAINER(three_by_three_t, M);
-	POINTER_TO_CONTAINER(three_by_three_t, compare_matrix);
+	POINTER_TO_CONTAINER(Matrix_t, M);
+	POINTER_TO_CONTAINER(Matrix_t, compare_matrix);
 	Mat_set_all_values_to(compare_matrix, 0.0);
 	Mat_set_all_values_to(M, 0.0);
 	Mat_set_all_values_to(matrix, 0.0);
@@ -268,7 +256,26 @@ TEST(matrix_operations, Mat_times_mat_should_work_in_correct_order){
 	Test_Mat_equal(matrix,compare_matrix);
 }
 
-_STATIC_ void Mat_write_arbitrary_values_into(three_by_three_t *matrix){
+TEST(matrix_operations, Transpose_should_work){
+	POINTER_TO_CONTAINER(Matrix_t, compare_matrix)
+	Mat_write_one_two_three_matrix(matrix);
+
+	Mat_write(compare_matrix, 1,1, 1.0);
+	Mat_write(compare_matrix, 1,2, 4.0);
+	Mat_write(compare_matrix, 1,3, 7.0);
+	Mat_write(compare_matrix, 2,1, 2.0);
+	Mat_write(compare_matrix, 2,2, 5.0);
+	Mat_write(compare_matrix, 2,3, 8.0);
+	Mat_write(compare_matrix, 3,1, 3.0);
+	Mat_write(compare_matrix, 3,2, 6.0);
+	Mat_write(compare_matrix, 3,3, 9.0);
+
+	Mat_transpose(matrix, matrix);
+
+	Test_Mat_equal(matrix, compare_matrix);
+}
+
+_STATIC_ void Mat_write_one_two_three_matrix(Matrix_t *matrix){
 	uint8_t i;
 	uint8_t j;
 	uint8_t k=1;
@@ -281,37 +288,4 @@ _STATIC_ void Mat_write_arbitrary_values_into(three_by_three_t *matrix){
 	}
 }
 
-_STATIC_ void Test_Mat_equal(three_by_three_t *matrix1, three_by_three_t *matrix2){
-	uint8_t i;
-	uint8_t j;
-	double mat1_val;
-	double mat2_val;
-	char error_message[50];
 
-	for(i=1; i<=3; i++){
-		for(j=1; j<= 3; j++){
-			mat1_val = Mat_read(matrix1, i, j);
-			mat2_val = Mat_read(matrix2, i, j);
-			sprintf(error_message, "at index (%d, %d), values: %f != %f",  i, j,mat1_val, mat2_val );
-			TEST_ASSERT_EQUAL_DOUBLE_MESSAGE(
-					mat1_val,
-					mat2_val,
-					error_message);
-		}
-	}
-}
-
-_STATIC_ void print_matrix(three_by_three_t *M, const char *name){
-	uint8_t i;
-	uint8_t j;
-
-	printf(name);
-	printf("\n{ \n");
-	for(i=1; i<=3; i++){
-		for(j=1; j<=3; j++){
-			printf("%f \t", Mat_read(M, i, j));
-		}
-		printf("\n");
-	}
-	printf("} \n");
-}

@@ -6,7 +6,7 @@ import './rakelibs/test_tasks.rake'
 import './rakelibs/arm_tasks.rake'
 require File.expand_path('./rakelibs/rakehelpers.rb', File.dirname(__FILE__))
 require File.expand_path('./rakelibs/test_target_helpers.rb', File.dirname(__FILE__))
-
+require File.expand_path('./rakelibs/dronedata_drawer.rb', File.dirname(__FILE__))
 #Rake.application.options.trace_rules = true
 
 task :default => :all
@@ -20,6 +20,12 @@ task :flash => :arm do
 end
 
 task :arm => elf_hex_bin_files(:arm)
+
+task :draw_simulation => "draw_data.txt" do |task|
+  draw_data_from_file(task.prerequisites[0])
+end
+
+task "draw_data.txt" => :test_simulation
 
 TESTS = {
   "test_pid_controller" => [
@@ -37,10 +43,12 @@ TESTS = {
     "vector_tester",
     "matrix_operations",
     "physical_helpers",
+    "matrix_tester",
   ],
   "test_matrix_operations" =>[
     "matrix_operations",
     "vector_operations",
+    "matrix_tester",
   ],
   "test_physical_helpers" => [
     "physical_helpers",
@@ -62,11 +70,17 @@ TESTS = {
     "vector_operations",
     "physical_helpers",
     "matrix_operations",
+    "disturbing_force_injection",
   ],
   "test_fake_motors"=>[
     "fake_motors",
     "vector_operations",
     "fake_simulation",
+  ],
+  "test_force_injection"=>[
+    "disturbing_force_injection",
+    "vector_tester",
+    "vector_operations",
   ],
 }
 

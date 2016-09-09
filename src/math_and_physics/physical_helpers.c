@@ -10,7 +10,7 @@
 
 #include "vector_operations.h"
 
-void physics_calculate_moment_of_inertia(Masspoint_t *masspoints, uint32_t  number_of_masspoints, three_by_three_t *J){
+void physics_calculate_moment_of_inertia(Masspoint_t *masspoints, uint32_t  number_of_masspoints, Matrix_t *J){
 	uint8_t i;
     uint8_t j;
     uint8_t k;

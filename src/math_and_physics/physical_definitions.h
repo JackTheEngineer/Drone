@@ -25,7 +25,7 @@ typedef struct Force{
 
 typedef struct ThreebyThree{
 	double M[3][3];
-}three_by_three_t;
+}Matrix_t;
 
 
 #endif /* TEST_PHYSICAL_DEFINITIONS_H_ */

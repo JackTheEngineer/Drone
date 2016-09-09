@@ -1,0 +1,10 @@
+#ifndef FORCE_INJECTION
+#define FORCE_INJECTION
+
+#include "base.h"
+#include "vector_operations.h"
+
+void Inject_Force_into_simulation(Vector_t *force);
+void Get_error_force(Vector_t *force);
+
+#endif /* FORCE_INJECTION */
