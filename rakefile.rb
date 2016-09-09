@@ -44,6 +44,7 @@ TESTS = {
     "matrix_operations",
     "physical_helpers",
     "matrix_tester",
+    "disturbing_force_injection",
   ],
   "test_matrix_operations" =>[
     "matrix_operations",

@@ -1,9 +1,0 @@
-#include "disturbing_force_injection.h"
-
-void Inject_Force_into_simulation(Vector_t *force){
-
-}
-
-void Get_error_force(Vector_t *force){
-	Vect_set_all_values_to(force, 0.0);
-}
