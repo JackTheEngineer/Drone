@@ -15,8 +15,6 @@ POINTER_TO_CONTAINER(Vector_t, vect);
 POINTER_TO_CONTAINER(Vector_t, vect_1);
 POINTER_TO_CONTAINER(Vector_t, vect_2);
 
-
-
 _STATIC_ void Test_vect_values_equal_to(double value);
 _STATIC_ void Set_Test_vectors_zero(void);
 _STATIC_ void _write_5_6_7_into_each_vector(Vector_t *vectorlist, uint8_t length);
@@ -281,17 +279,14 @@ TEST(vector_operations, Vect_cross_multiply_index_3_should_follow_rule){
 
 TEST(vector_operations, sum_up_list_of_Vectors_should_work){
 	Vector_t vectorlist[5];
-	Vector_t sum_vector_container;
-	Vector_t *sum_vector = &sum_vector_container;
-
-	Vector_t compare_vector_container;
-	Vector_t *compare_vector = &compare_vector_container;
+	POINTER_TO_CONTAINER(Vector_t, sum_vector);
+	POINTER_TO_CONTAINER(Vector_t, compare_vector);
 
 	_write_5_6_7_into_each_vector(vectorlist, 5);
 	Vect_write_three_values(compare_vector, 25.0, 30.0, 35.0);
-
+	
 	Vect_sum_up_list_of_vectors(vectorlist, sum_vector, 5);
-
+	
 	Test_vectors_equal(compare_vector, sum_vector);
 }
 

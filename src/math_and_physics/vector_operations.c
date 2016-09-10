@@ -97,8 +97,9 @@ void Vect_cross_multiply(Vector_t *vector_1, Vector_t *vector_2, Vector_t *resul
     
 }
 
-void Vect_sum_up_list_of_vectors(Vector_t *vectorlist, Vector_t *sum_vector, uint8_t listlength){
-	uint8_t i;
+void Vect_sum_up_list_of_vectors(Vector_t vectorlist[], Vector_t *sum_vector, uint32_t listlength){
+	uint32_t i;
+	Vect_set_all_values_to(sum_vector, 0.0);
 	for(i=0; i<listlength; i++){
 		Vect_add(&(vectorlist[i]), sum_vector, sum_vector);
 	}

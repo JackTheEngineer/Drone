@@ -14,3 +14,10 @@ void Test_vectors_equal(Vector_t * vector_1, Vector_t * vector_2){
     TEST_ASSERT_EQUAL_DOUBLE(Vect_read(vector_1, 3), Vect_read(vector_2, 3));
 }
 
+void print_vector(Vector_t *vector, const char *name){
+  uint8_t i;
+  printf("%s\n", name);
+  for(i=1; i<=3; i++){
+    printf("%.3f\n", Vect_read(vector,i));
+  }
+}
