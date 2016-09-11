@@ -70,9 +70,9 @@ TEST(drone_simulation, Rotation_from_earth_frame_to_drone_frame_and_back_again_s
 	Vect_write(rotated_vector, 1, 1.557);
 	Vect_write(rotated_vector, 2, 5.2347);
 	Vect_write(rotated_vector, 3, 4.3442);
-    Vect_copy_from_to(rotated_vector, compare_vector);
+	Vect_copy_from_to(rotated_vector, compare_vector);
 
-    _assign_angles_values(angles);
+	_assign_angles_values(angles);
 
 	Rotate_from_drone_frame_to_earth_frame(rotated_vector, angles);
 	Rotate_from_earth_frame_to_drone_frame(rotated_vector, angles);

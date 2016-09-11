@@ -3,19 +3,10 @@
 #define BASE_H
 
 #include <stdbool.h>
-
-typedef unsigned char uint8_t;
-typedef signed char int8_t;
-typedef short unsigned int uint16_t;
-typedef short signed int int16_t;
-typedef long unsigned int uint32_t;
-typedef long signed int int32_t;
-typedef long long unsigned int uint64_t;
-typedef long long signed int int64_t;
+#include <stdint.h>
 
 #define _STATIC_ static
 #define _INLINE_ inline
-
 
 // The GLUE macro is needed because of "macro double evaluation" , google it.
 #define GLUE(x,y) x##y

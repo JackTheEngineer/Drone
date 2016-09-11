@@ -35,17 +35,17 @@ TEST(vector_operations, kron_delta_should_return_one_when_indizes_are_equal){
 }
 
 TEST(vector_operations, vect_val_from_ind_returns_x_value_on_ind_1){
-	vect->x = 55;
+	vect->v[0] = 55;
 	TEST_ASSERT_EQUAL(55, Vect_read(vect, 1));
 }
 
 TEST(vector_operations, vect_val_from_ind_returns_y_value_on_ind_2){
-	vect->y = 77;
+	vect->v[1] = 77;
 	TEST_ASSERT_EQUAL(77, Vect_read(vect, 2));
 }
 
 TEST(vector_operations, vect_val_from_ind_returns_z_value_on_ind_3){
-	vect->z = 99;
+	vect->v[2] = 99;
 	TEST_ASSERT_EQUAL(99, Vect_read(vect, 3));
 }
 
@@ -58,50 +58,49 @@ TEST(vector_operations, vect_val_from_ind_returns_zero_if_index_bigger3){
 }
 
 TEST(vector_operations, set_all_values_to_should_work){
-    vect->x = 1;
-    vect->y = 1; 
-    vect->z = 1; 
+    vect->v[0] = 1;
+    vect->v[1] = 1; 
+    vect->v[2] = 1; 
     Vect_set_all_values_to(vect, 0.0);
     Test_vect_values_equal_to(0.0);
 }
 
 TEST(vector_operations, set_all_values_to_should_work2){
-    vect->x = 2.0;
-    vect->y = 2.0; 
-    vect->z = 2.0; 
+    vect->v[0] = 2.0;
+    vect->v[1] = 2.0; 
+    vect->v[2] = 2.0; 
     Vect_set_all_values_to(vect, 1.0);
     Test_vect_values_equal_to(1.0);
 }
 
 TEST(vector_operations, Vect_write_at_x_index_should_work){
-	vect->x = 0;
+	vect->v[0] = 0;
 	Vect_write(vect, 1, 1.0);
 	TEST_ASSERT_EQUAL_DOUBLE(1.0, Vect_read(vect, 1));
 }
 
 TEST(vector_operations, Vect_write_at_y_index_should_work){
-	vect->y = 0;
+	vect->v[1] = 0;
 	Vect_write(vect, 2, 2.0);
 	TEST_ASSERT_EQUAL_DOUBLE(2.0, Vect_read(vect, 2));
 }
 
 
 TEST(vector_operations, Vect_write_at_y_index_should){
-    	vect->z= 0;
+    	vect->v[2]= 0;
 	Vect_write(vect, 3, 2.0);
 	TEST_ASSERT_EQUAL_DOUBLE(2.0, Vect_read(vect, 3));
 }
 
 TEST(vector_operations, Vect_write_should_change_only_value_index){
-    vect->x = 4.0;
-    vect->y = 4.0;
-    vect->z = 4.0;
-    
+    vect->v[0] = 4.0;
+    vect->v[1] = 4.0; 
+    vect->v[2] = 4.0; 
     Vect_write(vect, 1, 2.0);
    
-    TEST_ASSERT_EQUAL_DOUBLE(2.0, vect->x);
-    TEST_ASSERT_EQUAL_DOUBLE(4.0, vect->y);
-    TEST_ASSERT_EQUAL_DOUBLE(4.0, vect->z);
+    TEST_ASSERT_EQUAL_DOUBLE(2.0, vect->v[0]);
+    TEST_ASSERT_EQUAL_DOUBLE(4.0, vect->v[1]);
+    TEST_ASSERT_EQUAL_DOUBLE(4.0, vect->v[2]);
 }
 
 TEST(vector_operations, Vect_add_should_add_first_component){
@@ -294,7 +293,7 @@ TEST(vector_operations, get_pointer_of_indexvalue_1){
 	double *ptr;
 	double *compare_ptr;
 
-	compare_ptr = &(vect->x);
+	compare_ptr = &(vect->v[0]);
 	ptr = Vect_pointer_to_index(vect, 1);
 
 	TEST_ASSERT_POINTERS_EQUAL(compare_ptr, ptr);
@@ -304,7 +303,7 @@ TEST(vector_operations, get_pointer_of_indexvalue_2){
 	double *ptr;
 	double *compare_ptr;
 
-	compare_ptr = &(vect->y);
+	compare_ptr = &(vect->v[1]);
 	ptr = Vect_pointer_to_index(vect, 2);
 
 	TEST_ASSERT_POINTERS_EQUAL(compare_ptr, ptr);
@@ -314,7 +313,7 @@ TEST(vector_operations, get_pointer_of_indexvalue_3){
 	double *ptr;
 	double *compare_ptr;
 
-	compare_ptr = &(vect->z);
+	compare_ptr = &(vect->v[2]);
 	ptr = Vect_pointer_to_index(vect, 3);
 
 	TEST_ASSERT_POINTERS_EQUAL(compare_ptr, ptr);
@@ -322,9 +321,9 @@ TEST(vector_operations, get_pointer_of_indexvalue_3){
 
 
 _STATIC_ void Test_vect_values_equal_to(double value){
-    TEST_ASSERT_EQUAL_DOUBLE(value , vect->x);
-    TEST_ASSERT_EQUAL_DOUBLE(value , vect->y);
-    TEST_ASSERT_EQUAL_DOUBLE(value , vect->z);
+    TEST_ASSERT_EQUAL_DOUBLE(value , vect->v[0]);
+    TEST_ASSERT_EQUAL_DOUBLE(value , vect->v[1]);
+    TEST_ASSERT_EQUAL_DOUBLE(value , vect->v[2]);
 }
 
 _STATIC_ void Set_Test_vectors_zero(void){

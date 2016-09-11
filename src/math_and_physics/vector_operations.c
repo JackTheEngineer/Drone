@@ -8,36 +8,16 @@ bool kron_delta(uint8_t ind_1,uint8_t ind_2){
  * Accepting index from 1 - 3
  */
 double Vect_read(Vector_t *vect, uint8_t index){
-    switch(index){
-        case 1:
-            return vect->x;
-            break;
-        case 2: 
-            return vect->y;
-            break;
-        case 3:
-            return vect->z;
-            break;
-        default:
-            return 0;
-            break;
-    }
+	if((index < 4) && (index > 0)){
+		return vect->v[index-1];
+	}
+	return 0.0;
 }
 
 void Vect_write(Vector_t *vect, uint8_t index, double value){
-    switch(index){
-    case 1: 
-        vect->x = value;
-        break;
-    case 2:
-        vect->y = value;
-        break;
-    case 3:
-        vect->z = value;
-        break;
-    default:
-        break;
-    }
+	if((index < 4) && (index > 0)){
+		vect->v[index-1] = value;
+	}
 }
 
 double Vect_length(Vector_t *vect){
@@ -85,15 +65,16 @@ void Vect_times_const(Vector_t *vector, double constant, Vector_t* result_vector
 }
 
 void Vect_copy_from_to(Vector_t *vector_from, Vector_t *vector_to){
-    vector_to->x = vector_from->x;
-    vector_to->y = vector_from->y;
-    vector_to->z = vector_from->z;
+	uint8_t i;
+	for(i=0; i<3;i++){
+		vector_to->v[i] = vector_from->v[i];
+	}
 }
 
 void Vect_cross_multiply(Vector_t *vector_1, Vector_t *vector_2, Vector_t *resultvector){
-    Vect_write(resultvector, 1, vector_1->y * vector_2->z - vector_1->z * vector_2->y);
-    Vect_write(resultvector, 2, vector_1->z * vector_2->x - vector_1->x * vector_2->z);
-    Vect_write(resultvector, 3, vector_1->x * vector_2->y - vector_1->y * vector_2->x);
+    Vect_write(resultvector, 1, vector_1->v[1] * vector_2->v[2] - vector_1->v[2] * vector_2->v[1]);
+    Vect_write(resultvector, 2, vector_1->v[2] * vector_2->v[0] - vector_1->v[0] * vector_2->v[2]);
+    Vect_write(resultvector, 3, vector_1->v[0] * vector_2->v[1] - vector_1->v[1] * vector_2->v[0]);
     
 }
 
@@ -116,13 +97,13 @@ void Vect_set_vectorlist_to_value(Vector_t vectorlist[], uint32_t listlength, do
 double *Vect_pointer_to_index(Vector_t *vect, uint8_t index){
 	switch(index){
 	case 1:
-		return &(vect->x);
+		return &(vect->v[0]);
 		break;
 	case 2:
-		return &(vect->y);
+		return &(vect->v[1]);
 		break;
 	case 3:
-		return &(vect->z);
+		return &(vect->v[2]);
 		break;
 	default:
 		return 0;

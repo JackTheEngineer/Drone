@@ -47,8 +47,10 @@ cppcheck:       [cppcheck](http://cppcheck.sourceforge.net/) With the current co
                 it is currently invoked plainly with "cppcheck", without having a nice Global configuration.  
 Jlink:          [segger-jlink](https://www.segger.com/jlink-software.html). 
                 The Software responsible for the connection to the ARM-device, using the "Single wire-debug"  
-Eclipse-CPP:    [eclipse C\C++ IDE](http://www.eclipse.org/downloads/packages/eclipse-ide-cc-developers/mars2)  
+Eclipse-CPP:    [eclipse C\C++ IDE](http://www.eclipse.org/downloads/packages/eclipse-ide-cc-developers/mars2)
+Gnuplot :	[http://www.gnuplot.info/](http://www.gnuplot.info/)
 and obviously - [git](https://git-scm.com/).
+
 
 ### Hardware
 Currently the only Hardware I use is an ARM-M4-Evaluation Board by Infineon using the XMC4500.

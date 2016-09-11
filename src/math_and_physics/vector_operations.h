@@ -5,9 +5,7 @@
 #include "base.h"
 
 typedef struct Vector{
-	double x;
-	double y;
-	double z;
+	double v[3];
 }Vector_t;
 
 double Vect_read(Vector_t *vect, uint8_t index);

@@ -22,7 +22,7 @@ end
 task :arm => elf_hex_bin_files(:arm)
 
 task :draw_simulation => "draw_data.txt" do |task|
-  draw_data_from_file(task.prerequisites[0])
+  draw_data_from_file(task.prerequisites[0].to_s)
 end
 
 task "draw_data.txt" => :test_simulation

@@ -14,14 +14,19 @@ void physics_calculate_moment_of_inertia(Masspoint_t *masspoints, uint32_t  numb
 	uint8_t i;
     uint8_t j;
     uint8_t k;
+    double x;
+    double y;
+    double z;
     double r_squared;
     double pointmass;
     Vector_t* vector;
-
     for(k = 0; k < number_of_masspoints; k++){
     	pointmass = masspoints[k].m;
         vector = &(masspoints[k].v);
-        r_squared = SQR(vector->x) + SQR(vector->y) + SQR(vector->z);
+	x = Vect_read(vector, 1);
+	y = Vect_read(vector, 2);
+	z = Vect_read(vector, 3);
+	r_squared = SQR(x) + SQR(y) + SQR(z);
 
     	for(i = 1; i <= 3; i++){
             for(j = 1; j <= 3; j++){
