@@ -15,66 +15,66 @@
 
 Masspoint_t drone_masspoints[NUMBER_OF_MASSPOINTS] = {
 		{
-				.v = {
-						.x = INNER_MASS_RADIUS,
-						.y = 0,
-						.z = 0,
+				.v.v = {
+						INNER_MASS_RADIUS,
+						0,
+						0,
 				},
 				.m = INNER_MASS,
 		},
 		{
-				.v = {
-						.x = -INNER_MASS_RADIUS,
-						.y = 0,
-						.z = 0,
+				.v.v = {
+						-INNER_MASS_RADIUS,
+						0,
+						0,
 				},
 				.m = INNER_MASS,
 		},
 		{
-				.v = {
-						.x = 0,
-						.y = INNER_MASS_RADIUS,
-						.z = 0,
+				.v.v = {
+						0,
+						INNER_MASS_RADIUS,
+						0,
 				},
 				.m = INNER_MASS,
 		},
 		{
-				.v = {
-						.x = 0,
-						.y = -INNER_MASS_RADIUS,
-						.z = 0,
+				.v.v = {
+						0,
+						-INNER_MASS_RADIUS,
+						0,
 				},
 				.m = INNER_MASS,
 		},
 		{
-				.v = {
-						.x = OUTER_MASS_RADIUS,
-						.y = 0,
-						.z = 0,
+				.v.v = {
+						OUTER_MASS_RADIUS,
+						0,
+						0,
 				},
 				.m = OUTER_MASS,
 		},
 		{
-				.v = {
-						.x = -OUTER_MASS_RADIUS,
-						.y = 0,
-						.z = 0,
+				.v.v = {
+						-OUTER_MASS_RADIUS,
+						0,
+						0,
 				},
 				.m = OUTER_MASS,
 		},
 		{
-				.v = {
-						.x = 0,
-						.y = OUTER_MASS_RADIUS,
-						.z = 0,
+				.v.v = {
+						0,
+						OUTER_MASS_RADIUS,
+						0,
 				},
 				.m = OUTER_MASS,
 		},
 		{
-				.v = {
-						.x = 0,
-						.y = -OUTER_MASS_RADIUS,
-						.z = 0,
+				.v.v = {
+						0,
+						-OUTER_MASS_RADIUS,
+						0,
 				},
 				.m = OUTER_MASS,
 		},

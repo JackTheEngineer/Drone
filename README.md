@@ -33,9 +33,9 @@ Ruby : for using Rake
         For Windows i recommend the [rubysinstaller](http://rubyinstaller.org/)   
         For Linux take a look at your repositories.  
         My currently used version 2.3.1.  
-        (i haven't tried any other versions - 
-        just get 2.3.1 if you have any issues and change the rake command to use the specific 2.3.1 version)  
-Rake : the build tool - instad of the outdated make.
+        i haven't tried any other versions - 
+        just get 2.3.1 if you have any issues and change the rake command to use the specific 2.3.1 version
+Rake : the build tool - instad of make. For the additional programming functionality.
         Rake is just an extenstion for Ruby. It provides a convenient way of telling the Computer how to compile a binary excecutable and on which files the binary depends.
         For Installation open the terminal and type: gem install rake  
 ARM-C-Compiler: [gcc-arm-none-eabi-4_9-2014q4](https://launchpad.net/gcc-arm-embedded/+milestone/4.9-2014-q4-major)  
@@ -48,7 +48,7 @@ cppcheck:       [cppcheck](http://cppcheck.sourceforge.net/) With the current co
 Jlink:          [segger-jlink](https://www.segger.com/jlink-software.html). 
                 The Software responsible for the connection to the ARM-device, using the "Single wire-debug"  
 Eclipse-CPP:    [eclipse C\C++ IDE](http://www.eclipse.org/downloads/packages/eclipse-ide-cc-developers/mars2)
-Gnuplot :	[http://www.gnuplot.info/](http://www.gnuplot.info/)
+Gnuplot :	[gnuplot](http://www.gnuplot.info/)
 and obviously - [git](https://git-scm.com/).
 
 

@@ -49,14 +49,6 @@ TEST(vector_operations, vect_val_from_ind_returns_z_value_on_ind_3){
 	TEST_ASSERT_EQUAL(99, Vect_read(vect, 3));
 }
 
-TEST(vector_operations, vect_val_from_ind_returns_zero_if_index_zero){
-	TEST_ASSERT_EQUAL(0, Vect_read(vect, 0));
-}
-
-TEST(vector_operations, vect_val_from_ind_returns_zero_if_index_bigger3){
-	TEST_ASSERT_EQUAL(0, Vect_read(vect, 4));
-}
-
 TEST(vector_operations, set_all_values_to_should_work){
     vect->v[0] = 1;
     vect->v[1] = 1; 

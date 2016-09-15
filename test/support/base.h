@@ -7,6 +7,8 @@
 #include <stdint.h>
 #include <math.h>
 
+#include "target_dep.h"
+
 #define _STATIC_
 #define _INLINE_ 
 

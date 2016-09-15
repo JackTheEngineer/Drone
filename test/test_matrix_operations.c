@@ -210,7 +210,7 @@ TEST(matrix_operations, Mat_times_mat_on_example_matrices_should_work){
 	Mat_write(compare_matrix, 3,3, 150.0);
 
 	/** result is also being saved into 'matrix' */
-	Mat_times_mat(matrix,matrix,matrix);
+	Mat_times_mat(matrix, matrix, matrix);
 
 	Test_Mat_equal(matrix, compare_matrix);
 }

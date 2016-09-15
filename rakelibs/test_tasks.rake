@@ -28,10 +28,10 @@ end
 rule /#{Regexp.escape(TEST_BUILD_DIR)}.+\.o$/ => [
   ->(f){source_for_o_file(f, test_sources)},
   ->(f){get_headers(source_for_o_file(f, test_sources), 
-                    test_headers())}
+                    test_headers)}
   ] do |task|
   mkdir_p task.name.pathmap("%d")
-  sh "cppcheck --force #{task.prerequisites.first}"
+  sh "cppcheck --force --enable=style,performance,portability,information #{task.prerequisites.first}"
   sh "#{compile_command_for_test(task.prerequisites.first, task.name)}"
 end
 

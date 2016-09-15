@@ -8,16 +8,11 @@ bool kron_delta(uint8_t ind_1,uint8_t ind_2){
  * Accepting index from 1 - 3
  */
 double Vect_read(Vector_t *vect, uint8_t index){
-	if((index < 4) && (index > 0)){
 		return vect->v[index-1];
-	}
-	return 0.0;
 }
 
 void Vect_write(Vector_t *vect, uint8_t index, double value){
-	if((index < 4) && (index > 0)){
 		vect->v[index-1] = value;
-	}
 }
 
 double Vect_length(Vector_t *vect){
@@ -95,17 +90,5 @@ void Vect_set_vectorlist_to_value(Vector_t vectorlist[], uint32_t listlength, do
 }
 
 double *Vect_pointer_to_index(Vector_t *vect, uint8_t index){
-	switch(index){
-	case 1:
-		return &(vect->v[0]);
-		break;
-	case 2:
-		return &(vect->v[1]);
-		break;
-	case 3:
-		return &(vect->v[2]);
-		break;
-	default:
-		return 0;
-	}
+		return &(vect->v[index-1]);
 }
