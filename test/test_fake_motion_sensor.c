@@ -8,8 +8,7 @@
 #include "motion_sensor.h"
 
 TEST_GROUP(fake_motion_sensor);
-Sensordata_t sensordata_container;
-Sensordata_t* sensordata = &sensordata_container;
+POINTER_TO_CONTAINER(Sensordata_t, sensordata);
 
 TEST_SETUP(fake_motion_sensor){
 	Motion_sensor_set_data_zero(sensordata);
@@ -19,4 +18,5 @@ TEST_TEAR_DOWN(fake_motion_sensor){
 }
 
 TEST(fake_motion_sensor, set_zero_should_set_all_values_to_zero){
+	
 }

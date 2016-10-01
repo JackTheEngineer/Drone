@@ -12,9 +12,9 @@
 #include "vector_operations.h"
 
 typedef struct Sensordata{
-	Vector_t acceleration;
-	Vector_t angle_speed;
-	Vector_t magnetic_field;
+	Vector_i32_t acceleration;
+	Vector_i32_t angle_speed;
+	Vector_i32_t magnetic_field;
 }Sensordata_t;
 
 void Motion_sensor_get_data(Sensordata_t *sensordata);

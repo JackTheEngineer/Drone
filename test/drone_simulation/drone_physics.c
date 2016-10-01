@@ -84,8 +84,6 @@ void Rotate_from_drone_frame_to_earth_frame(Vector_t *vect_to_rotate, Vector_t *
  * timestep in seconds
  */
 void Drone_calculate_next_values(Physical_Drone_t *drone, double timestep){
-	POINTER_TO_CONTAINER(Matrix_t, J_Inverse);
-	POINTER_TO_CONTAINER(Matrix_t, J);
 	POINTER_TO_CONTAINER(Vector_t, sum_of_moments);
 	POINTER_TO_CONTAINER(Vector_t, sum_of_forces);
 	POINTER_TO_CONTAINER(Vector_t, angular_acceleration);
@@ -102,9 +100,8 @@ void Drone_calculate_next_values(Physical_Drone_t *drone, double timestep){
 	Calculate_Sum_of_forces(sum_of_forces, drone);
 	Calculate_Sum_of_moments(sum_of_moments, drone);
 	
-	physics_calculate_moment_of_inertia(drone_masspoints, 8, J);
-	Mat_inverse(J, J_Inverse);
-	Mat_times_vect(J_Inverse, sum_of_moments, angular_acceleration);
+     
+	Mat_times_vect(&(drone->J_Inverse), sum_of_moments, angular_acceleration);
 	Rotate_from_drone_frame_to_earth_frame(angular_acceleration, &(drone->angular_position));
     
 	dronemass = physics_calculate_drone_mass(drone_masspoints, NUMBER_OF_MASSPOINTS);
@@ -113,8 +110,20 @@ void Drone_calculate_next_values(Physical_Drone_t *drone, double timestep){
 	Rotate_from_drone_frame_to_earth_frame(acceleration, &(drone->angular_position));
 	Vect_add_to(acceleration, g_acceleration);
 	
-	Integrate_with_given_accelerations(acceleration, &(drone->speed), &(drone->position), timestep);
-	Integrate_with_given_accelerations(angular_acceleration, &(drone->angular_speed), &(drone->angular_position), timestep);
+	Integrate_with_given_accelerations(acceleration,
+					   &(drone->speed),
+					   &(drone->position),
+					   timestep);
+	Integrate_with_given_accelerations(angular_acceleration,
+					   &(drone->angular_speed),
+					   &(drone->angular_position),
+					   timestep);
+}
+
+void Drone_calculate_inverse_mass_matrix(Matrix_t *J_Inverse){
+	POINTER_TO_CONTAINER(Matrix_t, J);
+	physics_calculate_moment_of_inertia(drone_masspoints, 8, J);
+	Mat_inverse(J, J_Inverse);
 }
 
 _STATIC_ void Integrate_with_given_accelerations(Vector_t* acceleration, Vector_t* speed, Vector_t* position, double timestep){

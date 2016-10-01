@@ -13,8 +13,9 @@
 #include "drone_constants.h"
 #include "dronedata_def.h"
 
-void Drone_set_position(double x, double y, double z, Physical_Drone_t* dronedata);
+void Drone_set_position(double x, double y, double z, Physical_Drone_t* drone);
 void Drone_calculate_next_values(Physical_Drone_t *drone, double timestep);
+void Drone_calculate_inverse_mass_matrix(Matrix_t *J_Inverse);
 void Drone_set_drone_data_zero(Physical_Drone_t *dronedata);
 void Drone_set_speed(double x, double y, double z, Physical_Drone_t *dronedata);
 void Drone_set_angular_position(double pitch, double roll, double yaw, Physical_Drone_t *dronedata);

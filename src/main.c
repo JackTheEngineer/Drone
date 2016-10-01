@@ -7,6 +7,6 @@ int main(void){
 	led_toggle(LED0);
 	led_toggle(LED1);
 	while(true){
-    }
-    return 0;
+	}
+	return 0;
 }

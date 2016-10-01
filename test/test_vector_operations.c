@@ -15,7 +15,7 @@ POINTER_TO_CONTAINER(Vector_t, vect);
 POINTER_TO_CONTAINER(Vector_t, vect_1);
 POINTER_TO_CONTAINER(Vector_t, vect_2);
 
-_STATIC_ void Test_vect_values_equal_to(double value);
+_STATIC_ void Test_vect_values_equal_to(_FLOAT_ value);
 _STATIC_ void Set_Test_vectors_zero(void);
 _STATIC_ void _write_5_6_7_into_each_vector(Vector_t *vectorlist, uint8_t length);
 
@@ -99,10 +99,10 @@ TEST(vector_operations, Vect_add_should_add_first_component){
     uint8_t i;
 
     for(i = 0; i < 10; i++){  
-        Vect_write(vect_1, 1, (double)(i));
-        Vect_write(vect_2, 1, (double)(i));
+        Vect_write(vect_1, 1, (_FLOAT_)(i));
+        Vect_write(vect_2, 1, (_FLOAT_)(i));
         Vect_add(vect_1, vect_2, vect);
-        TEST_ASSERT_EQUAL_DOUBLE((double)2*i, Vect_read(vect,1));
+        TEST_ASSERT_EQUAL_DOUBLE((_FLOAT_)2*i, Vect_read(vect,1));
     }
 }
 
@@ -110,10 +110,10 @@ TEST(vector_operations, Vect_add_should_add_second_component){
     uint8_t i;
 
     for(i = 0; i < 10; i++){  
-        Vect_write(vect_1, 2, (double)(i));
-        Vect_write(vect_2, 2, (double)(i));
+        Vect_write(vect_1, 2, (_FLOAT_)(i));
+        Vect_write(vect_2, 2, (_FLOAT_)(i));
         Vect_add(vect_1, vect_2, vect);
-        TEST_ASSERT_EQUAL_DOUBLE((double)2*i, Vect_read(vect,2));
+        TEST_ASSERT_EQUAL_DOUBLE((_FLOAT_)2*i, Vect_read(vect,2));
     }
 }
 
@@ -121,17 +121,17 @@ TEST(vector_operations, Vect_add_should_add_third_component){
     uint8_t i;
 
     for(i = 0; i < 10; i++){  
-        Vect_write(vect_1, 3, (double)(i));
-        Vect_write(vect_2, 3, (double)(i));
+        Vect_write(vect_1, 3, (_FLOAT_)(i));
+        Vect_write(vect_2, 3, (_FLOAT_)(i));
         Vect_add(vect_1, vect_2, vect);
-        TEST_ASSERT_EQUAL_DOUBLE((double)2*i, Vect_read(vect,3));
+        TEST_ASSERT_EQUAL_DOUBLE((_FLOAT_)2*i, Vect_read(vect,3));
     }
 }
 
 TEST(vector_operations, Vect_uniform_should_return_a_vector_with_length_1){
     Vect_set_all_values_to(vect_1, 5.0);
     Vect_uniform(vect_1, vect);
-    TEST_ASSERT_EQUAL_DOUBLE(1.0, Vect_length(vect));
+    TEST_ASSERT_DOUBLE_WITHIN(0.000001, 1.0, Vect_length(vect));
 }
 
 TEST(vector_operations, Vect_uniform_should_return_the_same_vector_with_a_uniform_vector){
@@ -161,9 +161,9 @@ TEST(vector_operations, Vect_length_should_return_5_with_components_3_and_4){
 }
 
 TEST(vector_operations, Vect_length_should_return_1_with_each_component_sqrt_3){
-    double sqrt_val = 1/sqrt(3);
+    _FLOAT_ sqrt_val = 1/sqrt(3);
     Vect_set_all_values_to(vect, sqrt_val);
-    TEST_ASSERT_EQUAL_DOUBLE(1.0, Vect_length(vect));
+    TEST_ASSERT_DOUBLE_WITHIN(0.000001, 1.0, Vect_length(vect));
 }
 
 TEST(vector_operations, Vect_write_three_values_should_work){
@@ -173,10 +173,10 @@ TEST(vector_operations, Vect_write_three_values_should_work){
     for(i = 0; i <= 5; i++){
         for(j = 0; j <= 5; j++){
             for(k = 0; k <= 5; k++){
-                Vect_write_three_values(vect, (double)i,(double)j,(double)k);
-                TEST_ASSERT_EQUAL_DOUBLE((double)i, Vect_read(vect, 1));
-                TEST_ASSERT_EQUAL_DOUBLE((double)j, Vect_read(vect, 2));
-                TEST_ASSERT_EQUAL_DOUBLE((double)k, Vect_read(vect, 3));
+                Vect_write_three_values(vect, (_FLOAT_)i,(_FLOAT_)j,(_FLOAT_)k);
+                TEST_ASSERT_EQUAL_DOUBLE((_FLOAT_)i, Vect_read(vect, 1));
+                TEST_ASSERT_EQUAL_DOUBLE((_FLOAT_)j, Vect_read(vect, 2));
+                TEST_ASSERT_EQUAL_DOUBLE((_FLOAT_)k, Vect_read(vect, 3));
             }
         }
     }
@@ -189,10 +189,10 @@ TEST(vector_operations, Vect_multiply_with_const_should_work){
         Vect_set_all_values_to(vect, 0);
         Vect_set_all_values_to(vect_1, 0);
         Vect_write_three_values(vect, 1.0, 2.0, 3.0);
-        Vect_times_const(vect, (double)i, vect_1);
-        TEST_ASSERT_EQUAL_DOUBLE(1.0 * (double)i, Vect_read(vect_1, 1));
-        TEST_ASSERT_EQUAL_DOUBLE(2.0 * (double)i, Vect_read(vect_1, 2));
-        TEST_ASSERT_EQUAL_DOUBLE(3.0 * (double)i, Vect_read(vect_1, 3));
+        Vect_times_const(vect, (_FLOAT_)i, vect_1);
+        TEST_ASSERT_EQUAL_DOUBLE(1.0 * (_FLOAT_)i, Vect_read(vect_1, 1));
+        TEST_ASSERT_EQUAL_DOUBLE(2.0 * (_FLOAT_)i, Vect_read(vect_1, 2));
+        TEST_ASSERT_EQUAL_DOUBLE(3.0 * (_FLOAT_)i, Vect_read(vect_1, 3));
     }
 }
 
@@ -203,10 +203,10 @@ TEST(vector_operations, Vect_copy_should_copy_vectors){
 }
 
 TEST(vector_operations, Vect_cross_multiply_index_1_should_follow_rule){
-    double i;
-    double j;
-    double k;
-    double l;
+    _FLOAT_ i;
+    _FLOAT_ j;
+    _FLOAT_ k;
+    _FLOAT_ l;
 
     for(i = 0.0; i <= 6.0; i = i+1.0){
         for(j = 0.0; j <= 6.0; j = j+1.0){
@@ -225,10 +225,10 @@ TEST(vector_operations, Vect_cross_multiply_index_1_should_follow_rule){
 }
 
 TEST(vector_operations, Vect_cross_multiply_index_2_should_follow_rule){
-    double i;
-    double j;
-    double k;
-    double l;
+    _FLOAT_ i;
+    _FLOAT_ j;
+    _FLOAT_ k;
+    _FLOAT_ l;
 
     for(i = 0.0; i <= 6.0; i = i+1.0){
         for(j = 0.0; j <= 6.0; j = j+1.0){
@@ -247,10 +247,10 @@ TEST(vector_operations, Vect_cross_multiply_index_2_should_follow_rule){
 }
 
 TEST(vector_operations, Vect_cross_multiply_index_3_should_follow_rule){
-    double i;
-    double j;
-    double k;
-    double l;
+    _FLOAT_ i;
+    _FLOAT_ j;
+    _FLOAT_ k;
+    _FLOAT_ l;
 
     for(i = 0.0; i <= 6.0; i = i+1.0){
         for(j = 0.0; j <= 6.0; j = j+1.0){
@@ -282,8 +282,8 @@ TEST(vector_operations, sum_up_list_of_Vectors_should_work){
 }
 
 TEST(vector_operations, get_pointer_of_indexvalue_1){
-	double *ptr;
-	double *compare_ptr;
+	_FLOAT_ *ptr;
+	_FLOAT_ *compare_ptr;
 
 	compare_ptr = &(vect->v[0]);
 	ptr = Vect_pointer_to_index(vect, 1);
@@ -292,8 +292,8 @@ TEST(vector_operations, get_pointer_of_indexvalue_1){
 }
 
 TEST(vector_operations, get_pointer_of_indexvalue_2){
-	double *ptr;
-	double *compare_ptr;
+	_FLOAT_ *ptr;
+	_FLOAT_ *compare_ptr;
 
 	compare_ptr = &(vect->v[1]);
 	ptr = Vect_pointer_to_index(vect, 2);
@@ -302,8 +302,8 @@ TEST(vector_operations, get_pointer_of_indexvalue_2){
 }
 
 TEST(vector_operations, get_pointer_of_indexvalue_3){
-	double *ptr;
-	double *compare_ptr;
+	_FLOAT_ *ptr;
+	_FLOAT_ *compare_ptr;
 
 	compare_ptr = &(vect->v[2]);
 	ptr = Vect_pointer_to_index(vect, 3);
@@ -312,7 +312,7 @@ TEST(vector_operations, get_pointer_of_indexvalue_3){
 }
 
 
-_STATIC_ void Test_vect_values_equal_to(double value){
+_STATIC_ void Test_vect_values_equal_to(_FLOAT_ value){
     TEST_ASSERT_EQUAL_DOUBLE(value , vect->v[0]);
     TEST_ASSERT_EQUAL_DOUBLE(value , vect->v[1]);
     TEST_ASSERT_EQUAL_DOUBLE(value , vect->v[2]);

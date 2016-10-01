@@ -13,9 +13,9 @@
  *  on which the work is performed.
  */
 
-_STATIC_ void _Line_a_minus_line_b_times_x(uint8_t a, uint8_t b, double x, Matrix_t *M1);
-_STATIC_ void _Line_a_minus_line_b_times_x_on_two_matrices(uint8_t a, uint8_t b, double x, Matrix_t *M1, Matrix_t *M2);
-_STATIC_ double secure_division(double divident, double divisor);
+_STATIC_ void _Line_a_minus_line_b_times_x(uint8_t a, uint8_t b, _FLOAT_ x, Matrix_t *M1);
+_STATIC_ void _Line_a_minus_line_b_times_x_on_two_matrices(uint8_t a, uint8_t b, _FLOAT_ x, Matrix_t *M1, Matrix_t *M2);
+_STATIC_ _FLOAT_ secure_division(_FLOAT_ divident, _FLOAT_ divisor);
 _STATIC_ void _Mat_exchange_lines_so_there_are_no_zeroes_on_the_diagonal(
 		Matrix_t *M, Matrix_t *Inverse);
 _STATIC_ void _Mat_scale_elements_linewise(Matrix_t* Inverse, Matrix_t* Diagonal_matrix);
@@ -24,15 +24,15 @@ _STATIC_ void Row_vector_from_(Matrix_t *M, uint8_t row_index, Vector_t *result_
 _STATIC_ void Column_vector_from_(Matrix_t *M, uint8_t col_index, Vector_t *result_vect);
 
 
-void Mat_write(Matrix_t *M, uint8_t i, uint8_t j, double value){
+void Mat_write(Matrix_t *M, uint8_t i, uint8_t j, _FLOAT_ value){
 		M->M[i-1][j-1] = value;
 }
 
-double Mat_read(Matrix_t *M, uint8_t i, uint8_t j){
+_FLOAT_ Mat_read(Matrix_t *M, uint8_t i, uint8_t j){
 		return M->M[i-1][j-1];
 }
 
-void Mat_set_all_values_to(Matrix_t *M, double value){
+void Mat_set_all_values_to(Matrix_t *M, _FLOAT_ value){
 	uint8_t i;
 	uint8_t j;
 	for(i = 1; i <= 3; i++){
@@ -42,7 +42,7 @@ void Mat_set_all_values_to(Matrix_t *M, double value){
 	}
 }
 
-void Mat_set_diag_to(Matrix_t *M, double value){
+void Mat_set_diag_to(Matrix_t *M, _FLOAT_ value){
 	uint8_t i;
 	
 	for(i = 1; i <= 3; i++){
@@ -50,7 +50,7 @@ void Mat_set_diag_to(Matrix_t *M, double value){
 	}
 }
 
-void Mat_times_const(Matrix_t *M, double constant){
+void Mat_times_const(Matrix_t *M, _FLOAT_ constant){
 	uint8_t i;
 	uint8_t j;
 	for(i = 1; i <= 3; i++){
@@ -60,14 +60,15 @@ void Mat_times_const(Matrix_t *M, double constant){
 	}
 }
 
-void Mat_add_to(Matrix_t *M, uint8_t i, uint8_t j, double value){
-	Mat_write(M,i,j, Mat_read(M,i,j) + value);
+void Mat_add_to(Matrix_t *M, uint8_t i, uint8_t j, _FLOAT_ value){
+	_FLOAT_ result = Mat_read(M,i,j) + value;
+	Mat_write(M, i , j, result);
 }
 
 void Mat_times_vect(Matrix_t *M, Vector_t *vect, Vector_t *resultvect){
-	double v1 = Vect_read(vect, 1);
-	double v2 = Vect_read(vect, 2);
-	double v3 = Vect_read(vect, 3);
+	_FLOAT_ v1 = Vect_read(vect, 1);
+	_FLOAT_ v2 = Vect_read(vect, 2);
+	_FLOAT_ v3 = Vect_read(vect, 3);
 	
 	Vect_write(resultvect, 1, Mat_read(M, 1,1)*v1 + Mat_read(M,1,2)*v2 + Mat_read(M,1,3) * v3);
 	Vect_write(resultvect, 2, Mat_read(M, 2,1)*v1 + Mat_read(M,2,2)*v2 + Mat_read(M,2,3) * v3);
@@ -176,7 +177,7 @@ void Mat_times_mat(Matrix_t *M1, Matrix_t *M2, Matrix_t *Result_M){
 	Mat_copy(helpermat, Result_M);
 }
 
-void Mat_multiply_line_a_by_x(Matrix_t *M, uint8_t a, double x){
+void Mat_multiply_line_a_by_x(Matrix_t *M, uint8_t a, _FLOAT_ x){
 	uint8_t j;
 	for(j=1;j<=3;j++){
 		Mat_write(M,a,j,x * Mat_read(M,a,j));
@@ -194,14 +195,14 @@ void Mat_copy(Matrix_t *M_from, Matrix_t *M_to){
 	}
 }
 
-_STATIC_ void _Line_a_minus_line_b_times_x_on_two_matrices(uint8_t a, uint8_t b, double x, Matrix_t *M1, Matrix_t *M2){
+_STATIC_ void _Line_a_minus_line_b_times_x_on_two_matrices(uint8_t a, uint8_t b, _FLOAT_ x, Matrix_t *M1, Matrix_t *M2){
 	_Line_a_minus_line_b_times_x(a,b,x,M1);
 	_Line_a_minus_line_b_times_x(a,b,x,M2);
 }
 
-_STATIC_ void _Line_a_minus_line_b_times_x(uint8_t a, uint8_t b, double x, Matrix_t *M){
+_STATIC_ void _Line_a_minus_line_b_times_x(uint8_t a, uint8_t b, _FLOAT_ x, Matrix_t *M){
 	uint8_t j;
-	double new_value;
+	_FLOAT_ new_value;
 	for(j=1;j<=3;j++){
 		new_value = Mat_read(M,a,j) - x * Mat_read(M,b,j);
 		Mat_write(M,a,j,new_value);
@@ -231,9 +232,9 @@ _STATIC_ void _Mat_exchange_lines_so_there_are_no_zeroes_on_the_diagonal(
 _STATIC_ void _Exchange_line_a_with_line_b(uint8_t a, uint8_t b, Matrix_t *M){
 	uint8_t j;
 	
-	double a1 = Mat_read(M,a,1);
-	double a2 = Mat_read(M,a,2);
-	double a3 = Mat_read(M,a,3);
+	_FLOAT_ a1 = Mat_read(M,a,1);
+	_FLOAT_ a2 = Mat_read(M,a,2);
+	_FLOAT_ a3 = Mat_read(M,a,3);
 	
 	for(j=1;j<=3;j++){
 		Mat_write(M, a, j, Mat_read(M,b,j));
@@ -258,7 +259,7 @@ _STATIC_ void _Mat_scale_elements_linewise(Matrix_t* Inverse,
 				 (1.0 / Mat_read(Diagonal_matrix, 3, 3)));
 }
 
-_STATIC_ double secure_division(double divident, double divisor){
+_STATIC_ _FLOAT_ secure_division(_FLOAT_ divident, _FLOAT_ divisor){
 	if(divisor){
 		return divident/divisor;
 	} else {

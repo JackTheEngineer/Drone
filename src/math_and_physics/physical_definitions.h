@@ -15,7 +15,7 @@
 
 typedef struct Masspoint{
 	Vector_t v;
-	double m;
+	_FLOAT_ m;
 }Masspoint_t;
 
 typedef struct Force{
@@ -24,7 +24,7 @@ typedef struct Force{
 }Force_t;
 
 typedef struct ThreebyThree{
-	double M[3][3];
+	_FLOAT_ M[3][3];
 }Matrix_t;
 
 

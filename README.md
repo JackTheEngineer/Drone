@@ -7,6 +7,7 @@ I know the build Environment to be supported by Windows and Linux.
 * The coding philosophy
 * Development environment 
     * The software environment
+    * Folder Setup
     * Hardware 
 * A note about licensing
 
@@ -47,10 +48,17 @@ cppcheck:       [cppcheck](http://cppcheck.sourceforge.net/) With the current co
                 it is currently invoked plainly with "cppcheck", without having a nice Global configuration.  
 Jlink:          [segger-jlink](https://www.segger.com/jlink-software.html). 
                 The Software responsible for the connection to the ARM-device, using the "Single wire-debug"  
-Eclipse-CPP:    [eclipse C\C++ IDE](http://www.eclipse.org/downloads/packages/eclipse-ide-cc-developers/mars2)
-Gnuplot :	[gnuplot](http://www.gnuplot.info/)
-and obviously - [git](https://git-scm.com/).
+Eclipse-CPP:    [eclipse C\C++ IDE](http://www.eclipse.org/downloads/packages/eclipse-ide-cc-developers/mars2)  
+Gnuplot :	[gnuplot](http://www.gnuplot.info/)  
+and obviously - [git](https://git-scm.com/)
 
+### Folder setup
+Here i use the common
+
+      src/
+      test/
+
+setup. The rake scripts and task definitions are within the folder rakelibs. the static definitions what arm-none-eabi-gcc binary to use are within arm_target_definitins.rb . The same counts for test_target_definitions.rb. 
 
 ### Hardware
 Currently the only Hardware I use is an ARM-M4-Evaluation Board by Infineon using the XMC4500.

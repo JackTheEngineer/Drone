@@ -4,7 +4,7 @@
 #include "vector_operations.h"
 
 typedef struct Motor{
-	double current;
+	_FLOAT_ current;
 	Vector_t speed;
 	Vector_t thrust;
 	Vector_t position;

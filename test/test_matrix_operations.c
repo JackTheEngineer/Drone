@@ -27,8 +27,8 @@ TEST_TEAR_DOWN(matrix_operations){
 }
 
 TEST(matrix_operations, Mat_write_should_use_plus_one_index){
-	Mat_write(matrix, 1, 1, 5.9);
-	TEST_ASSERT_EQUAL_DOUBLE(5.9, matrix->M[0][0]);
+	Mat_write(matrix, 1, 1,(_FLOAT_) 5.9);
+	TEST_ASSERT_EQUAL_DOUBLE((_FLOAT_)5.9 , matrix->M[0][0]);
 }
 
 TEST(matrix_operations, Mat_write_should_use_plus_one_index_everywhere){
@@ -37,8 +37,8 @@ TEST(matrix_operations, Mat_write_should_use_plus_one_index_everywhere){
 
 	for(i = 1; i <= 3; i++){
 		for(j = 1; j <= 3; j++){
-			Mat_write(matrix, i, j, i+j);
-			TEST_ASSERT_EQUAL_DOUBLE(i+j, matrix->M[i-1][j-1]);
+			Mat_write(matrix, i, j, (_FLOAT_)i+j);
+			TEST_ASSERT_EQUAL_DOUBLE((_FLOAT_)i+j, matrix->M[i-1][j-1]);
 		}
 	}
 }
@@ -106,15 +106,15 @@ TEST(matrix_operations, multiply_with_const_should_work){
 }
 
 TEST(matrix_operations, Add_to_matrix_should_do_as_said){
-	matrix->M[0][0] = 5.2;
-	Mat_add_to(matrix, 1,1, 1.2);
-	TEST_ASSERT_EQUAL_DOUBLE(6.4, matrix->M[0][0]);
+	Mat_write(matrix, 1, 1, (_FLOAT_)5.2);
+	Mat_add_to(matrix, 1, 1, (_FLOAT_)1.2);
+	TEST_ASSERT_DOUBLE_WITHIN(0.000001, (_FLOAT_)6.4, Mat_read(matrix, 1, 1));
 }
 
 TEST(matrix_operations, Add_to_matrix_should_do_as_said2){
-	matrix->M[1][1] = 5.2;
-	Mat_add_to(matrix, 2, 2, 1.2);
-	TEST_ASSERT_EQUAL_DOUBLE(6.4, matrix->M[1][1]);
+	Mat_write(matrix, 2, 2, (_FLOAT_) 5.2);
+	Mat_add_to(matrix, 2, 2, (_FLOAT_) 1.2);
+	TEST_ASSERT_DOUBLE_WITHIN(0.000001, (_FLOAT_) 6.4, Mat_read(matrix, 2, 2));
 }
 
 TEST(matrix_operations, Mat_times_vector_should_use_mathematical_rule){

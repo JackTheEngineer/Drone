@@ -6,7 +6,6 @@ import './rakelibs/test_tasks.rake'
 import './rakelibs/arm_tasks.rake'
 require File.expand_path('./rakelibs/rakehelpers.rb', File.dirname(__FILE__))
 require File.expand_path('./rakelibs/test_target_helpers.rb', File.dirname(__FILE__))
-require File.expand_path('./rakelibs/dronedata_drawer.rb', File.dirname(__FILE__))
 #Rake.application.options.trace_rules = true
 
 task :default => :all
@@ -14,18 +13,18 @@ task :default => :all
 task :all => [:test]
 
 task :flash => :arm do 
-  pid = Process.spawn("~/bin/JLink_Linux_V510u_x86_64/JLinkGDBServer -device XMC4500-1024 -if SWD -speed 4000")
+  pid = Process.spawn("~/bin/JLink_Linux_V610c_x86_64/JLinkGDBServer -device XMC4500-1024 -if SWD -speed 4000")
   sh "arm-none-eabi-gdb -x gdbcommands"
   Process.kill("SIGHUP", pid)
 end
 
 task :arm => elf_hex_bin_files(:arm)
 
-task :draw_simulation => "draw_data.txt" do |task|
-  draw_data_from_file(task.prerequisites[0].to_s)
+task :run_simulation => "simulation_graphics/draw_data.txt" do |task|
+  sh "gnuplot simulation_graphics/gnuplotcommands"
 end
 
-task "draw_data.txt" => :test_simulation
+task "simulation_graphics/draw_data.txt" => :test_simulation
 
 TESTS = {
   "test_pid_controller" => [

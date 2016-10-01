@@ -11,6 +11,7 @@
 
 #define _STATIC_
 #define _INLINE_ 
+#define _FLOAT_ float
 
 #define SQR(x) ((x)*(x))
 

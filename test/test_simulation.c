@@ -28,7 +28,7 @@ TEST_TEAR_DOWN(simulation){
 
 TEST(simulation, generate_file_with_timed_data){
 	FILE *file;
-	file = fopen("draw_data.txt", "w");
+	file = fopen("simulation_graphics/draw_data.txt", "w");
 	Simulate_and_write_to_file(file);
 	fclose(file);
 }

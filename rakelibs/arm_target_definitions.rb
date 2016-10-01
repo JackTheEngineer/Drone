@@ -1,8 +1,7 @@
 ## Definitions for the Compilations for the ARM Targets
 require File.expand_path('./common_definitions.rb', File.dirname(__FILE__))
 
-
-ARM_BASE = '/home/chocolate/bin/gcc-arm-none-eabi-4_9-2014q4/bin/'
+ARM_BASE = "~/bin/gcc-arm-none-eabi-4_9-2014q4/bin/"
 ARM_GCC = "#{ARM_BASE}arm-none-eabi-gcc"
 ARM_OBJCOPY = "#{ARM_BASE}arm-none-eabi-objcopy"
 ARM_SIZE = "#{ARM_BASE}arm-none-eabi-size"

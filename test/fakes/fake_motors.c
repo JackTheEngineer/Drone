@@ -24,6 +24,7 @@ Physical_Drone_t *fake_Motors_get_drone_pointer(void){
 void Motors_Init(void){
     /* Here the dronedata gets injected */
     fake_Motors_initailize_positions(dronedata->motors);
+    Drone_calculate_inverse_mass_matrix(&(dronedata->J_Inverse));
 }
 
 void Motors_Set_Speed(Motorcontrolvalues_t *motor_values){
