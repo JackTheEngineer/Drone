@@ -32,13 +32,11 @@ void Vect_set_vectorlist_to_value(Vector_t vectorlist[], uint32_t listlength, _F
 _FLOAT_ *Vect_pointer_to_index(Vector_t *vect, uint8_t index);
 
 int32_t Vect_i32_read(Vector_i32_t *vect, uint8_t index);
-int32_t Vect_i32_length(Vector_i32_t *vect);
 int32_t Vect_i32_dot(Vector_i32_t *vect);
 void Vect_i32_set_all_values_to(Vector_i32_t *vect, int32_t value);
 void Vect_i32_write(Vector_i32_t *vect, uint8_t index, int32_t value);
 void Vect_i32_add_to(Vector_i32_t *sum_vect, Vector_i32_t *vect);
 void Vect_i32_add(Vector_i32_t *vect_1, Vector_i32_t *vect_2, Vector_i32_t *sum_vect);
-void Vect_i32_uniform(Vector_i32_t *vector, Vector_i32_t *uniformed_vector);
 void Vect_i32_write_three_values(Vector_i32_t *vector, int32_t value_1, int32_t value_2, int32_t value_3);
 void Vect_i32_times_const(Vector_i32_t *vector, int32_t constant, Vector_i32_t *result_vector);
 void Vect_i32_copy_from_to(Vector_i32_t *vector_from, Vector_i32_t *vector_to);
@@ -46,7 +44,6 @@ void Vect_i32_cross_multiply(Vector_i32_t *vector_1, Vector_i32_t *vector_2, Vec
 void Vect_i32_sum_up_list_of_vectors(Vector_i32_t *vectorlist, Vector_i32_t *sum_vector, uint32_t listlength);
 void Vect_i32_set_vectorlist_to_value(Vector_i32_t vectorlist[], uint32_t listlength, int32_t value);
 int32_t *Vect_i32_pointer_to_index(Vector_i32_t *vect, uint8_t index);
-
 
 
 #endif
