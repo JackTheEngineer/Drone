@@ -5,7 +5,7 @@
  *      Author: jakov
  */
 
-#include "../../interfaces/pwm/pwm.h"
+#include "pwm.h"
 
 //XMC Capture/Compare Unit 4 (CCU4) Configuration:
 XMC_CCU4_SLICE_COMPARE_CONFIG_t SLICE0_config =

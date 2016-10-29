@@ -5,7 +5,6 @@
  *      Author: chocolate
  */
 
-#include "drone_simulation/simulation.h"
 #include "test_helper.h"
 #include "motors.h"
 #include "drone_physics.h"

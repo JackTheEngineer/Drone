@@ -15,9 +15,10 @@ POINTER_TO_CONTAINER(Vector_t, vect);
 POINTER_TO_CONTAINER(Vector_t, vect_1);
 POINTER_TO_CONTAINER(Vector_t, vect_2);
 
-_STATIC_ void Test_vect_values_equal_to(_FLOAT_ value);
+_STATIC_ void Test_vect_values_equal_to(Vector_t *vect, _FLOAT_ value);
 _STATIC_ void Set_Test_vectors_zero(void);
 _STATIC_ void _write_5_6_7_into_each_vector(Vector_t *vectorlist, uint8_t length);
+_STATIC_ void Test_i32_vect_all_values_equal_to(Vector_i32_t *i32_vect, int32_t compare_value);
 
 TEST_SETUP(vector_operations){
     Set_Test_vectors_zero();
@@ -54,7 +55,7 @@ TEST(vector_operations, set_all_values_to_should_work){
     vect->v[1] = 1; 
     vect->v[2] = 1; 
     Vect_set_all_values_to(vect, 0.0);
-    Test_vect_values_equal_to(0.0);
+    Test_vect_values_equal_to(vect, 0.0);
 }
 
 TEST(vector_operations, set_all_values_to_should_work2){
@@ -62,7 +63,7 @@ TEST(vector_operations, set_all_values_to_should_work2){
     vect->v[1] = 2.0; 
     vect->v[2] = 2.0; 
     Vect_set_all_values_to(vect, 1.0);
-    Test_vect_values_equal_to(1.0);
+    Test_vect_values_equal_to(vect, 1.0);
 }
 
 TEST(vector_operations, Vect_write_at_x_index_should_work){
@@ -311,8 +312,41 @@ TEST(vector_operations, get_pointer_of_indexvalue_3){
 	TEST_ASSERT_POINTERS_EQUAL(compare_ptr, ptr);
 }
 
+TEST(vector_operations, float_to_int32_transform_with_limits_should_consider_limit){
+	POINTER_TO_CONTAINER(Vector_i32_t, signed_vector);
+		
+	Vect_set_all_values_to(vect, 2.7);
+	Vect_transform_float_to_i32_with_limits(vect, signed_vector, 16, 2.0);
 
-_STATIC_ void Test_vect_values_equal_to(_FLOAT_ value){
+	Test_i32_vect_all_values_equal_to(signed_vector, (1<<15));
+}
+
+TEST(vector_operations, float_to_int32_transform_with_limits_should_consider_negative_limit){
+	POINTER_TO_CONTAINER(Vector_i32_t, signed_vector);
+		
+	Vect_set_all_values_to(vect, -2.7);
+	Vect_transform_float_to_i32_with_limits(vect, signed_vector, 16, 2.0);
+
+	Test_i32_vect_all_values_equal_to(signed_vector, -(1<<15));
+}
+
+TEST(vector_operations, float_to_int32_tranform_should_be_zero_with_value_zero){
+	POINTER_TO_CONTAINER(Vector_i32_t, signed_vector);
+		
+	Vect_set_all_values_to(vect, 0);
+	Vect_transform_float_to_i32_with_limits(vect, signed_vector, 16, 2.0);
+
+	Test_i32_vect_all_values_equal_to(signed_vector, 0);
+}
+
+_STATIC_ void Test_i32_vect_all_values_equal_to(Vector_i32_t *i32_vect, int32_t compare_value){
+	uint8_t i;
+	for(i=1; i<=3;i++){
+		TEST_ASSERT_EQUAL_INT32(compare_value, Vect_i32_read(i32_vect, i));
+	}
+}
+
+_STATIC_ void Test_vect_values_equal_to(Vector_t *vect, _FLOAT_ value){
     TEST_ASSERT_EQUAL_DOUBLE(value , vect->v[0]);
     TEST_ASSERT_EQUAL_DOUBLE(value , vect->v[1]);
     TEST_ASSERT_EQUAL_DOUBLE(value , vect->v[2]);

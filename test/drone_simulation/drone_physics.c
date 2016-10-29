@@ -13,18 +13,25 @@
 
 #define SPEED_TO_MOMENT 0.04
 #define G_ACCELERATION -9.81
-extern  Masspoint_t drone_masspoints[NUMBER_OF_MASSPOINTS];
+extern Masspoint_t drone_masspoints[NUMBER_OF_MASSPOINTS];
+
+STATIC_POINTER_TO_CONTAINER(Physical_Drone_t, dronedata);
 
 _STATIC_ void Calculate_Sum_of_forces(Vector_t *sum_of_forces, Physical_Drone_t *drone);
 _STATIC_ void Calculate_Sum_of_moments(Vector_t *sum_of_moments, Physical_Drone_t *drone);
 _STATIC_ void Integrate_with_given_accelerations(Vector_t* acceleration, Vector_t* speed, Vector_t* position, double timestep);
 _STATIC_ void Calculate_Moment_from_rotorspeed(Motor_t *motor, Vector_t *resulting_moment);
 
+Physical_Drone_t* Drone_get_dronedata(void){
+	return dronedata;
+}
+
 void Drone_set_drone_data_zero(Physical_Drone_t *drone){
 	Vect_set_all_values_to(&(drone->angular_position), 0.0);
 	Vect_set_all_values_to(&(drone->angular_speed), 0.0);
 	Vect_set_all_values_to(&(drone->position), 0.0);
 	Vect_set_all_values_to(&(drone->speed), 0.0);
+	Vect_set_all_values_to(&(drone->acceleration), 0.0);
 }
 
 void Generate_Rotation_Matrix(Matrix_t *rotation_matrix, Vector_t *angles){
@@ -118,6 +125,7 @@ void Drone_calculate_next_values(Physical_Drone_t *drone, double timestep){
 					   &(drone->angular_speed),
 					   &(drone->angular_position),
 					   timestep);
+	Vect_copy_from_to(acceleration, &drone->acceleration);
 }
 
 void Drone_calculate_inverse_mass_matrix(Matrix_t *J_Inverse){
@@ -171,23 +179,4 @@ _STATIC_ void Calculate_Moment_from_rotorspeed(Motor_t *motor, Vector_t *resulti
 	Vect_times_const(unitary_vector, SPEED_TO_MOMENT*Vect_dot(speed,speed), resulting_moment);
 }
 
-void Drone_set_position(double x, double y, double z, Physical_Drone_t *drone){
-	Vector_t *position = &(drone->position);
-	Vect_write(position, 1, x);
-	Vect_write(position, 2, y);
-	Vect_write(position, 3, z);
-}
 
-void Drone_set_speed(double x, double y, double z, Physical_Drone_t *drone){
-	Vector_t *speed = &(drone->speed);
-	Vect_write(speed, 1, x);
-	Vect_write(speed, 2, y);
-	Vect_write(speed, 3, z);
-}
-
-void Drone_set_angular_position(double pitch, double roll, double yaw, Physical_Drone_t *drone){
-	Vector_t *angle = &(drone->angular_position);
-	Vect_write(angle, 1, pitch);
-	Vect_write(angle, 2, roll);
-	Vect_write(angle, 3, yaw);
-}

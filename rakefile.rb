@@ -35,16 +35,7 @@ TESTS = {
     "vector_operations",
     "vector_tester",
   ], 
-  "test_drone_physics" => [
-    "drone_physics",
-    "drone_masses",
-    "vector_operations",
-    "vector_tester",
-    "matrix_operations",
-    "physical_helpers",
-    "matrix_tester",
-    "disturbing_force_injection",
-  ],
+
   "test_matrix_operations" =>[
     "matrix_operations",
     "vector_operations",
@@ -63,7 +54,6 @@ TESTS = {
     "propeller",
   ],
   "test_simulation" => [
-    "simulation",
     "drone_physics",
     "drone_masses",
     "fake_motors",
@@ -75,7 +65,23 @@ TESTS = {
   "test_fake_motors"=>[
     "fake_motors",
     "vector_operations",
-    "fake_simulation",
+    "fake_drone_physics",
+  ],
+  "test_fake_motion_sensor"=>[
+    "vector_operations",
+    "fake_motion_sensor",
+    "fake_drone_physics",
+    "vector_tester",
+  ],
+  "test_drone_physics" => [
+    "drone_physics",
+    "drone_masses",
+    "vector_operations",
+    "vector_tester",
+    "matrix_operations",
+    "physical_helpers",
+    "matrix_tester",
+    "disturbing_force_injection",
   ],
   "test_force_injection"=>[
     "disturbing_force_injection",

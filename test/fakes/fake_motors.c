@@ -6,8 +6,9 @@
  */
 
 #include "fake_motors.h"
-#include "simulation.h"
 #include "drone_masses.h"
+#include "timestep_definition.h"
+#include "drone_physics.h"
 
 #define VALUES_TO_CURRENTS 0.002
 #define CURRENT_TO_SPEED 10.0
@@ -15,24 +16,38 @@
 
 _STATIC_ void fake_Motors_initailize_positions(Motor_t motors[NMBR_OF_MOTORS]);
 
-POINTER_TO_CONTAINER(Physical_Drone_t, dronedata);
-
 Physical_Drone_t *fake_Motors_get_drone_pointer(void){
-	return dronedata;
+	return Drone_get_dronedata();
 }
 
 void Motors_Init(void){
-    /* Here the dronedata gets injected */
-    fake_Motors_initailize_positions(dronedata->motors);
-    Drone_calculate_inverse_mass_matrix(&(dronedata->J_Inverse));
+	/*
+	 * Here the rather unestethic fetching of the dronedata comes.
+	 * it's because the real interface to the motors has to stay 
+	 * independend of the dronedata. 
+	 *
+	 * The same counts for the motion sensor
+	 */
+       
+	Physical_Drone_t* dronedata = Drone_get_dronedata();
+	fake_Motors_initailize_positions(dronedata->motors);
+	Drone_calculate_inverse_mass_matrix(&(dronedata->J_Inverse));
 }
 
 void Motors_Set_Speed(Motorcontrolvalues_t *motor_values){
-    /* Here the dronedata gets injected */
-    fake_Motor_calculate_currents_from_controlvalues(dronedata->motors, motor_values);
-    fake_Motor_calculate_speeds_from_currents(dronedata->motors);
-    fake_Motor_calculate_thrust_from_speed(dronedata->motors);
-    Simulation_recieve(dronedata);
+	/*
+	 * Here the rather unestethic fetching of the dronedata comes.
+	 * it's because the real interface to the motors has to stay 
+	 * independend of the dronedata. 
+	 *
+	 * The same counts for the motion sensor
+	 */
+
+	Physical_Drone_t *dronedata = Drone_get_dronedata();
+	fake_Motor_calculate_currents_from_controlvalues(dronedata->motors, motor_values);
+	fake_Motor_calculate_speeds_from_currents(dronedata->motors);
+	fake_Motor_calculate_thrust_from_speed(dronedata->motors);
+	Drone_calculate_next_values(dronedata, TIMESTEP);
 }
 
 _STATIC_ void fake_Motors_initailize_positions(Motor_t motors[NMBR_OF_MOTORS]){

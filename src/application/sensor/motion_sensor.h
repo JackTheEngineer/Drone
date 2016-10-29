@@ -11,10 +11,18 @@
 #include "base.h"
 #include "vector_operations.h"
 
+typedef struct Settings{
+	uint32_t afs_sel;
+	uint32_t fs_sel;
+}Sensor_settings_t;
+
+
 typedef struct Sensordata{
 	Vector_i32_t acceleration;
 	Vector_i32_t angle_speed;
 	Vector_i32_t magnetic_field;
+
+	Sensor_settings_t settings;
 }Sensordata_t;
 
 void Motion_sensor_get_data(Sensordata_t *sensordata);

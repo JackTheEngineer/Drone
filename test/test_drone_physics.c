@@ -80,6 +80,7 @@ TEST(drone_simulation, Rotation_from_earth_frame_to_drone_frame_and_back_again_s
 	Test_vectors_equal(rotated_vector, compare_vector);
 }
 
+
 _STATIC_ void _assign_angles_values(Vector_t *angles){
 	Vect_write(angles, 1, 1.234);
 	Vect_write(angles, 2, 0.9434);

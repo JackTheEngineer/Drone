@@ -1,5 +1,5 @@
 
-#include "../../application/led_module/led_module.h"
+#include "led_module.h"
 
 #include "xmc_gpio.h"
 

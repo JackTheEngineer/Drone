@@ -42,7 +42,8 @@ LOCAL_LINK_OPTIONS = [
 
 LOCAL_LINK_COMMAND = [
   "#{LOCAL_GCC}",
-  "#{LOCAL_LINK_OPTIONS}"
+  "#{LOCAL_LINK_OPTIONS}",
+  "-lm"
 ].join(" ")
 
 

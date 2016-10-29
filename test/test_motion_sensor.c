@@ -12,12 +12,15 @@ TEST_GROUP(motion_sensor);
 POINTER_TO_CONTAINER(Sensordata_t, sensordata);
 
 TEST_SETUP(motion_sensor){
+
 }
 
 TEST_TEAR_DOWN(motion_sensor){
+
 }
 
 TEST(motion_sensor, set_zero_should_set_all_values_to_zero){
+
 }
 
 
