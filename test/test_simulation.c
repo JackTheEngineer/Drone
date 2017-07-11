@@ -11,7 +11,6 @@
 #include "timestep_definition.h"
 #include "fake_motors.h"
 
-
 _STATIC_ void Simulate_and_write_to_file(FILE *file);
 _STATIC_ void Run_one_simulation_Step(FILE *file, Motorcontrolvalues_t *motorspeeds, double time);
 _STATIC_ void Write_dronedata_to_file_in_a_line(FILE *file, double time);

@@ -7,6 +7,9 @@
 
 #include "pwm.h"
 
+extern XMC_CCU4_SLICE_COMPARE_CONFIG_t SLICE0_config;
+
+/* Requires value from 0 - 1000 */
 void PWM_Motor1_Set_Rate(uint32_t Speed){
 
 }

@@ -22,7 +22,7 @@ Physical_Drone_t *fake_Motors_get_drone_pointer(void){
 
 void Motors_Init(void){
 	/*
-	 * Here the rather unestethic fetching of the dronedata comes.
+	 * Here the rather unaestethic fetching of the dronedata comes.
 	 * it's because the real interface to the motors has to stay 
 	 * independend of the dronedata. 
 	 *
@@ -36,7 +36,7 @@ void Motors_Init(void){
 
 void Motors_Set_Speed(Motorcontrolvalues_t *motor_values){
 	/*
-	 * Here the rather unestethic fetching of the dronedata comes.
+	 * Here the rather unaestethic fetching of the dronedata comes.
 	 * it's because the real interface to the motors has to stay 
 	 * independend of the dronedata. 
 	 *
