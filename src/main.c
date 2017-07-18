@@ -1,86 +1,69 @@
-/*******************************************************************************
- Copyright (c) 2015, Infineon Technologies AG                                 **
- All rights reserved.                                                         **
-                                                                              **
- Redistribution and use in source and binary forms, with or without           **
- modification,are permitted provided that the following conditions are met:   **
-                                                                              **
- *Redistributions of source code must retain the above copyright notice,      **
- this list of conditions and the following disclaimer.                        **
- *Redistributions in binary form must reproduce the above copyright notice,   **
- this list of conditions and the following disclaimer in the documentation    **
- and/or other materials provided with the distribution.                       **
- *Neither the name of the copyright holders nor the names of its contributors **
- may be used to endorse or promote products derived from this software without**
- specific prior written permission.                                           **
-                                                                              **
- THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"  **
- AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE    **
- IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE   **
- ARE  DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE   **
- LIABLE  FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR         **
- CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF         **
- SUBSTITUTE GOODS OR  SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS    **
- INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN      **
- CONTRACT, STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)       **
- ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE   **
- POSSIBILITY OF SUCH DAMAGE.                                                  **
-                                                                              **
- To improve the quality of the software, users are encouraged to share        **
- modifications, enhancements or bug fixes with Infineon Technologies AG       **
- dave@infineon.com).                                                          **
-                                                                              **
-********************************************************************************
-**                                                                            **
-**                                                                            **
-** PLATFORM : Infineon XMC4500 Series                                         **
-**                                                                            **
-** AUTHOR : Application Engineering Team                                      **
-**                                                                            **
-** version 4.0.0 (Initial version)			                                  **
-**         4.1.2  Modified for APP updates                                    **
-**         4.1.4  Modified for APP updates                                    **
-**                                                                            **
-** MODIFICATION DATE : October, 30, 2015                                      **
-**                                                                            **
-*******************************************************************************/
-
-#include <DAVE.h>			//Declarations from DAVE Code Generation (includes SFR declarations)
-#include <xmc_ccu4.h>		//CCU4 LLD
+#include "xmc_ccu4.h"
+#include "xmc_scu.h"
 #include "led_module.h"
+
+const XMC_CCU4_SLICE_COMPARE_CONFIG_t RTE_slice_config =
+{
+  .timer_mode 		   = (uint32_t) XMC_CCU4_SLICE_TIMER_COUNT_MODE_EA,
+  .monoshot   		   = (uint32_t) false,
+  .shadow_xfer_clear   = (uint32_t) 0,
+  .dither_timer_period = (uint32_t) 0,
+  .dither_duty_cycle   = (uint32_t) 0,
+  .prescaler_mode	   = (uint32_t) XMC_CCU4_SLICE_PRESCALER_MODE_NORMAL,
+  .mcm_enable		   = (uint32_t) 0,
+  .prescaler_initval   = (uint32_t) 6,
+  .float_limit		   = (uint32_t) 0,
+  .dither_limit		   = (uint32_t) 0,
+  .passive_level 	   = (uint32_t) XMC_CCU4_SLICE_OUTPUT_PASSIVE_LEVEL_LOW,
+  .timer_concatenation = (uint32_t) 0
+};
 
 volatile uint32_t tick5ms;
 
-/**
- * @brief main() - Application entry point
- * No code in the main routine. All update made in the ISR handler.
- */
+XMC_CCU4_MODULE_t * const base = (XMC_CCU4_MODULE_t*) CCU41_BASE;
+XMC_CCU4_SLICE_t * const slice  = (XMC_CCU4_SLICE_t*) CCU41_CC41;
+XMC_CCU4_MODULE_t * const ccu = (XMC_CCU4_MODULE_t*) CCU41;
+
 int main(void)
 {
-  DAVE_STATUS_t status;
-  status = DAVE_STATUS_SUCCESS;
-  PWM_Init(&PWM_0);
+  /* Enable CCU4 module */
+  XMC_CCU4_Init(ccu, XMC_CCU4_SLICE_MCMS_ACTION_TRANSFER_PR_CR);
+  /* Start the prescaler */
+  XMC_CCU4_StartPrescaler(ccu);
 
+  XMC_CCU4_SLICE_CompareInit(slice, &RTE_slice_config);
 
+  /* Set the period and compare register values */
+  XMC_CCU4_SLICE_SetTimerPeriodMatch(slice,
+		                             (uint16_t)9375);
+  /* Configuring for 5ms Interrupt, with prescaler 6 */
+
+  XMC_CCU4_EnableShadowTransfer(base, (uint32_t)((uint32_t)XMC_CCU4_SHADOW_TRANSFER_SLICE_1 |
+          (uint32_t)XMC_CCU4_SHADOW_TRANSFER_PRESCALER_SLICE_1));
+
+  /* Initialize interrupts */
+  XMC_CCU4_SLICE_EnableEvent(slice, XMC_CCU4_SLICE_IRQ_ID_PERIOD_MATCH);
+
+  /* Bind event to Service Request Node to period match event*/
+  XMC_CCU4_SLICE_SetInterruptNode(slice, XMC_CCU4_SLICE_IRQ_ID_PERIOD_MATCH,
+		  XMC_CCU4_SLICE_SR_ID_1);
+  XMC_CCU4_EnableClock(base , 1U); /* 1 stands for slice number */
+  XMC_CCU4_SLICE_StartTimer(slice);
 
   NVIC_SetPriority(CCU41_1_IRQn,
                      NVIC_EncodePriority(NVIC_GetPriorityGrouping(),
                     		 	 	 	 63,
                                          0));
   NVIC_EnableIRQ(CCU41_1_IRQn);
-  leds_init();
-  PWM_SetFreq(&PWM_0, 200);
 
-  if(status == DAVE_STATUS_FAILURE)
-  {
-    /* Placeholder for error handler code. The while loop below can be replaced with an user error handler */
-    XMC_DEBUG(("DAVE APPs initialization failed with status %d\n", status));
-    while(1U)
-    {
-    }
-  }
+  leds_init();
+
+
   uint32_t counter = 0;
-  /* Placeholder for user application code. The while loop below can be replaced with user application code. */
+  /**
+   * @brief main() - Application entry point
+   * No code in the main routine. All update made in the ISR handler.
+   */
   while(1U)
   {
 	  if(tick5ms != 0){
@@ -95,13 +78,8 @@ int main(void)
   return 1;
 }
 
-/**
- * @brief periodmatchhandler() - Period match interrupt routine
- * This routine updates the PWM with a new frequency every 10 seconds
- */
-
-void periodmatchhandler(void)
+void CCU41_1_IRQHandler(void)
 {
-	PWM_ClearEvent(&PWM_0, PWM_INTERRUPT_PERIODMATCH);
+	XMC_CCU4_SLICE_ClearEvent(slice, XMC_CCU4_SLICE_IRQ_ID_PERIOD_MATCH);
 	tick5ms++;
 }
