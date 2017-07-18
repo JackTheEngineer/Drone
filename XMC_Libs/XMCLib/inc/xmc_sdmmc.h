@@ -1,13 +1,13 @@
 
 /**
  * @file xmc_sdmmc.h
- * @date 2016-01-12
+ * @date 2017-02-14
  *
  * @cond
  *********************************************************************************************************************
- * XMClib v2.1.6 - XMC Peripheral Driver Library 
+ * XMClib v2.1.12 - XMC Peripheral Driver Library 
  *
- * Copyright (c) 2015-2016, Infineon Technologies AG
+ * Copyright (c) 2015-2017, Infineon Technologies AG
  * All rights reserved.                        
  *                                             
  * Redistribution and use in source and binary forms, with or without modification,are permitted provided that the 
@@ -52,6 +52,20 @@
  *         4) XMC_SDMMC_EnableHighSpeed <br>
  *         5) XMC_SDMMC_DisableHighSpeed <br>
  *
+ * 2016-04-07:
+ *     - Added XMC_SDMMC_COMMAND_RESPONSE_t <br>
+ *
+ * 2016-07-11:
+ *     - Adjust masks for the following functions: <br>
+ *       1) XMC_SDMMC_SetBusVoltage <br>
+ *       2) XMC_SDMMC_SetDataLineTimeout <br>
+ *       3) XMC_SDMMC_SDClockFreqSelect <br>
+ *
+ * 2017-02-14:
+ *     - Added: <br>
+ *       1) XMC_SDMMC_SetCardDetectionStatus() <br>
+ *       2) XMC_SDMMC_SetCardDetectionSource() <br>
+
  * @endcond
  */
 
@@ -308,6 +322,17 @@ typedef enum
 } XMC_SDMMC_RESPONSE_TYPE_t;
 
 /**
+* Command response selection
+*/
+typedef enum XMC_SDMMC_COMMAND_RESPONSE
+{
+  XMC_SDMMC_COMMAND_RESPONSE_NONE = 0, /**< No Response */
+  XMC_SDMMC_COMMAND_RESPONSE_LONG = 1, /**< Response length 136 */
+  XMC_SDMMC_COMMAND_RESPONSE_SHORT = 2, /**< Response length 48 */
+  XMC_SDMMC_COMMAND_RESPONSE_SHORT_BUSY = 3, /**< Response length 48 check Busy after response */
+} XMC_SDMMC_COMMAND_RESPONSE_t;
+
+/**
  * Types of SDMMC commands
  */
 typedef enum
@@ -376,6 +401,24 @@ typedef enum
   XMC_SDMMC_DATA_TRANSFER_HOST_TO_CARD = 0U, /** Host to card */
   XMC_SDMMC_DATA_TRANSFER_CARD_TO_HOST       /** Card to host */
 } XMC_SDMMC_DATA_TRANSFER_DIR_t;
+
+/**
+ * SDMMC card detection signal source
+ */
+typedef enum XMC_SDMMC_CD_SOURCE
+{
+  XMC_SDMMC_CD_SOURCE_PIN = 0,
+  XMC_SDMMC_CD_SOURCE_SW = 1 << SDMMC_HOST_CTRL_CARD_DET_SIGNAL_DETECT_Pos
+} XMC_SDMMC_CD_SOURCE_t;
+
+/**
+ * SDMMC card detection status
+ */
+typedef enum XMC_SDMMC_CD_STATUS
+{
+  XMC_SDMMC_CD_STATUS_NO_CARD = 0,
+  XMC_SDMMC_CD_STATUS_INSERTED = 1 << SDMMC_HOST_CTRL_CARD_DETECT_TEST_LEVEL_Pos
+} XMC_SDMMC_CD_STATUS_t;
 
 /*******************************************************************************
  * DATA STRUCTURES
@@ -490,14 +533,14 @@ typedef union
 {
   struct
   {
-    uint16_t response_type_sel : 2; /**< Response type select */
-    uint16_t                   : 1; /**< Reserved bit */
+    uint16_t response_type_sel : 2; /**< Response type select ::XMC_SDMMC_COMMAND_RESPONSE_t */
+    uint16_t                   : 1;
     uint16_t crc_check_en      : 1; /**< Command CRC check enable */
     uint16_t index_check_en    : 1; /**< Command index check enable */
     uint16_t dat_present_sel   : 1; /**< Data present select */
-    uint16_t cmd_type          : 2; /**< Command type */
+    uint16_t cmd_type          : 2; /**< Command type ::XMC_SDMMC_COMMAND_TYPE_t */
     uint16_t cmd_index         : 6; /**< Command index */
-    uint16_t                   : 2; /**< Reserved bits */
+    uint16_t                   : 2;
   };
   uint16_t cmd;
 } XMC_SDMMC_COMMAND_t;
@@ -713,6 +756,40 @@ __STATIC_INLINE void XMC_SDMMC_TriggerEvent(XMC_SDMMC_t *const sdmmc, uint32_t e
   
   sdmmc->FORCE_EVENT_ERR_STATUS |= (uint16_t)(event >> 16U);
 }
+
+/**
+ * @param sdmmc A constant pointer to XMC_SDMMC_t, pointing to the SDMMC base address
+ * @param source A valid SDMMC card detection signal source (::XMC_SDMMC_CD_SOURCE_t)
+ * @return None
+ *
+ * \par<b>Description: </b><br>
+ * Selects source for card detection
+ */
+__STATIC_INLINE void XMC_SDMMC_SetCardDetectionSource(XMC_SDMMC_t *const sdmmc, XMC_SDMMC_CD_SOURCE_t source)
+{
+  XMC_ASSERT("XMC_SDMMC_TriggerEvent: Invalid module pointer", XMC_SDMMC_CHECK_MODULE_PTR(sdmmc));
+
+  sdmmc->HOST_CTRL |= (sdmmc->HOST_CTRL & (uint32_t)~SDMMC_HOST_CTRL_CARD_DET_SIGNAL_DETECT_Msk) | source;
+}
+
+/**
+ * @param sdmmc A constant pointer to XMC_SDMMC_t, pointing to the SDMMC base address
+ * @param status A valid SDMMC card detection status (::XMC_SDMMC_CD_STATUS_t)
+ * @return None
+ *
+ * \par<b>Description: </b><br>
+ * Sets the card detection status indicating whether card is inserted or not.
+ * Generates (card ins or card removal) interrupt when the normal interrupt is enabled.
+ * @note Only valid if SDMMC card detection signal source is set to XMC_SDMMC_CD_SOURCE_SW <br>
+ *
+ */
+__STATIC_INLINE void XMC_SDMMC_SetCardDetectionStatus(XMC_SDMMC_t *const sdmmc, XMC_SDMMC_CD_STATUS_t status)
+{
+  XMC_ASSERT("XMC_SDMMC_TriggerEvent: Invalid module pointer", XMC_SDMMC_CHECK_MODULE_PTR(sdmmc));
+
+  sdmmc->HOST_CTRL |= (sdmmc->HOST_CTRL & (uint32_t)~SDMMC_HOST_CTRL_CARD_DETECT_TEST_LEVEL_Msk) | status;
+}
+
 
 /**
  * @param sdmmc A constant pointer to XMC_SDMMC_t, pointing to the SDMMC base address
@@ -1382,8 +1459,8 @@ __STATIC_INLINE void XMC_SDMMC_SDClockFreqSelect(XMC_SDMMC_t *const sdmmc, XMC_S
   XMC_ASSERT("XMC_SDMMC_SDClockFreqSelect: Invalid module pointer", XMC_SDMMC_CHECK_MODULE_PTR(sdmmc));
   XMC_ASSERT("XMC_SDMMC_SDClockFreqSelect: Invalid clock frequency selection", XMC_SDMMC_CHECK_SDCLK_FREQ(clk));
 
-  sdmmc->CLOCK_CTRL |= (uint16_t)((uint32_t)SDMMC_CLOCK_CTRL_SDCLK_FREQ_SEL_Msk &
-                                  (uint32_t)((uint32_t)clk << SDMMC_CLOCK_CTRL_SDCLK_FREQ_SEL_Pos));
+  sdmmc->CLOCK_CTRL = (uint16_t)((sdmmc->CLOCK_CTRL & (uint32_t)~SDMMC_CLOCK_CTRL_SDCLK_FREQ_SEL_Msk) |
+                                 (uint32_t)(clk << SDMMC_CLOCK_CTRL_SDCLK_FREQ_SEL_Pos));
 }
 
 /**
@@ -1404,7 +1481,8 @@ __STATIC_INLINE void XMC_SDMMC_SetBusVoltage(XMC_SDMMC_t *const sdmmc, XMC_SDMMC
   XMC_ASSERT("XMC_SDMMC_SetBusVoltage: Invalid module pointer", XMC_SDMMC_CHECK_MODULE_PTR(sdmmc));
   XMC_ASSERT("XMC_SDMMC_SetBusVoltage: Invalid bus voltage", XMC_SDMMC_CHECK_BUS_VOLTAGE(bus_voltage));
 
-  sdmmc->POWER_CTRL |= (uint8_t)((uint32_t)bus_voltage << SDMMC_POWER_CTRL_SD_BUS_VOLTAGE_SEL_Pos);
+  sdmmc->POWER_CTRL = (uint8_t)((sdmmc->POWER_CTRL & (uint32_t)~SDMMC_POWER_CTRL_SD_BUS_VOLTAGE_SEL_Msk) |
+                                (uint32_t)(bus_voltage << SDMMC_POWER_CTRL_SD_BUS_VOLTAGE_SEL_Pos));
 }
 
 /**
@@ -1425,8 +1503,8 @@ __STATIC_INLINE void XMC_SDMMC_SetDataLineTimeout(XMC_SDMMC_t *const sdmmc, XMC_
   XMC_ASSERT("XMC_SDMMC_SetDataLineTimeout: Invalid module pointer", XMC_SDMMC_CHECK_MODULE_PTR(sdmmc));
   XMC_ASSERT("XMC_SDMMC_SetDataLineTimeout: Invalid timeout", XMC_SDMMC_CHECK_DAT_TIMEOUT_COUNTER(timeout));
 
-  sdmmc->TIMEOUT_CTRL |= (uint8_t)(((uint32_t)timeout << SDMMC_TIMEOUT_CTRL_DAT_TIMEOUT_CNT_VAL_Pos) &
-                                   (uint32_t)SDMMC_TIMEOUT_CTRL_DAT_TIMEOUT_CNT_VAL_Msk);
+  sdmmc->TIMEOUT_CTRL = (uint8_t)((sdmmc->TIMEOUT_CTRL & (uint32_t)~SDMMC_TIMEOUT_CTRL_DAT_TIMEOUT_CNT_VAL_Msk) |
+                                  (uint32_t)(timeout << SDMMC_TIMEOUT_CTRL_DAT_TIMEOUT_CNT_VAL_Pos));
 }
 
 /**

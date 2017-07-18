@@ -1,12 +1,12 @@
 /**
  * @file xmc4_flash.h
- * @date 2016-01-12
+ * @date 2016-03-22
  *
  * @cond
  *********************************************************************************************************************
- * XMClib v2.1.6 - XMC Peripheral Driver Library 
+ * XMClib v2.1.12 - XMC Peripheral Driver Library 
  *
- * Copyright (c) 2015-2016, Infineon Technologies AG
+ * Copyright (c) 2015-2017, Infineon Technologies AG
  * All rights reserved.                        
  *                                             
  * Redistribution and use in source and binary forms, with or without modification,are permitted provided that the 
@@ -52,6 +52,10 @@
  *     - Added support for XMC4800/4700 devices
  * 2015-12-07:
  *     - Fix XMC_FLASH_READ_ACCESS_TIME for XMC43, 47 and 48 devices
+ * 2016-03-18:
+ *     - Fix implementation of XMC_PREFETCH_EnableInstructionBuffer and XMC_PREFETCH_DisableInstructionBuffer
+ * 2016-03-22:
+ *     - Fix implementation of XMC_PREFETCH_InvalidateInstructionBuffer
  * @endcond 
  *
  */
@@ -450,7 +454,7 @@ __STATIC_INLINE void XMC_FLASH_SetWaitStates(uint32_t num_wait_states)
  */
 __STATIC_INLINE void XMC_PREFETCH_EnableInstructionBuffer(void)
 {
-	PREF->PCON |= PREF_PCON_IBYP_Msk;
+	PREF->PCON &= (uint32_t)~PREF_PCON_IBYP_Msk;
 }
 
 /**
@@ -467,7 +471,7 @@ __STATIC_INLINE void XMC_PREFETCH_EnableInstructionBuffer(void)
  */
 __STATIC_INLINE void XMC_PREFETCH_DisableInstructionBuffer(void)
 {
-	PREF->PCON &= (uint32_t)~PREF_PCON_IBYP_Msk;
+	PREF->PCON |= PREF_PCON_IBYP_Msk;
 }
 
 /**
@@ -489,6 +493,13 @@ __STATIC_INLINE void XMC_PREFETCH_DisableInstructionBuffer(void)
 __STATIC_INLINE void XMC_PREFETCH_InvalidateInstructionBuffer(void)
 {
   PREF->PCON |= PREF_PCON_IINV_Msk;
+  __DSB();
+  __ISB();
+
+  PREF->PCON &= ~PREF_PCON_IINV_Msk;
+  __DSB();
+  __ISB();
+
 }
 
 /**

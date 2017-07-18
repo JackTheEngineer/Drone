@@ -1,13 +1,13 @@
 
 /**
  * @file xmc_eth_mac.h
- * @date 2016-01-12
+ * @date 2017-04-17
  *
  * @cond
  *********************************************************************************************************************
- * XMClib v2.1.6 - XMC Peripheral Driver Library 
+ * XMClib v2.1.12 - XMC Peripheral Driver Library 
  *
- * Copyright (c) 2015-2016, Infineon Technologies AG
+ * Copyright (c) 2015-2017, Infineon Technologies AG
  * All rights reserved.                        
  *                                             
  * Redistribution and use in source and binary forms, with or without modification,are permitted provided that the 
@@ -38,7 +38,31 @@
  * --------------
  *
  * 2015-06-20:
- *     - Initial <br>
+ *     - Initial
+ *
+ * 2016-04-25:
+ *     - Change XMC_ETH_MAC_BUF_SIZE to 1524 to allow for Tagged MAC frame format
+ *  
+ * 2016-05-19:
+ *      - Added XMC_ETH_MAC_GetTxBuffer() and XMC_ETH_MAC_GetRxBuffer()
+ *      - Added XMC_ETH_MAC_SetTxBufferSize()
+ *
+ * 2016-06-08:
+ *      - Added XMC_ETH_MAC_IsRxDescriptorOwnedByDma()
+ * 
+ * 2017-02-25:
+ *      - XMC_ETH_MAC_SetPortControl() fixed compilation warning
+ *
+ * 2017-04-02:
+ *     - Added XMC_ETH_MAC_InitPTPEx()
+ *     - Added XMC_ETH_MAC_SetPTPTime()
+ *     - Added XMC_ETH_MAC_UpdateAddend()
+ *
+ * 2017-04-11:
+ *     - Added XMC_ETH_MAC_EnablePTPAlarm() and XMC_ETH_MAC_DisablePTPAlarm
+ *
+ * 2017-04-17:
+ *     - Fixed ordering of PTP nanoseconds and seconds in XMC_ETH_MAC_DMA_DESC_t
  *
  * @endcond
  */
@@ -80,9 +104,61 @@
  * MACROS
  *********************************************************************************************************************/
 
-#define XMC_ETH_MAC_BUF_SIZE           (1518)     /**< ETH MAC buffer size */
+#define XMC_ETH_MAC_BUF_SIZE           (1524)     /**< ETH MAC buffer size */
 #define XMC_ETH_MAC_PHY_MAX_RETRIES    (0xffffUL) /**< Maximum retries */
 #define XMC_ETH_WAKEUP_REGISTER_LENGTH (8U)       /**< Remote wakeup frame reg length */
+
+/**
+ * TDES0 Descriptor TX Packet Control/Status
+ */
+#define ETH_MAC_DMA_TDES0_OWN  (0x80000000U) /**< Own bit 1=DMA, 0=CPU */
+#define ETH_MAC_DMA_TDES0_IC   (0x40000000U) /**< Interrupt on competition */
+#define ETH_MAC_DMA_TDES0_LS   (0x20000000U) /**< Last segment */
+#define ETH_MAC_DMA_TDES0_FS   (0x10000000U) /**< First segment */
+#define ETH_MAC_DMA_TDES0_DC   (0x08000000U) /**< Disable CRC */
+#define ETH_MAC_DMA_TDES0_DP   (0x04000000U) /**< Disable pad */
+#define ETH_MAC_DMA_TDES0_TTSE (0x02000000U) /**< Transmit time stamp enable */
+#define ETH_MAC_DMA_TDES0_CIC  (0x00C00000U) /**< Checksum insertion control */
+#define ETH_MAC_DMA_TDES0_TER  (0x00200000U) /**< Transmit end of ring */
+#define ETH_MAC_DMA_TDES0_TCH  (0x00100000U) /**< Second address chained */
+#define ETH_MAC_DMA_TDES0_TTSS (0x00020000U) /**< Transmit time stamp status */
+#define ETH_MAC_DMA_TDES0_IHE  (0x00010000U) /**< IP header error */
+#define ETH_MAC_DMA_TDES0_ES   (0x00008000U) /**< Error summary */
+#define ETH_MAC_DMA_TDES0_JT   (0x00004000U) /**< Jabber timeout */
+#define ETH_MAC_DMA_TDES0_FF   (0x00002000U) /**< Frame flushed */
+#define ETH_MAC_DMA_TDES0_IPE  (0x00001000U) /**< IP payload error */
+#define ETH_MAC_DMA_TDES0_LOC  (0x00000800U) /**< Loss of carrier */
+#define ETH_MAC_DMA_TDES0_NC   (0x00000400U) /**< No carrier */
+#define ETH_MAC_DMA_TDES0_LC   (0x00000200U) /**< Late collision */
+#define ETH_MAC_DMA_TDES0_EC   (0x00000100U) /**< Excessive collision */
+#define ETH_MAC_DMA_TDES0_VF   (0x00000080U) /**< VLAN frame */
+#define ETH_MAC_DMA_TDES0_CC   (0x00000078U) /**< Collision count */
+#define ETH_MAC_DMA_TDES0_ED   (0x00000004U) /**< Excessive deferral */
+#define ETH_MAC_DMA_TDES0_UF   (0x00000002U) /**< Underflow error */
+#define ETH_MAC_DMA_TDES0_DB   (0x00000001U) /**< Deferred bit */
+
+/**
+ * RDES0 Descriptor RX Packet Status
+ */
+#define ETH_MAC_DMA_RDES0_OWN  (0x80000000U) /**< Own bit 1=DMA, 0=CPU */
+#define ETH_MAC_DMA_RDES0_AFM  (0x40000000U) /**< Destination address filter fail */
+#define ETH_MAC_DMA_RDES0_FL   (0x3FFF0000U) /**< Frame length mask */
+#define ETH_MAC_DMA_RDES0_ES   (0x00008000U) /**< Error summary */
+#define ETH_MAC_DMA_RDES0_DE   (0x00004000U) /**< Descriptor error */
+#define ETH_MAC_DMA_RDES0_SAF  (0x00002000U) /**< Source address filter fail */
+#define ETH_MAC_DMA_RDES0_LE   (0x00001000U) /**< Length error */
+#define ETH_MAC_DMA_RDES0_OE   (0x00000800U) /**< Overflow error */
+#define ETH_MAC_DMA_RDES0_VLAN (0x00000400U) /**< VLAN tag */
+#define ETH_MAC_DMA_RDES0_FS   (0x00000200U) /**< First descriptor */
+#define ETH_MAC_DMA_RDES0_LS   (0x00000100U) /**< Last descriptor */
+#define ETH_MAC_DMA_RDES0_TSA  (0x00000080U) /**< Timestamp available */
+#define ETH_MAC_DMA_RDES0_LC   (0x00000040U) /**< Late collision */
+#define ETH_MAC_DMA_RDES0_FT   (0x00000020U) /**< Frame type */
+#define ETH_MAC_DMA_RDES0_RWT  (0x00000010U) /**< Receive watchdog timeout */
+#define ETH_MAC_DMA_RDES0_RE   (0x00000008U) /**< Receive error */
+#define ETH_MAC_DMA_RDES0_DBE  (0x00000004U) /**< Dribble bit error */
+#define ETH_MAC_DMA_RDES0_CE   (0x00000002U) /**< CRC error */
+#define ETH_MAC_DMA_RDES0_ESA  (0x00000001U) /**< Extended Status/Rx MAC address */
 
 /**********************************************************************************************************************
  * ENUMS
@@ -197,6 +273,7 @@ typedef enum XMC_ETH_MAC_PMT_EVENT
 typedef enum XMC_ETH_MAC_TIMESTAMP_CONFIG
 {
   XMC_ETH_MAC_TIMESTAMP_CONFIG_FINE_UPDATE = ETH_TIMESTAMP_CONTROL_TSCFUPDT_Msk,             /**< Fine update */
+  XMC_ETH_MAC_TIMESTAMP_CONFIG_ENABLE_TS_INTERRUPT = ETH_TIMESTAMP_CONTROL_TSTRIG_Msk,       /**< Timestamp Interrupt Trigger Enable */
   XMC_ETH_MAC_TIMESTAMP_CONFIG_ENABLE_ALL_FRAMES = ETH_TIMESTAMP_CONTROL_TSENALL_Msk,        /**< Enable all frames */
   XMC_ETH_MAC_TIMESTAMP_CONFIG_ENABLE_PTPV2 = ETH_TIMESTAMP_CONTROL_TSVER2ENA_Msk,           /**< PTPV2 */
   XMC_ETH_MAC_TIMESTAMP_CONFIG_ENABLE_PTP_OVER_ETHERNET = ETH_TIMESTAMP_CONTROL_TSIPENA_Msk, /**< PTP over ETH */
@@ -256,8 +333,8 @@ typedef struct XMC_ETH_MAC_DMA_DESC
   uint32_t buffer2;                /**< Buffer 2 */
   uint32_t extended_status;        /**< Extended status */
   uint32_t reserved;               /**< Reserved */
-  uint32_t time_stamp_seconds;     /**< Time stamp low */
-  uint32_t time_stamp_nanoseconds; /**< Time stamp high */
+  uint32_t time_stamp_nanoseconds; /**< Time stamp low */
+  uint32_t time_stamp_seconds;     /**< Time stamp high */
 } XMC_ETH_MAC_DMA_DESC_t;
 
 /**
@@ -265,8 +342,8 @@ typedef struct XMC_ETH_MAC_DMA_DESC
  */
 typedef struct XMC_ETH_MAC_TIME
 {
-  int32_t nanoseconds;
-  uint32_t seconds;
+  uint32_t seconds;                 /**< Seconds */
+  int32_t nanoseconds;              /**< Nanoseconds */
 } XMC_ETH_MAC_TIME_t;
 
 /**
@@ -450,6 +527,7 @@ XMC_ETH_MAC_STATUS_t XMC_ETH_MAC_WritePhy(XMC_ETH_MAC_t *const eth_mac, uint8_t 
  */
 __STATIC_INLINE void XMC_ETH_MAC_SetPortControl(XMC_ETH_MAC_t *const eth_mac, const XMC_ETH_MAC_PORT_CTRL_t port_ctrl)
 {
+  XMC_UNUSED_ARG(eth_mac);
   ETH0_CON->CON = (uint32_t)port_ctrl.raw;
 }
 
@@ -1134,6 +1212,21 @@ void XMC_ETH_MAC_ReturnRxDescriptor(XMC_ETH_MAC_t *const eth_mac);
 
 /**
  * @param eth_mac A constant pointer to XMC_ETH_MAC_t, pointing to the ETH MAC base address
+ * @return bool true if RX descriptor is owned by DMA, false otherwise
+ *
+ * \par<b>Description: </b><br>
+ * Is RX descriptor owned by DMA? <br>
+ *
+ * \par
+ * The function checks if the RX descriptor is owned by the DMA.
+ */
+__STATIC_INLINE bool XMC_ETH_MAC_IsRxDescriptorOwnedByDma(XMC_ETH_MAC_t *const eth_mac)
+{
+  return ((eth_mac->rx_desc[eth_mac->rx_index].status & ETH_MAC_DMA_RDES0_OWN) != 0U);
+}
+
+/**
+ * @param eth_mac A constant pointer to XMC_ETH_MAC_t, pointing to the ETH MAC base address
  * @return None
  *
  * \par<b>Description: </b><br>
@@ -1154,7 +1247,10 @@ void XMC_ETH_MAC_ReturnTxDescriptor(XMC_ETH_MAC_t *const eth_mac);
  * \par
  * The function checks if the TX descriptor is owned by the DMA.
  */
-bool XMC_ETH_MAC_IsTxDescriptorOwnedByDma(XMC_ETH_MAC_t *const eth_mac);
+__STATIC_INLINE bool XMC_ETH_MAC_IsTxDescriptorOwnedByDma(XMC_ETH_MAC_t *const eth_mac)
+{
+  return ((eth_mac->tx_desc[eth_mac->tx_index].status & ETH_MAC_DMA_TDES0_OWN) != 0U);
+}
 
 /**
  * @param eth_mac A constant pointer to XMC_ETH_MAC_t, pointing to the ETH MAC base address
@@ -1284,6 +1380,43 @@ __STATIC_INLINE void XMC_ETH_MAC_ResumeRx(XMC_ETH_MAC_t *const eth_mac)
 {
   eth_mac->regs->STATUS = (uint32_t)ETH_STATUS_RU_Msk;
   eth_mac->regs->RECEIVE_POLL_DEMAND = 0U;
+}
+
+/**
+ * @param eth_mac A constant pointer to XMC_ETH_MAC_t, pointing to the ETH MAC base address
+ * @return Pointer to current TX buffer
+ *
+ * \par<b>Description: </b><br>
+ * Returns the current TX buffer.
+ */
+__STATIC_INLINE uint8_t *XMC_ETH_MAC_GetTxBuffer(XMC_ETH_MAC_t *const eth_mac)
+{
+  return (uint8_t *)(eth_mac->tx_desc[eth_mac->tx_index].buffer1);
+}
+
+/**
+ * @param eth_mac A constant pointer to XMC_ETH_MAC_t, pointing to the ETH MAC base address
+ * @return Pointer to current RX buffer
+ *
+ * \par<b>Description: </b><br>
+ * Returns the current RX buffer.
+ */
+__STATIC_INLINE uint8_t *XMC_ETH_MAC_GetRxBuffer(XMC_ETH_MAC_t *const eth_mac)
+{
+  return (uint8_t *)(eth_mac->rx_desc[eth_mac->rx_index].buffer1); 
+}
+
+/**
+ * @param eth_mac A constant pointer to XMC_ETH_MAC_t, pointing to the ETH MAC base address
+ * @param size Size of buffer
+ * @return None
+ *
+ * \par<b>Description: </b><br>
+ * Sets the current TX buffer size.
+ */
+__STATIC_INLINE void XMC_ETH_MAC_SetTxBufferSize(XMC_ETH_MAC_t *const eth_mac, uint32_t size)
+{
+  eth_mac->tx_desc[eth_mac->tx_index].length = size;
 }
 
 /**
@@ -1422,6 +1555,20 @@ void XMC_ETH_MAC_InitPTP(XMC_ETH_MAC_t *const eth_mac, uint32_t config);
 
 /**
  * @param eth_mac A constant pointer to XMC_ETH_MAC_t, pointing to the ETH MAC base address
+ * @param config Configuration of PTP module. See ::XMC_ETH_MAC_TIMESTAMP_CONFIG_t
+ * @param time Initialization time
+ * @return None
+ *
+ * \par<b>Description: </b><br>
+ * Initialize PTP <br>
+ *
+ * \par
+ * The function can be used to initialize PTP given a time parameter in addition
+ */
+void XMC_ETH_MAC_InitPTPEx(XMC_ETH_MAC_t *const eth_mac, uint32_t config, XMC_ETH_MAC_TIME_t *const time);
+
+/**
+ * @param eth_mac A constant pointer to XMC_ETH_MAC_t, pointing to the ETH MAC base address
  * @param time A constant pointer to XMC_ETH_MAC_TIME_t, pointing to the PTP time
  * @return None
  *
@@ -1433,6 +1580,19 @@ void XMC_ETH_MAC_InitPTP(XMC_ETH_MAC_t *const eth_mac, uint32_t config);
  * to the 'time' argument.
  */
 void XMC_ETH_MAC_GetPTPTime(XMC_ETH_MAC_t *const eth_mac, XMC_ETH_MAC_TIME_t *const time);
+
+/**
+ * @param eth_mac A constant pointer to XMC_ETH_MAC_t, pointing to the ETH MAC base address
+ * @param time A constant pointer to XMC_ETH_MAC_TIME_t, pointing to the PTP time
+ * @return None
+ *
+ * \par<b>Description: </b><br>
+ * Get PTP time <br>
+ *
+ * \par
+ * The function sets the PTP time give by the time parameter
+ */
+void XMC_ETH_MAC_SetPTPTime(XMC_ETH_MAC_t *const eth_mac, XMC_ETH_MAC_TIME_t *const time);
 
 /**
  * @param eth_mac A constant pointer to XMC_ETH_MAC_t, pointing to the ETH MAC base address
@@ -1461,6 +1621,52 @@ void XMC_ETH_MAC_UpdatePTPTime(XMC_ETH_MAC_t *const eth_mac, const XMC_ETH_MAC_T
  * be used to schedule an interrupt event triggered when the set alarm time limit is reached.
  */
 void XMC_ETH_MAC_SetPTPAlarm(XMC_ETH_MAC_t *const eth_mac, const XMC_ETH_MAC_TIME_t *const time);
+
+/**
+ * @param eth_mac A constant pointer to XMC_ETH_MAC_t, pointing to the ETH MAC base address
+ * @return None
+ *
+ * \par<b>Description: </b><br>
+ * Enables timestamp interrupt <br>
+ *
+ * \par
+ * The timestamp interrupt is generated when the System Time becomes greater than the value written
+ * in the Target Time register (Alarm). After the generation of the Timestamp Trigger Interrupt, the interrupt is disabled.
+ */
+__STATIC_INLINE void XMC_ETH_MAC_EnablePTPAlarm(XMC_ETH_MAC_t *const eth_mac)
+{
+  eth_mac->regs->TIMESTAMP_CONTROL |= (uint32_t)ETH_TIMESTAMP_CONTROL_TSTRIG_Msk;
+}
+
+/**
+ * @param eth_mac A constant pointer to XMC_ETH_MAC_t, pointing to the ETH MAC base address
+ * @return None
+ *
+ * \par<b>Description: </b><br>
+ * Disables timestamp interrupt <br>
+ *
+ * \par
+ * The timestamp interrupt is generated when the System Time becomes greater than the value written
+ * in the Target Time register (Alarm). After the generation of the Timestamp Trigger Interrupt, the interrupt is disabled.
+ */
+__STATIC_INLINE void XMC_ETH_MAC_DisablePTPAlarm(XMC_ETH_MAC_t *const eth_mac)
+{
+  eth_mac->regs->TIMESTAMP_CONTROL &= (uint32_t)~ETH_TIMESTAMP_CONTROL_TSTRIG_Msk;
+}
+
+
+/**
+ * @param eth_mac A constant pointer to XMC_ETH_MAC_t, pointing to the ETH MAC base address
+ * @param addend Addend value
+ * @return None
+ *
+ * \par<b>Description: </b><br>
+ * Adjust PTP clock <br>
+ *
+ * \par
+ * The function is used to adjust the PTP clock (time synchronization) to compensate a reference clock drift. 
+ */
+void XMC_ETH_MAC_UpdateAddend(XMC_ETH_MAC_t *const eth_mac, uint32_t addend);
 
 /**
  * @param eth_mac A constant pointer to XMC_ETH_MAC_t, pointing to the ETH MAC base address
@@ -1544,7 +1750,7 @@ void XMC_ETH_MAC_DisableEvent(XMC_ETH_MAC_t *const eth_mac, uint32_t event);
 
 /**
  * @param eth_mac A constant pointer to XMC_ETH_MAC_t, pointing to the ETH MAC base address
- * @param event The status of which event (or a combination of logically OR'd events) needs to be cleared?
+ * @param event The status of which event (or a combination of logically OR'd events) needs to be cleared
  * @return None
  *
  * \par<b>Description: </b><br>

@@ -9,6 +9,9 @@ build/**
 .metadata/**
 doc/
 
+Dave/Model/**
+Dave/Generated/**
+
 # Object files
 *.o
 *.ko

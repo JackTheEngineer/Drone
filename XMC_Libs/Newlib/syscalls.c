@@ -1,12 +1,12 @@
 /*********************************************************************************************************************
  * @file     syscalls.c
  * @brief    Newlib stubs
- * @version  V1.4
- * @date     11 Dec 2015
+ * @version  V1.6
+ * @date     20 Apr 2017
  *
  * @cond
  *********************************************************************************************************************
- * Copyright (c) 2015, Infineon Technologies AG
+ * Copyright (c) 2015-2017, Infineon Technologies AG
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,are permitted provided that the
@@ -41,6 +41,8 @@
  * V1.2                  : Restored compatibility with old project files
  * V1.3    Jan 2014, PKB : Encapsulating everything in this file for use only with GCC
  * V1.4 11 Dec 2015, JFT : Fix heap overflow
+ * V1.5 09 Mar 2016, JFT : Add dso_handle to support destructors call at exit 
+ * V1.6 20 Apr 2017, JFT : Foward declaration of __sbrk to fix link time optimization (-flto) compilation errors
  * @endcond
  */
 
@@ -54,6 +56,13 @@
 #include <stdint.h>
 #include <errno.h>
 #include <sys/types.h>
+
+/* Forward prototypes.  */
+caddr_t _sbrk(int nbytes) __attribute__((externally_visible));
+void _init(void) __attribute__((externally_visible));
+
+/* c++ destructor dynamic shared object needed if -fuse-cxa-atexit is used*/
+void *__dso_handle __attribute__ ((weak));
 
 // defined in linker script
 extern caddr_t Heap_Bank1_Start;
@@ -89,5 +98,3 @@ void _init(void)
 {}
 
 #endif /* __GNUC__ */
-
-

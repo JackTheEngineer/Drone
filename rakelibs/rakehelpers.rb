@@ -33,10 +33,10 @@ def get_headers(file, headerlist)
   if file == nil
     raise TypeError, "The function to get the headers of a file that got 'nil'", caller
   else
-    lines = File.readlines(file, :encoding => "UTF-8")
+    lines = File.readlines(file)
   end
   lines.each do |line|
-    m = line.match(/^\s*#include\s+[\"\<]\s*(.+\.[hH])\s*[\"\>]/)
+    m = line.scrub.match(/^\s*#include\s+[\"\<]\s*(.+\.[hH])\s*[\"\>]/)
     if not m.nil?
       includes << abspath_of_header(m[1], headerlist)
     end
@@ -49,6 +49,7 @@ def arm_include_dirs()
   dirs = Rake::FileList.new()
   dirs.include("#{SOURCE_DIR}**/**/")
   dirs.include("#{TARGET_LIBS}**/**/")
+  dirs.include("#{ADDITIONAL}**/**/")
   dirs.include("Startup/**/**/")
   return dirs
 end

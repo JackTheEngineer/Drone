@@ -11,6 +11,7 @@ ARM_BUILD_DIR = BUILD_DIR + 'arm/'
 
 CLANG_CHECKER = './vendor/clang_checker/bin/scan-build'
 SOURCE_DIR = "src/"
+ADDITIONAL = "Dave/Generated/"
 TEST_DIR = 'test/'
 SUPPORT_DIR = TEST_DIR + 'support/'
 TEST_BUILD_DIR = BUILD_DIR + 'test/'

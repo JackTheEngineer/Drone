@@ -1,12 +1,12 @@
 /**
  * @file xmc_scu.h
- * @date 2016-01-12
+ * @date 2016-03-09
  *
  * @cond
  *********************************************************************************************************************
- * XMClib v2.1.6 - XMC Peripheral Driver Library 
+ * XMClib v2.1.12 - XMC Peripheral Driver Library 
  *
- * Copyright (c) 2015-2016, Infineon Technologies AG
+ * Copyright (c) 2015-2017, Infineon Technologies AG
  * All rights reserved.                        
  *                                             
  * Redistribution and use in source and binary forms, with or without modification,are permitted provided that the 
@@ -52,6 +52,9 @@
  *
  * 2015-11-30:
  *     - Documentation improved <br>
+ *      
+ * 2016-03-09:
+ *     - Optimization of write only registers
  *      
  * @endcond 
  *
@@ -403,7 +406,7 @@ __STATIC_INLINE uint32_t XMC_SCU_RESET_GetDeviceResetReason(void)
 __STATIC_INLINE void XMC_SCU_RESET_ClearDeviceResetReason(void)
 {
   /* Clear RSTSTAT.RSTSTAT bitfield */
-  SCU_RESET->RSTCLR |= (uint32_t)SCU_RESET_RSTCLR_RSCLR_Msk;
+  SCU_RESET->RSTCLR = (uint32_t)SCU_RESET_RSTCLR_RSCLR_Msk;
 }
  
 /**

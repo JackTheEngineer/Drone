@@ -1,13 +1,13 @@
 
 /**
  * @file xmc_eth_mac.c
- * @date 2016-01-12
+ * @date 2017-04-17
  *
  * @cond
  *********************************************************************************************************************
- * XMClib v2.1.6 - XMC Peripheral Driver Library 
+ * XMClib v2.1.12 - XMC Peripheral Driver Library
  *
- * Copyright (c) 2015-2016, Infineon Technologies AG
+ * Copyright (c) 2015-2017, Infineon Technologies AG
  * All rights reserved.                        
  *                                             
  * Redistribution and use in source and binary forms, with or without modification,are permitted provided that the 
@@ -47,13 +47,47 @@
  * 2015-11-30:
  *     - Fix XMC_ETH_MAC_GetRxFrameSize return value in case of errors
  *
+ * 2016-03-16:
+ *     - Fix XMC_ETH_MAC_DisableEvent
+ *
+ * 2016-05-19:
+ *     - Changed XMC_ETH_MAC_ReturnTxDescriptor and XMC_ETH_MAC_ReturnRxDescriptor
+ *
+ * 2016-08-30:
+ *     - Changed XMC_ETH_MAC_Init() to disable MMC interrupt events
+ *
+ * 2016-11-22:
+ *     - Changed XMC_ETH_MAC_Init() to optimize access to bus
+ *
+ * 2017-02-25:
+ *     - XMC_ETH_MAC_Enable() and XMC_ETH_MAC_Disable(), fixed compilation warnings
+ *
+ * 2017-03-27:
+ *     - Changed XMC_ETH_MAC_Init() to disable PMT and timestamp interrupt events
+ *
+ * 2017-04-02:
+ *     - Added XMC_ETH_MAC_InitPTPEx()
+ *     - Added XMC_ETH_MAC_SetPTPTime()
+ *     - Added XMC_ETH_MAC_UpdateAddend() 
+ *     - Fixed XMC_ETH_MAC_InitPTP(), XMC_ETH_MAC_UpdatePTPTime(), XMC_ETH_MAC_SetPTPAlarm()
+ *       - nanoseconds initializazion
+ *       - added polling to wait for setup
+ *
+ * 2017-04-04:
+ *     - Changed XMC_ETH_MAC_Init() to disable MMC IPC receive interrupt events
+ *
+ * 2017-04-11:
+ *     - Fixed XMC_ETH_MAC_SetPTPAlarm() nanoseconds conversion
+ *
+ * 2017-04-17:
+ *     - Changed XMC_ETH_MAC_GetTxTimeStamp() and XMC_ETH_MAC_GetRxTimeStamp() return the timestamp depending on status bit in descriptor 
+ *
  * @endcond
  */
 
 /*******************************************************************************
  * HEADER FILES
  *******************************************************************************/
-
 #include <xmc_eth_mac.h>
 
 #if defined (ETH0)
@@ -85,57 +119,6 @@
 #define XMC_ETH_MAC_MDC_DIVIDER_102 (4U << ETH_GMII_ADDRESS_CR_Pos) /**< MDC clock: ETH clock/102 */
 #define XMC_ETH_MAC_MDC_DIVIDER_124 (5U << ETH_GMII_ADDRESS_CR_Pos) /**< MDC clock: ETH clock/124 */
 
-/**
- * TDES0 Descriptor TX Packet Control/Status
- */
-#define ETH_MAC_DMA_TDES0_OWN  (0x80000000U) /**< Own bit 1=DMA, 0=CPU */
-#define ETH_MAC_DMA_TDES0_IC   (0x40000000U) /**< Interrupt on competition */
-#define ETH_MAC_DMA_TDES0_LS   (0x20000000U) /**< Last segment */
-#define ETH_MAC_DMA_TDES0_FS   (0x10000000U) /**< First segment */
-#define ETH_MAC_DMA_TDES0_DC   (0x08000000U) /**< Disable CRC */
-#define ETH_MAC_DMA_TDES0_DP   (0x04000000U) /**< Disable pad */
-#define ETH_MAC_DMA_TDES0_TTSE (0x02000000U) /**< Transmit time stamp enable */
-#define ETH_MAC_DMA_TDES0_CIC  (0x00C00000U) /**< Checksum insertion control */
-#define ETH_MAC_DMA_TDES0_TER  (0x00200000U) /**< Transmit end of ring */
-#define ETH_MAC_DMA_TDES0_TCH  (0x00100000U) /**< Second address chained */
-#define ETH_MAC_DMA_TDES0_TTSS (0x00020000U) /**< Transmit time stamp status */
-#define ETH_MAC_DMA_TDES0_IHE  (0x00010000U) /**< IP header error */
-#define ETH_MAC_DMA_TDES0_ES   (0x00008000U) /**< Error summary */
-#define ETH_MAC_DMA_TDES0_JT   (0x00004000U) /**< Jabber timeout */
-#define ETH_MAC_DMA_TDES0_FF   (0x00002000U) /**< Frame flushed */
-#define ETH_MAC_DMA_TDES0_IPE  (0x00001000U) /**< IP payload error */
-#define ETH_MAC_DMA_TDES0_LOC  (0x00000800U) /**< Loss of carrier */
-#define ETH_MAC_DMA_TDES0_NC   (0x00000400U) /**< No carrier */
-#define ETH_MAC_DMA_TDES0_LC   (0x00000200U) /**< Late collision */
-#define ETH_MAC_DMA_TDES0_EC   (0x00000100U) /**< Excessive collision */
-#define ETH_MAC_DMA_TDES0_VF   (0x00000080U) /**< VLAN frame */
-#define ETH_MAC_DMA_TDES0_CC   (0x00000078U) /**< Collision count */
-#define ETH_MAC_DMA_TDES0_ED   (0x00000004U) /**< Excessive deferral */
-#define ETH_MAC_DMA_TDES0_UF   (0x00000002U) /**< Underflow error */
-#define ETH_MAC_DMA_TDES0_DB   (0x00000001U) /**< Deferred bit */
-
-/**
- * RDES0 Descriptor RX Packet Status
- */
-#define ETH_MAC_DMA_RDES0_OWN  (0x80000000U) /**< Own bit 1=DMA, 0=CPU */
-#define ETH_MAC_DMA_RDES0_AFM  (0x40000000U) /**< Destination address filter fail */
-#define ETH_MAC_DMA_RDES0_FL   (0x3FFF0000U) /**< Frame length mask */
-#define ETH_MAC_DMA_RDES0_ES   (0x00008000U) /**< Error summary */
-#define ETH_MAC_DMA_RDES0_DE   (0x00004000U) /**< Descriptor error */
-#define ETH_MAC_DMA_RDES0_SAF  (0x00002000U) /**< Source address filter fail */
-#define ETH_MAC_DMA_RDES0_LE   (0x00001000U) /**< Length error */
-#define ETH_MAC_DMA_RDES0_OE   (0x00000800U) /**< Overflow error */
-#define ETH_MAC_DMA_RDES0_VLAN (0x00000400U) /**< VLAN tag */
-#define ETH_MAC_DMA_RDES0_FS   (0x00000200U) /**< First descriptor */
-#define ETH_MAC_DMA_RDES0_LS   (0x00000100U) /**< Last descriptor */
-#define ETH_MAC_DMA_RDES0_TSA  (0x00000080U) /**< Timestamp available */
-#define ETH_MAC_DMA_RDES0_LC   (0x00000040U) /**< Late collision */
-#define ETH_MAC_DMA_RDES0_FT   (0x00000020U) /**< Frame type */
-#define ETH_MAC_DMA_RDES0_RWT  (0x00000010U) /**< Receive watchdog timeout */
-#define ETH_MAC_DMA_RDES0_RE   (0x00000008U) /**< Receive error */
-#define ETH_MAC_DMA_RDES0_DBE  (0x00000004U) /**< Dribble bit error */
-#define ETH_MAC_DMA_RDES0_CE   (0x00000002U) /**< CRC error */
-#define ETH_MAC_DMA_RDES0_ESA  (0x00000001U) /**< Extended Status/Rx MAC address */
 
 /**
  * RDES1 Descriptor RX Packet Control
@@ -144,6 +127,12 @@
 #define ETH_MAC_DMA_RDES1_RER  (0x00008000U) /**< Receive end of ring */
 #define ETH_MAC_DMA_RDES1_RCH  (0x00004000U) /**< Second address chained */
 #define ETH_MAC_DMA_RDES1_RBS1 (0x00001FFFU) /**< Receive buffer 1 size */
+
+/**
+ * Interrupt masking
+ */
+#define ETH_MAC_DISABLE_MMC_INTERRUPT_MSK              (0x03ffffffU) /**< Bit mask to disable MMMC transmit and receive interrupts */
+#define ETH_MAC_DISABLE_MMC_IPC_RECEIVE_INTERRUPT_MSK  (0x3fff3fffU) /**< Bit mask to disable MMC IPC Receive Checksum Offload Interrupt Mask */
 
 /**
  * Normal MAC events
@@ -228,10 +217,14 @@ XMC_ETH_MAC_STATUS_t XMC_ETH_MAC_Init(XMC_ETH_MAC_t *const eth_mac)
   eth_mac->regs->FLOW_CONTROL = ETH_FLOW_CONTROL_DZPQ_Msk; /* Disable Zero Quanta Pause */
 
   eth_mac->regs->OPERATION_MODE = (uint32_t)ETH_OPERATION_MODE_RSF_Msk |
-		                          (uint32_t)ETH_OPERATION_MODE_TSF_Msk;
+                                  (uint32_t)ETH_OPERATION_MODE_TSF_Msk |
+                                  (uint32_t)ETH_OPERATION_MODE_OSF_Msk;
 
   /* Increase enhanced descriptor to 8 WORDS, required when the Advanced Time-Stamp feature or Full IPC Offload Engine is enabled */
-  eth_mac->regs->BUS_MODE |= (uint32_t)ETH_BUS_MODE_ATDS_Msk;
+  eth_mac->regs->BUS_MODE = (uint32_t)ETH_BUS_MODE_ATDS_Msk |
+                            (uint32_t)ETH_BUS_MODE_AAL_Msk | /* the AHB interface generates all bursts aligned to the start address LS bits */
+                            (uint32_t)ETH_BUS_MODE_FB_Msk | /* DMA attempts to execute fixed-length Burst transfers on the AHB Master interface */
+                            (uint32_t)(0x20 << ETH_BUS_MODE_PBL_Pos); /* maximum Burst length */
 
   /* Initialize DMA Descriptors */
   XMC_ETH_MAC_InitRxDescriptors(eth_mac);
@@ -239,6 +232,14 @@ XMC_ETH_MAC_STATUS_t XMC_ETH_MAC_Init(XMC_ETH_MAC_t *const eth_mac)
 
   /* Clear interrupts */
   eth_mac->regs->STATUS = 0xFFFFFFFFUL;
+
+  /* Disable MMC interrupt events */
+  eth_mac->regs->MMC_TRANSMIT_INTERRUPT_MASK = ETH_MAC_DISABLE_MMC_INTERRUPT_MSK;
+  eth_mac->regs->MMC_RECEIVE_INTERRUPT_MASK = ETH_MAC_DISABLE_MMC_INTERRUPT_MSK;
+  eth_mac->regs->MMC_IPC_RECEIVE_INTERRUPT_MASK = ETH_MAC_DISABLE_MMC_IPC_RECEIVE_INTERRUPT_MSK;
+
+  /* Disable PMT and timestamp interrupt events */
+  eth_mac->regs->INTERRUPT_MASK = ETH_INTERRUPT_MASK_PMTIM_Msk | ETH_INTERRUPT_MASK_TSIM_Msk;
 
   eth_mac->frame_end = NULL;
 
@@ -259,9 +260,9 @@ void XMC_ETH_MAC_InitRxDescriptors(XMC_ETH_MAC_t *const eth_mac)
    */
   for (i = 0U; i < eth_mac->num_rx_buf; ++i)
   {
-	eth_mac->rx_desc[i].status = (uint32_t)ETH_MAC_DMA_RDES0_OWN;
-	eth_mac->rx_desc[i].length = (uint32_t)ETH_MAC_DMA_RDES1_RCH | (uint32_t)XMC_ETH_MAC_BUF_SIZE;
-	eth_mac->rx_desc[i].buffer1 = (uint32_t)&(eth_mac->rx_buf[i * XMC_ETH_MAC_BUF_SIZE]);
+  eth_mac->rx_desc[i].status = (uint32_t)ETH_MAC_DMA_RDES0_OWN;
+  eth_mac->rx_desc[i].length = (uint32_t)ETH_MAC_DMA_RDES1_RCH | (uint32_t)XMC_ETH_MAC_BUF_SIZE;
+  eth_mac->rx_desc[i].buffer1 = (uint32_t)&(eth_mac->rx_buf[i * XMC_ETH_MAC_BUF_SIZE]);
     next = i + 1U;
     if (next == eth_mac->num_rx_buf)
     {
@@ -284,8 +285,8 @@ void XMC_ETH_MAC_InitTxDescriptors(XMC_ETH_MAC_t *const eth_mac)
   /* Chained structure (ETH_MAC_DMA_TDES0_TCH), second address in the descriptor (buffer2) is the next descriptor address */
   for (i = 0U; i < eth_mac->num_tx_buf; ++i)
   {
-	eth_mac->tx_desc[i].status = ETH_MAC_DMA_TDES0_TCH | ETH_MAC_DMA_TDES0_LS | ETH_MAC_DMA_TDES0_FS;
-	eth_mac->tx_desc[i].buffer1 = (uint32_t)&(eth_mac->tx_buf[i * XMC_ETH_MAC_BUF_SIZE]);
+  eth_mac->tx_desc[i].status = ETH_MAC_DMA_TDES0_TCH | ETH_MAC_DMA_TDES0_LS | ETH_MAC_DMA_TDES0_FS;
+  eth_mac->tx_desc[i].buffer1 = (uint32_t)&(eth_mac->tx_buf[i * XMC_ETH_MAC_BUF_SIZE]);
     next = i + 1U;
     if (next == eth_mac->num_tx_buf)
     {
@@ -299,9 +300,9 @@ void XMC_ETH_MAC_InitTxDescriptors(XMC_ETH_MAC_t *const eth_mac)
 
 /* Set address perfect filter */
 void XMC_ETH_MAC_SetAddressPerfectFilter(XMC_ETH_MAC_t *const eth_mac,
-		                                 uint8_t index,
-								         const uint64_t addr,
-								         uint32_t flags)
+                                     uint8_t index,
+                         const uint64_t addr,
+                         uint32_t flags)
 {
   __IO uint32_t *reg;
 
@@ -328,7 +329,7 @@ XMC_ETH_MAC_STATUS_t XMC_ETH_MAC_SendFrame(XMC_ETH_MAC_t *const eth_mac, const u
   uint32_t ctrl;
 
   XMC_ASSERT("XMC_ETH_MAC_SendFrame:", eth_mac != NULL);
-  XMC_ASSERT("XMC_ETH_MAC_SendFrame:", eth_mac->regs != ETH0);
+  XMC_ASSERT("XMC_ETH_MAC_SendFrame:", eth_mac->regs == ETH0);
   XMC_ASSERT("XMC_ETH_MAC_SendFrame:", (frame != NULL) && (len > 0));
 
   dst = eth_mac->frame_end;
@@ -374,12 +375,12 @@ XMC_ETH_MAC_STATUS_t XMC_ETH_MAC_SendFrame(XMC_ETH_MAC_t *const eth_mac, const u
 
       if (flags & (uint32_t)XMC_ETH_MAC_TX_FRAME_EVENT)
       {
-    	ctrl |= ETH_MAC_DMA_TDES0_IC;
+      ctrl |= ETH_MAC_DMA_TDES0_IC;
       }
 
       if (flags & (uint32_t)XMC_ETH_MAC_TX_FRAME_TIMESTAMP)
       {
-    	ctrl |= ETH_MAC_DMA_TDES0_TTSE;
+      ctrl |= ETH_MAC_DMA_TDES0_TTSE;
       }
       eth_mac->tx_ts_index = eth_mac->tx_index;
 
@@ -388,7 +389,7 @@ XMC_ETH_MAC_STATUS_t XMC_ETH_MAC_SendFrame(XMC_ETH_MAC_t *const eth_mac, const u
       eth_mac->tx_index++;
       if (eth_mac->tx_index == eth_mac->num_tx_buf)
       {
-    	eth_mac->tx_index = 0U;
+      eth_mac->tx_index = 0U;
       }
       eth_mac->frame_end = NULL;
 
@@ -408,7 +409,7 @@ uint32_t XMC_ETH_MAC_ReadFrame(XMC_ETH_MAC_t *const eth_mac, uint8_t *frame, uin
   uint8_t const *src;
 
   XMC_ASSERT("XMC_ETH_MAC_ReadFrame:", eth_mac != NULL);
-  XMC_ASSERT("XMC_ETH_MAC_ReadFrame:", eth_mac->regs != ETH0);
+  XMC_ASSERT("XMC_ETH_MAC_ReadFrame:", eth_mac->regs == ETH0);
   XMC_ASSERT("XMC_ETH_MAC_ReadFrame:", (frame != NULL) && (len > 0));
 
   /* Fast-copy data to packet buffer */
@@ -428,8 +429,8 @@ uint32_t XMC_ETH_MAC_ReadFrame(XMC_ETH_MAC_t *const eth_mac, uint8_t *frame, uin
   if (eth_mac->regs->STATUS & ETH_STATUS_RU_Msk)
   {
     /* Receive buffer unavailable, resume DMA */
-	eth_mac->regs->STATUS = (uint32_t)ETH_STATUS_RU_Msk;
-	eth_mac->regs->RECEIVE_POLL_DEMAND = 0U;
+  eth_mac->regs->STATUS = (uint32_t)ETH_STATUS_RU_Msk;
+  eth_mac->regs->RECEIVE_POLL_DEMAND = 0U;
   }
 
   return (len);
@@ -477,27 +478,27 @@ XMC_ETH_MAC_STATUS_t XMC_ETH_MAC_SetManagmentClockDivider(XMC_ETH_MAC_t *const e
   reg = &(eth_mac->regs->GMII_ADDRESS);
   if (eth_mac_clk <= XMC_ETH_MAC_CLK_SPEED_35MHZ)
   {
-	*reg = XMC_ETH_MAC_MDC_DIVIDER_16;
+  *reg = XMC_ETH_MAC_MDC_DIVIDER_16;
   }
   else if (eth_mac_clk <= XMC_ETH_MAC_CLK_SPEED_60MHZ)
   {
-	*reg = XMC_ETH_MAC_MDC_DIVIDER_26;
+  *reg = XMC_ETH_MAC_MDC_DIVIDER_26;
   }
   else if (eth_mac_clk <= XMC_ETH_MAC_CLK_SPEED_100MHZ)
   {
-	*reg = XMC_ETH_MAC_MDC_DIVIDER_42;
+  *reg = XMC_ETH_MAC_MDC_DIVIDER_42;
   }
   else if (eth_mac_clk <= XMC_ETH_MAC_CLK_SPEED_150MHZ)
   {
-	*reg = XMC_ETH_MAC_MDC_DIVIDER_62;
+  *reg = XMC_ETH_MAC_MDC_DIVIDER_62;
   }
   else if (eth_mac_clk <= XMC_ETH_MAC_CLK_SPEED_200MHZ)
   {
-	*reg = XMC_ETH_MAC_MDC_DIVIDER_102;
+  *reg = XMC_ETH_MAC_MDC_DIVIDER_102;
   }
   else if (eth_mac_clk <= XMC_ETH_MAC_CLK_SPEED_250MHZ)
   {
-	*reg = XMC_ETH_MAC_MDC_DIVIDER_124;
+  *reg = XMC_ETH_MAC_MDC_DIVIDER_124;
   }
   else
   {
@@ -510,6 +511,8 @@ XMC_ETH_MAC_STATUS_t XMC_ETH_MAC_SetManagmentClockDivider(XMC_ETH_MAC_t *const e
 /* ETH MAC enable */
 void XMC_ETH_MAC_Enable(XMC_ETH_MAC_t *const eth_mac)
 {
+  XMC_UNUSED_ARG(eth_mac);
+
   XMC_SCU_CLOCK_EnableClock(XMC_SCU_CLOCK_ETH);
 #if UC_DEVICE != XMC4500
   XMC_SCU_CLOCK_UngatePeripheralClock(XMC_SCU_PERIPHERAL_CLOCK_ETH0);
@@ -520,6 +523,8 @@ void XMC_ETH_MAC_Enable(XMC_ETH_MAC_t *const eth_mac)
 /* ETH MAC disable */
 void XMC_ETH_MAC_Disable(XMC_ETH_MAC_t *const eth_mac)
 {
+  XMC_UNUSED_ARG(eth_mac);
+
   XMC_SCU_RESET_AssertPeripheralReset(XMC_SCU_PERIPHERAL_RESET_ETH0);
 #if UC_DEVICE != XMC4500
   XMC_SCU_CLOCK_GatePeripheralClock(XMC_SCU_PERIPHERAL_CLOCK_ETH0);
@@ -620,12 +625,12 @@ void XMC_ETH_MAC_EnableEvent(XMC_ETH_MAC_t *const eth_mac, uint32_t event)
   event &= (uint16_t)0x7fffU;
   if (XCM_ETH_MAC_IsNormalEvent(event))
   {
-	event |= (uint32_t)ETH_INTERRUPT_ENABLE_NIE_Msk;
+  event |= (uint32_t)ETH_INTERRUPT_ENABLE_NIE_Msk;
   }
 
   if (XCM_ETH_MAC_IsAbnormalEvent(event))
   {
-	event |= (uint32_t)ETH_INTERRUPT_ENABLE_AIE_Msk;
+  event |= (uint32_t)ETH_INTERRUPT_ENABLE_AIE_Msk;
   }
 
   eth_mac->regs->INTERRUPT_ENABLE |= event;
@@ -638,56 +643,64 @@ void XMC_ETH_MAC_DisableEvent(XMC_ETH_MAC_t *const eth_mac, uint32_t event)
 
   eth_mac->regs->INTERRUPT_MASK |= event >> 16U;
 
-  event &= (uint16_t)~0xffffU;
+  event &= 0x7fffU;
   eth_mac->regs->INTERRUPT_ENABLE &= ~event;
 }
 
 /* Clear event status */
 void XMC_ETH_MAC_ClearEventStatus(XMC_ETH_MAC_t *const eth_mac, uint32_t event)
 {
-  XMC_ASSERT("XMC_ETH_MAC_ClearDMAEventStatus: eth_mac is invalid", XMC_ETH_MAC_IsValidModule(eth_mac->regs));
+  XMC_ASSERT("XMC_ETH_MAC_ClearEventStatus: eth_mac is invalid", XMC_ETH_MAC_IsValidModule(eth_mac->regs));
 
   if ((eth_mac->regs->STATUS & ETH_STATUS_NIS_Msk) != 0U)
   {
-	event |= (uint32_t)ETH_STATUS_NIS_Msk;
+    event |= (uint32_t)ETH_STATUS_NIS_Msk;
   }
 
   if ((eth_mac->regs->STATUS & ETH_STATUS_AIS_Msk) != 0U)
   {
-	event |= (uint32_t)ETH_STATUS_AIS_Msk;
+    event |= (uint32_t)ETH_STATUS_AIS_Msk;
   }
 
-  eth_mac->regs->STATUS = event;
+  eth_mac->regs->STATUS = event & 0x0001FFFFU;
 }
 
 /* Obtain event status */
 uint32_t XMC_ETH_MAC_GetEventStatus(const XMC_ETH_MAC_t *const eth_mac)
 {
   uint32_t temp_status = 0;
-  XMC_ASSERT("XMC_ETH_MAC_GetDMAEventStatus: eth_mac is invalid", XMC_ETH_MAC_IsValidModule(eth_mac->regs));
+  XMC_ASSERT("XMC_ETH_MAC_GetEventStatus: eth_mac is invalid", XMC_ETH_MAC_IsValidModule(eth_mac->regs));
   
   temp_status =  (eth_mac->regs->STATUS & (uint32_t)0x7ffUL);
 
   return ((uint32_t)((eth_mac->regs->INTERRUPT_STATUS & (ETH_INTERRUPT_MASK_PMTIM_Msk | ETH_INTERRUPT_MASK_TSIM_Msk)) << 16U) |
-		  temp_status);
+      temp_status);
 }
 
 /* Return RX descriptor */
 void XMC_ETH_MAC_ReturnRxDescriptor(XMC_ETH_MAC_t *const eth_mac)
 {
   eth_mac->rx_desc[eth_mac->rx_index].status |= ETH_MAC_DMA_RDES0_OWN;
+  eth_mac->rx_index++;
+  if (eth_mac->rx_index == eth_mac->num_rx_buf)
+  {
+    eth_mac->rx_index = 0U;
+  } 
 }
 
 /* Return TX descriptor */
 void XMC_ETH_MAC_ReturnTxDescriptor(XMC_ETH_MAC_t *const eth_mac)
 {
-  eth_mac->tx_desc[eth_mac->tx_index].status |= ETH_MAC_DMA_TDES0_OWN;
-}
+  eth_mac->tx_ts_index = eth_mac->tx_index;
 
-/* Is TX descriptor owned by DMA? */
-bool XMC_ETH_MAC_IsTxDescriptorOwnedByDma(XMC_ETH_MAC_t *const eth_mac)
-{
-  return ((eth_mac->tx_desc[eth_mac->tx_index].status & ETH_MAC_DMA_TDES0_OWN) != 0U);
+  eth_mac->tx_desc[eth_mac->tx_index].status |= ETH_MAC_DMA_TDES0_CIC |ETH_MAC_DMA_TDES0_OWN;
+  eth_mac->tx_index++;
+  if (eth_mac->tx_index == eth_mac->num_tx_buf)
+  {
+    eth_mac->tx_index = 0U;
+  } 
+
+  eth_mac->frame_end = NULL;
 }
 
 /* Set VLAN tag */
@@ -707,26 +720,57 @@ void XMC_ETH_MAC_InitPTP(XMC_ETH_MAC_t *const eth_mac, uint32_t config)
   eth_mac->regs->INTERRUPT_MASK |= (uint32_t)ETH_INTERRUPT_MASK_TSIM_Msk;
 
   /* Enable time stamp */
-  eth_mac->regs->TIMESTAMP_CONTROL = config | (uint32_t)ETH_TIMESTAMP_CONTROL_TSENA_Msk;
+  eth_mac->regs->TIMESTAMP_CONTROL = ETH_TIMESTAMP_CONTROL_TSENA_Msk;
+
+  /* Program sub-second increment register based on PTP clock frequency = fSYS/2 */
+  /* the nanoseconds register has a resolution of ~0.465ns. */
+  eth_mac->regs->SUB_SECOND_INCREMENT = (uint32_t)((0x80000000U / (float)(XMC_SCU_CLOCK_GetSystemClockFrequency() / 2)) + 0.5F);
 
   if ((config & (uint32_t)XMC_ETH_MAC_TIMESTAMP_CONFIG_FINE_UPDATE) != 0U)
   {
-	/* Program addend register to obtain fSYS/2 from reference clock (fSYS) */
-	eth_mac->regs->TIMESTAMP_ADDEND = (uint32_t)0x80000000U;
-	eth_mac->regs->TIMESTAMP_CONTROL |= (uint32_t)ETH_TIMESTAMP_CONTROL_TSADDREG_Msk;
-
-	/* Program sub-second increment register based on PTP clock frequency = fSYS/2 */
-	/* the nanoseconds register has a resolution of ~0.465ns. */
-	eth_mac->regs->SUB_SECOND_INCREMENT = (uint32_t)((1.0F / (0x80000000U)) * (2.0F / XMC_SCU_CLOCK_GetSystemClockFrequency()));
+    /* Program addend register to obtain fSYS/2 from reference clock (fSYS) */
+    eth_mac->regs->TIMESTAMP_ADDEND = (uint32_t)0x80000000U;
+    /* Addend register update */
+    eth_mac->regs->TIMESTAMP_CONTROL |= (uint32_t)ETH_TIMESTAMP_CONTROL_TSADDREG_Msk;
+    /* Poll the Timestamp Control register until the bit TSADDREG is cleared */
+    while (eth_mac->regs->TIMESTAMP_CONTROL & ETH_TIMESTAMP_CONTROL_TSADDREG_Msk);
   }
-  else
+  
+  eth_mac->regs->TIMESTAMP_CONTROL |= config | (uint32_t)ETH_TIMESTAMP_CONTROL_TSINIT_Msk;
+  while (eth_mac->regs->TIMESTAMP_CONTROL & ETH_TIMESTAMP_CONTROL_TSINIT_Msk);  
+}
+
+/* Initialize PTP using a given time */
+void XMC_ETH_MAC_InitPTPEx(XMC_ETH_MAC_t *const eth_mac, uint32_t config, XMC_ETH_MAC_TIME_t *const time)
+{
+  XMC_ASSERT("XMC_ETH_MAC_InitPTP: eth_mac is invalid", XMC_ETH_MAC_IsValidModule(eth_mac->regs));
+
+  /* Mask the time stamp interrupt */
+  eth_mac->regs->INTERRUPT_MASK |= (uint32_t)ETH_INTERRUPT_MASK_TSIM_Msk;
+
+  /* Enable time stamp */
+  eth_mac->regs->TIMESTAMP_CONTROL = ETH_TIMESTAMP_CONTROL_TSENA_Msk;
+
+  /* Program sub-second increment register based on PTP clock frequency = fSYS/2 */
+  /* the nanoseconds register has a resolution of ~0.465ns. */
+  eth_mac->regs->SUB_SECOND_INCREMENT = (uint32_t)((0x80000000U / (float)(XMC_SCU_CLOCK_GetSystemClockFrequency() / 2)) + 0.5F);
+
+  if ((config & (uint32_t)XMC_ETH_MAC_TIMESTAMP_CONFIG_FINE_UPDATE) != 0U)
   {
-	/* Program sub-second increment register based on PTP clock frequency = fSYS */
-	/* the nanoseconds register has a resolution of ~0.465ns. */
-	eth_mac->regs->SUB_SECOND_INCREMENT = (uint32_t)((1.0F / (0x80000000U)) * (1.0F / XMC_SCU_CLOCK_GetSystemClockFrequency()));
+    /* Program addend register to obtain fSYS/2 from reference clock (fSYS) */
+    eth_mac->regs->TIMESTAMP_ADDEND = (uint32_t)0x80000000U;
+    /* Addend register update */
+    eth_mac->regs->TIMESTAMP_CONTROL |= (uint32_t)ETH_TIMESTAMP_CONTROL_TSADDREG_Msk;
+    /* Poll the Timestamp Control register until the bit TSADDREG is cleared */
+    while (eth_mac->regs->TIMESTAMP_CONTROL & ETH_TIMESTAMP_CONTROL_TSADDREG_Msk);
   }
+  
+  /* Initialize the system time */
+  eth_mac->regs->SYSTEM_TIME_NANOSECONDS_UPDATE = time->nanoseconds;
+  eth_mac->regs->SYSTEM_TIME_SECONDS_UPDATE = time->seconds;
 
-  eth_mac->regs->TIMESTAMP_CONTROL |= (uint32_t)ETH_TIMESTAMP_CONTROL_TSINIT_Msk;
+  eth_mac->regs->TIMESTAMP_CONTROL |= config | (uint32_t)ETH_TIMESTAMP_CONTROL_TSINIT_Msk;
+  while (eth_mac->regs->TIMESTAMP_CONTROL & ETH_TIMESTAMP_CONTROL_TSINIT_Msk);  
 }
 
 /* Get PTP time */
@@ -734,8 +778,21 @@ void XMC_ETH_MAC_GetPTPTime(XMC_ETH_MAC_t *const eth_mac, XMC_ETH_MAC_TIME_t *co
 {
   XMC_ASSERT("XMC_ETH_MAC_GetPTPTime: eth_mac is invalid", XMC_ETH_MAC_IsValidModule(eth_mac->regs));
 
-  time->nanoseconds = (uint32_t)(eth_mac->regs->SYSTEM_TIME_NANOSECONDS * (0x80000000U / 1000000000.0F));
+  time->nanoseconds = (uint32_t)(eth_mac->regs->SYSTEM_TIME_NANOSECONDS * (1000000000.0F / 0x80000000U)); /* accuracy of 0.46 ns */
   time->seconds = eth_mac->regs->SYSTEM_TIME_SECONDS;
+}
+
+/* Set PTP time */
+void XMC_ETH_MAC_SetPTPTime(XMC_ETH_MAC_t *const eth_mac, XMC_ETH_MAC_TIME_t *const time)
+{
+  XMC_ASSERT("XMC_ETH_MAC_GetPTPTime: eth_mac is invalid", XMC_ETH_MAC_IsValidModule(eth_mac->regs));
+
+  eth_mac->regs->SYSTEM_TIME_SECONDS_UPDATE = time->seconds;
+  eth_mac->regs->SYSTEM_TIME_NANOSECONDS_UPDATE = time->nanoseconds;
+
+  /* Initialize precision timer */
+  ETH0->TIMESTAMP_CONTROL |= ETH_TIMESTAMP_CONTROL_TSINIT_Msk;
+  while (eth_mac->regs->TIMESTAMP_CONTROL & ETH_TIMESTAMP_CONTROL_TSINIT_Msk);
 }
 
 /* Update PTP time */
@@ -744,11 +801,12 @@ void XMC_ETH_MAC_UpdatePTPTime(XMC_ETH_MAC_t *const eth_mac, const XMC_ETH_MAC_T
   uint32_t temp;
 
   XMC_ASSERT("XMC_ETH_MAC_UpdatePTPTime: eth_mac is invalid", XMC_ETH_MAC_IsValidModule(eth_mac->regs));
+  XMC_ASSERT("XMC_ETH_MAC_UpdatePTPTime: time.time_stamp_nanoseconds not in range", (time->nanoseconds < 1000000000.0F));
 
-  temp = (uint32_t)(abs(time->nanoseconds) * (100000000.0F / (0x80000000U)));
-  if (time->nanoseconds >= 0)
+  temp = (uint32_t)(abs(time->nanoseconds) * (0x80000000U / 1000000000.0F));
+  if (time->nanoseconds < 0)
   {
-	temp |= (uint32_t)ETH_SYSTEM_TIME_NANOSECONDS_UPDATE_ADDSUB_Msk;
+    temp |= (uint32_t)ETH_SYSTEM_TIME_NANOSECONDS_UPDATE_ADDSUB_Msk;
   }
 
   eth_mac->regs->SYSTEM_TIME_NANOSECONDS_UPDATE = temp;
@@ -761,8 +819,9 @@ void XMC_ETH_MAC_UpdatePTPTime(XMC_ETH_MAC_t *const eth_mac, const XMC_ETH_MAC_T
 void XMC_ETH_MAC_SetPTPAlarm(XMC_ETH_MAC_t *const eth_mac, const XMC_ETH_MAC_TIME_t *const time)
 {
   XMC_ASSERT("XMC_ETH_MAC_SetPTPAlarm: eth_mac is invalid", XMC_ETH_MAC_IsValidModule(eth_mac->regs));
+  XMC_ASSERT("XMC_ETH_MAC_SetPTPAlarm: time.time_stamp_nanoseconds not in range", (time->nanoseconds < 1000000000.0F));
 
-  eth_mac->regs->TARGET_TIME_NANOSECONDS = (uint32_t)(time->nanoseconds * (100000000.0F / (0x80000000U)));
+  eth_mac->regs->TARGET_TIME_NANOSECONDS = (uint32_t)(time->nanoseconds * (0x80000000U / 1000000000.0F));
   eth_mac->regs->TARGET_TIME_SECONDS = time->seconds;
 }
 
@@ -776,6 +835,23 @@ void XMC_ETH_MAC_AdjustPTPClock(XMC_ETH_MAC_t *const eth_mac, uint32_t correctio
 
   /* Update addend register */
   eth_mac->regs->TIMESTAMP_CONTROL |= (uint32_t)ETH_TIMESTAMP_CONTROL_TSADDREG_Msk;
+
+  /* Poll the Timestamp Control register until the bit TSADDREG is cleared */
+  while (eth_mac->regs->TIMESTAMP_CONTROL & ETH_TIMESTAMP_CONTROL_TSADDREG_Msk);  
+}
+
+/* Update Addend */
+void XMC_ETH_MAC_UpdateAddend(XMC_ETH_MAC_t *const eth_mac, uint32_t addend)
+{
+  XMC_ASSERT("XMC_ETH_MAC_AdjustPTPClock: eth_mac is invalid", XMC_ETH_MAC_IsValidModule(eth_mac->regs));
+
+  eth_mac->regs->TIMESTAMP_ADDEND = addend;
+
+  /* Update addend register */
+  eth_mac->regs->TIMESTAMP_CONTROL |= (uint32_t)ETH_TIMESTAMP_CONTROL_TSADDREG_Msk;
+
+  /* Poll the Timestamp Control register until the bit TSADDREG is cleared */
+  while (eth_mac->regs->TIMESTAMP_CONTROL & ETH_TIMESTAMP_CONTROL_TSADDREG_Msk);
 }
 
 /* Set PTP status */
@@ -802,10 +878,17 @@ XMC_ETH_MAC_STATUS_t XMC_ETH_MAC_GetRxTimeStamp(XMC_ETH_MAC_t *const eth_mac, XM
   }
   else
   {
-    time->nanoseconds = (int32_t)rx_desc->time_stamp_nanoseconds;
-    time->seconds = rx_desc->time_stamp_seconds;
+  	if ((rx_desc->status & (ETH_MAC_DMA_RDES0_TSA | ETH_MAC_DMA_RDES0_LS)) == (ETH_MAC_DMA_RDES0_TSA | ETH_MAC_DMA_RDES0_LS))
+  	{
+      time->nanoseconds = (int32_t)rx_desc->time_stamp_nanoseconds;
+      time->seconds = rx_desc->time_stamp_seconds;      
 
-    status = XMC_ETH_MAC_STATUS_OK;
+      status = XMC_ETH_MAC_STATUS_OK;
+    }
+    else
+    {
+      status = XMC_ETH_MAC_STATUS_ERROR;	
+    }
   }
 
   return status;
@@ -827,10 +910,17 @@ XMC_ETH_MAC_STATUS_t XMC_ETH_MAC_GetTxTimeStamp(XMC_ETH_MAC_t *const eth_mac, XM
   }
   else
   {
-    time->nanoseconds = (int32_t)tx_desc->time_stamp_nanoseconds;
-    time->seconds = tx_desc->time_stamp_seconds;
+  	if ((tx_desc->status & (ETH_MAC_DMA_TDES0_TTSS | ETH_MAC_DMA_TDES0_LS)) == (ETH_MAC_DMA_TDES0_TTSS | ETH_MAC_DMA_TDES0_LS))
+  	{
+      time->nanoseconds = (int32_t)tx_desc->time_stamp_nanoseconds;
+      time->seconds = tx_desc->time_stamp_seconds;
 
-    status = XMC_ETH_MAC_STATUS_OK;
+      status = XMC_ETH_MAC_STATUS_OK;
+    }
+    else
+    {
+      status = XMC_ETH_MAC_STATUS_ERROR;
+    }
   }
 
   return status;
