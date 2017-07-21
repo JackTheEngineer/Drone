@@ -9,12 +9,10 @@
 #define SRC_RTE_TIMETASKS_H_
 
 #include "base.h"
+#include "tick_.h"
 
-#define TICK_TIME_MS 5
-#define MS_100 (100/TICK_TIME_MS)
+#define TIME100MS (uint32_t)100
 
-void Run_Next_Task(uint32_t *ticks);
-void Tick_Interrupt_Init(void);
-
+void TimeTasks_run();
 
 #endif /* SRC_RTE_TIMETASKS_H_ */

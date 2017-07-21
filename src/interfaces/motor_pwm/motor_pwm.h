@@ -20,9 +20,9 @@
 #define SLICE0_OUTPUT		P0_0
 
 void PWM_Init(void);
-void PWM_Motor1_Set_Rate(uint32_t Speed);
-void PWM_Motor2_Set_Rate(uint32_t Speed);
-void PWM_Motor3_Set_Rate(uint32_t Speed);
-void PWM_Motor4_Set_Rate(uint32_t Speed);
+void PWM_Motor1_Set_Rate(uint16_t Speed);
+void PWM_Motor2_Set_Rate(uint16_t Speed);
+void PWM_Motor3_Set_Rate(uint16_t Speed);
+void PWM_Motor4_Set_Rate(uint16_t Speed);
 
 #endif /* PWM_H_ */
