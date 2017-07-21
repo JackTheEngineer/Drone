@@ -202,43 +202,62 @@ void PWM_Motor3_Set_Rate(uint16_t Speed){
 void PWM_Motor4_Set_Rate(uint16_t Speed){
 }
 
-void PWM_Init(void){
-	XMC_CCU8_MODULE_t * const module = (XMC_CCU8_MODULE_t*) CCU80;
-	XMC_CCU8_SLICE_t * const slice = (XMC_CCU8_SLICE_t*) CCU80_CC80;
-	uint8_t const slice_number = 0U;
-	uint32_t const shadow_transfer_enable_code = XMC_CCU8_SHADOW_TRANSFER_SLICE_0;
-	uint32_t const shadow_transfer_enable_dither_code = XMC_CCU8_SHADOW_TRANSFER_DITHER_SLICE_0;
-	uint16_t period_match_value = 1000U;
-	XMC_GPIO_PORT_t * gpio_base  = (XMC_GPIO_PORT_t *) PORT0_BASE;
-	uint32_t gpio_pin = 2U;
-	XMC_GPIO_CONFIG_t const * gpio_config_ptr = &motor_pwm_out_config;
+typedef struct _Easy_CCU8_PWM_{
+	XMC_CCU8_MODULE_t * const module; /* CCU8 Base pointer, (XMC_CCU8_MODULE_t*) CCU80; */
+	XMC_CCU8_SLICE_t * const slice;	  /* slice  base pointer, f.e (XMC_CCU8_SLICE_t*) CCU80_CC80; */
+	uint8_t const slice_number; 
+	uint32_t const shadow_transfer_enable_code; /* f.e XMC_CCU8_SHADOW_TRANSFER_SLICE_0; */
+	uint32_t const shadow_transfer_enable_dither_code; /* f.e XMC_CCU8_SHADOW_TRANSFER_DITHER_SLICE_0; */
+	uint16_t period_match_value; 
+	XMC_GPIO_PORT_t * gpio_base; /* f.e. (XMC_GPIO_PORT_t *) PORT0_BASE; */
+	uint32_t gpio_pin; /* pin number */
+	XMC_GPIO_CONFIG_t const * gpio_config_ptr; 
+}local_pwm_t;
 
+const local_pwm_t pwm1 = {
+	.module = (XMC_CCU8_MODULE_t*) CCU80,
+	.slice = (XMC_CCU8_SLICE_t*) CCU80_CC80,
+	.slice_number = 0U,
+	.shadow_transfer_enable_code = XMC_CCU8_SHADOW_TRANSFER_SLICE_0,
+	.shadow_transfer_enable_dither_code = XMC_CCU8_SHADOW_TRANSFER_DITHER_SLICE_0,
+	.period_match_value = 1000U,
+	.gpio_base  = (XMC_GPIO_PORT_t *) PORT0_BASE,
+	.gpio_pin = 2U,
+	.gpio_config_ptr = &motor_pwm_out_config,
+};
+
+void InitOnePWMPort(local_pwm_t const * pwm){
 	/* Initialize consumed Apps */
-	XMC_CCU8_Init(module, XMC_CCU8_SLICE_MCMS_ACTION_TRANSFER_PR_CR);
+	XMC_CCU8_Init(pwm->module, XMC_CCU8_SLICE_MCMS_ACTION_TRANSFER_PR_CR);
 
 	/* Start the prescaler */
-	XMC_CCU8_StartPrescaler(module);
-	XMC_CCU8_SLICE_CompareInit(slice, &PWM_CCU8_0_timer_handle);
+	XMC_CCU8_StartPrescaler(pwm->module);
+	XMC_CCU8_SLICE_CompareInit(pwm->slice, &PWM_CCU8_0_timer_handle);
 	
 	/* Set period match value of the timer  */
-	XMC_CCU8_SLICE_SetTimerPeriodMatch(slice, period_match_value);
+	XMC_CCU8_SLICE_SetTimerPeriodMatch(pwm->slice, pwm->period_match_value);
 
 	/* Set timer compare match value for channel 1 */
-	XMC_CCU8_SLICE_SetTimerCompareMatch(slice, XMC_CCU8_SLICE_COMPARE_CHANNEL_1, (uint16_t) 0);
+	/* Set the pwm to 0 */
+	XMC_CCU8_SLICE_SetTimerCompareMatch(pwm->slice, XMC_CCU8_SLICE_COMPARE_CHANNEL_1, (uint16_t) 0);
 
 	/* Transfer value from shadow timer registers to actual timer registers */
-	XMC_CCU8_EnableShadowTransfer(module, shadow_transfer_enable_code);
-	XMC_CCU8_EnableShadowTransfer(module, shadow_transfer_enable_dither_code);
+	XMC_CCU8_EnableShadowTransfer(pwm->module, pwm->shadow_transfer_enable_code);
+	XMC_CCU8_EnableShadowTransfer(pwm->module, pwm->shadow_transfer_enable_dither_code);
 
-	XMC_CCU8_SLICE_DeadTimeInit(slice, &PWM_CCU8_0_dt_config);
+	//	XMC_CCU8_SLICE_DeadTimeInit(pwm->slice, &PWM_CCU8_0_dt_config);
 
-	XMC_GPIO_Init(gpio_base,
-		      gpio_pin,
-		      gpio_config_ptr);
-	
-	XMC_CCU8_EnableClock(module, slice_number);
-	XMC_CCU8_SLICE_StartTimer(slice);
+	XMC_GPIO_Init(pwm->gpio_base,
+		      pwm->gpio_pin,
+		      pwm->gpio_config_ptr);
+	XMC_CCU8_EnableClock(pwm->module, pwm->slice_number);
+	XMC_CCU8_SLICE_StartTimer(pwm->slice);
 }
+	
+void PWM_Init(void){
+	InitOnePWMPort(&pwm1);
+}
+
 
 
 
