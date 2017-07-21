@@ -7,7 +7,7 @@
 #include "timetasks.h"
 #include "led_module.h"
 
-volatile uint32_t volatile tick_count;
+extern uint32_t volatile tick_count;
 
 void TimeTasks_run(void){
 	if((tick_count % TIME100MS) == 0){
