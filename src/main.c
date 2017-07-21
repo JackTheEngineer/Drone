@@ -12,7 +12,8 @@ int main(void)
 	TickInterrupt_init();
 	leds_init();
 
-	PWM_Motor1_Set_Rate(400);
+	PWM_Motor1_Set_Rate(800);
+	PWM_Motor2_Set_Rate(800);
 	while(1U){
 		TimeTasks_run();
 	}
