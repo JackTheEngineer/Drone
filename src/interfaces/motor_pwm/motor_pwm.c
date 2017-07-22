@@ -9,7 +9,8 @@
 #include "xmc_scu.h"
 #include "xmc_ccu8.h"
 
-#include "pwm_ccu8.h"
+void SetCompareValue(local_pwm_t const * pwm, uint16_t compare_value);
+void InitOnePWMPort(local_pwm_t const * pwm);
 
 const XMC_CCU8_SLICE_COMPARE_CONFIG_t CCU8_timer_config     =
 {
@@ -68,6 +69,10 @@ typedef struct _Easy_CCU8_PWM_{
 	XMC_GPIO_CONFIG_t const * gpio_config_ptr; 
 }local_pwm_t;
 
+
+/* For the appropriate available pinouts lookup 
+ * page 2557 of the micro-Keil xmc4500 manual 
+ */
 const local_pwm_t pwm1_container = {
 	.module = (XMC_CCU8_MODULE_t*) CCU80,
 	.slice = (XMC_CCU8_SLICE_t*) CCU80_CC80,
@@ -80,7 +85,6 @@ const local_pwm_t pwm1_container = {
 	.gpio_pin = 2U,
 	.gpio_config_ptr = &motor_pwm_out_config,
 };
-
 const local_pwm_t pwm2_container = {
 	.module = (XMC_CCU8_MODULE_t*) CCU80,
 	.slice = (XMC_CCU8_SLICE_t*) CCU80_CC82,
@@ -93,9 +97,35 @@ const local_pwm_t pwm2_container = {
 	.gpio_pin = 3U,
 	.gpio_config_ptr = &motor_pwm_out_config,
 };
+const local_pwm_t pwm3_container = {
+	.module = (XMC_CCU8_MODULE_t*) CCU80,
+	.slice = (XMC_CCU8_SLICE_t*) CCU80_CC83,
+	.slice_number = 3U,
+	.compare_channel =  XMC_CCU8_SLICE_COMPARE_CHANNEL_1,
+	.shadow_transfer_enable_code = XMC_CCU8_SHADOW_TRANSFER_SLICE_3,
+	.shadow_transfer_enable_dither_code = XMC_CCU8_SHADOW_TRANSFER_DITHER_SLICE_3,
+	.period_match_value = 1000U,
+	.gpio_base  = (XMC_GPIO_PORT_t *) PORT0_BASE,
+	.gpio_pin = 6U,
+	.gpio_config_ptr = &motor_pwm_out_config,
+};
+const local_pwm_t pwm4_container = {
+	.module = (XMC_CCU8_MODULE_t*) CCU80,
+	.slice = (XMC_CCU8_SLICE_t*) CCU80_CC81,
+	.slice_number = 1U,
+	.compare_channel =  XMC_CCU8_SLICE_COMPARE_CHANNEL_1,
+	.shadow_transfer_enable_code = XMC_CCU8_SHADOW_TRANSFER_SLICE_1,
+	.shadow_transfer_enable_dither_code = XMC_CCU8_SHADOW_TRANSFER_DITHER_SLICE_1,
+	.period_match_value = 1000U,
+	.gpio_base  = (XMC_GPIO_PORT_t *) PORT0_BASE,
+	.gpio_pin = 4U,
+	.gpio_config_ptr = &motor_pwm_out_config,
+};
 
 local_pwm_t const *pwm1 = &pwm1_container;
 local_pwm_t const *pwm2 = &pwm2_container;
+local_pwm_t const *pwm3 = &pwm3_container;
+local_pwm_t const *pwm4 = &pwm4_container;
 
 void SetCompareValue(local_pwm_t const * pwm, uint16_t compare_value){
 	XMC_CCU8_SLICE_SetTimerCompareMatch(pwm->slice,
@@ -106,6 +136,7 @@ void SetCompareValue(local_pwm_t const * pwm, uint16_t compare_value){
 	XMC_CCU8_EnableShadowTransfer(pwm->module,
 				      pwm->shadow_transfer_enable_dither_code);
 }
+
 /* Requires value from 0 - 1000 */
 void PWM_Motor1_Set_Rate(uint16_t Speed){//
 	SetCompareValue(pwm1, Speed);
@@ -114,8 +145,10 @@ void PWM_Motor2_Set_Rate(uint16_t Speed){
 	SetCompareValue(pwm2, Speed);
 }
 void PWM_Motor3_Set_Rate(uint16_t Speed){
+	SetCompareValue(pwm3, Speed);
 }
 void PWM_Motor4_Set_Rate(uint16_t Speed){
+	SetCompareValue(pwm4, Speed);
 }
 
 void InitOnePWMPort(local_pwm_t const * pwm){
@@ -144,6 +177,8 @@ void InitOnePWMPort(local_pwm_t const * pwm){
 void PWM_Init(void){
 	InitOnePWMPort(pwm1);
 	InitOnePWMPort(pwm2);
+	InitOnePWMPort(pwm3);
+	InitOnePWMPort(pwm4);
 }
 
 
