@@ -8,6 +8,21 @@
 #include "motor_pwm.h"
 #include "xmc_scu.h"
 #include "xmc_ccu8.h"
+#include "xmc_gpio.h"
+
+typedef struct _Easy_CCU8_PWM_{
+	XMC_CCU8_MODULE_t * const module; /* CCU8 Base pointer, (XMC_CCU8_MODULE_t*) CCU80; */
+	XMC_CCU8_SLICE_t * const slice;	  /* slice  base pointer, f.e (XMC_CCU8_SLICE_t*) CCU80_CC80; */
+	uint8_t slice_number;
+	XMC_CCU8_SLICE_COMPARE_CHANNEL_t compare_channel;
+	uint32_t  shadow_transfer_enable_code; /* f.e XMC_CCU8_SHADOW_TRANSFER_SLICE_0; */
+	uint32_t  shadow_transfer_enable_dither_code; /* f.e XMC_CCU8_SHADOW_TRANSFER_DITHER_SLICE_0; */
+	uint16_t period_match_value; 
+	XMC_GPIO_PORT_t * gpio_base; /* f.e. (XMC_GPIO_PORT_t *) PORT0_BASE; */
+	uint32_t gpio_pin; /* pin number */
+	XMC_GPIO_CONFIG_t const * gpio_config_ptr; 
+}local_pwm_t;
+
 
 void SetCompareValue(local_pwm_t const * pwm, uint16_t compare_value);
 void InitOnePWMPort(local_pwm_t const * pwm);
@@ -55,20 +70,6 @@ const XMC_GPIO_CONFIG_t  motor_pwm_out_config   =
 		.output_level        = XMC_GPIO_OUTPUT_LEVEL_LOW,
 		.output_strength     = XMC_GPIO_OUTPUT_STRENGTH_WEAK,
 };
-
-typedef struct _Easy_CCU8_PWM_{
-	XMC_CCU8_MODULE_t * const module; /* CCU8 Base pointer, (XMC_CCU8_MODULE_t*) CCU80; */
-	XMC_CCU8_SLICE_t * const slice;	  /* slice  base pointer, f.e (XMC_CCU8_SLICE_t*) CCU80_CC80; */
-	uint8_t slice_number;
-	XMC_CCU8_SLICE_COMPARE_CHANNEL_t compare_channel;
-	uint32_t  shadow_transfer_enable_code; /* f.e XMC_CCU8_SHADOW_TRANSFER_SLICE_0; */
-	uint32_t  shadow_transfer_enable_dither_code; /* f.e XMC_CCU8_SHADOW_TRANSFER_DITHER_SLICE_0; */
-	uint16_t period_match_value; 
-	XMC_GPIO_PORT_t * gpio_base; /* f.e. (XMC_GPIO_PORT_t *) PORT0_BASE; */
-	uint32_t gpio_pin; /* pin number */
-	XMC_GPIO_CONFIG_t const * gpio_config_ptr; 
-}local_pwm_t;
-
 
 /* For the appropriate available pinouts lookup 
  * page 2557 of the micro-Keil xmc4500 manual 
@@ -180,8 +181,4 @@ void PWM_Init(void){
 	InitOnePWMPort(pwm3);
 	InitOnePWMPort(pwm4);
 }
-
-
-
-
 
