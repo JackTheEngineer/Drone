@@ -10,6 +10,9 @@
 #include "xmc_ccu8.h"
 #include "xmc_gpio.h"
 
+#define CPU_FREQU 120000000
+#define PRESCALER 6U
+
 typedef struct _Easy_CCU8_PWM_{
 	XMC_CCU8_MODULE_t * const module; /* CCU8 Base pointer, (XMC_CCU8_MODULE_t*) CCU80; */
 	XMC_CCU8_SLICE_t * const slice;	  /* slice  base pointer, f.e (XMC_CCU8_SLICE_t*) CCU80_CC80; */
@@ -25,11 +28,11 @@ typedef struct _Easy_CCU8_PWM_{
 
 
 void SetCompareValue(local_pwm_t const * pwm, uint16_t compare_value);
-void InitOnePWMPort(local_pwm_t const * pwm);
-
+void InitPWMPort(local_pwm_t const * pwm);
+n
 const XMC_CCU8_SLICE_COMPARE_CONFIG_t CCU8_timer_config     =
 {
-		.timer_mode            = (uint32_t)XMC_CCU8_SLICE_TIMER_COUNT_MODE_CA,
+		.timer_mode            = (uint32_t)XMC_CCU8_SLICE_TIMER_COUNT_MODE_EA,
 		.monoshot              = (uint32_t)XMC_CCU8_SLICE_TIMER_REPEAT_MODE_REPEAT,
 		.shadow_xfer_clear     = 0U,
 		.dither_timer_period   = 0U,
@@ -58,7 +61,7 @@ const XMC_CCU8_SLICE_COMPARE_CONFIG_t CCU8_timer_config     =
 		.selector_out2         = XMC_CCU8_SOURCE_OUT2_ST2,
 		.selector_out3         = XMC_CCU8_SOURCE_OUT3_INV_ST2,
 #endif
-		.prescaler_initval     = 4U,
+		.prescaler_initval     = PRESCALER,
 		.float_limit           = 0U,
 		.dither_limit          = 0U,
 		.timer_concatenation   = 0U,
@@ -68,7 +71,7 @@ const XMC_GPIO_CONFIG_t  motor_pwm_out_config   =
 {
 		.mode                = XMC_GPIO_MODE_OUTPUT_PUSH_PULL_ALT3,
 		.output_level        = XMC_GPIO_OUTPUT_LEVEL_LOW,
-		.output_strength     = XMC_GPIO_OUTPUT_STRENGTH_WEAK,
+		.output_strength     = XMC_GPIO_OUTPUT_STRENGTH_STRONG_SHARP_EDGE,
 };
 
 /* For the appropriate available pinouts lookup 
@@ -128,14 +131,41 @@ local_pwm_t const *pwm2 = &pwm2_container;
 local_pwm_t const *pwm3 = &pwm3_container;
 local_pwm_t const *pwm4 = &pwm4_container;
 
-void SetCompareValue(local_pwm_t const * pwm, uint16_t compare_value){
-	XMC_CCU8_SLICE_SetTimerCompareMatch(pwm->slice,
-					    pwm->compare_channel,
-					    compare_value);
+void EnableShadowTransfer(local_pwm_t const * pwm){
 	XMC_CCU8_EnableShadowTransfer(pwm->module,
 				      pwm->shadow_transfer_enable_code);
 	XMC_CCU8_EnableShadowTransfer(pwm->module,
 				      pwm->shadow_transfer_enable_dither_code);
+}
+
+void SetCompareValue(local_pwm_t const * pwm, uint16_t compare_value){
+	XMC_CCU8_SLICE_SetTimerCompareMatch(pwm->slice,
+					    pwm->compare_channel,
+					    compare_value);
+	EnableShadowTransfer(pwm);
+}
+
+void SetPeriodMatch(local_pwm_t const * pwm, uint16_t period_match){
+	XMC_CCU8_SLICE_SetTimerPeriodMatch(pwm->slice, period_match);
+	EnableShadowTransfer(pwm);
+}
+
+uint16_t calculate_PeriodMatchValue(uint32_t fclk, uint32_t frequency, uint16_t prescaler){
+	uint32_t tmp = fclk/(1<<(prescaler));
+	return (uint16_t)((float)tmp/(float)frequency);
+}
+
+void SetFrequency(local_pwm_t const * pwm, uint32_t frequency){
+	uint16_t period_match = calculate_PeriodMatchValue(CPU_FREQU, frequency, PRESCALER);
+	XMC_CCU8_SLICE_SetTimerPeriodMatch(pwm->slice, period_match);
+	XMC_CCU8_SLICE_SetTimerCompareMatch(pwm->slice,
+					    pwm->compare_channel,
+					    (period_match/2));
+	EnableShadowTransfer(pwm);
+}
+
+void Pin3_set_frequ(uint32_t frequ){
+	SetFrequency(pwm2, frequ);
 }
 
 /* Requires value from 0 - 1000 */
@@ -152,7 +182,7 @@ void PWM_Motor4_Set_Rate(uint16_t Speed){
 	SetCompareValue(pwm4, Speed);
 }
 
-void InitOnePWMPort(local_pwm_t const * pwm){
+void InitPWMPort(local_pwm_t const * pwm){
 	/* Initialize consumed Apps */
 	XMC_CCU8_Init(pwm->module, XMC_CCU8_SLICE_MCMS_ACTION_TRANSFER_PR_CR);
 
@@ -170,15 +200,14 @@ void InitOnePWMPort(local_pwm_t const * pwm){
 	XMC_GPIO_Init(pwm->gpio_base,
 		      pwm->gpio_pin,
 		      pwm->gpio_config_ptr);
-	
 	XMC_CCU8_EnableClock(pwm->module, pwm->slice_number);
 	XMC_CCU8_SLICE_StartTimer(pwm->slice);
 }
 	
 void PWM_Init(void){
-	InitOnePWMPort(pwm1);
-	InitOnePWMPort(pwm2);
-	InitOnePWMPort(pwm3);
-	InitOnePWMPort(pwm4);
+	InitPWMPort(pwm1);
+	InitPWMPort(pwm2);
+	InitPWMPort(pwm3);
+	InitPWMPort(pwm4);
 }
 
