@@ -20,4 +20,9 @@
 #define POINTER_TO_CONTAINER(type, name) type GLUE(name,_container); type *name = &(GLUE(name,_container))
 #define STATIC_POINTER_TO_CONTAINER(type, name) static type GLUE(name,_container); static type *name = &(GLUE(name,_container))
 
+typedef enum _Direction_{
+	UP,
+	DOWN,
+}Direction_t;
+
 #endif

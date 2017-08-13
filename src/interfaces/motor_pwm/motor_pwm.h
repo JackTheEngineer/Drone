@@ -11,10 +11,6 @@
 #include "base.h"
 
 void PWM_Init(void);
-void PWM_Motor1_Set_Rate(uint16_t Speed);
-void PWM_Motor2_Set_Rate(uint16_t Speed);
-void PWM_Motor3_Set_Rate(uint16_t Speed);
-void PWM_Motor4_Set_Rate(uint16_t Speed);
-void Pin3_set_frequ(uint32_t frequ);
+void PWM_Motor_Set_Rate(uint16_t Speed, uint8_t motor_index);
 
 #endif /* PWM_H_ */

@@ -40,10 +40,10 @@ int main(void)
 	leds_init();
 	buttons_init();
 
-	PWM_Motor1_Set_Rate(500);
-	PWM_Motor2_Set_Rate(500);
-	PWM_Motor3_Set_Rate(500);
-	PWM_Motor4_Set_Rate(500);
+	PWM_Motor_Set_Rate(100, 0);
+	PWM_Motor_Set_Rate(100, 1);
+	PWM_Motor_Set_Rate(100, 2);
+	PWM_Motor_Set_Rate(100, 3);
 
 	while(1U){
 		if(UpdateTime(&last_ticks)){

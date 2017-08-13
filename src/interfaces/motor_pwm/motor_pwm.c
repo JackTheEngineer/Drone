@@ -12,6 +12,8 @@
 
 #define CPU_FREQU 120000000
 #define PRESCALER 6U
+#define STARTPERIODMATCH 37500U /* Makes 50 Hz */
+#define NUM_OF_MOTORS 4
 
 typedef struct _Easy_CCU8_PWM_{
 	XMC_CCU8_MODULE_t * const module; /* CCU8 Base pointer, (XMC_CCU8_MODULE_t*) CCU80; */
@@ -29,7 +31,7 @@ typedef struct _Easy_CCU8_PWM_{
 
 void SetCompareValue(local_pwm_t const * pwm, uint16_t compare_value);
 void InitPWMPort(local_pwm_t const * pwm);
-n
+
 const XMC_CCU8_SLICE_COMPARE_CONFIG_t CCU8_timer_config     =
 {
 		.timer_mode            = (uint32_t)XMC_CCU8_SLICE_TIMER_COUNT_MODE_EA,
@@ -84,7 +86,7 @@ const local_pwm_t pwm1_container = {
 	.compare_channel =  XMC_CCU8_SLICE_COMPARE_CHANNEL_1,
 	.shadow_transfer_enable_code = XMC_CCU8_SHADOW_TRANSFER_SLICE_0,
 	.shadow_transfer_enable_dither_code = XMC_CCU8_SHADOW_TRANSFER_DITHER_SLICE_0,
-	.period_match_value = 1000U,
+	.period_match_value = STARTPERIODMATCH,
 	.gpio_base  = (XMC_GPIO_PORT_t *) PORT0_BASE,
 	.gpio_pin = 2U,
 	.gpio_config_ptr = &motor_pwm_out_config,
@@ -96,7 +98,7 @@ const local_pwm_t pwm2_container = {
 	.compare_channel =  XMC_CCU8_SLICE_COMPARE_CHANNEL_1,
 	.shadow_transfer_enable_code = XMC_CCU8_SHADOW_TRANSFER_SLICE_2,
 	.shadow_transfer_enable_dither_code = XMC_CCU8_SHADOW_TRANSFER_DITHER_SLICE_2,
-	.period_match_value = 1000U,
+	.period_match_value = STARTPERIODMATCH,
 	.gpio_base  = (XMC_GPIO_PORT_t *) PORT0_BASE,
 	.gpio_pin = 3U,
 	.gpio_config_ptr = &motor_pwm_out_config,
@@ -108,7 +110,7 @@ const local_pwm_t pwm3_container = {
 	.compare_channel =  XMC_CCU8_SLICE_COMPARE_CHANNEL_1,
 	.shadow_transfer_enable_code = XMC_CCU8_SHADOW_TRANSFER_SLICE_3,
 	.shadow_transfer_enable_dither_code = XMC_CCU8_SHADOW_TRANSFER_DITHER_SLICE_3,
-	.period_match_value = 1000U,
+	.period_match_value = STARTPERIODMATCH,
 	.gpio_base  = (XMC_GPIO_PORT_t *) PORT0_BASE,
 	.gpio_pin = 6U,
 	.gpio_config_ptr = &motor_pwm_out_config,
@@ -120,16 +122,18 @@ const local_pwm_t pwm4_container = {
 	.compare_channel =  XMC_CCU8_SLICE_COMPARE_CHANNEL_1,
 	.shadow_transfer_enable_code = XMC_CCU8_SHADOW_TRANSFER_SLICE_1,
 	.shadow_transfer_enable_dither_code = XMC_CCU8_SHADOW_TRANSFER_DITHER_SLICE_1,
-	.period_match_value = 1000U,
+	.period_match_value = STARTPERIODMATCH,
 	.gpio_base  = (XMC_GPIO_PORT_t *) PORT0_BASE,
 	.gpio_pin = 4U,
 	.gpio_config_ptr = &motor_pwm_out_config,
 };
 
-local_pwm_t const *pwm1 = &pwm1_container;
-local_pwm_t const *pwm2 = &pwm2_container;
-local_pwm_t const *pwm3 = &pwm3_container;
-local_pwm_t const *pwm4 = &pwm4_container;
+const local_pwm_t const *pwms[NUM_OF_MOTORS] = {
+	&pwm1_container,
+	&pwm2_container,
+	&pwm3_container,
+	&pwm4_container,
+};
 
 void EnableShadowTransfer(local_pwm_t const * pwm){
 	XMC_CCU8_EnableShadowTransfer(pwm->module,
@@ -164,24 +168,9 @@ void SetFrequency(local_pwm_t const * pwm, uint32_t frequency){
 	EnableShadowTransfer(pwm);
 }
 
-void Pin3_set_frequ(uint32_t frequ){
-	SetFrequency(pwm2, frequ);
-}
-
-/* Requires value from 0 - 1000 */
-void PWM_Motor1_Set_Rate(uint16_t Speed){//
-	SetCompareValue(pwm1, Speed);
-}
-void PWM_Motor2_Set_Rate(uint16_t Speed){
-	SetCompareValue(pwm2, Speed);
-}
-void PWM_Motor3_Set_Rate(uint16_t Speed){
-	SetCompareValue(pwm3, Speed);
-}
-void PWM_Motor4_Set_Rate(uint16_t Speed){
-	SetCompareValue(pwm4, Speed);
-}
-
+/********************************************/
+/* Initializes A PWM port with zero Output  */
+/********************************************/
 void InitPWMPort(local_pwm_t const * pwm){
 	/* Initialize consumed Apps */
 	XMC_CCU8_Init(pwm->module, XMC_CCU8_SLICE_MCMS_ACTION_TRANSFER_PR_CR);
@@ -203,11 +192,22 @@ void InitPWMPort(local_pwm_t const * pwm){
 	XMC_CCU8_EnableClock(pwm->module, pwm->slice_number);
 	XMC_CCU8_SLICE_StartTimer(pwm->slice);
 }
-	
+
+/* Requires speed value from 0 - 1000 */
+void PWM_Motor_Set_Rate(uint16_t Speed, uint8_t motor_index){
+	if(motor_index >= NUM_OF_MOTORS){
+		return;
+	}
+	local_pwm_t const *pwm = pwms[motor_index];
+	uint16_t compare_val = (uint16_t)(((float)1.1 * (float)Speed + (float)950)*(float)STARTPERIODMATCH/(float)20000.0);
+	SetCompareValue(pwm, compare_val);
+}
+
 void PWM_Init(void){
-	InitPWMPort(pwm1);
-	InitPWMPort(pwm2);
-	InitPWMPort(pwm3);
-	InitPWMPort(pwm4);
+	for(uint8_t motor_index=0;
+	    motor_index < NUM_OF_MOTORS;
+	    motor_index++){
+			InitPWMPort(pwms[motor_index]);
+	}
 }
 
