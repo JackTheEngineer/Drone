@@ -7,6 +7,9 @@
 #include "timetasks.h"
 #include "led_module.h"
 #include "motor_pwm.h"
+#include "uart.h"
+
+uint8_t read_data = 0x0;
 
 #define SPEEDS 5
 static const uint32_t speeds[SPEEDS] = {
@@ -52,6 +55,11 @@ void TimeTasks_run(uint32_t ticks, OS_t *os){
 		if(button_readEdge(os->button_2) == RISING_EDGE){
 			Change_speed(os->frequ_index, DOWN);
 		}
+
+		UART_Receive(&UART_0, &read_data, 1);
+		UART_Transmit(&UART_0, &read_data, 1);
+		Motion_sensor_get_data(os->motion_sensor);
+		read_data = 0x0;
 	}
 	if((ticks % TIME100MS) == 0){
 		led_toggle(LED0);
