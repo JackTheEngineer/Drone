@@ -6,6 +6,12 @@
 #include "uart.h"
 #include "motion_sensor.h"
 
+/* To be removed */
+#include "spi_wrapper.h"
+
+
+
+
 extern uint32_t volatile tick_count;
 extern UART_t UART_0;
 

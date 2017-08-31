@@ -291,7 +291,7 @@ static SPI_MASTER_STATUS_t SPI_MASTER_0_lInit(void)
 	
 	/* Configure the clock polarity and clock delay */
 	XMC_SPI_CH_ConfigureShiftClockOutput(SPI_MASTER_0.channel,
-					     XMC_SPI_CH_BRG_SHIFT_CLOCK_PASSIVE_LEVEL_1_DELAY_ENABLED,
+					     XMC_SPI_CH_BRG_SHIFT_CLOCK_PASSIVE_LEVEL_1_DELAY_DISABLED,
 					     XMC_SPI_CH_BRG_SHIFT_CLOCK_OUTPUT_SCLK);
 	/* Configure Leading/Trailing delay */
 	XMC_SPI_CH_SetSlaveSelectDelay(SPI_MASTER_0.channel, 2U);
@@ -327,7 +327,7 @@ static SPI_MASTER_STATUS_t SPI_MASTER_0_lInit(void)
 		      (uint8_t)SPI_MASTER_0_SS_0.pin,
 		      &SPI_MASTER_0_SS_0_Config.port_config);
 	
-	XMC_SPI_CH_EnableSlaveSelect(SPI_MASTER_0.channel, SPI_MASTER_0_SS_0_Config.slave_select_ch);
+	//XMC_SPI_CH_EnableSlaveSelect(SPI_MASTER_0.channel, SPI_MASTER_0_SS_0_Config.slave_select_ch);
 
 	/* Configure the service interrupt nodes for standard transmit FIFO events */
 	XMC_USIC_CH_TXFIFO_SetInterruptNodePointer(SPI_MASTER_0.channel,

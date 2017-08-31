@@ -29,6 +29,8 @@
 #define GYRO_ZOUT_H 71
 #define GYRO_ZOUT_L 72
 
+#define WHO_AM_I 117
+
 #define READ  (0x80)
 #define WRITE (0x0)
 

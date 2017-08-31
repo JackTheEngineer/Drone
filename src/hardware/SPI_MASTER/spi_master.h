@@ -414,7 +414,7 @@ SPI_MASTER_STATUS_t SPI_MASTER_Init(SPI_MASTER_t* const handle);
  * @endcode<BR>
  */
 
-SPI_MASTER_STATUS_t SPI_MASTER_SetMode(SPI_MASTER_t* const handle, const XMC_SPI_CH_MODE_t mode);
+SPI_MASTER_STATUS_t SPI_MASTER_SetMode(const SPI_MASTER_t* const handle, const XMC_SPI_CH_MODE_t mode);
 
 /**
  * @brief Set the required baud rate during runtime.
