@@ -11,7 +11,7 @@ void SPI_transmit(const SPI_MASTER_t *const handle, uint8_t* data, uint32_t coun
 	SPI_MASTER_ClearFlag(&SPI_MASTER_0, XMC_SPI_CH_STATUS_FLAG_ALTERNATIVE_RECEIVE_INDICATION);
 	SPI_MASTER_ClearFlag(&SPI_MASTER_0, XMC_SPI_CH_STATUS_FLAG_RECEIVE_INDICATION);
 	  
-	_SPI_transmit(&SPI_MASTER_0, data, count);
+	SPI_MASTER_Transmit(&SPI_MASTER_0, data, count);
 	while(SPI_MASTER_0.runtime->tx_busy);
 	/* Wait till dummy data is received from flash chip */
 	do
@@ -21,10 +21,8 @@ void SPI_transmit(const SPI_MASTER_t *const handle, uint8_t* data, uint32_t coun
 	} while(((status1 == 0) && (status2 == 0)));
 
 	/* Clear the flags */
-	SPI_MASTER_ClearFlag(&SPI_MASTER_0,XMC_SPI_CH_STATUS_FLAG_ALTERNATIVE_RECEIVE_INDICATION);
-	SPI_MASTER_ClearFlag(&SPI_MASTER_0,XMC_SPI_CH_STATUS_FLAG_RECEIVE_INDICATION);
+	SPI_MASTER_ClearFlag(&SPI_MASTER_0, XMC_SPI_CH_STATUS_FLAG_ALTERNATIVE_RECEIVE_INDICATION);
+	SPI_MASTER_ClearFlag(&SPI_MASTER_0, XMC_SPI_CH_STATUS_FLAG_RECEIVE_INDICATION);
+	SPI_MASTER_DisableSlaveSelectSignal(&SPI_MASTER_0);
 }
 
-void _SPI_transmit(const SPI_MASTER_t *const handle, uint8_t* data, uint32_t count){
-	SPI_MASTER_lStartTransmitPolling(handle, data, count);
-}

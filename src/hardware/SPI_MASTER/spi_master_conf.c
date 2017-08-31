@@ -188,7 +188,7 @@ const SPI_MASTER_GPIO_CONFIG_t SPI_MASTER_0_SS_0_Config =
 		.output_level = XMC_GPIO_OUTPUT_LEVEL_HIGH,
 		.output_strength = XMC_GPIO_OUTPUT_STRENGTH_STRONG_MEDIUM_EDGE
 	},
-	.slave_select_ch = XMC_SPI_CH_SLAVE_SELECT_1
+	.slave_select_ch = XMC_SPI_CH_SLAVE_SELECT_4
 };
 
 XMC_SPI_CH_CONFIG_t SPI_MASTER_0_Channel_Config =
@@ -238,8 +238,8 @@ const SPI_MASTER_CONFIG_t SPI_MASTER_0_Config  =
                               NULL, NULL,
                               NULL, NULL
                              },
-  .tx_sr   = (SPI_MASTER_SR_ID_t)SPI_MASTER_SR_ID_0,
-  .rx_sr   = (SPI_MASTER_SR_ID_t)SPI_MASTER_SR_ID_1,
+  .tx_sr   = (SPI_MASTER_SR_ID_t)SPI_MASTER_SR_ID_1,
+  .rx_sr   = (SPI_MASTER_SR_ID_t)SPI_MASTER_SR_ID_0,
 };
                            
 SPI_MASTER_RUNTIME_t SPI_MASTER_0_runtime =
@@ -282,26 +282,23 @@ static SPI_MASTER_STATUS_t SPI_MASTER_0_lInit(void)
 	SPI_MASTER_STATUS_t status;
 	status = SPI_MASTER_STATUS_SUCCESS; 
 	/* LLD initialization */
-	XMC_SPI_CH_Init(XMC_SPI2_CH0, &SPI_MASTER_0_Channel_Config);
+	XMC_SPI_CH_Init(SPI_MASTER_0.channel, &SPI_MASTER_0_Channel_Config);
+	XMC_SPI_CH_SetBitOrderMsbFirst(SPI_MASTER_0.channel);
 	
-	XMC_SPI_CH_SetBitOrderMsbFirst(XMC_SPI2_CH0);
+	XMC_SPI_CH_SetWordLength(SPI_MASTER_0.channel, (uint8_t)8);
 	
-	XMC_SPI_CH_SetWordLength(XMC_SPI2_CH0, (uint8_t)8);
-	
-	XMC_SPI_CH_SetFrameLength(XMC_SPI2_CH0, (uint8_t)64);
+	XMC_SPI_CH_SetFrameLength(SPI_MASTER_0.channel, (uint8_t)64);
 	
 	/* Configure the clock polarity and clock delay */
-	XMC_SPI_CH_ConfigureShiftClockOutput(XMC_SPI2_CH0,
-					     /*XMC_SPI_CH_BRG_SHIFT_CLOCK_PASSIVE_LEVEL_1_DELAY_DISABLED*/
-					     XMC_SPI_CH_BRG_SHIFT_CLOCK_PASSIVE_LEVEL_0_DELAY_DISABLED,
+	XMC_SPI_CH_ConfigureShiftClockOutput(SPI_MASTER_0.channel,
+					     XMC_SPI_CH_BRG_SHIFT_CLOCK_PASSIVE_LEVEL_1_DELAY_ENABLED,
 					     XMC_SPI_CH_BRG_SHIFT_CLOCK_OUTPUT_SCLK);
 	/* Configure Leading/Trailing delay */
-	XMC_SPI_CH_SetSlaveSelectDelay(XMC_SPI2_CH0, 2U);
-        
+	XMC_SPI_CH_SetSlaveSelectDelay(SPI_MASTER_0.channel, 2U);
 	/* Configure the inter word delay */
-	XMC_SPI_CH_SetInterwordDelaySCLK(XMC_SPI2_CH0, 10U);
+	XMC_SPI_CH_SetInterwordDelaySCLK(SPI_MASTER_0.channel, 2U);
 	/* Enable inter word delay */
-	XMC_SPI_CH_EnableInterwordDelay(XMC_SPI2_CH0);
+	XMC_SPI_CH_EnableInterwordDelay(SPI_MASTER_0.channel);
 	
 	/* Configure the input pin properties */
 	XMC_GPIO_Init((XMC_GPIO_PORT_t *)SPI_MASTER_0_MISO.port,
@@ -309,11 +306,11 @@ static SPI_MASTER_STATUS_t SPI_MASTER_0_lInit(void)
 		      &SPI_MASTER_0_MISO_Config.port_config);
 	
 	/* Configure the data input line selected */
-	XMC_SPI_CH_SetInputSource(XMC_SPI2_CH0,
+	XMC_SPI_CH_SetInputSource(SPI_MASTER_0.channel,
 				  XMC_SPI_CH_INPUT_DIN0,
-				  (uint8_t)SPI_MASTER_INPUT_B);
+				  (uint8_t)SPI_MASTER_INPUT_A);
 	/* Start the SPI_Channel */
-	XMC_SPI_CH_Start(XMC_SPI2_CH0);
+	XMC_SPI_CH_Start(SPI_MASTER_0.channel);
 	
 	/* Configure the output pin properties */
 	XMC_GPIO_Init((XMC_GPIO_PORT_t *)SPI_MASTER_0_MOSI.port,
@@ -330,23 +327,41 @@ static SPI_MASTER_STATUS_t SPI_MASTER_0_lInit(void)
 		      (uint8_t)SPI_MASTER_0_SS_0.pin,
 		      &SPI_MASTER_0_SS_0_Config.port_config);
 	
-	XMC_SPI_CH_EnableSlaveSelect(XMC_SPI2_CH0, XMC_SPI_CH_SLAVE_SELECT_1);
-	
+	XMC_SPI_CH_EnableSlaveSelect(SPI_MASTER_0.channel, SPI_MASTER_0_SS_0_Config.slave_select_ch);
+
+	/* Configure the service interrupt nodes for standard transmit FIFO events */
+	XMC_USIC_CH_TXFIFO_SetInterruptNodePointer(SPI_MASTER_0.channel,
+						   XMC_USIC_CH_TXFIFO_INTERRUPT_NODE_POINTER_STANDARD,
+						   (uint32_t)SPI_MASTER_0_Config.tx_sr);
 	
 	/* Configure transmit FIFO settings */
-	XMC_USIC_CH_TXFIFO_Configure(XMC_SPI2_CH0,
+	XMC_USIC_CH_TXFIFO_Configure(SPI_MASTER_0.channel,
 				     32U,
 				     (XMC_USIC_CH_FIFO_SIZE_t)XMC_USIC_CH_FIFO_SIZE_32WORDS,
 				     1U);
 
 	/* Configure receive FIFO settings */
-	XMC_USIC_CH_RXFIFO_Configure(XMC_SPI2_CH0,
+	XMC_USIC_CH_RXFIFO_Configure(SPI_MASTER_0.channel,
 				     0U,
 				     (XMC_USIC_CH_FIFO_SIZE_t)XMC_USIC_CH_FIFO_SIZE_32WORDS,
 				     0U);
-	
 
-	
+	XMC_USIC_CH_RXFIFO_SetInterruptNodePointer(SPI_MASTER_0.channel,
+						   XMC_USIC_CH_RXFIFO_INTERRUPT_NODE_POINTER_STANDARD,
+						   (uint32_t)SPI_MASTER_0_Config.rx_sr);
+	XMC_USIC_CH_RXFIFO_SetInterruptNodePointer(SPI_MASTER_0.channel,
+						   XMC_USIC_CH_RXFIFO_INTERRUPT_NODE_POINTER_ALTERNATE,
+						   (uint32_t)SPI_MASTER_0_Config.rx_sr);
+
+	/* Set priority of the Transmit interrupt */
+	NVIC_SetPriority((IRQn_Type)96, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), 63U, 0U));
+	/* Enable Transmit interrupt */
+	NVIC_EnableIRQ((IRQn_Type)96);
+	/* Set priority of the Receive interrupt */
+	NVIC_SetPriority((IRQn_Type)97, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), 62U, 0U));
+	/* Enable Receive interrupt */
+	NVIC_EnableIRQ((IRQn_Type)97);
+    
 	return status;
 }
 /*Transmit ISR*/

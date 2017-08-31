@@ -36,14 +36,6 @@ void Motion_sensor_get_data(Sensordata_t *sensordata){
 					      ACCEL_XOUT_H,
 					      ACCEL_XOUT_L);
 	Vect_i32_write(&sensordata->acceleration, 1, value);
-	value = SPI_read_double_value(&SPI_MASTER_0,
-				      ACCEL_YOUT_H,
-				      ACCEL_YOUT_L);
-	Vect_i32_write(&sensordata->acceleration, 2, value);
-	value = SPI_read_double_value(&SPI_MASTER_0,
-				      ACCEL_ZOUT_H,
-				      ACCEL_ZOUT_L);
-	Vect_i32_write(&sensordata->acceleration, 3, value);
 }
 
 int32_t SPI_read_double_value(const SPI_MASTER_t *const handle,
