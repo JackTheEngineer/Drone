@@ -6,8 +6,6 @@
 #include "uart.h"
 #include "motion_sensor.h"
 
-/* To be removed */
-#include "spi_wrapper.h"
 
 
 
@@ -24,9 +22,14 @@ bool UpdateTime(uint32_t *last_ticks){
 	}
 }
 
+void delay_ms(uint32_t ms){
+	uint32_t current_ticks = tick_count;
+	while((tick_count - current_ticks) < ms);
+}
+
 int main(void)
 {
-	uint32_t last_ticks;
+	uint32_t last_ticks = 0;
 	POINTER_TO_CONTAINER(OS_t, os);
 	POINTER_TO_CONTAINER(Sensordata_t, motion_sensor);
 	Button_t btn1 = {
@@ -47,10 +50,10 @@ int main(void)
 
 	PWM_Init();
 	UART_Init(&UART_0);
+	TickInterrupt_init();
 
 	Motion_sensor_init(os->motion_sensor);
 
-	TickInterrupt_init();
 	leds_init();
 	buttons_init();
 

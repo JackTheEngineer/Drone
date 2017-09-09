@@ -364,15 +364,15 @@ static SPI_MASTER_STATUS_t SPI_MASTER_0_lInit(void)
     
 	return status;
 }
-/*Transmit ISR*/
-void SPI_MASTER_0_tx_handler()
-{
-	SPI_MASTER_lTransmitHandler(&SPI_MASTER_0);
-}
-
-/*Receive ISR*/
-void SPI_MASTER_0_rx_handler()
-{
-	SPI_MASTER_lReceiveHandler(&SPI_MASTER_0);
-}
+///*Transmit ISR*/
+//void SPI_MASTER_0_tx_handler()
+//{
+//	SPI_MASTER_lTransmitHandler(&SPI_MASTER_0);
+//}
+//
+///*Receive ISR*/
+//void SPI_MASTER_0_rx_handler()
+//{
+//	SPI_MASTER_lReceiveHandler(&SPI_MASTER_0);
+//}
 

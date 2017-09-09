@@ -9,10 +9,10 @@
 #include "motor_pwm.h"
 #include "dbg_uart.h"
 
-/* To be removed */
-#include "spi_wrapper.h"
-
 void Action_5ms(OS_t* os);
+
+extern volatile uint8_t tx_completion_0;
+extern volatile uint8_t rx_completion_0;
 
 #define SPEEDS 5
 static const uint32_t speeds[SPEEDS] = {
@@ -51,7 +51,7 @@ void Change_speed(int32_t *frequ_index, Direction_t updown){
 }
 
 void Action_5ms(OS_t* os){
-	uint8_t receive;
+	int16_t receive;
 	if (button_readEdge(os->button_1) == RISING_EDGE) {
 		Change_speed(os->frequ_index, UP);
 	}
@@ -59,9 +59,8 @@ void Action_5ms(OS_t* os){
 		Change_speed(os->frequ_index, DOWN);
 	}
 
-	uint8_t data = (READ|WHO_AM_I);
-	SPI_transmit(&SPI_MASTER_0, &data, 1);
-	SPI_receive(&SPI_MASTER_0, &receive, 1);
+	uint8_t data = (WHO_AM_I);
+	receive = I2Cdev_readByte(MPU9250_USIC, MPU9250_ADDRESS);
 	DBG_Uart_send_num(&UART_0, receive);
 }
 
