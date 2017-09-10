@@ -10,7 +10,6 @@
 
 #include "base.h"
 #include "vector_operations.h"
-#include "xmc_usic.h"
 
 /*
  * CODES

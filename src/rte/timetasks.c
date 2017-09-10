@@ -8,7 +8,7 @@
 #include "led_module.h"
 #include "motor_pwm.h"
 #include "dbg_uart.h"
-#include "xmc_i2c.h"
+#include "i2c_master.h"
 
 void Action_5ms(OS_t* os);
 
@@ -49,7 +49,7 @@ void Change_speed(int32_t *frequ_index, Direction_t updown){
 }
 
 void Action_5ms(OS_t* os){
-	int16_t receive;
+	uint8_t receive = 0;
 	if (button_readEdge(os->button_1) == RISING_EDGE) {
 		Change_speed(os->frequ_index, UP);
 	}
@@ -58,11 +58,14 @@ void Action_5ms(OS_t* os){
 	}
 
 	uint8_t data = (WHO_AM_I);
-	XMC_I2C_CH_MasterStart(MPU9250_USIC, MPU9250_ADDRESS, XMC_I2C_CH_CMD_WRITE);
+
+	I2C_MASTER_Transmit(&I2C_MASTER, true, MPU9250_ADDRESS, &data, 1, false);
+	I2C_MASTER_Receive(&I2C_MASTER, true, MPU9250_ADDRESS, &receive, 1, true, true);
 	for(uint32_t i = 0; i < 50; i++){
 		uint32_t flag = XMC_I2C_CH_GetStatusFlag(MPU9250_USIC);
 		DBG_Uart_send_num(&UART_0, flag);
 	}
+
 }
 
 void TimeTasks_run(uint32_t ticks, OS_t *os){

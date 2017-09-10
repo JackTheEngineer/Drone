@@ -6,10 +6,12 @@
  */
 
 #include "motion_sensor.h"
+#include "i2c_master.h"
 #include "I2Cdev.h"
 
 void Motion_sensor_init(Sensordata_t *sensordata){
-	setupI2CInterface(MPU9250_USIC);
+	// setupI2CInterface(MPU9250_USIC);
+	I2C_MASTER_Init(&I2C_MASTER);
 	Motion_sensor_set_data_zero(sensordata);
 }
 
