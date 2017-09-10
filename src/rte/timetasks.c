@@ -8,11 +8,9 @@
 #include "led_module.h"
 #include "motor_pwm.h"
 #include "dbg_uart.h"
+#include "xmc_i2c.h"
 
 void Action_5ms(OS_t* os);
-
-extern volatile uint8_t tx_completion_0;
-extern volatile uint8_t rx_completion_0;
 
 #define SPEEDS 5
 static const uint32_t speeds[SPEEDS] = {
@@ -60,8 +58,11 @@ void Action_5ms(OS_t* os){
 	}
 
 	uint8_t data = (WHO_AM_I);
-	receive = I2Cdev_readByte(MPU9250_USIC, MPU9250_ADDRESS);
-	DBG_Uart_send_num(&UART_0, receive);
+	XMC_I2C_CH_MasterStart(MPU9250_USIC, MPU9250_ADDRESS, XMC_I2C_CH_CMD_WRITE);
+	for(uint32_t i = 0; i < 50; i++){
+		uint32_t flag = XMC_I2C_CH_GetStatusFlag(MPU9250_USIC);
+		DBG_Uart_send_num(&UART_0, flag);
+	}
 }
 
 void TimeTasks_run(uint32_t ticks, OS_t *os){

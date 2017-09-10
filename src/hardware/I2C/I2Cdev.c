@@ -15,11 +15,13 @@ const XMC_GPIO_CONFIG_t i2c_sda_pin_config   =
 {
 	.mode = XMC_GPIO_MODE_OUTPUT_OPEN_DRAIN_ALT1,
 	.output_level   = XMC_GPIO_OUTPUT_LEVEL_HIGH,
+	.output_strength = XMC_GPIO_OUTPUT_STRENGTH_STRONG_SOFT_EDGE,
 };
 const XMC_GPIO_CONFIG_t i2c_scl_pin_config   =
 {
 	.mode = XMC_GPIO_MODE_OUTPUT_OPEN_DRAIN_ALT1,
 	.output_level  = XMC_GPIO_OUTPUT_LEVEL_HIGH,
+	.output_strength = XMC_GPIO_OUTPUT_STRENGTH_STRONG_SOFT_EDGE,
 };
 
 void setupI2CInterface(XMC_USIC_CH_t *const i2c_usic)
@@ -40,12 +42,9 @@ void setupI2CInterface(XMC_USIC_CH_t *const i2c_usic)
 	/* look at page 1772 (miko-keil manual xmc4000)	       */
 	/*     for the usic interconnect		       */
 	/*******************************************************/
-	XMC_I2C_CH_SetInputSource(i2c_usic,
-				  XMC_I2C_CH_INPUT_SDA,
-				  0); /* Clock Input select  P5.2 */
-	XMC_I2C_CH_SetInputSource(i2c_usic,
-				  XMC_I2C_CH_INPUT_SCL,
-				  0); /* Clock Input select  P5.1 */
+	/* This activates the connection between the DX1 signal and the 5.1 / 5.2 pin */
+	XMC_I2C_CH_SetInputSource(i2c_usic, XMC_USIC_CH_INPUT_DX1, 0); /* Clock Input select  P5.2 */
+	XMC_I2C_CH_SetInputSource(i2c_usic, XMC_USIC_CH_INPUT_DX0, 0); /* Clock Input select  P5.1 */
 	
 	XMC_USIC_CH_RXFIFO_Configure(i2c_usic, 0, XMC_USIC_CH_FIFO_SIZE_32WORDS, 0);
 	XMC_I2C_CH_Start(i2c_usic);
@@ -94,6 +93,15 @@ bool I2Cdev_writeByte(XMC_USIC_CH_t* i2c_usic,uint8_t devAddr, uint8_t regAddr, 
 
 	XMC_I2C_CH_MasterStop(i2c_usic);
 	return true;
+}
+
+
+int16_t I2Ctest(XMC_USIC_CH_t* i2c_usic,
+			uint8_t devAddr,
+			uint8_t regAddr){
+
+	XMC_I2C_CH_MasterStart(i2c_usic, devAddr, XMC_I2C_CH_CMD_WRITE);
+
 }
 
 int16_t I2Cdev_readByte(XMC_USIC_CH_t* i2c_usic,

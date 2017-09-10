@@ -75,6 +75,9 @@
 #endif
 #endif
 
+#include <DAVE_Common.h>
+
+
 typedef void(*i2c_master_fptr_cbhandler)(void);
 
 /***********************************************************************************************************************
@@ -233,6 +236,32 @@ extern "C" {
 /***********************************************************************************************************************
  * API PROTOTYPES
  **********************************************************************************************************************/
+/**
+ * @brief Get I2C_MASTER APP version.
+ * @return \a DAVE_APP_VERSION_t APP version information (major, minor and patch number)
+ *
+ * \par<b>Description: </b><br>
+ * The function can be used to check application software compatibility with a
+ * specific version of the APP.
+ *
+ * @code
+ *  #include <DAVE.h>
+ *
+ *  int main(void)
+ *  {
+ *    DAVE_APP_VERSION_t version;
+ *    DAVE_Init();
+ *    version = I2C_MASTER_GetAppVersion();
+ *    if(version.major != 4U)
+ *    {
+ *    }
+ *    while(1)
+ *    {}
+ *    return 0;
+ *  }
+ * @endcode<BR> </p>
+ */
+DAVE_APP_VERSION_t I2C_MASTER_GetAppVersion(void);
 /**
  * @brief This function initializes the I2C_MASTER APP based on user provided configuration.
  *

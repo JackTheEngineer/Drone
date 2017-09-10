@@ -43,7 +43,7 @@
 
 #define MPU9250_ADDRESS 0x68
 
-#define MPU9250_USIC USIC2_CH0
+#define MPU9250_USIC XMC_USIC2_CH0
 
 typedef struct Settings{
 	uint32_t afs_sel;

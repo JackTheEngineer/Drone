@@ -11,6 +11,6 @@
 #include "base.h"
 #include "uart.h"
 
-void DBG_Uart_send_num(const UART_t *const handle, uint8_t number);
+void DBG_Uart_send_num(const UART_t *const handle, uint32_t number);
 
 #endif /* SRC_INTERFACES_DBG_UART_DBG_UART_H_ */
