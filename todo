@@ -4,3 +4,22 @@ Todo:
         
         constanten in fake_motors.h berechnen und setzen
 
+
+DOC RMF hoepfer tranciever
+
+# Address
+3 byts long : in the AW register(length) RC-Control: 0x4C 0xC0 0x91
+       	           	     		 Drone:	     0xD4 0x09 0xEE
+
+(Rc control)
+PRX device: datapipes in EN_RXADDR: datapipe 0
+RX_ADDR_PX
+
+RX_ADDR_Pn(the pipe addrress) mus be unique
+
+(ON PTX)
+TX_ADDR must be the same as RX_ADDR_P0 and same as pipe on PRX
+
+Dynamic Payload length
+
+NO_ACK tells PRX not to acknoledge 

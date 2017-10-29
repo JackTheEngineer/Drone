@@ -10,6 +10,6 @@
 
 #include "base.h"
 
-void TickInterrupt_init(void);
+void Timer_CE_PIN_Interrupt_init(void);
 
 #endif /* SRC_HARDWARE_SYSTICKINTERRUPT_TICK__H_ */

@@ -33,7 +33,8 @@ ARM_COMPILE_OPTIONS = [
   '-fdata-sections',
   '-Wall',
   '-std=gnu99',
-  '-mfloat-abi=softfp',
+  '-mfloat-abi=softfp', 
+  '-ffast-math', # Disables generation of code, for checking FPU status
   '-pipe',
   '-fmessage-length=0',
   '-mcpu=cortex-m4',
@@ -43,7 +44,6 @@ ARM_COMPILE_OPTIONS = [
   '-gdwarf-2',
 ].join(' ')
 
-
 # =======================================================================
 # ARM Linker Definition
 # =======================================================================
@@ -51,7 +51,7 @@ ARM_LINK_OPTIONS = [
 '-nostartfiles',
 '-Xlinker',
 '--gc-sections', 
-'-mfloat-abi=softfp', 
+'-mfloat-abi=softfp',
 '-mfpu=fpv4-sp-d16', 
 '-mcpu=cortex-m4', 
 '-mthumb',

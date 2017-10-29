@@ -30,12 +30,6 @@ TESTS = {
   "test_pid_controller" => [
     "pid_controller",
   ],
-  "test_motion_sensor" => [
-    "motion_sensor",
-    "vector_operations",
-    "vector_tester",
-  ], 
-
   "test_matrix_operations" =>[
     "matrix_operations",
     "vector_operations",

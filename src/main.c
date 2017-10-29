@@ -5,13 +5,14 @@
 #include "os.h"
 #include "uart.h"
 #include "motion_sensor.h"
+#include "delay.h"
 
-
-
-
-
-extern uint32_t volatile tick_count;
+uint32_t volatile tick_count;
 extern UART_t UART_0;
+
+extern void SysTick_Handler(void){
+	tick_count++;
+}
 
 bool UpdateTime(uint32_t *last_ticks){
 	if(tick_count != *last_ticks){
@@ -20,11 +21,6 @@ bool UpdateTime(uint32_t *last_ticks){
 	}else{
 		return false;
 	}
-}
-
-void delay_ms(uint32_t ms){
-	uint32_t current_ticks = tick_count;
-	while((tick_count - current_ticks) < ms);
 }
 
 int main(void)
@@ -50,17 +46,20 @@ int main(void)
 
 	PWM_Init();
 	UART_Init(&UART_0);
-	TickInterrupt_init();
+	SysTick_Config(SystemCoreClock/1000); /* 1 ms Tick */
 
 	Motion_sensor_init(os->motion_sensor);
 
+	Timer_CE_PIN_Interrupt_init();
 	leds_init();
 	buttons_init();
 
-	PWM_Motor_Set_Rate(100, 0);
-	PWM_Motor_Set_Rate(100, 1);
-	PWM_Motor_Set_Rate(100, 2);
-	PWM_Motor_Set_Rate(100, 3);
+	PWM_Motor_Set_Rate(0, 0);
+	PWM_Motor_Set_Rate(0, 1);
+	PWM_Motor_Set_Rate(0, 2);
+	PWM_Motor_Set_Rate(0, 3);
+
+	delay_ms(5000);
 
 	while(1U){
 		if(UpdateTime(&last_ticks)){
@@ -69,5 +68,3 @@ int main(void)
 	}
 	return 1;
 }
-
-

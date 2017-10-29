@@ -17,6 +17,10 @@ GPATH
 GTAGS
 GRTAGS
 
+test/GPATH
+test/GRTAGS
+test/GTAGS
+
 # Emacs autosaves
 *~
 \#*\#

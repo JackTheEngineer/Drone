@@ -30,6 +30,7 @@ int32_t cut_index(int32_t *f, uint32_t bufsize){
 	}
 	return *f;
 }
+
 void Change_speed(int32_t *frequ_index, Direction_t updown){
 	if(frequ_index == NULL){
 		return;
@@ -56,19 +57,35 @@ void Action_5ms(OS_t* os){
 	if (button_readEdge(os->button_2) == RISING_EDGE) {
 		Change_speed(os->frequ_index, DOWN);
 	}
+	Motion_sensor_get_data(os->motion_sensor);
+	DBG_Uart_send_num(&UART_0, (uint32_t)receive);
+}
 
-	uint8_t data = (WHO_AM_I);
+void Wechsle_Motor(void){
+	static uint8_t motorzahl = 0;
+	uint8_t stopzahl = 3;
 
-	I2C_MASTER_Transmit(&I2C_MASTER, true, MPU9250_ADDRESS, &data, 1, false);
-	I2C_MASTER_Receive(&I2C_MASTER, true, MPU9250_ADDRESS, &receive, 1, true, true);
-	for(uint32_t i = 0; i < 50; i++){
-		uint32_t flag = XMC_I2C_CH_GetStatusFlag(MPU9250_USIC);
-		DBG_Uart_send_num(&UART_0, flag);
+	/* startet motor 0, und stoppe motor 3 */
+	/*starte motor 1, und stoppe motor 0 */
+	PWM_Motor_Set_Rate(300, motorzahl);
+
+	if(motorzahl == 0){
+		stopzahl = 3;
+	}else{
+		stopzahl = motorzahl-1;
 	}
+	
+	PWM_Motor_Set_Rate(0, stopzahl);
 
+	motorzahl = motorzahl+1;
+
+	if(motorzahl >= 4){
+			motorzahl = 0;
+	}
 }
 
 void TimeTasks_run(uint32_t ticks, OS_t *os){
+
 	if((ticks % TIME5MS) == 0){
 		Action_5ms(os);
 	}
@@ -77,6 +94,9 @@ void TimeTasks_run(uint32_t ticks, OS_t *os){
 	}
 	if((ticks % TIME1S) == 0){
 		led_toggle(LED1);
+	}
+	if((ticks % TIME2S) == 0){
+		Wechsle_Motor();
 	}
 }
 
