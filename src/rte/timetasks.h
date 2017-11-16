@@ -9,7 +9,6 @@
 #define SRC_RTE_TIMETASKS_H_
 
 #include "base.h"
-#include "tick_.h"
 #include "os.h"
 
 #define TIME5MS (uint32_t)5

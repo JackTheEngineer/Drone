@@ -9,6 +9,7 @@
 #include "motor_pwm.h"
 #include "dbg_uart.h"
 #include "i2c_master.h"
+#include "RFM75_driver.h"
 
 void Action_5ms(OS_t* os);
 
@@ -85,9 +86,18 @@ void Wechsle_Motor(void){
 }
 
 void TimeTasks_run(uint32_t ticks, OS_t *os){
-
 	if((ticks % TIME5MS) == 0){
+		uint8_t readbytes[5] = {R_RX_PAYLOAD, 0,0,0,0};
+//		uint8_t testcmd[2] = {SETUP_AW,  0};
+//		uint8_t write_cmd[2] = {WRITE_COMMAND_RFM(SETUP_AW), ADDRESS_WIDTH_3};
 		Action_5ms(os);
+
+//		RC_Iface_send_bytes(write_cmd, 2, DISABLE_CE);
+//		RC_Iface_read_bytes(testcmd, 2, DISABLE_CE);
+
+		RFM75_set_bank(0);
+		RC_Iface_read_bytes(readbytes, 5, DISABLE_CE);
+		asm("NOP");
 	}
 	if((ticks % TIME100MS) == 0){
 		led_toggle(LED0);

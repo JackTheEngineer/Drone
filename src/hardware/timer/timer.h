@@ -10,6 +10,10 @@
 
 #include "base.h"
 
-void Timer_CE_PIN_Interrupt_init(void);
+void TIMER_Init(void);
+void TIMER_Start(void);
+void TIMER_Stop(void);
+void TIMER_ClearEvent(void);
+void TIMER_Clear(void);
 
 #endif /* SRC_HARDWARE_SYSTICKINTERRUPT_TICK__H_ */

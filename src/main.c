@@ -6,6 +6,7 @@
 #include "uart.h"
 #include "motion_sensor.h"
 #include "delay.h"
+#include "RFM75_driver.h"
 
 uint32_t volatile tick_count;
 extern UART_t UART_0;
@@ -45,21 +46,21 @@ int main(void)
 	os->frequ_index = &f;
 
 	PWM_Init();
-	UART_Init(&UART_0);
-	SysTick_Config(SystemCoreClock/1000); /* 1 ms Tick */
-
-	Motion_sensor_init(os->motion_sensor);
-
-	Timer_CE_PIN_Interrupt_init();
-	leds_init();
-	buttons_init();
-
 	PWM_Motor_Set_Rate(0, 0);
 	PWM_Motor_Set_Rate(0, 1);
 	PWM_Motor_Set_Rate(0, 2);
 	PWM_Motor_Set_Rate(0, 3);
 
-	delay_ms(5000);
+	UART_Init(&UART_0);
+	SysTick_Config(SystemCoreClock/1000); /* 1 ms Tick */
+
+	Motion_sensor_init(os->motion_sensor);
+
+	leds_init();
+	buttons_init();
+
+	delay_ms(50);
+	RFM75_Init();
 
 	while(1U){
 		if(UpdateTime(&last_ticks)){

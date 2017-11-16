@@ -36,7 +36,7 @@ void physics_calculate_moment_of_inertia(Masspoint_t *masspoints, uint32_t  numb
     }
 }
 
-double physics_calculate_drone_mass(const Masspoint_t *masspoints, uint32_t number_of_masspoints){
+double physics_calculate_drone_mass(Masspoint_t const *masspoints, uint32_t number_of_masspoints){
     uint32_t i;
     double right_mass=0;
     for(i=0; i<number_of_masspoints; i++){
