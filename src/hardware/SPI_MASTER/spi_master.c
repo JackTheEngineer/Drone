@@ -175,6 +175,22 @@ static void SPI_MASTER_lPortModeSet(const SPI_MASTER_t* handle);
 static void SPI_MASTER_lPortModeReset(const SPI_MASTER_t* handle);
 /* Returns whether mode change is valid or not */
 static SPI_MASTER_STATUS_t SPI_MASTER_lValidateModeChange(const SPI_MASTER_t * handle, XMC_SPI_CH_MODE_t mode);
+/***********************************************************************************************************************
+ * API IMPLEMENTATION
+ **********************************************************************************************************************/
+/*
+ * API to retrieve the version of the SPI_MASTER
+ */
+DAVE_APP_VERSION_t SPI_MASTER_GetAppVersion()
+{
+  DAVE_APP_VERSION_t version;
+
+  version.major = SPI_MASTER_MAJOR_VERSION;
+  version.minor = SPI_MASTER_MINOR_VERSION;
+  version.patch = SPI_MASTER_PATCH_VERSION;
+
+  return version;
+}
 
 /*
  * This function initializes the SPI channel, based on UI configuration.

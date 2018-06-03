@@ -1,5 +1,6 @@
 #include "delay.h"
 
+void _delay_ms(uint32_t ms);
 extern volatile uint32_t tick_count;
 
 /* Assumes tick count to be 1 tick  = 1 ms */
@@ -13,7 +14,7 @@ void delay_ms(uint32_t ms){
 	hbs = ((tick_count >> 31) & 0x01);
 		
 	while(true){
-		if(hbs & (((tick_count >> 31) & 0x01) == 0)){
+		if(hbs && (((tick_count >> 31) & 0x01) == 0)){
 			dt = tick_count + (0xFFFFFFFF - current_ticks);
 		}else{
 			dt = tick_count - current_ticks;
@@ -24,3 +25,6 @@ void delay_ms(uint32_t ms){
 	}
 }
 
+void _delay_ms(uint32_t ms){
+	delay_ms(ms);
+}

@@ -20,6 +20,7 @@ typedef enum __RFM75_RX_Status{
 
 void RFM75_Init(void);
 void RFM75_Transmit_bytes(uint8_t *buffer, uint8_t size);
-RFM75_Rx_Status_e RFM75_Receive_bytes(uint8_t *buffer, uint8_t size);
+void RFM75_set_bank(uint8_t bank);
+RFM75_Rx_Status_e _RFM75_Receive_bytes(uint8_t *buffer, uint8_t size);
 
 #endif /* SRC_INTERFACE_RFM75_DRIVER_H_ */

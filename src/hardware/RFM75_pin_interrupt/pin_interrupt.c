@@ -4,6 +4,7 @@ const PIN_INTERRUPT_t RFM75_PIN_INTERRUPT =
 {
 	.eru = XMC_ERU0,  /* ERU module 0 Mapped */
 	.port = XMC_GPIO_PORT3,  /* PORT 3 Mapped */
+	.pin = 2U, /* Mapped pin number */
 	.gpio_config = {
 		.mode = XMC_GPIO_MODE_INPUT_TRISTATE  /* Pin Characteristics */
 	},
@@ -22,7 +23,6 @@ const PIN_INTERRUPT_t RFM75_PIN_INTERRUPT =
 	.irq_subpriority = 0,  /* Subpriority of the Interrupt */
 	.etl = 0U,  /* ERU ETL channel number */
 	.ogu = 3U,  /* ERU OGU channel number */
-	.pin = 2U, /* Mapped pin number */ 
 };
 
 void PIN_INTERRUPT_SetEdgeSensitivity(const PIN_INTERRUPT_t *const handle, const PIN_INTERRUPT_EDGE_t edge);

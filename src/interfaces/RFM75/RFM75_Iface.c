@@ -12,6 +12,7 @@
 #include "xmc_gpio.h"
 #include "RFM75_codes.h"
 #include "pin_pulse.h"
+#include "delay.h"
 
 void _RC_Iface_wait_for_receive(void);
 void _RC_Iface_clear_receive_indication(void);
@@ -28,11 +29,11 @@ void RC_Iface_init(void){
 	PIN_INTERRUPT_Init(&RFM75_PIN_INTERRUPT);
 }
 
-
-void RC_Iface_send_bytes(uint8_t const *bytes,
-		uint8_t bufsize,
-		Disable_CE_e ce_disable){
+void RC_Iface_send_bytes(uint8_t *bytes,
+			 uint8_t bufsize,
+			 Disable_CE_e ce_disable){
 	SPI_MASTER_SetMode(&SPI_MASTER_0, XMC_SPI_CH_MODE_STANDARD);
+	XMC_SPI_CH_SetFrameLength(SPI_MASTER_0.channel, (uint8_t)bufsize*8);
 	SPI_MASTER_EnableSlaveSelectSignal(&SPI_MASTER_0,
 			SPI_MASTER_0.config->slave_select_pin_config[0]->slave_select_ch);
 
@@ -48,8 +49,8 @@ void RC_Iface_send_bytes(uint8_t const *bytes,
 }
 
 void RC_Iface_read_bytes_no_cmd(uint8_t *bytes,
-		uint8_t bufsize,
-		Disable_CE_e ce_disable){
+				uint32_t bufsize,
+				Disable_CE_e ce_disable){
 	/* Change SPI  Channel configuration */
 	SPI_MASTER_SetMode(&SPI_MASTER_0, XMC_SPI_CH_MODE_STANDARD);
 	SPI_MASTER_EnableSlaveSelectSignal(&SPI_MASTER_0,
@@ -67,8 +68,8 @@ void RC_Iface_read_bytes_no_cmd(uint8_t *bytes,
 }
 
 void RC_Iface_read_bytes(uint8_t *bytes,
-		uint8_t bufsize,
-		Disable_CE_e ce_disable){
+			 uint8_t bufsize,
+			 Disable_CE_e ce_disable){
 	/* Change SPI  Channel configuration */
 	SPI_MASTER_SetMode(&SPI_MASTER_0, XMC_SPI_CH_MODE_STANDARD);
 	SPI_MASTER_EnableSlaveSelectSignal(&SPI_MASTER_0,

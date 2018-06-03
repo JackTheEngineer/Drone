@@ -71,7 +71,7 @@
 #define RF_PWR(x) (0b110 & ((x)<< 1)) /* Max 2 bit */
 #define LNA_HCURR (1 << 0)
 	
-#define STATUS 0x07
+#define RFM75_STATUS 0x07
 #define RBANK ( 1 << 7)
 /* Data Ready RX FIFO interrupt
    Asserted when new data arrives RX FIFO

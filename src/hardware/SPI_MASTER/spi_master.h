@@ -93,6 +93,7 @@
 #include <xmc_gpio.h>
 #include <xmc_scu.h>
 #include <xmc_spi.h>
+#include <DAVE_Common.h>
 #include "spi_master_conf.h"
 
 #if((SPI_MASTER_DMA_TRANSMIT_MODE == 1U) || (SPI_MASTER_DMA_RECEIVE_MODE == 1U))
@@ -324,6 +325,39 @@ extern "C" {
  * @ingroup SPI_MASTER_apidoc
  * @{
  */
+/**
+ * @brief Get SPI_MASTER APP version
+ * @return DAVE_APP_VERSION_t APP version information (major, minor and patch number)
+ * <BR>
+ * \par<b>Description:</b><br>
+ * The function can be used to check application software compatibility with a
+ * specific version of the APP.
+ *
+ * Example Usage:
+ * @code
+ * #include <DAVE.h>
+ * int main(void)
+ * {
+ *   DAVE_STATUS_t status;
+ *   DAVE_APP_VERSION_t app_version;
+ *
+ *   status = DAVE_Init();    // SPI_MASTER_Init() is called from DAVE_Init()
+ *
+ *   app_version = SPI_MASTER_GetAppVersion();
+ *
+ *   if (app_version.major != 4U)
+ *   {
+ *     // Probably, not the right version.
+ *   }
+ *
+ *   while(1U)
+ *   {
+ *   }
+ *   return 1;
+ * }
+ * @endcode<BR>
+ */
+DAVE_APP_VERSION_t SPI_MASTER_GetAppVersion(void);
 
 /**
  * @brief Initialize the SPI channel as per the configuration made in GUI.

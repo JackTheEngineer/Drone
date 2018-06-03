@@ -14,6 +14,14 @@ void leds_init(void){
 	XMC_GPIO_Init(XMC_GPIO_PORT1, 1, &LED_conf);
 }
 
+void led_on(leds_t led){
+	XMC_GPIO_SetOutputHigh(XMC_GPIO_PORT1, led);
+}
+
+void led_off(leds_t led){
+	XMC_GPIO_SetOutputLow(XMC_GPIO_PORT1, led);
+}
+
 void led_toggle(leds_t led){
     XMC_GPIO_ToggleOutput(XMC_GPIO_PORT1, led);
 }

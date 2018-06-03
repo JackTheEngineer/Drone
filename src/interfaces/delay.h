@@ -2,6 +2,7 @@
 #define __DELAY__H__
 
 #include "base.h"
+#include "delay_us.h"
 
 void delay_ms(uint32_t ms);
 

@@ -3,14 +3,11 @@
 #include "led_module.h"
 #include "buttons.h"
 #include "os.h"
-#include "uart.h"
 #include "motion_sensor.h"
 #include "delay.h"
 #include "RFM75_driver.h"
 
 uint32_t volatile tick_count;
-extern UART_t UART_0;
-
 extern void SysTick_Handler(void){
 	tick_count++;
 }
@@ -51,15 +48,15 @@ int main(void)
 	PWM_Motor_Set_Rate(0, 2);
 	PWM_Motor_Set_Rate(0, 3);
 
-	UART_Init(&UART_0);
 	SysTick_Config(SystemCoreClock/1000); /* 1 ms Tick */
+	DelayTimer_Init();
 
-	Motion_sensor_init(os->motion_sensor);
+	//Motion_sensor_init(os->motion_sensor);
 
 	leds_init();
 	buttons_init();
 
-	delay_ms(50);
+	delay_ms(100);
 	RFM75_Init();
 
 	while(1U){
