@@ -10,8 +10,8 @@
 
 #include "xmc_gpio.h"
 
-#define CE_PORT XMC_GPIO_PORT3
-#define CE_PIN 1
+#define CE_PORT XMC_GPIO_PORT5
+#define CE_PIN 4
 
 void PinPulse_Init(void);
 void PinPulse_Trigger(void);

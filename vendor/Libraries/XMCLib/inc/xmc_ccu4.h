@@ -1,12 +1,12 @@
 /**
  * @file xmc_ccu4.h
- * @date 2017-04-27
+ * @date 2017-09-15
  *
  * @cond
  *********************************************************************************************************************
- * XMClib v2.1.16 - XMC Peripheral Driver Library 
+ * XMClib v2.1.18 - XMC Peripheral Driver Library 
  *
- * Copyright (c) 2015-2017, Infineon Technologies AG
+ * Copyright (c) 2015-2018, Infineon Technologies AG
  * All rights reserved.                        
  *                                             
  * Redistribution and use in source and binary forms, with or without modification,are permitted provided that the 
@@ -71,6 +71,9 @@
  * 2017-04-27:
  *     - XMC_CCU4_SLICE_SetPrescaler() changed div_val parameter to type XMC_CCU4_SLICE_PRESCALER_t 
  * 
+ * 2017-09-15:
+ *     - Fix XMC_CCU4_SLICE_SetShadowTransferMode()
+ *
  * @endcond
  */
 
@@ -2264,7 +2267,7 @@ __STATIC_INLINE void XMC_CCU4_SLICE_SetShadowTransferMode(XMC_CCU4_SLICE_t *cons
                                                           const XMC_CCU4_SLICE_SHADOW_TRANSFER_MODE_t shadow_transfer_mode)
 {
   XMC_ASSERT("XMC_CCU4_SLICE_SetShadowTransferMode:Invalid Slice Pointer", XMC_CCU4_IsValidSlice(slice));
-  slice->STC = ((slice->STC) & ~(uint32_t)((uint32_t)CCU4_CC4_STC_STM_Msk << (uint32_t)CCU4_CC4_STC_STM_Pos)) |
+  slice->STC = ((slice->STC) & (uint32_t)~CCU4_CC4_STC_STM_Msk) |
                ((shadow_transfer_mode << CCU4_CC4_STC_STM_Pos) & (uint32_t)CCU4_CC4_STC_STM_Msk);
 }
 

@@ -1,12 +1,12 @@
 /*********************************************************************************************************************
- * @file     system_XMC4500.h
- * @brief    Device specific initialization for the XMC4500-Series according to CMSIS
- * @version  V1.7
- * @date     10 February 2015
+ * @file     system_XMC4700.h
+ * @brief    Device specific initialization for the XMC4700-Series according to CMSIS
+ * @version  V1.0
+ * @date     22 May 2015
  *
  * @cond
  *********************************************************************************************************************
- * Copyright (c) 2012-2016, Infineon Technologies AG
+ * Copyright (c) 2015-2016, Infineon Technologies AG
  * All rights reserved.                        
  *                                             
  * Redistribution and use in source and binary forms, with or without modification,are permitted provided that the 
@@ -34,12 +34,13 @@
  *********************************************************************************************************************
  *
  **************************** Change history *********************************
+ * V1.0, 22 May 2015, JFT, Initial version
  *****************************************************************************
  * @endcond 
  */
 
-#ifndef SYSTEM_XMC4500_H
-#define SYSTEM_XMC4500_H
+#ifndef SYSTEM_XMC4700_H
+#define SYSTEM_XMC4700_H
 
 /*******************************************************************************
  * HEADER FILES

@@ -1,12 +1,12 @@
 /*********************************************************************************************************************
- * @file     startup_XMC4500.S
- * @brief    CMSIS Core Device Startup File for Infineon XMC4500 Device Series
- * @version  V1.20
- * @date     01 June 2016
+ * @file     startup_XMC4700.S
+ * @brief    CMSIS Core Device Startup File for Infineon XMC4700 Device Series
+ * @version  V1.1
+ * @date     05 Jan 2016
  *
  * @cond
  *********************************************************************************************************************
- * Copyright (c) 2011-2016, Infineon Technologies AG
+ * Copyright (c) 2015-2016, Infineon Technologies AG
  * All rights reserved.                        
  *                                             
  * Redistribution and use in source and binary forms, with or without modification,are permitted provided that the 
@@ -34,32 +34,8 @@
  *********************************************************************************************************************
  *
  **************************** Change history ********************************
- * V1.0,July 2011, First version for XIP profile
- * V1.1,Oct  2011, Program loading code included (GH: b to main changed)
- * V1.2,Nov, 01, 2011 GH :Removed second definition of section .Xmc4500.reset
- *                        at line 186. 
- * V1.3,Nov, 16, 2011 GH :Removed PMU0_1_IRQHandler and respective weak function
- *                        declaration.
- * V1.4,Dec, 16, 2011 PKB:Jump to __Xmc4500_start_c reinstated for RTOS integration
- * V1.5,Jan, 10, 2012 PKB:Migrated to GCC from ARM
- * V1.6,Jan, 16, 2012 PKB:Branch prediction turned off, Parity errors cleared.
- * V1.7,Apr, 17, 2012 PKB:Added decision function for PLL initialization  
- * V1.8,Apr, 20, 2012 PKB:Handshake with DAVE code engine added  
- * V1.9,Jun, 14, 2012 PKB:Removed the handshake protocol towards simplification  
- * V1.10,Aug, 13, 2012 PKB:Flash Wait states handling  
- * V1.11,Oct, 11, 2012 PKB:C++ support. Call to global constructors  
- * V1.12,Jan, 23, 2013 PKB:XMC4 Prefetch bug workaround  
- * V1.13,Jul, 29, 2013 PKB:AAPCS violation in V1.12 fixed
- * V1.14,Feb, 05, 2014 PKB:Removed redundant alignment code from copy+clear funcs   
- * V1.15,May, 05, 2014 JFT:Added ram_code section
- * V1.16,Nov, 25, 2014 JFT:CPU workaround disabled. Single default handler.
- *                         Removed DAVE3 dependency
- * V1.17,June 11, 2015 JFT:Remove SystemCoreClockUpdate call, done in SystemCoreClockSetup
- * V1.18,Jan, 05, 2016 JFT:Fix .reset section attributes
- * V1.19,March,04,2016 JFT:Fix weak definition of Veneers. 
- *                         Only relevant for AA and AB step, which needs ENABLE_PMU_CM_001_WORKAROUND 
- * V1.20,June ,01,2016 JFT:Rename ENABLE_CPU_CM_001_WORKAROUND to ENABLE_PMU_CM_001_WORKAROUND
- *                         Action required: If using AA/AB step, use ENABLE_PMU_CM_001_WORKAROUND instead of ENABLE_CPU_CM_001_WORKAROUND
+ * V1.0,Sep, 03, 2015 JFT:Initial version
+ * V1.1,Jan, 05, 2016 JFT:Fix .reset section attributes
  *
  * @endcond 
  */
@@ -67,27 +43,12 @@
 /* ===========START : MACRO DEFINITION MACRO DEFINITION ================== */
  
 .macro Entry Handler
-#if defined(ENABLE_PMU_CM_001_WORKAROUND)
-    .long \Handler\()_Veneer
-#else
     .long \Handler
-#endif
 .endm
 
 .macro Insert_ExceptionHandler Handler_Func 
     .weak \Handler_Func
     .thumb_set \Handler_Func, Default_Handler
-
-#if defined(ENABLE_PMU_CM_001_WORKAROUND)
-    .weak \Handler_Func\()_Veneer
-    .type \Handler_Func\()_Veneer, %function
-\Handler_Func\()_Veneer:
-    push {r0, lr}
-    ldr  r0, =\Handler_Func
-    blx  r0
-    pop  {r0, pc}
-    .size \Handler_Func\()_Veneer, . - \Handler_Func\()_Veneer
-#endif 
 .endm
 
 /* =============END : MACRO DEFINITION MACRO DEFINITION ================== */
@@ -120,7 +81,7 @@ __Vectors:
     Entry   PendSV_Handler              /* PendSV Handler               */
     Entry   SysTick_Handler             /* SysTick Handler              */
 
-    /* Interrupt Handlers for Service Requests (SR) from XMC4500 Peripherals */
+    /* Interrupt Handlers for Service Requests (SR) from XMC4700 Peripherals */
     Entry   SCU_0_IRQHandler            /* Handler name for SR SCU_0     */
     Entry   ERU0_0_IRQHandler           /* Handler name for SR ERU0_0    */
     Entry   ERU0_1_IRQHandler           /* Handler name for SR ERU0_1    */
@@ -327,15 +288,13 @@ Reset_Handler:
 .align 2
 __copy_table_start__:
     .long __data_load, __data_start, __data_size
-    .long __data2_load, __data2_start, __data2_size
-    .long __data3_load, __data3_start, __data3_size
     .long __ram_code_load, __ram_code_start, __ram_code_size
 __copy_table_end__:
 
 __zero_table_start__:
     .long __bss_start, __bss_size
-    .long __bss2_start, __bss2_size
-    .long __bss3_start, __bss3_size
+    .long USB_RAM_start, USB_RAM_size
+    .long ETH_RAM_start, ETH_RAM_size
 __zero_table_end__:
     
 	.pool

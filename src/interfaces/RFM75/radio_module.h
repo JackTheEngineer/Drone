@@ -1,47 +1,20 @@
 /*
-	The rapidradio project
-	
-	Author: Michal Okulski, The RapidRadio Team
-	Website: http://rapidradio.pl
-	Email: michal@rapidradio.pl
-	
-	Inspired by AVR's RFM70 libraries. 
-	
-	------------------------------------------------------------------------------------
-	The MIT License (MIT)
-
-	Copyright (c) 2015 Michal Okulski (micas.pro)
-
-	Permission is hereby granted, free of charge, to any person obtaining a copy
-	of this software and associated documentation files (the "Software"), to deal
-	in the Software without restriction, including without limitation the rights
-	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-	copies of the Software, and to permit persons to whom the Software is
-	furnished to do so, subject to the following conditions:
-
-	The above copyright notice and this permission notice shall be included in
-	all copies or substantial portions of the Software.
-
-	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-	THE SOFTWARE.
-	------------------------------------------------------------------------------------
 */
 
-#ifndef RFM_DRV_H_
-#define RFM_DRV_H_
-	
-#include "base.h"
+#ifndef RAPIDRADIO_H
+#define RAPIDRADIO_H
 
-// High level functions ----------------------------------------------------------------------
+#include "delay.h"
+
+#define CE_LOW					    RC_Iface_CE_low();
+#define CE_HIGH					    RC_Iface_CE_high();
 
 bool init();
 void turnOn();
 void turnOff();
+void RFM75_setRxModeIfNeeded(void);
+void RFM75_setTxModeIfNeeded(void);
+
 
 #define DBMM10       0x00 // parameter for setPower(pwr): -10 dBm
 #define DBMM5        0x01 // parameter for setPower(pwr): -5 dBm
@@ -51,25 +24,24 @@ void setPower(uint8_t pwr);
 
 typedef enum
 {
-	Success = 0,
-	FifoFull = 1,
-	MaxRT = 2,
-	Unknown = 3
+	SUCCESS = 0,
+	FIFOFULL = 1,
+	MAXRT = 2,
+	UNKNOWN = 3
 } TransmitStatus;
 
 typedef struct
 {
 	TransmitStatus status;
-	size_t bytesSent;
+	uint32_t bytesSent;
 } TransmitResult_t;
 
-
-void startListening(const uint8_t channel, const uint32_t *localAddress);
+void startListening(const uint8_t channel,
+		    const uint32_t *localAddress);
 
 // buff has to be at least 32 bytes!
 bool received(uint8_t *buff, uint8_t *length);
-
-// Low level functions and definitions -------------------------------------------------------
+// Low level functions and definitions ----
 
 #define WITH_ACK     0x01 // parameter for sendPayload(..): send with ack expectation
 #define NO_ACK       0x00 // parameter for sendPayload(..): send without ack expectation
@@ -93,7 +65,6 @@ bool received(uint8_t *buff, uint8_t *length);
 #define RFM7x_MAX_PACKET_LEN 32// max value is 32
 #define RFM7x_BEGIN_INIT_WAIT_MS 0 // pause before Init Registers: 3000ms after RFM73 power up, but Raspberry Pi boots longer than 3s so can be set to 0ms here
 #define RFM7x_END_INIT_WAIT_MS 100 // pause after init registers
-#define RFM7x_CS_DELAY 0 // wait ms after CS pin state change
 
 // SPI commands
 #define RFM7x_CMD_READ_REG 0x00 // Define read command to register
@@ -159,7 +130,6 @@ uint8_t RFM75_getMode(void);
 void RFM75_setChannel(uint8_t cnum);
 uint8_t RFM75_getChannel(void);
 
-uint8_t transmitSPI(uint8_t val);
 uint8_t readRegVal(uint8_t cmd);
 uint8_t writeRegVal(uint8_t cmd, uint8_t val);
 uint8_t writeRegPgmBuf(uint8_t * cmdbuf, uint8_t len);
@@ -187,7 +157,5 @@ void resetCE();
 void setCSN();
 void resetCSN();
 
-#define MIN(a,b) ((a) < (b) ? (a) : (b))
-
-#endif /* RAPIDRADIO_H */
+#endif
 

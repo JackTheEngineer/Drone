@@ -4,9 +4,9 @@
  *
  * @cond
   *********************************************************************************************************************
- * XMClib v2.1.16 - XMC Peripheral Driver Library 
+ * XMClib v2.1.18 - XMC Peripheral Driver Library 
  *
- * Copyright (c) 2015-2017, Infineon Technologies AG
+ * Copyright (c) 2015-2018, Infineon Technologies AG
  * All rights reserved.                        
  *                                             
  * Redistribution and use in source and binary forms, with or without modification,are permitted provided that the 
@@ -91,13 +91,15 @@
  *********************************************************************************************************************/
 #define XMC_LIB_MAJOR_VERSION	(2U)
 #define XMC_LIB_MINOR_VERSION	(1U)
-#define XMC_LIB_PATCH_VERSION	(16U)
+#define XMC_LIB_PATCH_VERSION	(18U)
  
 #define XMC_LIB_VERSION         ((XMC_LIB_MAJOR_VERSION << 16U) + (XMC_LIB_MINOR_VERSION << 8U) + XMC_LIB_PATCH_VERSION)
 
 /* Define WEAK attribute */
 #if !defined(__WEAK)
 #if defined ( __CC_ARM )
+#define __WEAK __attribute__ ((weak))
+#elif defined (__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050)
 #define __WEAK __attribute__ ((weak))
 #elif defined ( __ICCARM__ )
 #define __WEAK __weak
@@ -111,6 +113,8 @@
 #if !defined(__RAM_FUNC)
 #if defined ( __CC_ARM )
 // http://www.keil.com/support/docs/3723.htm
+#define __RAM_FUNC __attribute__((section("RAMCODESECTION")))
+#elif defined (__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050)
 #define __RAM_FUNC __attribute__((section("RAMCODESECTION")))
 #elif defined ( __ICCARM__ )
 // https://www.iar.com/support/tech-notes/linker/controlling-placement-of-the-section-where-__ramfunc-functions-reside-ewarm-5.x--6.x/

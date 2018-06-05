@@ -1,13 +1,13 @@
 
 /**
  * @file xmc_eth_mac.c
- * @date 2017-08-03
+ * @date 2017-09-27
  *
  * @cond
  *********************************************************************************************************************
- * XMClib v2.1.16 - XMC Peripheral Driver Library
+ * XMClib v2.1.18 - XMC Peripheral Driver Library
  *
- * Copyright (c) 2015-2017, Infineon Technologies AG
+ * Copyright (c) 2015-2018, Infineon Technologies AG
  * All rights reserved.                        
  *                                             
  * Redistribution and use in source and binary forms, with or without modification,are permitted provided that the 
@@ -88,6 +88,10 @@
  * 2017-08-03:
  *     - Changed XMC_ETH_MAC_InitPTP(), XMC_ETH_MAC_InitPTPEx(), XMC_ETH_MAC_GetPTPTime(), XMC_ETH_MAC_UpdatePTPTime(), XMC_ETH_MAC_SetPTPAlarm(), XMC_ETH_MAC_GetRxTimeStamp(), XMC_ETH_MAC_GetTxTimeStamp()
  *       rollover mode of nanosecond counter from binary to digital mode, i.e 1ns resolution
+ *
+ * 2017-09-27:
+ *     - Added XMC_ETH_MAC_InitEx()
+ *     - XMC_ETH_MAC_SetAddressEx(), XMC_ETH_MAC_GetAddressEx() and XMC_ETH_MAC_SetAddressPerfectFilterEx() which receives a byte array with the MAC address instead of uint64_t
  *
  * @endcond
  */
@@ -207,19 +211,11 @@ __STATIC_INLINE bool XMC_ETH_MAC_IsValidModule(ETH_GLOBAL_TypeDef *const eth)
 
 #endif
 
-/* ETH MAC initialize */
-XMC_ETH_MAC_STATUS_t XMC_ETH_MAC_Init(XMC_ETH_MAC_t *const eth_mac)
+void XMC_ETH_MAC_InitEx(XMC_ETH_MAC_t *const eth_mac)
 {
-  XMC_ETH_MAC_STATUS_t status;
+  XMC_ASSERT("XMC_ETH_MAC_InitEx: eth_mac is invalid", XMC_ETH_MAC_IsValidModule(eth_mac->regs));
 
-  XMC_ASSERT("XMC_ETH_MAC_Init: eth_mac is invalid", XMC_ETH_MAC_IsValidModule(eth_mac->regs));
-
-  XMC_ETH_MAC_Enable(eth_mac);
   XMC_ETH_MAC_Reset(eth_mac);
-
-  status = XMC_ETH_MAC_SetManagmentClockDivider(eth_mac);
-
-  XMC_ETH_MAC_SetAddress(eth_mac, eth_mac->address);
 
   /* Initialize MAC configuration */
   eth_mac->regs->MAC_CONFIGURATION = (uint32_t)ETH_MAC_CONFIGURATION_IPC_Msk;
@@ -228,14 +224,14 @@ XMC_ETH_MAC_STATUS_t XMC_ETH_MAC_Init(XMC_ETH_MAC_t *const eth_mac)
   eth_mac->regs->FLOW_CONTROL = ETH_FLOW_CONTROL_DZPQ_Msk; /* Disable Zero Quanta Pause */
 
   eth_mac->regs->OPERATION_MODE = (uint32_t)ETH_OPERATION_MODE_RSF_Msk |
-                                  (uint32_t)ETH_OPERATION_MODE_TSF_Msk |
-                                  (uint32_t)ETH_OPERATION_MODE_OSF_Msk;
+	                              (uint32_t)ETH_OPERATION_MODE_TSF_Msk |
+	                              (uint32_t)ETH_OPERATION_MODE_OSF_Msk;
 
   /* Increase enhanced descriptor to 8 WORDS, required when the Advanced Time-Stamp feature or Full IPC Offload Engine is enabled */
   eth_mac->regs->BUS_MODE = (uint32_t)ETH_BUS_MODE_ATDS_Msk |
-                            (uint32_t)ETH_BUS_MODE_AAL_Msk | /* the AHB interface generates all bursts aligned to the start address LS bits */
-                            (uint32_t)ETH_BUS_MODE_FB_Msk | /* DMA attempts to execute fixed-length Burst transfers on the AHB Master interface */
-                            (uint32_t)(0x20 << ETH_BUS_MODE_PBL_Pos); /* maximum Burst length */
+	                        (uint32_t)ETH_BUS_MODE_AAL_Msk | /* the AHB interface generates all bursts aligned to the start address LS bits */
+	                        (uint32_t)ETH_BUS_MODE_FB_Msk | /* DMA attempts to execute fixed-length Burst transfers on the AHB Master interface */
+	                        (uint32_t)(0x20 << ETH_BUS_MODE_PBL_Pos); /* maximum Burst length */
 
   /* Initialize DMA Descriptors */
   XMC_ETH_MAC_InitRxDescriptors(eth_mac);
@@ -253,6 +249,21 @@ XMC_ETH_MAC_STATUS_t XMC_ETH_MAC_Init(XMC_ETH_MAC_t *const eth_mac)
   eth_mac->regs->INTERRUPT_MASK = ETH_INTERRUPT_MASK_PMTIM_Msk | ETH_INTERRUPT_MASK_TSIM_Msk;
 
   eth_mac->frame_end = NULL;
+}
+
+/* ETH MAC initialize */
+XMC_ETH_MAC_STATUS_t XMC_ETH_MAC_Init(XMC_ETH_MAC_t *const eth_mac)
+{
+  XMC_ETH_MAC_STATUS_t status;
+
+  XMC_ASSERT("XMC_ETH_MAC_Init: eth_mac is invalid", XMC_ETH_MAC_IsValidModule(eth_mac->regs));
+
+  XMC_ETH_MAC_Enable(eth_mac);
+  status = XMC_ETH_MAC_SetManagmentClockDivider(eth_mac);
+
+  XMC_ETH_MAC_InitEx(eth_mac);
+
+  XMC_ETH_MAC_SetAddress(eth_mac, eth_mac->address);
 
   return status;
 }
@@ -309,6 +320,25 @@ void XMC_ETH_MAC_InitTxDescriptors(XMC_ETH_MAC_t *const eth_mac)
   eth_mac->tx_index = 0U;
 }
 
+void XMC_ETH_MAC_SetAddressEx(XMC_ETH_MAC_t *const eth_mac, uint8_t *const addr)
+{
+  eth_mac->regs->MAC_ADDRESS0_HIGH = addr[4] | (addr[5] << 8); 
+  eth_mac->regs->MAC_ADDRESS0_LOW = addr[0] | (addr[1] << 8) | (addr[2] << 16) | (addr[3] << 24); 
+}
+
+void XMC_ETH_MAC_GetAddressEx(XMC_ETH_MAC_t *const eth_mac, uint8_t *const addr)
+{
+  uint32_t low_addr = eth_mac->regs->MAC_ADDRESS0_LOW;
+  uint32_t high_addr = eth_mac->regs->MAC_ADDRESS0_HIGH;
+
+  addr[0] = low_addr & 0xff;
+  addr[1] = (low_addr >> 8) & 0xff;
+  addr[2] = (low_addr >> 16) & 0xff;
+  addr[3] = (low_addr >> 24) & 0xff;
+  addr[4] = high_addr & 0xff;
+  addr[5] = (high_addr >> 8) & 0xff;
+}
+
 /* Set address perfect filter */
 void XMC_ETH_MAC_SetAddressPerfectFilter(XMC_ETH_MAC_t *const eth_mac,
                                          uint8_t index,
@@ -323,6 +353,21 @@ void XMC_ETH_MAC_SetAddressPerfectFilter(XMC_ETH_MAC_t *const eth_mac,
   reg = &(eth_mac->regs->MAC_ADDRESS0_HIGH);
   reg[index] = (uint32_t)(addr >> 32U) | flags;
   reg[index + 1U] = (uint32_t)addr;
+}
+
+void XMC_ETH_MAC_SetAddressPerfectFilterEx(XMC_ETH_MAC_t *const eth_mac,
+                                           uint8_t index,
+                                           uint8_t *const addr,
+                                           uint32_t flags)
+{
+  __IO uint32_t *reg;
+
+  XMC_ASSERT("XMC_ETH_MAC_SetAddressPerfectFilter: eth_mac is invalid", XMC_ETH_MAC_IsValidModule(eth_mac->regs));
+  XMC_ASSERT("XMC_ETH_MAC_SetAddressFilter: index is out of range", ((index > 0) && (index < 4)));
+
+  reg = &(eth_mac->regs->MAC_ADDRESS0_HIGH);
+  reg[index] = addr[4] | (addr[5] << 8); 
+  reg[index + 1U] = addr[0] | (addr[1] << 8) | (addr[2] << 16) | (addr[3] << 24); 
 }
 
 /* Set address hash filter */

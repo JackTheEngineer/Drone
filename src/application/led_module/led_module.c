@@ -10,8 +10,8 @@ const XMC_GPIO_CONFIG_t LED_conf = {
 };
 
 void leds_init(void){
-	XMC_GPIO_Init(XMC_GPIO_PORT1, 0, &LED_conf);
-	XMC_GPIO_Init(XMC_GPIO_PORT1, 1, &LED_conf);
+	XMC_GPIO_Init(XMC_GPIO_PORT5, 9, &LED_conf);
+	XMC_GPIO_Init(XMC_GPIO_PORT5, 8, &LED_conf);
 }
 
 void led_on(leds_t led){

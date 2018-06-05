@@ -57,7 +57,8 @@ int main(void)
 	buttons_init();
 
 	delay_ms(100);
-	RFM75_Init();
+//	bool initialize = RFM75_Init();
+//	while(initialize == 0){}
 
 	while(1U){
 		if(UpdateTime(&last_ticks)){

@@ -1,13 +1,13 @@
 
 /**
  * @file xmc_eth_mac.h
- * @date 2017-08-07
+ * @date 2017-09-27
  *
  * @cond
  *********************************************************************************************************************
- * XMClib v2.1.16 - XMC Peripheral Driver Library 
+ * XMClib v2.1.18 - XMC Peripheral Driver Library 
  *
- * Copyright (c) 2015-2017, Infineon Technologies AG
+ * Copyright (c) 2015-2018, Infineon Technologies AG
  * All rights reserved.                        
  *                                             
  * Redistribution and use in source and binary forms, with or without modification,are permitted provided that the 
@@ -66,6 +66,10 @@
  *
  * 2017-08-07:
  *     - Added XMC_ETH_MAC_TIMESTAMP_STATUS_t
+ *
+ * 2017-09-27:
+ *     - Added XMC_ETH_MAC_InitEx()
+ *     - XMC_ETH_MAC_SetAddressEx(), XMC_ETH_MAC_GetAddressEx() and XMC_ETH_MAC_SetAddressPerfectFilterEx() which receives a byte array with the MAC address instead of uint64_t
  *
  * @endcond
  */
@@ -412,6 +416,21 @@ XMC_ETH_MAC_STATUS_t XMC_ETH_MAC_Init(XMC_ETH_MAC_t *const eth_mac);
  * @return None
  *
  * \par<b>Description: </b><br>
+ * Initialize the Ethernet MAC peripheral. <br>
+ * Required when initializing the PHY, to deliver the clocks to the MAC, before MAC is reseted.
+ * \note The module needs to be enabled before using XMC_ETH_MAC_Enable() <br>
+ *
+ * \par
+ * The function sets the link speed, applies the duplex mode, sets auto-negotiation
+ * and loop-back settings.
+ */
+void XMC_ETH_MAC_InitEx(XMC_ETH_MAC_t *const eth_mac);
+
+/**
+ * @param eth_mac A constant pointer to XMC_ETH_MAC_t, pointing to the ETH MAC base address
+ * @return None
+ *
+ * \par<b>Description: </b><br>
  * Initialize the RX DMA descriptors <br>
  *
  * \par
@@ -578,6 +597,20 @@ __STATIC_INLINE void XMC_ETH_MAC_SetAddress(XMC_ETH_MAC_t *const eth_mac, uint64
 
 /**
  * @param eth_mac A constant pointer to XMC_ETH_MAC_t, pointing to the ETH MAC base address
+ * @param addr Pointer to 6 byte MAC address
+ * @return None
+ *
+ * \par<b>Description: </b><br>
+ * Set MAC address <br>
+ *
+ * \par
+ * The function sets the MAC address by writing to the MAC_ADDRESS0_HIGH and
+ * MAC_ADDRESS0_LOW registers.
+ */
+void XMC_ETH_MAC_SetAddressEx(XMC_ETH_MAC_t *const eth_mac, uint8_t *const addr);
+
+/**
+ * @param eth_mac A constant pointer to XMC_ETH_MAC_t, pointing to the ETH MAC base address
  * @return uint64_t The MAC address which has been set
  *
  * \par<b>Description: </b><br>
@@ -590,6 +623,18 @@ __STATIC_INLINE uint64_t XMC_ETH_MAC_GetAddress(XMC_ETH_MAC_t *const eth_mac)
 {
   return ((((uint64_t)eth_mac->regs->MAC_ADDRESS0_HIGH << 32)) | (uint64_t)eth_mac->regs->MAC_ADDRESS0_LOW);
 }
+
+/**
+ * @param eth_mac A constant pointer to XMC_ETH_MAC_t, pointing to the ETH MAC base address
+ * @return uint64_t The MAC address which has been set
+ *
+ * \par<b>Description: </b><br>
+ * Get MAC address <br>
+ *
+ * \par
+ * The function returns the current ETH MAC address.
+ */
+void XMC_ETH_MAC_GetAddressEx(XMC_ETH_MAC_t *const eth_mac, uint8_t *const addr);
 
 /**
  * @param eth_mac A constant pointer to XMC_ETH_MAC_t, pointing to the ETH MAC base address
@@ -606,6 +651,22 @@ __STATIC_INLINE uint64_t XMC_ETH_MAC_GetAddress(XMC_ETH_MAC_t *const eth_mac)
  * The function can be used to set perfect filter for address filtering.
  */
 void XMC_ETH_MAC_SetAddressPerfectFilter(XMC_ETH_MAC_t *const eth_mac, uint8_t index, const uint64_t addr, uint32_t flags);
+
+/**
+ * @param eth_mac A constant pointer to XMC_ETH_MAC_t, pointing to the ETH MAC base address
+ * @param index Table entry index
+ * @param addr Pointer to 6 byte MAC address
+ * @param flags Compare control. OR'ed combination of @ref XMC_ETH_MAC_ADDR_FILTER_t or zero. 
+ *
+ * @return None
+ *
+ * \par<b>Description: </b><br>
+ * Set perfect filter for address filtering <br>
+ *
+ * \par
+ * The function can be used to set perfect filter for address filtering.
+ */
+void XMC_ETH_MAC_SetAddressPerfectFilterEx(XMC_ETH_MAC_t *const eth_mac, uint8_t index, uint8_t *const addr, uint32_t flags);
 
 /**
  * @param eth_mac A constant pointer to XMC_ETH_MAC_t, pointing to the ETH MAC base address

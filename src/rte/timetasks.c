@@ -15,11 +15,11 @@ void Action_5ms(OS_t* os);
 
 #define SPEEDS 5
 static const uint32_t speeds[SPEEDS] = {
-		100,
-		300,
-		500,
-		800,
-		999,
+		10,
+		15,
+		20,
+		30,
+		40,
 };
 
 int32_t cut_index(int32_t *f, uint32_t bufsize){
@@ -51,7 +51,6 @@ void Change_speed(int32_t *frequ_index, Direction_t updown){
 }
 
 void Action_5ms(OS_t* os){
-	uint8_t receive = 0;
 	if (button_readEdge(os->button_1) == RISING_EDGE) {
 		Change_speed(os->frequ_index, UP);
 	}
@@ -86,16 +85,23 @@ void Wechsle_Motor(void){
 }
 
 void TimeTasks_run(uint32_t ticks, OS_t *os){
-	uint8_t sendbytes[DATASIZE_RFM75_TRANSMIT] = {11, 22, 33, 44, 55, 66, 77, 88};
+//	char *sendbytes = "Hallo du auch !";
+//	uint32_t length = 15;
+
 	if((ticks % TIME5MS) == 0){
-		uint8_t readbytes[5] = {R_RX_PAYLOAD, 0,0,0,0};
-//		uint8_t testcmd[2] = {SETUP_AW,  0};
-//		uint8_t write_cmd[2] = {WRITE_COMMAND_RFM(SETUP_AW), ADDRESS_WIDTH_3};
 		Action_5ms(os);
 
-//		RC_Iface_send_bytes(write_cmd, 2, DISABLE_CE);
-//		RC_Iface_read_bytes(testcmd, 2, DISABLE_CE);
-		RFM75_Transmit_bytes(sendbytes, DATASIZE_RFM75_TRANSMIT);
+
+//		turnOn();
+//		RC_Iface_CE_high();
+//		RFM75_Transmit_bytes((uint8_t*)sendbytes,
+//							  	  &length,
+//								  50,
+//								  true);
+//		RC_Iface_CE_low();
+//		turnOff();
+//		led_toggle(LED0);
+
 
 		asm("NOP");
 	}

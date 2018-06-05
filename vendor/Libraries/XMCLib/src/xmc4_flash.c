@@ -4,9 +4,9 @@
  *
  * @cond
  *********************************************************************************************************************
- * XMClib v2.1.16 - XMC Peripheral Driver Library 
+ * XMClib v2.1.18 - XMC Peripheral Driver Library 
  *
- * Copyright (c) 2015-2017, Infineon Technologies AG
+ * Copyright (c) 2015-2018, Infineon Technologies AG
  * All rights reserved.                        
  *                                             
  * Redistribution and use in source and binary forms, with or without modification,are permitted provided that the 
@@ -60,6 +60,9 @@
  *       6. XMC_FLASH_EraseUCB
  *     - Fix XMC_FLASH_VerifyReadProtection and XMC_FLASH_VerifyWriteProtection
  *
+ * 2018-02-08
+ *     - Added implementation of XMC_FLASH_InstallBMI()
+ *
  * @endcond 
  *
  */
@@ -74,6 +77,9 @@
 
 #define XMC_FLASH_PROTECTION_CONFIGURATION_WORDS (8UL) /* Used to upadte the assembly buffer during protection 
                                                           configuration */
+#define XMC_FLASH_BMI_STRING_WORDS (10UL) /* Used to upadte the assembly buffer during BMI String
+                                                          configuration */
+
 #define XMC_FLASH_PROT_CONFIRM_OFFSET (512UL) /* Offset address for UCB page */
 #define XMC_FLASH_PROT_CONFIRM_WORDS  (4UL)
 #define XMC_FLASH_PROT_CONFIRM_CODE   (0x8AFE15C3UL)
@@ -393,6 +399,37 @@ void XMC_FLASH_Reset(void)
 
   address = (uint32_t *)(XMC_FLASH_UNCACHED_BASE + 0x5554U);
   *address = 0xf0U;
+}
+
+#define BMI_STRING_BYTE_CNT 30
+
+void XMC_FLASH_InstallBMI(XMC_FLASH_BMI_STRING_t *const bmi_string)
+{
+  uint32_t checksum = 0;
+  for (int i = 0; i < BMI_STRING_BYTE_CNT; ++i)
+  {
+	checksum ^= ((const uint8_t *)bmi_string)[i];
+  }
+
+  bmi_string->reserved = checksum;
+
+  XMC_FLASH_lEnterPageModeCommand();
+
+  XMC_FLASH_lLoadPageCommand(((const uint32_t *)bmi_string)[0], ((const uint32_t *)bmi_string)[1]);
+  XMC_FLASH_lLoadPageCommand(((const uint32_t *)bmi_string)[2], ((const uint32_t *)bmi_string)[3]);
+  XMC_FLASH_lLoadPageCommand(((const uint32_t *)bmi_string)[4], ((const uint32_t *)bmi_string)[5]);
+  XMC_FLASH_lLoadPageCommand(((const uint32_t *)bmi_string)[6], ((const uint32_t *)bmi_string)[7]);
+  XMC_FLASH_lLoadPageCommand(((const uint32_t *)bmi_string)[8], 0);
+
+  for (uint32_t idx = 0U; idx < (XMC_FLASH_WORDS_PER_PAGE - XMC_FLASH_BMI_STRING_WORDS); idx += 2U)
+  {
+    XMC_FLASH_lLoadPageCommand(0UL, 0UL);
+  }
+
+  XMC_FLASH_lWriteUCBPageCommand((uint32_t *)((uint32_t)XMC_FLASH_UCB2 + XMC_FLASH_BYTES_PER_PAGE));
+
+  /* wait until the operation is completed */
+  while ((FLASH0->FSR & (uint32_t)FLASH_FSR_PBUSY_Msk) != 0U){}
 }
 
 /*

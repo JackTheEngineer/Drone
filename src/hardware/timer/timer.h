@@ -12,7 +12,7 @@
 #include "xmc_ccu4.h"
 #include "xmc_scu.h"
 
-#define PinPulseHandler CCU41_1_IRQHandler
+#define PinPulseHandler CCU40_0_IRQHandler
 #define DelayUsHandler CCU40_1_IRQHandler
 
 const XMC_CCU4_SLICE_COMPARE_CONFIG_t PinPulse_slice_config;

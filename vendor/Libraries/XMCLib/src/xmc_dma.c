@@ -5,9 +5,9 @@
  *
  * @cond
  *********************************************************************************************************************
- * XMClib v2.1.16 - XMC Peripheral Driver Library 
+ * XMClib v2.1.18 - XMC Peripheral Driver Library 
  *
- * Copyright (c) 2015-2017, Infineon Technologies AG
+ * Copyright (c) 2015-2018, Infineon Technologies AG
  * All rights reserved.                        
  *                                             
  * Redistribution and use in source and binary forms, with or without modification,are permitted provided that the 
@@ -62,6 +62,9 @@
  *       Write optimization of MASKCHEV 
  *     - Fix XMC_DMA_IRQHandler, clear channel event status before processing the event handler.
  *       It corrects event losses if the DMA triggered in the event handler finished before returning from handler.
+ *
+ * 2018-02-08:
+ *     - Fix XMC_DMA_CH_RequestLastMultiblockTransfer() clearing CTLL_LLP_SRC_EN and CTLL_LLP_DST_EN
  *
  * @endcond
  */
@@ -613,6 +616,7 @@ void XMC_DMA_CH_DisableDestinationAddressReload(XMC_DMA_t *const dma, const uint
 void XMC_DMA_CH_RequestLastMultiblockTransfer(XMC_DMA_t *const dma, const uint8_t channel)
 {
   dma->CH[channel].CFGL &= (uint32_t)~(GPDMA0_CH_CFGL_RELOAD_SRC_Msk | GPDMA0_CH_CFGL_RELOAD_DST_Msk);
+  dma->CH[channel].CTLL &= (uint32_t)~(GPDMA0_CH_CTLL_LLP_SRC_EN_Msk | GPDMA0_CH_CTLL_LLP_DST_EN_Msk);
 }
 
 /* Set event handler */

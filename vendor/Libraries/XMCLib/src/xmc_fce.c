@@ -1,12 +1,12 @@
 /**
  * @file xmc_fce.c
- * @date 2015-06-20
+ * @date 2017-12-14
  *
  * @cond
  *********************************************************************************************************************
- * XMClib v2.1.16 - XMC Peripheral Driver Library 
+ * XMClib v2.1.18 - XMC Peripheral Driver Library 
  *
- * Copyright (c) 2015-2017, Infineon Technologies AG
+ * Copyright (c) 2015-2018, Infineon Technologies AG
  * All rights reserved.                        
  *                                             
  * Redistribution and use in source and binary forms, with or without modification,are permitted provided that the 
@@ -41,6 +41,17 @@
  *      
  * 2015-06-20:
  *     - Removed GetDriverVersion API
+ *
+ * 2017-12-14:
+ *     - XMC_FCE_CalculateCRC8()
+ *       Ensure 32bit access to IR register
+ *     - XMC_FCE_CalculateCRC16()
+ *       Ensure 32bit access to IR register
+ *       Remove restriction on data source allignment
+ *     - XMC_FCE_CalculateCRC32()
+ *       Ensure 32bit access to IR register
+ *       Remove restriction on data source allignment
+ *
  * @endcond 
  *
  */
@@ -112,7 +123,7 @@ XMC_FCE_STATUS_t XMC_FCE_CalculateCRC8(const XMC_FCE_t *const engine,
   {
     while (0UL != length)
     {
-      engine->kernel_ptr->IR = *data;
+      engine->kernel_ptr->IR = (uint32_t)*data;
       data++;
       length -= 1U;
     }
@@ -133,11 +144,10 @@ XMC_FCE_STATUS_t XMC_FCE_CalculateCRC16(const XMC_FCE_t *const engine,
 	
   XMC_ASSERT("XMC_FCE_CalculateCRC16: Wrong FCE kernel used", (engine -> kernel_ptr == XMC_FCE_CRC16));
   XMC_ASSERT("XMC_FCE_CalculateCRC16: Length field is empty", (length != 0));
-  XMC_ASSERT("XMC_FCE_CalculateCRC16: Length is not aligned", ((length & 0x01) == 0));
-  XMC_ASSERT("XMC_FCE_CalculateCRC16: Buffer is not aligned", (((uint32_t)data % 2U) == 0));
+  XMC_ASSERT("XMC_FCE_CalculateCRC16: Length is not aligned", ((length & 0x1U) == 0));
 
-  /* Check if data and length are word aligned */
-  if (((length & 0x01U) != 0U) || (((uint32_t)length % 2U) != 0U))
+  /* Check length is a multiple of 2 */
+  if ((length == 0) || ((length & 0x1U) != 0U))
   {
     status = XMC_FCE_STATUS_ERROR;
   }
@@ -145,7 +155,7 @@ XMC_FCE_STATUS_t XMC_FCE_CalculateCRC16(const XMC_FCE_t *const engine,
   {
     while (0UL != length)
     {
-      engine->kernel_ptr->IR = *data;
+      engine->kernel_ptr->IR = (uint32_t)*data;
       data++;
       length -= 2U;
     }
@@ -167,11 +177,10 @@ XMC_FCE_STATUS_t XMC_FCE_CalculateCRC32(const XMC_FCE_t *const engine,
   XMC_ASSERT("XMC_FCE_CalculateCRC32: Wrong FCE kernel used", ((engine->kernel_ptr == XMC_FCE_CRC32_0) ||
                                                                (engine->kernel_ptr == XMC_FCE_CRC32_1)));
   XMC_ASSERT("XMC_FCE_CalculateCRC32: Length field is empty", (length != 0));
-  XMC_ASSERT("XMC_FCE_CalculateCRC32: Length is not aligned", ((length & 0x03) == 0));
-  XMC_ASSERT("XMC_FCE_CalculateCRC32: Buffer is not aligned", (((uint32_t)data % 4U) == 0));
+  XMC_ASSERT("XMC_FCE_CalculateCRC32: Length is not aligned", ((length & 0x3U) == 0));
 
-  /* Check if data and length are word aligned */
-  if (((length & 0x03U) != 0U) || (((uint32_t)length % 4U) != 0U))
+  /* Check length is a multiple of 4 */
+  if ((length == 0) || ((length & 0x3U) != 0U))
   {
     status = XMC_FCE_STATUS_ERROR;
   }

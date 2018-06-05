@@ -16,16 +16,16 @@ const XMC_GPIO_CONFIG_t button_config   =
 };
 
 void buttons_init(void){
-	XMC_GPIO_Init(XMC_GPIO_PORT1, 14, &button_config);
-	XMC_GPIO_Init(XMC_GPIO_PORT1, 15, &button_config);
+	XMC_GPIO_Init(XMC_GPIO_PORT15, 13, &button_config);
+	XMC_GPIO_Init(XMC_GPIO_PORT15, 12, &button_config);
 }
 
 uint32_t button_read(Hdw_button_t button){
 	if(button == BUTTON1){
-		return XMC_GPIO_GetInput(XMC_GPIO_PORT1, 14);
+		return XMC_GPIO_GetInput(XMC_GPIO_PORT15, 13);
 	}
 	if(button == BUTTON2){
-		return XMC_GPIO_GetInput(XMC_GPIO_PORT1, 15);
+		return XMC_GPIO_GetInput(XMC_GPIO_PORT15, 12);
 	}
 	return 0;
 }

@@ -1,12 +1,12 @@
 /**
  * @file xmc_usic.h
- * @date 2017-02-10
+ * @date 2017-09-08
  *
  * @cond
  *********************************************************************************************************************
- * XMClib v2.1.16 - XMC Peripheral Driver Library 
+ * XMClib v2.1.18 - XMC Peripheral Driver Library 
  *
- * Copyright (c) 2015-2017, Infineon Technologies AG
+ * Copyright (c) 2015-2018, Infineon Technologies AG
  * All rights reserved.                        
  *                                             
  * Redistribution and use in source and binary forms, with or without modification,are permitted provided that the 
@@ -76,6 +76,9 @@
  * 2017-02-10:
  *     - Added XMC_USIC_CH_SetShiftDirection() to allow selection of shift direction of the data words for transmision and reception
  *     - Added XMC_USIC_CH_GetCaptureTimerValue() and XMC_USIC_CH_SetFractionalDivider()
+ *
+ * 2017-09-08:
+ *     - Fixed value of macro XMC_USIC_CH_SHIFT_DIRECTION_MSB_FIRST used in XMC_USIC_CH_SetShiftDirection()
  *
  * @endcond
  *
@@ -450,7 +453,7 @@ typedef enum XMC_USIC_CH_BRG_SHIFT_CLOCK_OUTPUT
 typedef enum XMC_USIC_CH_SHIFT_DIRECTION
 {
   XMC_USIC_CH_SHIFT_DIRECTION_LSB_FIRST = 0x0UL, /**< Shift LSB first. The first data bit of a data word is located at bit position 0. */
-  XMC_USIC_CH_SHIFT_DIRECTION_MSB_FIRST = 0x1UL << USIC_CH_SCTR_SDIR_Msk /**< Shift MSB first. The first data bit of a data word is located at the bit position given by the configured word length. */ 
+  XMC_USIC_CH_SHIFT_DIRECTION_MSB_FIRST = 0x1UL << USIC_CH_SCTR_SDIR_Pos /**< Shift MSB first. The first data bit of a data word is located at the bit position given by the configured word length. */ 
 } XMC_USIC_CH_SHIFT_DIRECTION_t;
 
 

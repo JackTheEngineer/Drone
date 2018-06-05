@@ -11,8 +11,8 @@
 #include "xmc_scu.h"
 #include "timer.h"
 
-XMC_CCU4_MODULE_t * const module = (XMC_CCU4_MODULE_t*) CCU41;
-XMC_CCU4_SLICE_t * const slice  = (XMC_CCU4_SLICE_t*) CCU41_CC41;
+XMC_CCU4_MODULE_t * const module = (XMC_CCU4_MODULE_t*) CCU40;
+XMC_CCU4_SLICE_t * const slice  = (XMC_CCU4_SLICE_t*) CCU41_CC40;
 
 XMC_GPIO_CONFIG_t const gpio_config = {
 		.mode = XMC_GPIO_MODE_OUTPUT_PUSH_PULL,

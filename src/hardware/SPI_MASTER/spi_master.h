@@ -7,9 +7,9 @@
  *
  * @cond
  ***********************************************************************************************************************
- * SPI_MASTER v4.3.20 - Configures the properties of USIC channel to support SPI mode of communication.
+ * SPI_MASTER v4.3.22 - Configures the properties of USIC channel to support SPI mode of communication.
  *
- * Copyright (c) 2015-2016, Infineon Technologies AG
+ * Copyright (c) 2015-2017, Infineon Technologies AG
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,are permitted provided that the

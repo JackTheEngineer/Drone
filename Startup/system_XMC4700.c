@@ -1,12 +1,12 @@
 /*********************************************************************************************************************
- * @file     system_XMC4500.c
- * @brief    CMSIS Cortex-M4 Device Peripheral Access Layer Header File for the Infineon XMC4500 Device Series
- * @version  V3.1.2
- * @date     09. Feb 2017
+ * @file     system_XMC4700.c
+ * @brief    CMSIS Cortex-M4 Device Peripheral Access Layer Header File for the Infineon XMC4700 Device Series
+ * @version  V1.0.5
+ * @date     26. sep 2017
  *
  * @cond
  *********************************************************************************************************************
- * Copyright (c) 2014-2017, Infineon Technologies AG
+ * Copyright (c) 2015-2017, Infineon Technologies AG
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,are permitted provided that the
@@ -34,49 +34,55 @@
  *********************************************************************************************************************
  *
  ********************** Version History ***************************************
- * V3.1.0, Dec 2014, Added options to configure clock settings
- * V3.1.1, 01. Jun 2016, Fix masking of OSCHPCTRL value 
- * V3.1.2, 09. Feb 2017, Fix activation of USBPLL when SDMMC clock is enabled
+ * V1.0.0, 03. Sep 2015, Initial version
+ * V1.0.1, 26. Jan 2016, Disable trap generation from clock unit
+ * V1.0.2, 01. Jun 2016, Fix masking of OSCHPCTRL value
+ * V1.0.3, 09. Feb 2017, Fix activation of USBPLL when SDMMC clock is enabled 
+ * V1.0.4, 19. Jun 2017, Rely on cmsis_compiler.h instead of defining __WEAK 
+ *                       Added support for ARM Compiler 6 (armclang) 
+ * V1.0.5, 26. Sep 2017, Disable FPU if FPU_USED is zero    
  ******************************************************************************
  * @endcond
  */
+
+/*******************************************************************************
+ * Default clock initialization
+ * fPLL = 288MHz => fSYS = 144MHz => fCPU = 144MHz
+ *                                => fPB  = 144MHz
+ *                                => fCCU = 144MHz
+ *                                => fETH = 72MHz
+ *               => fUSB = 48MHz
+ *               => fEBU = 72MHz
+ *
+ * fUSBPLL Disabled, only enabled if SCU_CLK_USBCLKCR_USBSEL_USBPLL is selected
+ *
+ * fOFI = 24MHz => fWDT = 24MHz
+ *******************************************************************************/
 
 /*******************************************************************************
  * HEADER FILES
  *******************************************************************************/
 #include <string.h>
 
-#include <XMC4500.h>
-#include "system_XMC4500.h"
+#include <XMC4700.h>
+#include "system_XMC4700.h"
 
 /*******************************************************************************
  * MACROS
  *******************************************************************************/
-
 #define CHIPID_LOC ((uint8_t *)0x20000000UL)
 
-/* Define WEAK attribute */
-#if !defined(__WEAK)
-#if defined ( __CC_ARM )
-#define __WEAK __attribute__ ((weak))
-#elif defined ( __ICCARM__ )
-#define __WEAK __weak
-#elif defined ( __GNUC__ )
-#define __WEAK __attribute__ ((weak))
-#elif defined ( __TASKING__ )
-#define __WEAK __attribute__ ((weak))
-#endif
-#endif
+#define PMU_FLASH_WS          (0x4U)
 
-#define PMU_FLASH_WS          (0x3U)
-
-#define FPLL_FREQUENCY        (120000000U)
 #define FOSCREF               (2500000U)
+
 #define DELAY_CNT_50US_50MHZ  (2500UL)
 #define DELAY_CNT_150US_50MHZ (7500UL)
-#define DELAY_CNT_50US_60MHZ  (3000UL)
-#define DELAY_CNT_50US_90MHZ  (4500UL)
+#define DELAY_CNT_50US_48MHZ  (2400UL)
+#define DELAY_CNT_50US_72MHZ  (3600UL)
+#define DELAY_CNT_50US_96MHZ  (4800UL)
 #define DELAY_CNT_50US_120MHZ (6000UL)
+#define DELAY_CNT_50US_144MHZ (7200UL)
 
 #define SCU_PLL_PLLSTAT_OSC_USABLE  (SCU_PLL_PLLSTAT_PLLHV_Msk | \
                                      SCU_PLL_PLLSTAT_PLLLV_Msk | \
@@ -100,35 +106,24 @@
 */
 #define OSCHP_FREQUENCY (12000000U)
 
+/* USB PLL settings, fUSBPLL = 48MHz and fUSBPLLVCO = 384 MHz */
+/* Note: Implicit divider of 2 and fUSBPLLVCO >= 260 MHz and fUSBPLLVCO <= 520 MHz*/
 #if OSCHP_FREQUENCY == 8000000U
 #define USB_PDIV (1U)
 #define USB_NDIV (95U)
-#define USB_DIV (3U)
 
 #elif OSCHP_FREQUENCY == 12000000U
 #define USB_PDIV (1U)
 #define USB_NDIV (63U)
-#define USB_DIV (3U)
 
 #elif OSCHP_FREQUENCY == 16000000U
 #define USB_PDIV (1U)
 #define USB_NDIV (47U)
-#define USB_DIV (3U)
 
 #else
 #error "External crystal frequency not supported"
 
 #endif
-
-/*
-//    <o> System clock (fSYS) source selection
-//       <0=> Backup clock (24MHz)
-//       <1=> Maximum clock frequency using PLL (120MHz)
-//    <i> Default: Maximum clock frequency using PLL (120MHz)
-*/
-#define SYS_CLOCK_SRC 1
-#define SYS_CLOCK_SRC_OFI 0
-#define SYS_CLOCK_SRC_PLL 1
 
 /*
 //    <o> Backup clock calibration mode
@@ -153,30 +148,29 @@
 /*
 //    <o> PLL clock source selection
 //       <0=> External crystal
-//       <1=> External direct input
-//       <2=> Internal fast oscillator
+//       <1=> Internal fast oscillator
 //    <i> Default: External crystal
 */
 #define PLL_CLOCK_SRC 0
 #define PLL_CLOCK_SRC_EXT_XTAL 0
-#define PLL_CLOCK_SRC_EXT_DIRECT 1
-#define PLL_CLOCK_SRC_OFI 2
+#define PLL_CLOCK_SRC_OFI 1
 
+/* PLL settings, fPLL = 288MHz */
 #if PLL_CLOCK_SRC == PLL_CLOCK_SRC_EXT_XTAL
 #if OSCHP_FREQUENCY == 8000000U
 #define PLL_PDIV (1U)
-#define PLL_NDIV (89U)
-#define PLL_K2DIV (2U)
+#define PLL_NDIV (71U)
+#define PLL_K2DIV (0U)
 
 #elif OSCHP_FREQUENCY == 12000000U
 #define PLL_PDIV (1U)
-#define PLL_NDIV (79U)
-#define PLL_K2DIV (3U)
+#define PLL_NDIV (47U)
+#define PLL_K2DIV (0U)
 
 #elif OSCHP_FREQUENCY == 16000000U
 #define PLL_PDIV (1U)
-#define PLL_NDIV (59U)
-#define PLL_K2DIV (3U)
+#define PLL_NDIV (35U)
+#define PLL_K2DIV (0U)
 
 #else
 #error "External crystal frequency not supported"
@@ -186,18 +180,19 @@
 #define VCO ((OSCHP_FREQUENCY / (PLL_PDIV + 1UL)) * (PLL_NDIV + 1UL))
 
 #else /* PLL_CLOCK_SRC == PLL_CLOCK_SRC_EXT_XTAL */
-
 #define PLL_PDIV (1U)
-#define PLL_NDIV (39U)
-#define PLL_K2DIV (3U)
+#define PLL_NDIV (23U)
+#define PLL_K2DIV (0U)
 
 #define VCO ((OFI_FREQUENCY / (PLL_PDIV + 1UL)) * (PLL_NDIV + 1UL))
 
 #endif /* PLL_CLOCK_SRC == PLL_CLOCK_SRC_OFI */
 
-#define PLL_K2DIV_0 ((VCO / OFI_FREQUENCY) - 1UL)
-#define PLL_K2DIV_1 ((VCO / 60000000U) - 1UL)
-#define PLL_K2DIV_2 ((VCO / 90000000U) - 1UL)
+#define PLL_K2DIV_24MHZ  ((VCO / OFI_FREQUENCY) - 1UL)
+#define PLL_K2DIV_48MHZ  ((VCO / 48000000U) - 1UL)
+#define PLL_K2DIV_72MHZ  ((VCO / 72000000U) - 1UL)
+#define PLL_K2DIV_96MHZ  ((VCO / 96000000U) - 1UL)
+#define PLL_K2DIV_120MHZ ((VCO / 120000000U) - 1UL)
 
 #define SCU_CLK_CLKCLR_ENABLE_USBCLK SCU_CLK_CLKCLR_USBCDI_Msk
 #define SCU_CLK_CLKCLR_ENABLE_MMCCLK SCU_CLK_CLKCLR_MMCCDI_Msk
@@ -206,8 +201,11 @@
 #define SCU_CLK_CLKCLR_ENABLE_CCUCLK SCU_CLK_CLKCLR_CCUCDI_Msk
 #define SCU_CLK_CLKCLR_ENABLE_WDTCLK SCU_CLK_CLKCLR_WDTCDI_Msk
 
-#define SCU_CLK_USBCLKCR_USBSEL_USBPLL (0U << SCU_CLK_USBCLKCR_USBSEL_Pos)
-#define SCU_CLK_USBCLKCR_USBSEL_PLL    (1U << SCU_CLK_USBCLKCR_USBSEL_Pos)
+#define SCU_CLK_SYSCLKCR_SYSSEL_OFI      (0U << SCU_CLK_SYSCLKCR_SYSSEL_Pos)
+#define SCU_CLK_SYSCLKCR_SYSSEL_PLL      (1U << SCU_CLK_SYSCLKCR_SYSSEL_Pos)
+
+#define SCU_CLK_USBCLKCR_USBSEL_USBPLL   (0U << SCU_CLK_USBCLKCR_USBSEL_Pos)
+#define SCU_CLK_USBCLKCR_USBSEL_PLL      (1U << SCU_CLK_USBCLKCR_USBSEL_Pos)
 
 #define SCU_CLK_WDTCLKCR_WDTSEL_OFI      (0U << SCU_CLK_WDTCLKCR_WDTSEL_Pos)
 #define SCU_CLK_WDTCLKCR_WDTSEL_STANDBY  (1U << SCU_CLK_WDTCLKCR_WDTSEL_Pos)
@@ -217,73 +215,79 @@
 #define SCU_CLK_EXTCLKCR_ECKSEL_USBPLL   (2U << SCU_CLK_EXTCLKCR_ECKSEL_Pos)
 #define SCU_CLK_EXTCLKCR_ECKSEL_PLL      (3U << SCU_CLK_EXTCLKCR_ECKSEL_Pos)
 
-#define EXTCLK_PIN_P0_8  (0)
-#define EXTCLK_PIN_P1_15 (1)
+#define EXTCLK_PIN_P0_8  (1)
+#define EXTCLK_PIN_P1_15 (2)
 
 /*
 //    <h> Clock tree
-//        <o1.0> CPU clock divider
-//                   <0=> fCPU = fSYS
-//                   <1=> fCPU = fSYS / 2
-//        <o2.0>  Peripheral clock divider
-//                     <0=> fPB	= fCPU
-//                     <1=> fPB	= fCPU / 2
-//        <e.4> Enable CCU clock
-//             <o3.0>  CCU clock divider
-//                     <0=> fCCU = fCPU
-//                     <1=> fCCU = fCPU / 2
-//        </e>
+//        <o1.16> System clock source selection
+//                      <0=> fOFI
+//                      <1=> fPLL
+//                      <i> Default: fPLL
+//        <o1.0..7> System clock divider <1-256><#-1>
+//                      <i> Default: 2
+//        <o2.0> CPU clock divider
+//                      <0=> fCPU = fSYS
+//                      <1=> fCPU = fSYS / 2
+//                      <i> Default: fCPU = fSYS
+//        <o3.0>  Peripheral clock divider
+//                      <0=> fPB = fCPU
+//                      <1=> fPB = fCPU / 2
+//                      <i> Default: fPB = fCPU
+//        <o4.0>  CCU clock divider
+//                      <0=> fCCU = fCPU
+//                      <1=> fCCU = fCPU / 2
+//                      <i> Default: fCCU = fCPU
 //        <e.5> Enable WDT clock
-//             <o4.0..7>  WDT clock divider <1-256><#-1>
-//             <o4.16..17> WDT clock source <0=> fOFI
+//             <o5.16..17> WDT clock source <0=> fOFI
 //                                          <1=> fSTDBY
 //                                          <2=> fPLL
+//                      <i> Default: fOFI
+//             <o5.0..7> WDT clock divider <1-256><#-1>
+//                      <i> Default: 1
 //        </e>
 //        <e.3> Enable EBU clock
-//             <o5.0..5>  EBU clock divider  <1-64><#-1>
+//             <o6.0..5>  EBU clock divider  <1-64><#-1>
+//             <i> Default: 4
 //        </e>
 //        <e.2> Enable ETH clock
 //        </e>
 //        <e.1> Enable MMC clock
 //        </e>
 //        <e.0> Enable USB clock
-//             <o6.16> USB clock source <0=> USBPLL
-//                                      <1=> PLL
+//             <o7.16> USB clock source <0=> fUSBPLL
+//                                      <1=> fPLL
+//             <i> Default: fPLL
 //        </e>
-//        <e7> External Clock configuration
-//            <o8.0..1> External Clock Source Selection
-//                  <0=> System clock
-//                  <2=> USB PLL clock
-//                  <3=> PLL clock
-//            <o8.16..24> External Clock divider <1-512><#-1>
-//            <i> Only valid for USB PLL and PLL clocks
-//            <o9.0> External Clock Pin Selection
-//                  <0=> P0.8
-//                  <1=> P1.15
+//        <e8> Enable external clock
+//             <o8.0..1> External Clock Source Selection
+//                  <0=> fSYS
+//                  <2=> fUSB
+//                  <3=> fPLL
+//                  <i> Default: fPLL
+//             <o8.16..24> External Clock divider <1-512><#-1>
+//                  <i> Default: 288
+//                  <i> Only valid for USB PLL and PLL clocks
+//             <o9.0> External Clock Pin Selection
+//                  <0=> Disabled
+//                  <1=> P0.8
+//                  <2=> P1.15
+//                  <i> Default: Disabled
 //        </e>
 //    </h>
 */
-#define ENABLE_SCUCLK (0U)
-#define CPUCLKDIV (0U)
-#define PBCLKDIV (0U)
-#define CCUCLKDIV (0U)
-#define WDTCLKDIV (0U | SCU_CLK_WDTCLKCR_WDTSEL_OFI)
-#define EBUCLKDIV (0U)
-#define USBCLKDIV (0U | SCU_CLK_USBCLKCR_USBSEL_USBPLL | USB_DIV)
+#define __CLKSET    (0x00000000UL)
+#define __SYSCLKCR  (0x00010001UL)
+#define __CPUCLKCR  (0x00000000UL)
+#define __PBCLKCR   (0x00000000UL)
+#define __CCUCLKCR  (0x00000000UL)
+#define __WDTCLKCR  (0x00000000UL)
+#define __EBUCLKCR  (0x00000003UL)
+#define __USBCLKCR  (0x00010000UL)
 
-#define ENABLE_EXTCLK (0U)
-#define EXTCLKDIV (0U | SCU_CLK_EXTCLKCR_ECKSEL_SYS)
-#define EXTCLK_PIN (0U)
+#define __EXTCLKCR (0x01200003UL)
+#define __EXTCLKPIN (0U)
 
-#define ENABLE_PLL \
-    (SYS_CLOCK_SRC == SYS_CLOCK_SRC_PLL) || \
-    ((ENABLE_SCUCLK & SCU_CLK_CLKSET_EBUCEN_Msk) != 0) || \
-    (((ENABLE_SCUCLK & SCU_CLK_CLKSET_USBCEN_Msk) != 0) && ((USBCLKDIV & SCU_CLK_USBCLKCR_USBSEL_Msk) == SCU_CLK_USBCLKCR_USBSEL_PLL)) || \
-    (((ENABLE_SCUCLK & SCU_CLK_CLKSET_WDTCEN_Msk) != 0) && ((WDTCLKDIV & SCU_CLK_WDTCLKCR_WDTSEL_Msk) == SCU_CLK_WDTCLKCR_WDTSEL_PLL))
-
-#define ENABLE_USBPLL \
-    ((((ENABLE_SCUCLK & SCU_CLK_CLKSET_USBCEN_Msk) != 0) && ((USBCLKDIV & SCU_CLK_USBCLKCR_USBSEL_Msk) == SCU_CLK_USBCLKCR_USBSEL_USBPLL)) ||\
-     (((ENABLE_SCUCLK & SCU_CLK_CLKCLR_ENABLE_MMCCLK) != 0) && ((USBCLKDIV & SCU_CLK_USBCLKCR_USBSEL_Msk) == SCU_CLK_USBCLKCR_USBSEL_USBPLL)))
 /*
 // </h>
 */
@@ -291,23 +295,75 @@
 /*
 //-------- <<< end of configuration section >>> ------------------
 */
-                                     
+
+#define ENABLE_PLL \
+    (((__SYSCLKCR & SCU_CLK_SYSCLKCR_SYSSEL_Msk) == SCU_CLK_SYSCLKCR_SYSSEL_PLL) || \
+     ((__CLKSET & SCU_CLK_CLKSET_EBUCEN_Msk) != 0) || \
+     (((__CLKSET & SCU_CLK_CLKSET_USBCEN_Msk) != 0) && ((__USBCLKCR & SCU_CLK_USBCLKCR_USBSEL_Msk) == SCU_CLK_USBCLKCR_USBSEL_PLL)) || \
+     (((__CLKSET & SCU_CLK_CLKSET_WDTCEN_Msk) != 0) && ((__WDTCLKCR & SCU_CLK_WDTCLKCR_WDTSEL_Msk) == SCU_CLK_WDTCLKCR_WDTSEL_PLL)))
+
+#define ENABLE_USBPLL \
+     ((((__CLKSET & SCU_CLK_CLKSET_USBCEN_Msk) != 0) && ((__USBCLKCR & SCU_CLK_USBCLKCR_USBSEL_Msk) == SCU_CLK_USBCLKCR_USBSEL_USBPLL)) || \
+      (((__CLKSET & SCU_CLK_CLKSET_MMCCEN_Msk) != 0) && ((__USBCLKCR & SCU_CLK_USBCLKCR_USBSEL_Msk) == SCU_CLK_USBCLKCR_USBSEL_USBPLL)))
+                     
+#if ((__USBCLKCR & SCU_CLK_USBCLKCR_USBSEL_Msk) == SCU_CLK_USBCLKCR_USBSEL_USBPLL)
+#define USB_DIV (3U)
+#else
+#define USB_DIV (5U)
+#endif
+    
 /*******************************************************************************
  * GLOBAL VARIABLES
  *******************************************************************************/
 #if defined ( __CC_ARM )
-uint32_t SystemCoreClock __attribute__((at(0x2000FFC0)));
-uint8_t g_chipid[16] __attribute__((at(0x2000FFC4)));
+#if defined(XMC4700_E196x2048) || defined(XMC4700_F144x2048) || defined(XMC4700_F100x2048)
+uint32_t SystemCoreClock __attribute__((at(0x2003FFC0)));
+uint8_t g_chipid[16] __attribute__((at(0x2003FFC4)));
+#elif defined(XMC4700_E196x1536) || defined(XMC4700_F144x1536) || defined(XMC4700_F100x1536)
+uint32_t SystemCoreClock __attribute__((at(0x2002CFC0)));
+uint8_t g_chipid[16] __attribute__((at(0x2002CFC4)));
+#else
+#error "system_XMC4700.c: device not supported" 
+#endif
+#elif defined (__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050)
+#if defined(XMC4700_E196x2048) || defined(XMC4700_F144x2048) || defined(XMC4700_F100x2048)
+uint32_t SystemCoreClock __attribute__((section(".ARM.__at_0x2003FFC0")));
+uint8_t g_chipid[16] __attribute__((section(".ARM.__at_0x2003FFC4")));
+#elif defined(XMC4700_E196x1536) || defined(XMC4700_F144x1536) || defined(XMC4700_F100x1536)
+uint32_t SystemCoreClock __attribute__((section(".ARM.__at_0x2002CFC0")));
+uint8_t g_chipid[16] __attribute__((section(".ARM.__at_0x2002CFC4")));
+#else
+#error "system_XMC4700.c: device not supported" 
+#endif   
 #elif defined ( __ICCARM__ )
+#if defined(XMC4700_E196x2048) || defined(XMC4700_F144x2048) || defined(XMC4700_F100x2048) || \
+    defined(XMC4700_E196x1536) || defined(XMC4700_F144x1536) || defined(XMC4700_F100x1536)
 __no_init uint32_t SystemCoreClock;
 __no_init uint8_t g_chipid[16];
+#else
+#error "system_XMC4700.c: device not supported" 
+#endif    
 #elif defined ( __GNUC__ )
+#if defined(XMC4700_E196x2048) || defined(XMC4700_F144x2048) || defined(XMC4700_F100x2048) || \
+    defined(XMC4700_E196x1536) || defined(XMC4700_F144x1536) || defined(XMC4700_F100x1536)
 uint32_t SystemCoreClock __attribute__((section(".no_init")));
 uint8_t g_chipid[16] __attribute__((section(".no_init")));
+#else
+#error "system_XMC4700.c: device not supported" 
+#endif    
 #elif defined ( __TASKING__ )
-uint32_t SystemCoreClock __at( 0x2000FFC0 );
-uint8_t g_chipid[16] __at( 0x2000FFC4 );
-#endif
+#if defined(XMC4700_E196x2048) || defined(XMC4700_F144x2048) || defined(XMC4700_F100x2048)
+uint32_t SystemCoreClock __at( 0x2003FFC0 );
+uint8_t g_chipid[16] __at( 0x2003FFC4 );
+#elif defined(XMC4700_E196x1536) || defined(XMC4700_F144x1536) || defined(XMC4700_F100x1536)
+uint32_t SystemCoreClock __at( 0x2002CFC0 );
+uint8_t g_chipid[16] __at( 0x2002CFC4 );
+#else
+#error "system_XMC4700.c: device not supported" 
+#endif    
+#else
+#error "system_XMC4700.c: compiler not supported" 
+#endif    
 
 extern uint32_t __Vectors;
 
@@ -331,7 +387,7 @@ static void delay(uint32_t cycles)
 __WEAK void SystemInit(void)
 {
   memcpy(g_chipid, CHIPID_LOC, 16);
-
+  
   SystemCoreSetup();
   SystemCoreClockSetup(); 
 }
@@ -346,9 +402,16 @@ __WEAK void SystemCoreSetup(void)
   __DSB();
   __enable_irq();
     
+  /* __FPU_PRESENT = 1 defined in device header file */
+  /* __FPU_USED value depends on compiler/linker options. */
+  /* __FPU_USED = 0 if -mfloat-abi=soft is selected */
+  /* __FPU_USED = 1 if -mfloat-abi=softfp or –mfloat-abi=hard */
+
 #if ((__FPU_PRESENT == 1) && (__FPU_USED == 1))
   SCB->CPACR |= ((3UL << 10*2) |                 /* set CP10 Full Access */
                  (3UL << 11*2)  );               /* set CP11 Full Access */
+#else
+  SCB->CPACR = 0;
 #endif
 
   /* Enable unaligned memory access - SCB_CCR.UNALIGN_TRP = 0 */
@@ -427,7 +490,6 @@ __WEAK void SystemCoreClockSetup(void)
     /* check SCU_MIRRSTS to ensure that no transfer over serial interface is pending */
   }
   SCU_HIBERNATE->HDCR |= SCU_HIBERNATE_HDCR_RCS_Msk | SCU_HIBERNATE_HDCR_STDBYSEL_Msk;
-
 #endif /* STDBY_CLOCK_SRC == STDBY_CLOCK_SRC_OSCULP */
 
   /* Enable automatic calibration of internal fast oscillator */
@@ -457,7 +519,7 @@ __WEAK void SystemCoreClockSetup(void)
     while ((SCU_PLL->PLLSTAT & SCU_PLL_PLLSTAT_OSC_USABLE) != SCU_PLL_PLLSTAT_OSC_USABLE)
     {
       /* wait till OSC_HP output frequency is usable */
-    }
+    }   
   }
 #else /* PLL_CLOCK_SRC != PLL_CLOCK_SRC_OFI */
 
@@ -473,7 +535,7 @@ __WEAK void SystemCoreClockSetup(void)
 
   /* Setup divider settings for main PLL */
   SCU_PLL->PLLCON1 = ((PLL_NDIV << SCU_PLL_PLLCON1_NDIV_Pos) |
-                      (PLL_K2DIV_0 << SCU_PLL_PLLCON1_K2DIV_Pos) |
+                      (PLL_K2DIV_24MHZ << SCU_PLL_PLLCON1_K2DIV_Pos) |
                       (PLL_PDIV << SCU_PLL_PLLCON1_PDIV_Pos));
 
   /* Set OSCDISCDIS */
@@ -487,7 +549,7 @@ __WEAK void SystemCoreClockSetup(void)
 
   while ((SCU_PLL->PLLSTAT & SCU_PLL_PLLSTAT_VCOLOCK_Msk) == 0U)
   {
-    /* wait for PLL Lock */
+    /* wait for PLL Lock at 24MHz*/
   }
 
   /* Disable bypass- put PLL clock back */
@@ -495,64 +557,54 @@ __WEAK void SystemCoreClockSetup(void)
   while ((SCU_PLL->PLLSTAT & SCU_PLL_PLLSTAT_VCOBYST_Msk) != 0U)
   {
     /* wait for normal mode */
-  }
+  } 
 #endif /* ENABLE_PLL */
 
-#if (SYS_CLOCK_SRC == SYS_CLOCK_SRC_PLL)
-  /* Switch system clock to PLL */
-  SCU_CLK->SYSCLKCR |= SCU_CLK_SYSCLKCR_SYSSEL_Msk;
-#else
-  /* Switch system clock to backup clock */
-  SCU_CLK->SYSCLKCR &= ~SCU_CLK_SYSCLKCR_SYSSEL_Msk;
-#endif
-
   /* Before scaling to final frequency we need to setup the clock dividers */
-  SCU_CLK->PBCLKCR = PBCLKDIV;
-  SCU_CLK->CPUCLKCR = CPUCLKDIV;
-  SCU_CLK->CCUCLKCR = CCUCLKDIV;
-  SCU_CLK->WDTCLKCR = WDTCLKDIV;
-  SCU_CLK->EBUCLKCR = EBUCLKDIV;
-  SCU_CLK->USBCLKCR = USBCLKDIV;
+  SCU_CLK->SYSCLKCR = __SYSCLKCR;
+  SCU_CLK->PBCLKCR = __PBCLKCR;
+  SCU_CLK->CPUCLKCR = __CPUCLKCR;
+  SCU_CLK->CCUCLKCR = __CCUCLKCR;
+  SCU_CLK->WDTCLKCR = __WDTCLKCR;
+  SCU_CLK->EBUCLKCR = __EBUCLKCR;
+  SCU_CLK->USBCLKCR = __USBCLKCR | USB_DIV;
+  SCU_CLK->EXTCLKCR = __EXTCLKCR;
 
 #if ENABLE_PLL
   /* PLL frequency stepping...*/
   /* Reset OSCDISCDIS */
   SCU_PLL->PLLCON0 &= ~SCU_PLL_PLLCON0_OSCDISCDIS_Msk;
+  
+  SCU_PLL->PLLCON1 = ((PLL_NDIV << SCU_PLL_PLLCON1_NDIV_Pos) |
+	                  (PLL_K2DIV_48MHZ << SCU_PLL_PLLCON1_K2DIV_Pos) |
+	                  (PLL_PDIV << SCU_PLL_PLLCON1_PDIV_Pos));
+
+  delay(DELAY_CNT_50US_48MHZ);
 
   SCU_PLL->PLLCON1 = ((PLL_NDIV << SCU_PLL_PLLCON1_NDIV_Pos) |
-	                    (PLL_K2DIV_1 << SCU_PLL_PLLCON1_K2DIV_Pos) |
-	                    (PLL_PDIV << SCU_PLL_PLLCON1_PDIV_Pos));
+	                  (PLL_K2DIV_72MHZ << SCU_PLL_PLLCON1_K2DIV_Pos) |
+	                  (PLL_PDIV << SCU_PLL_PLLCON1_PDIV_Pos));
 
-
-  delay(DELAY_CNT_50US_60MHZ);
-  while ((SCU_PLL->PLLSTAT & SCU_PLL_PLLSTAT_VCOLOCK_Msk) == 0U)
-  {
-    /* wait for PLL Lock */
-  }
+  delay(DELAY_CNT_50US_72MHZ);
 
   SCU_PLL->PLLCON1 = ((PLL_NDIV << SCU_PLL_PLLCON1_NDIV_Pos) |
-	                    (PLL_K2DIV_2 << SCU_PLL_PLLCON1_K2DIV_Pos) |
-	                    (PLL_PDIV << SCU_PLL_PLLCON1_PDIV_Pos));
+	                  (PLL_K2DIV_96MHZ << SCU_PLL_PLLCON1_K2DIV_Pos) |
+	                  (PLL_PDIV << SCU_PLL_PLLCON1_PDIV_Pos));
 
-
-  delay(DELAY_CNT_50US_90MHZ);
-  while ((SCU_PLL->PLLSTAT & SCU_PLL_PLLSTAT_VCOLOCK_Msk) == 0U)
-  {
-    /* wait for PLL Lock */
-  }
+  delay(DELAY_CNT_50US_96MHZ);
 
   SCU_PLL->PLLCON1 = ((PLL_NDIV << SCU_PLL_PLLCON1_NDIV_Pos) |
-	                    (PLL_K2DIV << SCU_PLL_PLLCON1_K2DIV_Pos) |
-	                    (PLL_PDIV << SCU_PLL_PLLCON1_PDIV_Pos));
-
+	                  (PLL_K2DIV_120MHZ << SCU_PLL_PLLCON1_K2DIV_Pos) |
+	                  (PLL_PDIV << SCU_PLL_PLLCON1_PDIV_Pos));
 
   delay(DELAY_CNT_50US_120MHZ);
-  while ((SCU_PLL->PLLSTAT & SCU_PLL_PLLSTAT_VCOLOCK_Msk) == 0U)
-  {
-    /* wait for PLL Lock */
-  }
 
-  SCU_TRAP->TRAPCLR = SCU_TRAP_TRAPCLR_SOSCWDGT_Msk | SCU_TRAP_TRAPCLR_SVCOLCKT_Msk;
+  SCU_PLL->PLLCON1 = ((PLL_NDIV << SCU_PLL_PLLCON1_NDIV_Pos) |
+	                  (PLL_K2DIV << SCU_PLL_PLLCON1_K2DIV_Pos) |
+	                  (PLL_PDIV << SCU_PLL_PLLCON1_PDIV_Pos));
+
+  delay(DELAY_CNT_50US_144MHZ);
+  
 #endif /* ENABLE_PLL */
 
 #if ENABLE_USBPLL
@@ -582,6 +634,7 @@ __WEAK void SystemCoreClockSetup(void)
     }
   }
 
+
   /* Setup USB PLL */
   /* Go to bypass the USB PLL */
   SCU_PLL->USBPLLCON |= SCU_PLL_USBPLLCON_VCOBYP_Msk;
@@ -605,17 +658,15 @@ __WEAK void SystemCoreClockSetup(void)
   while ((SCU_PLL->USBPLLSTAT & SCU_PLL_USBPLLSTAT_VCOLOCK_Msk) == 0U)
   {
     /* wait for PLL Lock */
-  }
-#endif /* (USBCLKDIV & SCU_CLK_USBCLKCR_USBSEL_Msk) */
+  }  
+#endif
+
 
   /* Enable selected clocks */
-  SCU_CLK->CLKSET = ENABLE_SCUCLK;
+  SCU_CLK->CLKSET = __CLKSET;
 
-#if ENABLE_EXTCLK == 1
-  /* Configure external clock */
-  SCU_CLK->EXTCLKCR = EXTCLKDIV;
-
-#if EXTCLK_PIN == EXTCLK_PIN_P1_15
+#if __EXTCLKPIN != 0
+#if __EXTCLKPIN == EXTCLK_PIN_P1_15
   /* P1.15 */
   PORT1->PDR1 &= ~PORT1_PDR1_PD15_Msk;
   PORT1->IOCR12 = (PORT1->IOCR12 & ~PORT0_IOCR12_PC15_Msk) | (0x11U << PORT0_IOCR12_PC15_Pos);
@@ -625,7 +676,6 @@ __WEAK void SystemCoreClockSetup(void)
   PORT0->PDR1 &= ~PORT0_PDR1_PD8_Msk;
   PORT0->IOCR8 = (PORT0->IOCR8 & ~PORT0_IOCR8_PC8_Msk) | (0x11U << PORT0_IOCR8_PC8_Pos);
 #endif
-
 #endif  /* ENABLE_EXTCLK == 1  */
 
   SystemCoreClockUpdate();

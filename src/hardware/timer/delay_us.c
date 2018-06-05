@@ -6,6 +6,7 @@
  */
 
 #include "delay_us.h"
+#include "xmc_ccu4.h"
 #include "timer.h"
 
 
@@ -26,8 +27,8 @@ void DelayTimer_Init(void){
 	NVIC_EnableIRQ(CCU40_1_IRQn);
 }
 void _delay_us(uint16_t us){
-	XMC_CCU4_SLICE_SetPrescaler(slice, 7);
-	XMC_CCU4_SLICE_SetTimerPeriodMatch(slice, us);
+	XMC_CCU4_SLICE_SetPrescaler(slice, 4);
+	XMC_CCU4_SLICE_SetTimerPeriodMatch(slice, 9*us);
 	XMC_CCU4_SLICE_SetTimerCompareMatch(slice, (uint16_t)0);
 	XMC_CCU4_SLICE_ClearTimer(slice);
 	XMC_CCU4_EnableShadowTransfer(module, (uint32_t)

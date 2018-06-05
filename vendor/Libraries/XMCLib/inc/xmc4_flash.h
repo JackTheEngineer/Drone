@@ -6,7 +6,7 @@
  *********************************************************************************************************************
  * XMClib v2.1.14 - XMC Peripheral Driver Library 
  *
- * Copyright (c) 2015-2017, Infineon Technologies AG
+ * Copyright (c) 2015-2018, Infineon Technologies AG
  * All rights reserved.                        
  *                                             
  * Redistribution and use in source and binary forms, with or without modification,are permitted provided that the 
@@ -56,6 +56,10 @@
  *     - Fix implementation of XMC_PREFETCH_EnableInstructionBuffer and XMC_PREFETCH_DisableInstructionBuffer
  * 2016-03-22:
  *     - Fix implementation of XMC_PREFETCH_InvalidateInstructionBuffer
+ *
+ * 2018-02-08
+ *     - Added XMC_FLASH_InstallBMI()
+ *
  * @endcond 
  *
  */
@@ -234,6 +238,42 @@ typedef enum XMC_FLASH_PROTECTION
   XMC_FLASH_PROTECTION_WRITE_SECTORS_14_15 = 0x1000UL,  /**< Sector 14 and 15 write protection */
   XMC_FLASH_PROTECTION_READ_GLOBAL         = 0x8000UL   /**< Global read protection (Applicable for UserLevel0 alone)*/
 } XMC_FLASH_PROTECTION_t;
+
+/**
+ * BMI Word configuration
+ */
+typedef enum XMC_FLASH_BMI
+{
+  XMC_FLASH_BMI_VALID = 0x1UL << 31, /**< This is always 0 in UCB. The copy of this BMI word in DSRAM1 has this “BMI Valid” bit set to 1 after SSW has validated the XOR checksum */
+  XMC_FLASH_BMI_BOOT_MODE_NORMAL = 0x0UL, /**< Normal boot mode */
+  XMC_FLASH_BMI_BOOT_MODE_ASC_BSL = 0x1UL, /**< ASC BSL boot mode */
+  XMC_FLASH_BMI_BOOT_MODE_CAN_BSL = 0x3UL, /**< CAN BSL boot mode */
+  XMC_FLASH_BMI_BOOT_MODE_PSRAM = 0x4UL, /**< PSRAM boot mode */
+  XMC_FLASH_BMI_BOOT_MODE_ABM0 = 0x5UL, /**< ABM0 boot mode */
+  XMC_FLASH_BMI_BOOT_MODE_ABM1 = 0x6UL, /**< ABM1 boot mode */
+  XMC_FLASH_BMI_BOOT_MODE_FALLBACK_ABM = 0x7UL, /**< Fallback ABM boot mode */
+  XMC_FLASH_BMI_MAC_BIT_MSK = 0x1UL << 5, /**< Valid MAC address part of BMI string */
+  XMC_FLASH_BMI_IPV4_BIT_MSK = 0x1UL << 7, /**< Ethernet IP extension contains a IPv4 address */
+  XMC_FLASH_BMI_IPV6_BIT_MSK = 0x1UL << 8, /**< Ethernet IP extension contains a IPv6 address */
+  XMC_FLASH_BMI_USB_BIT_MAK = 0x1UL << 10, /**< Valid USB Serial Number part of BMI string */
+  XMC_FLASH_BMI_PAI_PSRAM_MSK = 0x1UL << 12, /**< Parity of PSRAM to be initialized by SSW */
+  XMC_FLASH_BMI_PAI_DSRAM_MSK = 0x1UL << 13, /**< Parity of DSRAM1 to be initialized by SSW */
+  XMC_FLASH_BMI_PAI_CMSRAM_MSK = 0x1UL << 14, /**< Parity of DSRAM-Comm to be initialized by SSW */
+  XMC_FLASH_BMI_SPEEDUP_BIT_MSK = 0x1UL << 15, /**< Clock Tree of the device to be setup to maximum frequency */
+} XMC_FLASH_BMI_t;
+
+/**
+ * BMI String configuration
+ */
+typedef struct XMC_FLASH_BMI_STRING
+{
+  uint32_t bmi; /**< See ::XMC_FLASH_BMI_t */
+  uint8_t mac_addr[6]; /**< MAC address extension */
+  uint8_t ip_extension[16]; /**< Ethernet IP extension */
+  uint8_t usb_serial_no[4]; /**< USB Serial Number */
+  uint32_t reserved; 
+  uint16_t reserved1;
+} XMC_FLASH_BMI_STRING_t;
 
 /*********************************************************************************************************************
  * API PROTOTYPES
@@ -501,6 +541,23 @@ __STATIC_INLINE void XMC_PREFETCH_InvalidateInstructionBuffer(void)
   __ISB();
 
 }
+
+/**
+ * @param bmi_string BMI string configuration
+ *
+ * @return None
+ *
+ * \par<b>Description:</b><br>
+ * BMI provides a provision for end user to customize boot sequence. 
+ * A 32 bit BMI word describes a set of activities that must be performed by SSW.
+ * BMI word along with associated parameters is known as the BMI string.
+ * The function calculates the XOR checksum of the BMI String.
+ * Before calling this function the UCB2 should be erased.
+ *
+ * \par<b>Related APIs:</b><BR>
+ * XMC_FLASH_EraseUCB()
+ */
+void XMC_FLASH_InstallBMI(XMC_FLASH_BMI_STRING_t *const bmi_string);
 
 /**
  *
