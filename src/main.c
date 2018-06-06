@@ -26,6 +26,7 @@ int main(void)
 	uint32_t last_ticks = 0;
 	POINTER_TO_CONTAINER(OS_t, os);
 	POINTER_TO_CONTAINER(Sensordata_t, motion_sensor);
+	uint8_t address[5] = {1,0,0,0,0};
 	Button_t btn1 = {
 			.btn = BUTTON1,
 			.laststate = false,
@@ -56,9 +57,19 @@ int main(void)
 	leds_init();
 	buttons_init();
 	bool initialize = RFM75_Init();
-	while(initialize == 0){}
+	while(initialize == 0){
+		delay_ms(25);
+		led_toggle(LED0);
+	}
+	RFM75_setRxModeIfNeeded();
+	configRxPipe(/* Pipe number */ 0,
+				address,
+				/* Static = 1, Dynamic = 0 */ 0,
+				/*	Enable Auto Acknowledge */ 1);
+	RFM75_setChannel(50);
+	CE_HIGH;
 
-	delay_ms(8000);
+	delay_ms(5000);
 
 	PWM_Motor_Set_Rate(300, 0);
 

@@ -76,8 +76,6 @@ void RC_Iface_read_bytes(uint8_t *bytes,
 		uint8_t bufsize,
 		Disable_CSN_e csn_disable){
 
-	SPI_MASTER_STATUS_t status;
-
 	/* Change SPI  Channel configuration */
 	SPI_MASTER_SetMode(&SPI_MASTER_0, XMC_SPI_CH_MODE_STANDARD);
 	SPI_MASTER_EnableSlaveSelectSignal(&SPI_MASTER_0,
@@ -86,9 +84,8 @@ void RC_Iface_read_bytes(uint8_t *bytes,
 	_RC_Iface_clear_receive_indication();
 
 	/* Send the read status register command to SPI flash chip */
-	status = SPI_MASTER_Transmit(&SPI_MASTER_0, bytes, 1);
+	SPI_MASTER_Transmit(&SPI_MASTER_0, bytes, 1);
 	while(SPI_MASTER_0.runtime->tx_busy);
-	while(status > 0){}
 
 	_RC_Iface_wait_for_receive();
 

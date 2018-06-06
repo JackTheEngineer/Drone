@@ -119,12 +119,14 @@ bool RFM75_initRegisters()
 	writeRegPgmBuf((uint8_t *)RFM75_cmd_tog1, sizeof(RFM75_cmd_tog1));
 	writeRegPgmBuf((uint8_t *)RFM75_cmd_tog2, sizeof(RFM75_cmd_tog2));
 
-	delay_ms(RFM7x_END_INIT_WAIT_MS);
+	delay_ms(50);
 
 	selectBank(0);
 	RFM75_setModeRX();
 
+	delay_ms(5);
 	selectBank(1);
+	delay_ms(5);
 
 	//Check the ChipID
 	uint8_t ID;

@@ -85,12 +85,17 @@ void Wechsle_Motor(void){
 }
 
 void TimeTasks_run(uint32_t ticks, OS_t *os){
-//	char *sendbytes = "Hallo du auch !";
-//	uint32_t length = 15;
+	uint8_t sendbytes[32];
+	uint8_t length = 15;
+
 
 	if((ticks % TIME5MS) == 0){
 		Action_5ms(os);
 
+		length = RFM75_Receive_bytes(sendbytes);
+		if(length != 0){
+			led_toggle(LED0);
+		}
 
 //		turnOn();
 //		RC_Iface_CE_high();

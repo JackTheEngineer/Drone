@@ -194,7 +194,7 @@ const SPI_MASTER_GPIO_CONFIG_t SPI_MASTER_0_SS_0_Config =
 
 XMC_SPI_CH_CONFIG_t SPI_MASTER_0_Channel_Config =
 {
-  .baudrate = 19200U,
+  .baudrate = 400000U,
   .bus_mode = (XMC_SPI_CH_BUS_MODE_t)XMC_SPI_CH_BUS_MODE_MASTER,
   .selo_inversion = XMC_SPI_CH_SLAVE_SEL_INV_TO_MSLS,
   .parity_mode = XMC_USIC_CH_PARITY_MODE_NONE
