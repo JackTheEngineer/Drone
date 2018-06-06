@@ -1,6 +1,5 @@
 #include "delay.h"
 
-void _delay_ms(uint32_t ms);
 extern volatile uint32_t tick_count;
 
 /* Assumes tick count to be 1 tick  = 1 ms */
@@ -23,8 +22,4 @@ void delay_ms(uint32_t ms){
 			break;
 		}
 	}
-}
-
-void _delay_ms(uint32_t ms){
-	delay_ms(ms);
 }

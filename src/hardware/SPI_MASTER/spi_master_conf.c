@@ -294,8 +294,8 @@ static SPI_MASTER_STATUS_t SPI_MASTER_0_lInit(void)
 
   /* Configure the clock polarity and clock delay */
   XMC_SPI_CH_ConfigureShiftClockOutput(XMC_SPI2_CH0,
-		  XMC_SPI_CH_BRG_SHIFT_CLOCK_PASSIVE_LEVEL_0_DELAY_ENABLED,
-		  XMC_SPI_CH_BRG_SHIFT_CLOCK_OUTPUT_SCLK);
+                                       XMC_SPI_CH_BRG_SHIFT_CLOCK_PASSIVE_LEVEL_0_DELAY_ENABLED,
+                                       XMC_SPI_CH_BRG_SHIFT_CLOCK_OUTPUT_SCLK);
   /* Configure Leading/Trailing delay */
   XMC_SPI_CH_SetSlaveSelectDelay(XMC_SPI2_CH0, 2U);
 

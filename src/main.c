@@ -55,10 +55,12 @@ int main(void)
 
 	leds_init();
 	buttons_init();
+	bool initialize = RFM75_Init();
+	while(initialize == 0){}
 
-	delay_ms(100);
-//	bool initialize = RFM75_Init();
-//	while(initialize == 0){}
+	delay_ms(8000);
+
+	PWM_Motor_Set_Rate(300, 0);
 
 	while(1U){
 		if(UpdateTime(&last_ticks)){

@@ -80,9 +80,6 @@
 #endif
 #endif
 
-#include <DAVE_Common.h>
-
-
 typedef void(*i2c_master_fptr_cbhandler)(void);
 
 /***********************************************************************************************************************
@@ -271,7 +268,6 @@ extern "C" {
  *  }
  * @endcode<BR> </p>
  */
-DAVE_APP_VERSION_t I2C_MASTER_GetAppVersion(void);
 /**
  * @brief This function initializes the I2C_MASTER APP based on user provided configuration.
  *

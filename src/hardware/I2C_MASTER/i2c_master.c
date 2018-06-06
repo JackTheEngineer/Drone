@@ -166,24 +166,6 @@ static uint16_t nack_buf[1];
 /**********************************************************************************************************************
 * API IMPLEMENTATION
 **********************************************************************************************************************/
-
-/*
- * @brief API to retrieve the version of the I2C_MASTER APP.
- *
- * @return DAVE_APP_VERSION_t Structure containing major version, minor version
- *         and patch version.
- */
-DAVE_APP_VERSION_t I2C_MASTER_GetAppVersion(void)
-{
-  DAVE_APP_VERSION_t version;
-
-  version.major = I2C_MASTER_MAJOR_VERSION;
-  version.minor = I2C_MASTER_MINOR_VERSION;
-  version.patch = I2C_MASTER_PATCH_VERSION;
-
-  return (version);
-}
-
 /* Function to initialize the USIC Channel with GUI configured values.*/
 I2C_MASTER_STATUS_t I2C_MASTER_Init(const I2C_MASTER_t *const handle)
 {

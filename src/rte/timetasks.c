@@ -100,19 +100,15 @@ void TimeTasks_run(uint32_t ticks, OS_t *os){
 //								  true);
 //		RC_Iface_CE_low();
 //		turnOff();
-//		led_toggle(LED0);
-
-
-		asm("NOP");
 	}
 	if((ticks % TIME100MS) == 0){
-		led_toggle(LED0);
+		//led_toggle(LED0);
 	}
 	if((ticks % TIME1S) == 0){
 		led_toggle(LED1);
 	}
 	if((ticks % TIME2S) == 0){
-		Wechsle_Motor();
+		//Wechsle_Motor();
 	}
 }
 

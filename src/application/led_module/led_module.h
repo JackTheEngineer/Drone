@@ -2,8 +2,8 @@
 #define LED_MODULE
 
 typedef enum lednumbers{
-    LED0=8,
-    LED1=9,
+    LED0=9,
+    LED1=8,
 }leds_t;
 
 
