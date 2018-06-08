@@ -28,11 +28,11 @@ typedef enum
 	FIFOFULL = 1,
 	MAXRT = 2,
 	UNKNOWN = 3
-} TransmitStatus;
+} TransmitStatus_t;
 
 typedef struct
 {
-	TransmitStatus status;
+	TransmitStatus_t status;
 	uint32_t bytesSent;
 } TransmitResult_t;
 

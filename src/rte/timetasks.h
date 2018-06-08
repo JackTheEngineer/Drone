@@ -11,7 +11,7 @@
 #include "base.h"
 #include "os.h"
 
-#define TIME5MS (uint32_t)5
+#define TIME10MS (uint32_t)10
 #define TIME100MS (uint32_t)100
 #define TIME1S (uint32_t)1000
 #define TIME2S (uint32_t)2000

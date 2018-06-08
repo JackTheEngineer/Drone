@@ -68,14 +68,15 @@ int main(void)
 	}
 	RFM75_setRxModeIfNeeded();
 	configRxPipe(/* Pipe number */ 0,
-				address,
-				/* Static = 1, Dynamic = 0 */ 0,
-				/*	Enable Auto Acknowledge */ 1);
+		     address,
+		     /* Static = 1, Dynamic = 0 */ 0,
+		     /*	Enable Auto Acknowledge */ 1);
 	RFM75_setChannel(50);
 
-	blinkdelay(500, 9); /* waits 4,5 seconds */
 
+	blinkdelay(500, 9); /* waits 4,5 seconds */
 	CE_HIGH;
+
 	while(1U){
 		if(UpdateTime(&last_ticks)){
 			TimeTasks_run(last_ticks, os);
