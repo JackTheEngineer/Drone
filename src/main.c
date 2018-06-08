@@ -7,6 +7,8 @@
 #include "delay.h"
 #include "RFM75_driver.h"
 
+void blinkdelay(uint32_t time, uint32_t times);
+
 uint32_t volatile tick_count;
 extern void SysTick_Handler(void){
 	tick_count++;
@@ -52,10 +54,13 @@ int main(void)
 	SysTick_Config(SystemCoreClock/1000); /* 1 ms Tick */
 	DelayTimer_Init();
 
-	//Motion_sensor_init(os->motion_sensor);
+
+	Motion_sensor_init(os->motion_sensor);
 
 	leds_init();
 	buttons_init();
+	delay_ms(100);
+	/* This delay is needed for Vcc stabilization of the RFM75 transmitter */
 	bool initialize = RFM75_Init();
 	while(initialize == 0){
 		delay_ms(25);
@@ -67,16 +72,21 @@ int main(void)
 				/* Static = 1, Dynamic = 0 */ 0,
 				/*	Enable Auto Acknowledge */ 1);
 	RFM75_setChannel(50);
+
+	blinkdelay(500, 9); /* waits 4,5 seconds */
+
 	CE_HIGH;
-
-	delay_ms(5000);
-
-	PWM_Motor_Set_Rate(300, 0);
-
 	while(1U){
 		if(UpdateTime(&last_ticks)){
 			TimeTasks_run(last_ticks, os);
 		}
 	}
 	return 1;
+}
+
+void blinkdelay(uint32_t time, uint32_t times){
+	for(uint32_t i=0; i< times; i++){
+		delay_ms(time);
+		led_toggle(LED1);
+	}
 }

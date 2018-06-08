@@ -86,31 +86,28 @@ void Wechsle_Motor(void){
 
 void TimeTasks_run(uint32_t ticks, OS_t *os){
 	uint8_t sendbytes[32];
-	uint8_t length = 15;
+	uint8_t length;
+	uint16_t value = 0;
 
-
-	if((ticks % TIME5MS) == 0){
-		Action_5ms(os);
+	if((ticks % 10) == 0){
 
 		length = RFM75_Receive_bytes(sendbytes);
-		if(length != 0){
-			led_toggle(LED0);
+		if(length == 16){
+			value = ((uint16_t)sendbytes[1] << 8)| (sendbytes[0]);
+			led_toggle(LED1);
+			PWM_Motor_Set_Rate(value/4, 0);
+			PWM_Motor_Set_Rate(value/4, 1);
+			PWM_Motor_Set_Rate(value/4, 2);
+			PWM_Motor_Set_Rate(value/4, 3);
 		}
 
-//		turnOn();
-//		RC_Iface_CE_high();
-//		RFM75_Transmit_bytes((uint8_t*)sendbytes,
-//							  	  &length,
-//								  50,
-//								  true);
-//		RC_Iface_CE_low();
-//		turnOff();
+		Motion_sensor_get_data(os->motion_sensor);
+		asm("NOP");
 	}
 	if((ticks % TIME100MS) == 0){
-		//led_toggle(LED0);
+
 	}
 	if((ticks % TIME1S) == 0){
-		led_toggle(LED1);
 	}
 	if((ticks % TIME2S) == 0){
 		//Wechsle_Motor();
