@@ -71,8 +71,6 @@ int main(void)
 
 	delay_ms(5000);
 
-	PWM_Motor_Set_Rate(300, 0);
-
 	while(1U){
 		if(UpdateTime(&last_ticks)){
 			TimeTasks_run(last_ticks, os);

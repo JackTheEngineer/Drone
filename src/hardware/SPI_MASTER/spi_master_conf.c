@@ -209,7 +209,7 @@ const SPI_MASTER_CONFIG_t SPI_MASTER_0_Config  =
   .tx_fifo_size            = (XMC_USIC_CH_FIFO_SIZE_t)XMC_USIC_CH_FIFO_SIZE_16WORDS,
   .rx_fifo_size            = (XMC_USIC_CH_FIFO_SIZE_t)XMC_USIC_CH_FIFO_SIZE_16WORDS,
   /* Clock Settings */
-  .shift_clk_passive_level = XMC_SPI_CH_BRG_SHIFT_CLOCK_PASSIVE_LEVEL_0_DELAY_DISABLED, 
+  .shift_clk_passive_level = XMC_SPI_CH_BRG_SHIFT_CLOCK_PASSIVE_LEVEL_0_DELAY_ENABLED,
   .slave_select_lines      = (uint8_t)1,
   .leading_trailing_delay  = (uint8_t)2,
   .spi_master_config_mode  = XMC_SPI_CH_MODE_STANDARD, /* spi master initial mode configured mode */
