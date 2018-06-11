@@ -12,8 +12,8 @@
 #include "vector_operations.h"
 
 typedef struct Settings{
-	uint32_t afs_sel;
-	uint32_t fs_sel;
+	uint16_t afs_sel;
+	uint16_t fs_sel;
 }Sensor_settings_t;
 
 

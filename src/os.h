@@ -10,11 +10,12 @@
 
 #include "buttons.h"
 #include "motion_sensor.h"
+#include "states.h"
 
 typedef struct _os_{
 	Button_t *button_1;
 	Button_t *button_2;
-	int32_t *frequ_index;
+	State_t *current_state;
 
 	Sensordata_t *motion_sensor;
 }OS_t;

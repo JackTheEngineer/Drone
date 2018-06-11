@@ -6,6 +6,7 @@
 #include "motion_sensor.h"
 #include "delay.h"
 #include "RFM75_driver.h"
+#include "statemachine.h"
 
 void blinkdelay(uint32_t time, uint32_t times);
 
@@ -29,6 +30,7 @@ int main(void)
 	POINTER_TO_CONTAINER(OS_t, os);
 	POINTER_TO_CONTAINER(Sensordata_t, motion_sensor);
 	uint8_t address[5] = {1,0,0,0,0};
+	State_t state = STATE_CALIBRATE;
 	Button_t btn1 = {
 			.btn = BUTTON1,
 			.laststate = false,
@@ -38,12 +40,11 @@ int main(void)
 			.btn = BUTTON2,
 			.laststate = false,
 	};
-	int32_t f = 0;
 
 	os->motion_sensor = motion_sensor;
 	os->button_1 = &btn1;
 	os->button_2 = &btn2;
-	os->frequ_index = &f;
+	os->current_state = &state;
 
 	PWM_Init();
 	PWM_Motor_Set_Rate(0, 0);
@@ -54,12 +55,11 @@ int main(void)
 	SysTick_Config(SystemCoreClock/1000); /* 1 ms Tick */
 	DelayTimer_Init();
 
-
 	Motion_sensor_init(os->motion_sensor);
 
 	leds_init();
 	buttons_init();
-	delay_ms(100);
+	delay_ms(400);
 	/* This delay is needed for Vcc stabilization of the RFM75 transmitter */
 	bool initialize = RFM75_Init();
 	while(initialize == 0){
@@ -73,13 +73,14 @@ int main(void)
 		     /*	Enable Auto Acknowledge */ 1);
 	RFM75_setChannel(50);
 
-
 	blinkdelay(500, 9); /* waits 4,5 seconds */
+
+
 	CE_HIGH;
 
 	while(1U){
 		if(UpdateTime(&last_ticks)){
-			TimeTasks_run(last_ticks, os);
+			Statemachine_do(last_ticks, os);
 		}
 	}
 	return 1;

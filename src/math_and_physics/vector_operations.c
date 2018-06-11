@@ -71,7 +71,6 @@ void Vect_cross_multiply(const Vector_t *vector_1, const Vector_t *vector_2, Vec
     Vect_write(resultvector, 1, vector_1->v[1] * vector_2->v[2] - vector_1->v[2] * vector_2->v[1]);
     Vect_write(resultvector, 2, vector_1->v[2] * vector_2->v[0] - vector_1->v[0] * vector_2->v[2]);
     Vect_write(resultvector, 3, vector_1->v[0] * vector_2->v[1] - vector_1->v[1] * vector_2->v[0]);
-    
 }
 
 void Vect_sum_up_list_of_vectors(const Vector_t vectorlist[], Vector_t *sum_vector, uint32_t listlength){
@@ -131,6 +130,12 @@ void Vect_i32_times_const(const Vector_i32_t *vector, int32_t constant, Vector_i
 	Vect_i32_write(result_vector, 3, Vect_i32_read(vector, 3) * constant);
 }
 
+void Vect_i32_div_by_const(const Vector_i32_t *vector, int32_t constant, Vector_i32_t* result_vector){
+	Vect_i32_write(result_vector, 1, Vect_i32_read(vector, 1)/constant);
+	Vect_i32_write(result_vector, 2, Vect_i32_read(vector, 2)/constant);
+	Vect_i32_write(result_vector, 3, Vect_i32_read(vector, 3)/constant);
+}
+
 void Vect_i32_copy_from_to(const Vector_i32_t *vector_from, Vector_i32_t *vector_to){
 	uint8_t i;
 	for(i=0; i<3;i++){
@@ -143,6 +148,14 @@ void Vect_i32_cross_multiply(const Vector_i32_t *vector_1, const Vector_i32_t *v
 	Vect_i32_write(resultvector, 2, vector_1->v[2] * vector_2->v[0] - vector_1->v[0] * vector_2->v[2]);
 	Vect_i32_write(resultvector, 3, vector_1->v[0] * vector_2->v[1] - vector_1->v[1] * vector_2->v[0]);
 	
+}
+
+void Vect_i32_sum_up_list_of_vectors(const Vector_i32_t vectorlist[], Vector_i32_t *sum_vector, uint32_t listlength){
+	uint32_t i;
+	Vect_i32_set_all_values_to(sum_vector, 0.0);
+	for(i=0; i<listlength; i++){
+		Vect_i32_add(&(vectorlist[i]), sum_vector, sum_vector);
+	}
 }
 
 void Vect_transform_float_to_i32_with_limits(const Vector_t *float_vect, Vector_i32_t *si_vect, uint8_t resolution, _FLOAT_ limit){

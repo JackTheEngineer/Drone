@@ -99,9 +99,8 @@ void Mat_inverse(Matrix_t *M, Matrix_t *Inverse){
 	
 	_Mat_exchange_lines_so_there_are_no_zeroes_on_the_diagonal(Temporary,Inverse);
 	/* I have written the 6 Matrix operations by hand,
-	   because three_by_three_t is of fixed size
-	   and through this i am reducing the amount of
-	   'for' loops. */
+	 * because i am too lazy to implement LR Separation or anything.
+	 */
 	_Line_a_minus_line_b_times_x_on_two_matrices(
 						     2,
 						     1,

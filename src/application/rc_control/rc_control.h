@@ -11,12 +11,12 @@
 #include "base.h"
 
 typedef struct Flight_Data{
-	uint32_t throttle;
+	uint16_t throttle;
 	int32_t rotation;
 	int32_t x_tilt;
 	int32_t y_tilt;
-}Flight_Data_t;
+}RC_Data_t;
 
-
+void RC_Control_decode_message(uint8_t *received_bytes, RC_Data_t* rc_data);
 
 #endif /* RC_CONTROL_H_ */

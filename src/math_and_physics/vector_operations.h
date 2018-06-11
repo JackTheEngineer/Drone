@@ -38,8 +38,10 @@ void Vect_i32_add(const Vector_i32_t *vect_1, const Vector_i32_t *vect_2, Vector
 void Vect_i32_add_to(Vector_i32_t *sum_vect, const Vector_i32_t *vect);
 void Vect_i32_write_three_values(Vector_i32_t *vector, int32_t value_1, int32_t value_2, int32_t value_3);
 void Vect_i32_times_const(const Vector_i32_t *vector, int32_t constant, Vector_i32_t *result_vector);
+void Vect_i32_div_by_const(const Vector_i32_t *vector, int32_t constant, Vector_i32_t* result_vector);
 void Vect_i32_copy_from_to(const Vector_i32_t *vector_from, Vector_i32_t *vector_to);
 void Vect_i32_cross_multiply(const Vector_i32_t *vector_1, const Vector_i32_t *vector_2, Vector_i32_t *resultvector);
+void Vect_i32_sum_up_list_of_vectors(const Vector_i32_t vectorlist[], Vector_i32_t *sum_vector, uint32_t listlength);
 void Vect_transform_float_to_i32_with_limits(const Vector_t *float_vect, Vector_i32_t *si_vect, uint8_t resolution, _FLOAT_ limit);
 
 #endif

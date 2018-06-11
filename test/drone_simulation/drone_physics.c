@@ -44,8 +44,6 @@ void Generate_Rotation_Matrix(Matrix_t *rotation_matrix, Vector_t *angles){
 	Mat_set_all_values_to(R_y, 0.0);
 	POINTER_TO_CONTAINER(Matrix_t, R_z);
 	Mat_set_all_values_to(R_z, 0.0);
-	POINTER_TO_CONTAINER(Matrix_t, helpermat);
-	Mat_set_all_values_to(helpermat, 0.0);
 	
 	Mat_write(R_x, 1,1, 1.0);
 	Mat_write(R_x, 2,2, cos(Vect_read(angles, 1)));
@@ -106,7 +104,6 @@ void Drone_calculate_next_values(Physical_Drone_t *drone, double timestep){
 	/* Forces are being calculated in the Drone reference frame */
 	Calculate_Sum_of_forces(sum_of_forces, drone);
 	Calculate_Sum_of_moments(sum_of_moments, drone);
-	
      
 	Mat_times_vect(&(drone->J_Inverse), sum_of_moments, angular_acceleration);
 	Rotate_from_drone_frame_to_earth_frame(angular_acceleration, &(drone->angular_position));
