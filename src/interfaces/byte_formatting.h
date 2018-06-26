@@ -27,8 +27,10 @@ void format_u8buf_to_u64(uint8_t *buf_pu8, uint64_t *val_u64);
 void format_u8buf_to_u64_highbyte_first(uint8_t *buf_pu8, uint64_t *val_u64);
 void format_u32_to_u8buf(uint32_t input_u32, uint8_t output_buf_pu8[]);
 void format_u32_to_u8buf_highbyte_first(uint32_t input_u32, uint8_t output_buf_pu8[]);
-void format_u16_to_u8buf(uint16_t input_u16, uint8_t output_buf_pu8[]);
-void format_u16_to_u8buf_highbyte_first(uint16_t input_u16, uint8_t output_buf_pu8[]);
+
+void format_u16_to_u8buf(uint16_t input_u16, uint8_t *output_buf_pu8);
+void format_u16_to_u8_highbyte_first(uint16_t input_u16, uint8_t *output_buf_pu8);
+
 uint16_t format_u8buf_to_u16(uint8_t buf_pu8[]);
 uint16_t format_u8buf_to_u16_highbyte_first(uint8_t buf_pu8[]);
 void format_u64_to_u16buf(uint64_t input_u64, uint16_t output_buf_pu16[]);

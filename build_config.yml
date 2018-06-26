@@ -56,3 +56,5 @@ FURTHER_COMPILE_INCLUDES:
   - vendor/Libraries/CMSIS/Infineon/XMC4700_series/Include
 STARTUP_SRC: Startup/
 LINKER_FILE: linker_script.ld
+GLOBAL_EXCLUDE: 
+  - src/gsl/**/**

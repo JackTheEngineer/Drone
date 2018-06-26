@@ -7,6 +7,8 @@
 #include "delay.h"
 #include "RFM75_driver.h"
 #include "statemachine.h"
+#include "uart.h"
+#include "byte_formatting.h"
 
 void blinkdelay(uint32_t time, uint32_t times);
 
@@ -59,7 +61,7 @@ int main(void)
 
 	leds_init();
 	buttons_init();
-	delay_ms(400);
+	delay_ms(200);
 	/* This delay is needed for Vcc stabilization of the RFM75 transmitter */
 	bool initialize = RFM75_Init();
 	while(initialize == 0){
@@ -73,7 +75,9 @@ int main(void)
 		     /*	Enable Auto Acknowledge */ 1);
 	RFM75_setChannel(50);
 
-	blinkdelay(500, 9); /* waits 4,5 seconds */
+	UART_Init(&DebugUart);
+
+	//blinkdelay(500, 9); /* waits 4,5 seconds */
 
 
 	CE_HIGH;

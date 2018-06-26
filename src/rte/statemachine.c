@@ -13,7 +13,10 @@
 #include "delay.h"
 #include "rc_control.h"
 #include "os.h"
+#include "uart.h"
 #include "pid_controller.h"
+#include "serialize_vector.h"
+#include "byte_formatting.h"
 
 #define OFFSET_MEASUREMENTS 100
 
@@ -54,7 +57,7 @@ void Statemachine_do(uint32_t ticks, OS_t *os){
 }
 
 void State_Calibrate(uint32_t ticks, OS_t *os){
-	if((ticks % 10) == 0){
+	if((ticks % 2) == 0){
 		Motion_sensor_get_data(&offset_measurements[offset_count]);
 		offset_count++;
 		if(offset_count >= OFFSET_MEASUREMENTS){
@@ -73,9 +76,17 @@ void State_Run(uint32_t ticks, OS_t *os){
 	POINTER_TO_CONTAINER(RC_Data_t, rc_data);
 	POINTER_TO_CONTAINER(Motorcontrolvalues_t, motors);
 	POINTER_TO_CONTAINER(Vector_i32_t, helper_speed);
+	uint8_t send_bytes[37];
+	format_set_u8_buf_to(0, send_bytes, 36);
+	send_bytes[36] = '\n';
 
-
-	if(ticks % 10){
+	if((ticks % 20) == 0){
+		received_length = RFM75_Receive_bytes(received_bytes);
+		if(received_length == 0){
+			rc_no_data_receive_count++;
+		}
+		delay_ms(2);
+		Vect_i32_set_all_values_to(helper_speed, 0);
 		Motion_sensor_get_data(os->motion_sensor);
 		Vect_i32_times_const(&start_offset.angle_speed, -1, helper_speed);
 		Vect_i32_add(&os->motion_sensor->angle_speed, helper_speed, helper_speed);
@@ -97,10 +108,6 @@ void State_Run(uint32_t ticks, OS_t *os){
 		}
 
 
-		received_length = RFM75_Receive_bytes(received_bytes);
-		if(received_length == 0){
-			rc_no_data_receive_count++;
-		}
 		if(received_length == 16){
 			RC_Control_decode_message(received_bytes, rc_data);
 			Motors_set_all_data_speed(motors, rc_data->throttle/4);
@@ -111,7 +118,11 @@ void State_Run(uint32_t ticks, OS_t *os){
 			Motors_set_all_data_speed(motors, 0);
 		}
 		Motors_act_on_pwm(motors);
-		asm("NOP");
+
+		serialize_vector_as_i32(&os->motion_sensor->acceleration, &send_bytes[0]);
+		serialize_vector_as_i32(&os->motion_sensor->angle_speed, &send_bytes[12]);
+		serialize_vector_as_i32(&os->motion_sensor->magnetic_field, &send_bytes[24]);
+		UART_Transmit(&DebugUart, send_bytes, 37);
 	}
 	if((ticks % 500) == 0){
 		led_toggle(LED1);
