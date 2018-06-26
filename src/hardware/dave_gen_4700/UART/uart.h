@@ -76,6 +76,7 @@
 #error "UART requires XMC Peripheral Library v2.1.10 or higher"
 #endif
 
+#include <DAVE_Common.h>
 #include "uart_conf.h"
 #if ((defined UART_TX_DMA_USED) || (defined UART_RX_DMA_USED))
 #include "../GLOBAL_DMA/global_dma.h"
@@ -321,6 +322,8 @@ extern "C" {
  *  }
  *  @endcode
  */
+DAVE_APP_VERSION_t UART_GetAppVersion(void);
+
 /**
  * @brief Initializes the UART module as per the configuration made
  * in UI.

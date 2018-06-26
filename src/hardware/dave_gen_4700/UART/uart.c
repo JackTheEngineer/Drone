@@ -109,7 +109,29 @@ static UART_STATUS_t UART_lStartReceivePolling (const UART_t *const handle, uint
 void UART_lProtocolHandler(const UART_t * const handle);
 
 
-/* * @brief Function to initialize the USIC Channel with GUI configured values.
+/**********************************************************************************************************************
+ * API IMPLEMENTATION
+ **********************************************************************************************************************/
+
+/*
+ * @brief API to retrieve the version of the UART APP.
+ *
+ * @return DAVE_APP_VERSION_t Structure containing major version, minor version
+ *         and patch version.
+ */
+DAVE_APP_VERSION_t UART_GetAppVersion()
+{
+  DAVE_APP_VERSION_t version;
+
+  version.major = UART_MAJOR_VERSION;
+  version.minor = UART_MINOR_VERSION;
+  version.patch = UART_PATCH_VERSION;
+
+  return version;
+}
+
+/*
+ * @brief Function to initialize the USIC Channel with GUI configured values.
  *
  * @param[in]  handle UART APP handle pointer of type UART_t*
  *
