@@ -64,13 +64,36 @@
 
 #define MPU9250_ADDRESS (0x68 << 1)
 
+//Magnetometer Registers
+#define AK8963_WHO_AM_I  0x00 // should return 0x48
+#define AK8963_INFO      0x01
+#define AK8963_ST1       0x02  // data ready status bit 0
+#define AK8963_XOUT_L	 0x03  // data
+#define AK8963_XOUT_H	 0x04
+#define AK8963_YOUT_L	 0x05
+#define AK8963_YOUT_H	 0x06
+#define AK8963_ZOUT_L	 0x07
+#define AK8963_ZOUT_H	 0x08
+#define AK8963_ST2       0x09  // Data overflow bit 3 and data read error status bit 2
+#define AK8963_CNTL      0x0A  // Power down (0000), single-measurement (0001), self-test (1000) and Fuse ROM (1111) modes on bits 3:0
+#define AK8963_ASTC      0x0C  // Self test control
+#define AK8963_I2CDIS    0x0F  // I2C disable
+#define AK8963_ASAX      0x10  // Fuse ROM x-axis sensitivity adjustment value
+#define AK8963_ASAY      0x11  // Fuse ROM y-axis sensitivity adjustment value
+#define AK8963_ASAZ 0x12 // Fuse ROM z-axis sensitivity adjustment value
+
+#define AK8963_ADDRESS (0x0C << 1) //  Address of magnetometer
+
 /* At max sensitivity */
 #define GYRO_SENSITIVITY 131 /* LSB for 1 Deg/sec */
 /* At max sensitivity */
 #define ACCEL_SENSITIVITY 16384 /* LSB for 1 g = 9.81 m/s^2 */
 
-uint8_t MSensor_Iface_readByte(uint8_t address);
+uint8_t MSensor_Iface_readByte(uint8_t i2c_addr, uint8_t address);
+void MSensor_Iface_readBytesFromi2c_addr(uint8_t i2c_addr, uint8_t startaddress,
+		uint8_t *read_buf, uint8_t size);
 void MSensor_Iface_writeByte(uint8_t address, uint8_t value);
+void MSensor_Iface_writeByteToi2c_addr(uint8_t i2c_addr, uint8_t address, uint8_t value);
 void MSensor_Iface_readBytes(uint8_t startaddress, uint8_t *read_buf, uint8_t size);
 void MSensor_Iface_Init(void);
 

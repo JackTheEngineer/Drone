@@ -7,7 +7,33 @@ from functools import partial as fp
 from collections import deque
 from pyqtgraph.Qt import QtGui, QtCore
 
-def readSerialAndUpdatePlot(ser_port, curves, data):
+class Plot(object):
+      def __init__(self, window, title):
+            self.plot = window.addPlot(title=title)
+            self.plot.showGrid(x=False, y=True)
+            self.plot.enableAutoRange('xy', True)
+            self.curves = []
+            self.data = []
+
+      def addCurveToPlot(self, data, color):
+            self.curves.append(self.plot.plot(np.array(data), pen=color))
+            self.data.append([])
+
+      def setData(self, curve_index, data):
+            if(curve_index < self.numOfCurves()):
+                  self.curves[curve_index].setData(np.array(data))
+
+      def numOfCurves(self):
+            return len(self.curves)
+
+      def addDataPoint(self, curve_index, value):
+            if(curve_index < self.numOfCurves()):
+                  self.data[curve_index].append(value)
+                  self.setData(curve_index, self.data[curve_index])
+                  while(len(self.data[curve_index]) > 200):
+                        del self.data[curve_index][0]
+
+def readSerialAndUpdatePlot(ser_port, plots):
       bytes_per_value = 4
 
       while(ser_port.in_waiting != 0):
@@ -17,23 +43,14 @@ def readSerialAndUpdatePlot(ser_port, curves, data):
           for i in range(9): # 9 Integer Numbers, using 36 Bytes , last byte is "\n"
             values.append(int.from_bytes(bytess[(bytes_per_value*i):(bytes_per_value*(i+1))],
                                          'little', signed=True))
-          print(values)
-          for i, oneArray in enumerate(data):
-            value = values[i]
-            if(value > 2**15):
-              value = values[i] - 2**16 
-
-            oneArray.append(value)
-            curves[i].setData(np.array(oneArray))
-            while(len(oneArray) > 200):
-              del oneArray[0]
-
-          
+          for i in range(3):
+            for j in range(3):
+                  plots[i].addDataPoint(j, values[i*3 + j])
             
 def main():
       #ser_port = serial.Serial('/dev/ttyUSB0', 460800)
       ser_port = serial.Serial('/dev/ttyUSB0', 460800)
-      #ser_port = serial.Serial('/dev/ttyUSB1', 115200)
+      #ser_port = serial.Serial('/dev/ttyUSB0', 115200)
 
       app = QtGui.QApplication([])
 
@@ -41,44 +58,27 @@ def main():
       win.resize(1200,800)
       win.setWindowTitle('Plotting')
       pg.setConfigOptions(antialias=True)
-      
-      p1 = win.addPlot(title="Acceleration")
-      p1.showGrid(x=False, y=True)
-      p1.enableAutoRange('xy', True)
 
-      p2 = win.addPlot(title="AngularMotion")
-      p2.showGrid(x=False, y=True)
-      p2.enableAutoRange('xy', True)
+      plotnames = ("Acceleration", "AngularMotion", "Magnetic Field")
+      colors = (((255, 0, 0),(0,255,0), (0,0,255)),
+                ((255,255,0),(255,0,255),(0,255,255)),
+                ((255,100,100),(100,100,255),(100,255,100)))
+      plots = []
 
-      p3 = win.addPlot(title="Magnetic Field")
-      p3.showGrid(x=False, y=True)
-      p3.enableAutoRange('xy', True)
-
-      colors = [(255, 0, 0),(0,255,0), (0,0,255),
-                (255,255,0),(255,0,255),(0,255,255),
-                (255,255,255),(255,255,255),(255,255,255)]
-  
-      data = []
-      curves = []
       for i in range(3):
-            data.append([])
-            curves.append(p1.plot(np.array(data[i]), pen=colors[i]))
+            newplot = Plot(win, plotnames[i])
+            for color in colors[i]: # colors[i] is a color triple
+                  newplot.addCurveToPlot([], color)
+            plots.append(newplot)
 
-      for i in range(3,6):
-            data.append([])
-            # appending to plot p2
-            curves.append(p2.plot(np.array(data[i]), pen=colors[i]))
+      win.nextRow()
 
-      for i in range(6,9):
-            data.append([])
-            # appending to plot p3
-            curves.append(p2.plot(np.array(data[i]), pen=colors[i]))
 
+  
       timer = pg.QtCore.QTimer()
       timer.timeout.connect(fp(readSerialAndUpdatePlot,
-                               ser_port,
-                               curves,
-                               data))
+                               ser_port, plots))
+
       timer.start(20)
       
       QtGui.QApplication.instance().exec_()
