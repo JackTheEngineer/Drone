@@ -92,7 +92,7 @@ sourceOfObjectFile o_file allSources = do
 
 main :: IO ()
 main = shakeArgs shakeOptions{shakeFiles=resultsDir
-                             ,shakeThreads=4} $ do
+                             ,shakeThreads=6} $ do
   let elf_file = resultsDir </> "result.elf"
       hex_file = elf_file -<.> "hex"
       bin_file = elf_file -<.> "bin"
@@ -123,6 +123,7 @@ main = shakeArgs shakeOptions{shakeFiles=resultsDir
     allSources <- liftIO $ getDirectoryFilesIO "" source_files
     allHeaders <- liftIO $ getDirectoryFilesIO "" header_files
     sourceFile <- sourceOfObjectFile out allSources
+    need [sourceFile]
     let ending = takeExtension sourceFile
         m = out -<.> "m"
         uniqueDirs = nub (map dropFileName (allHeaders ++ allSources))
