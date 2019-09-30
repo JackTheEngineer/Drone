@@ -242,7 +242,7 @@ uint8_t writeRegPgmBuf(uint8_t * cmdbuf, uint8_t len)
 }
 
 uint8_t writeRegCmdBuf(uint8_t cmd,
-		uint8_t * buf,
+		const uint8_t * buf,
 		uint8_t len)
 {
 	RC_Iface_send_bytes(&cmd, 1, LEAVE_CE_ENABLED);

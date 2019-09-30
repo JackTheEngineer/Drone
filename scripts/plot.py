@@ -1,4 +1,4 @@
-import serial # import Serial Library
+import serial 
 import pyqtgraph as pg
 import numpy as np
 from time import sleep
@@ -17,23 +17,18 @@ def readSerialAndUpdatePlot(ser_port, curves, data):
           for i in range(9): # 9 Integer Numbers, using 36 Bytes , last byte is "\n"
             values.append(int.from_bytes(bytess[(bytes_per_value*i):(bytes_per_value*(i+1))],
                                          'little', signed=True))
-          print(values)
           for i, oneArray in enumerate(data):
             value = values[i]
-            if(value > 2**15):
-              value = values[i] - 2**16 
 
-            oneArray.append(value)
+            oneArray.append(value - 14.5)
             curves[i].setData(np.array(oneArray))
             while(len(oneArray) > 200):
               del oneArray[0]
-
-          
             
 def main():
       #ser_port = serial.Serial('/dev/ttyUSB0', 460800)
       ser_port = serial.Serial('/dev/ttyUSB0', 460800)
-      #ser_port = serial.Serial('/dev/ttyUSB1', 115200)
+      #ser_port = serial.Serial('/dev/ttyUSB0', 115200)
 
       app = QtGui.QApplication([])
 

@@ -17,7 +17,7 @@ _STATIC_ void calucalte_multipliers(Motorcontrolvalues_t *motorvalues, Motor_t m
 _STATIC_ void calculate_quadratic_multipliers(_FLOAT_ *multipliers, Motor_t motors[NMBR_OF_MOTORS]);
 
 _STATIC_ void Test_multipliers_equal_and_nonzero(_FLOAT_ *multipliers1, _FLOAT_ *multipliers2 );
-_STATIC_ void Set_all_values_in_ui32_list(uint32_t *list, uint32_t length, _FLOAT_ value_to_set);
+_STATIC_ void Set_all_values_in_ui16_list(uint16_t *list, uint32_t length, _FLOAT_ value_to_set);
 _STATIC_ void Test_selected_values_in_Motors_list_equal_value(Motor_t motors[NMBR_OF_MOTORS], Motorelement_selector_f selector, _FLOAT_ value);
 _STATIC_ void Set_all_selected_values_in_Motors_list(Motor_t motors[NMBR_OF_MOTORS], Motorelement_selector_f selector, _FLOAT_ value);
 _STATIC_ void Test_selected_values_in_Motors_list_nonzero(Motor_t motors[NMBR_OF_MOTORS], Motorelement_selector_f selector);
@@ -82,15 +82,15 @@ TEST(fake_motors, caluclate_thursts_from_speeds_should_be_quadratic){
 }
 
 _STATIC_ void Set_all_values_zero(Motorcontrolvalues_t *motorvalues, Motor_t motors[NMBR_OF_MOTORS]){
-	Set_all_values_in_ui32_list(motorvalues->motorspeeds, NMBR_OF_MOTORS, 0);
-        Set_all_selected_values_in_Motors_list(motors, select_current, 0);
+	Set_all_values_in_ui16_list(motorvalues->motorspeeds, NMBR_OF_MOTORS, 0);
+    Set_all_selected_values_in_Motors_list(motors, select_current, 0);
 }
 
 _STATIC_ void Set_motorvalues_to_x(Motorcontrolvalues_t *motorvalues, _FLOAT_ x){
-	Set_all_values_in_ui32_list(motorvalues->motorspeeds, NMBR_OF_MOTORS, x);
+	Set_all_values_in_ui16_list(motorvalues->motorspeeds, NMBR_OF_MOTORS, x);
 }
 
-_STATIC_ void Set_all_values_in_ui32_list(uint32_t *list, uint32_t length, _FLOAT_ value_to_set){
+_STATIC_ void Set_all_values_in_ui16_list(uint16_t *list, uint32_t length, _FLOAT_ value_to_set){
 	uint32_t i;
 
 	for(i=0;i<length;i++){

@@ -9,6 +9,7 @@ build/**
 /vendor/clang-checker/
 .metadata/**
 doc/
+shakebuild/**
 
 Dave/Model/**
 Dave/Generated/**

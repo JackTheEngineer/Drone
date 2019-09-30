@@ -68,6 +68,7 @@ int main(void)
 		delay_ms(25);
 		led_toggle(LED0);
 	}
+
 	RFM75_setRxModeIfNeeded();
 	configRxPipe(/* Pipe number */ 0,
 		     address,

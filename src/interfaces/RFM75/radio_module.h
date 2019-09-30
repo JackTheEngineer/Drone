@@ -139,7 +139,7 @@ void selectBank(uint8_t bank);
 // adr has to be 5 bytes!
 uint8_t configRxPipe(uint8_t pipe_nr, uint8_t *adr, uint8_t plLen, uint8_t en_aa);
 void enableRxPipe(uint8_t pipe_nr);
-uint8_t writeRegCmdBuf(uint8_t cmd, uint8_t * buf, uint8_t len);
+uint8_t writeRegCmdBuf(uint8_t cmd, const uint8_t * buf, uint8_t len);
 void disableRxPipe(uint8_t pipe_nr);
 
 // adr has to be 5 bytes!
