@@ -19,9 +19,9 @@ headerFiles:
 # and works only for the 'ccBase' parameter
 
 ccBase: /home/jakov/bin/gcc-arm-none-eabi-4_9-2014q4/bin
-cc: <ccBase>arm-none-eabi-gcc # <ccBase> gets replaced and correctly concatenated
-ccObjCopy: <ccBase>arm-none-eabi-objcopy
-ccSize: <ccBase>arm-none-eabi-size
+cc: <ccBase>/arm-none-eabi-gcc # <ccBase> gets just replaced
+ccObjCopy: <ccBase>/arm-none-eabi-objcopy
+ccSize: <ccBase>/arm-none-eabi-size
 
 ccAsmOptions:
   - -x assembler-with-cpp
@@ -72,10 +72,10 @@ ccLinkLibs:
 # At the command line they end up like:
 # "-I"compile-include-path" -I"PATH_TO_ARM_BASE/arm-none-eabi/include"
 compileIncludes:
-  - <ccBase>arm-none-eabi/include
-  - vendor/Libraries/XMCLib/inc
-  - vendor/Libraries/CMSIS/Include
-  - vendor/Libraries/CMSIS/Infineon/XMC4700_series/Include
+  - <ccBase>/arm-none-eabi/include/
+  - vendor/Libraries/XMCLib/inc/
+  - vendor/Libraries/CMSIS/Include/
+  - vendor/Libraries/CMSIS/Infineon/XMC4700_series/Include/
   
 # Leave empty if you don't have any
 linkerFile: linker_script.ld
