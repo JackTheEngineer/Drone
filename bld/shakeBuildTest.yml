@@ -6,8 +6,10 @@ resultsDir: "_testbuild"
 sourceFiles:
   - test//test_pid_controller.c
   - src//pid_controller.c
+  - vendor/Unity/src/unity.c
+  - vendor/Unity/extras/fixture/src/unity_fixture.c
 headerFiles:
-  - test/fakes//*.h
+  - test//*.h
   - src//*.h
 
 # For compilation, ccBase and the others are joined with
@@ -22,7 +24,8 @@ cc: gcc
 ccObjCopy: ""
 ccSize: ""
 ccAsmOptions: []
-ccCompileOptions: 
+ccCompileOptions:
+  - -c
   - -DUNITY_INCLUDE_DOUBLE
   - -std=gnu11
   - -Wall
@@ -62,7 +65,9 @@ ccLinkLibs:
   
 # At the command line they end up like:
 # "-I"compile-include-path" -I"PATH_TO_ARM_BASE/arm-none-eabi/include"
-compileIncludes: []
-# Leave empty if you don't have any
-linkerFile: 
+compileIncludes:
+  - vendor/Unity/src/
+  - vendor/Unity/extras/fixture/src/
+# make an empty string if you don't have any
+linkerFile: ""
 

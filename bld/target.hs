@@ -11,12 +11,12 @@ import System.Environment
 
 data Config = Config {
   resultsDir :: FilePath
+  , sourceFiles :: [FilePattern]
+  , headerFiles :: [FilePattern]
   , ccBase :: FilePath
   , cc :: FilePath
   , ccObjCopy :: FilePath
   , ccSize :: FilePath
-  , sourceFiles :: [FilePattern]
-  , headerFiles :: [FilePattern]
   , ccAsmOptions :: [String]
   , ccCompileOptions :: [String]
   , ccLinkOptions :: [String]
@@ -31,19 +31,19 @@ unpck = DT.unpack
 instance FromJSON Config where
   parseJSON (Y.Object v) =
     Config <$>
+    v .: pck "resultsDir" <*>
+    v .: pck "sourceFiles" <*>
+    v .: pck "headerFiles" <*>
     v .: pck "ccBase" <*>
     v .: pck "cc" <*>
     v .: pck "ccObjCopy" <*>
     v .: pck "ccSize" <*>
-    v .: pck "sourceFiles" <*>
-    v .: pck "headerFiles" <*>
     v .: pck "ccAsmOptions" <*>
     v .: pck "ccCompileOptions" <*>
     v .: pck "ccLinkOptions" <*>
     v .: pck "ccLinkLibs" <*>
     v .: pck "compileIncludes" <*>
-    v .: pck "linkerFile" <*>
-    v .: pck "resultsDir"
+    v .: pck "linkerFile"
   parseJSON _ = fail "Expected Object for Config value"
 
 makeInclude = ((++) "-I ")

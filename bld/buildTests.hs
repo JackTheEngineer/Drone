@@ -11,12 +11,12 @@ import System.Environment
 
 data Config = Config {
   resultsDir :: FilePath
+  , sourceFiles :: [FilePattern]
+  , headerFiles :: [FilePattern]
   , ccBase :: FilePath
   , cc :: FilePath
   , ccObjCopy :: FilePath
   , ccSize :: FilePath
-  , sourceFiles :: [FilePattern]
-  , headerFiles :: [FilePattern]
   , ccAsmOptions :: [String]
   , ccCompileOptions :: [String]
   , ccLinkOptions :: [String]
@@ -31,19 +31,19 @@ unpck = DT.unpack
 instance FromJSON Config where
   parseJSON (Y.Object v) =
     Config <$>
+    v .: pck "resultsDir" <*>
+    v .: pck "sourceFiles" <*>
+    v .: pck "headerFiles" <*>
     v .: pck "ccBase" <*>
     v .: pck "cc" <*>
     v .: pck "ccObjCopy" <*>
     v .: pck "ccSize" <*>
-    v .: pck "sourceFiles" <*>
-    v .: pck "headerFiles" <*>
     v .: pck "ccAsmOptions" <*>
     v .: pck "ccCompileOptions" <*>
     v .: pck "ccLinkOptions" <*>
     v .: pck "ccLinkLibs" <*>
     v .: pck "compileIncludes" <*>
-    v .: pck "linkerFile" <*>
-    v .: pck "resultsDir"
+    v .: pck "linkerFile" 
   parseJSON _ = fail "Expected Object for Config value"
 
 makeInclude = ((++) "-I ")
@@ -58,7 +58,9 @@ sourceOfObjectFile o_file allSources = do
     do 
       case res of
         (x:[]) -> return x
-        _ -> error "The UNIMAGINABLE happened. The function 'sourceOfObjectFile' did not work"
+        _ -> liftIO $ do
+          mapM_ print allSources
+          error ("The UNIMAGINABLE happened. 'sourceOfObjectFile' failed on " ++ o_file)
 
 
 startsWith :: String -> String -> Bool
@@ -69,8 +71,10 @@ startsWith key wholestring =
 -- and "test_something"
 -- and "test_something"
 shakeIT :: Config -> IO()
-shakeIT c = shakeArgs shakeOptions{shakeFiles=(resultsDir c)
-                                  ,shakeThreads=6} $ do
+shakeIT c = shakeArgs shakeOptions{ shakeFiles= (resultsDir c)
+                                  , shakeThreads = 6
+                                  , shakeReport = ["shake.trace"]
+                                  , shakeCreationCheck = False} $ do
 
   allSources <- liftIO $ getDirectoryFilesIO "" (sourceFiles c)
   allHeaders <- liftIO $ getDirectoryFilesIO "" (headerFiles c)
@@ -85,23 +89,39 @@ shakeIT c = shakeArgs shakeOptions{shakeFiles=(resultsDir c)
       furtherCompileIncludes = map makeInclude (compileIncludes c)
       gcc = (cc c)
 
+  -- Calls all Tests
+  -- Does not work yet
+  -- Decision between single file with all
+  -- source_definitions for tests
+  -- or, multiple yaml files, each own with it's source defines
+  phony "test" $ do
+    test_sources <- getDirectoryFiles "" ["test//test_*.c"]
+    need $ map takeBaseName test_sources
+  
   resultDir <//> "run_*.c" %> \out -> do
     let genRunnerScript = "bld" </> "generate_test_runner.rb"
         runnerTemplate =  "bld" </> "runner_template.c"
         compare = (\cp p -> (takeBaseName p) == cp)
-        test_source = (filter (compare ("test" ++ (runnername out))) allSources) !! 0
-    need [sourceGenDir]
-    cmd_ "ruby" genRunnerScript "-o" [out] "-t" runnerTemplate "-r" test_source
+        test_name = ("test" ++ (runnername out))
+        test_sources = (filter (compare ("test" ++ (runnername out))) allSources)
+    case test_sources of
+      [] -> liftIO $ do
+        mapM_ print allSources
+        error ("Failed on  finding the test_source for: " ++ test_name)
+      (test_source:[]) -> do
+        cmd_ "ruby" genRunnerScript "-o" [out] "-t" runnerTemplate "-r" test_source
+    
 
   "test_*" %> \out -> do
-    let executable = resultDir </> out -<.> exe
+    let executable = resultDir </> out -<.> ".exe"
     need [executable]
-    cmd_ executable
+    command_ [] executable [] 
     
-  resultDir <//> "test_*" <.> exe %> \out -> do
+  resultDir <//> "test_*" <.> "exe" %> \out -> do
     sources <- getDirectoryFiles "" (sourceFiles c)
     let runner_c = sourceGenDir </> ("run_" ++ (runnername out)) <.> "c"
-        os = [resultDir </> source -<.> "o" | source <- (runner_c:sources)]
+        _os = [resultDir </> source -<.> "o" | source <- (sources)]
+        os = ((runner_c -<.> "o"):_os)
     need [runner_c]
     need os
     cmd_ gcc "-o" [out] os (ccLinkOptions c) (ccLinkLibs c)
@@ -121,7 +141,6 @@ loadConfig :: String -> IO(Config)
 loadConfig filename = do
   file <- BS.readFile filename
   cfg <- Y.decodeThrow file :: IO(Config)
-  print cfg
   let rpl = DT.replace
       rep a = unpck ((rpl (pck "<ccBase>") (pck (ccBase cfg))) (pck a))
       updated_config c = c { cc = rep (cc cfg)
