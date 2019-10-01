@@ -48,21 +48,34 @@ instance FromJSON Config where
 
 makeInclude = ((++) "-I ")
 
-sourceOfObjectFile :: FilePath -> [FilePath] -> Action(FilePath)
-sourceOfObjectFile o_file allSources = do
+runner_to_test r = "test" ++  (((drop 4) . takeBaseName) r)
+test_to_runner t = "run_" ++ (((drop 4) . takeBaseName) t)
+
   -- If you want to make an arbitrarily deep results directory,
-  -- change this func  :>>----------------------------<<:, and pass it the result directory as a parameter
-  let pathNoExtension = (dropExtension . dropDirectory1) o_file
-      compare = (\cp p -> (dropExtension p) == cp)
-      res = filter (compare pathNoExtension) allSources in
-    do 
-      case res of
-        (x:[]) -> return x
-        _ -> error "The UNIMAGINABLE happened. The function 'sourceOfObjectFile' did not work"
+  -- change this func underneath the funny symbols   :>>----------------------------<<:,
+  -- and pass it the result directory as a parameter
+sieveSourceOfObjFile o_file =   let pathNoExtension = (dropExtension . dropDirectory1) o_file
+                                    compare = (\cp p -> (dropExtension p) == cp) in 
+                                  (compare pathNoExtension)
+  
+sieveTestSourceOfRunner r = let compare = (\cp p -> (takeBaseName p) == cp)
+                                test_name = (runner_to_test r) in
+                             (compare test_name) 
+  
+findSourceWithFilterOrError ::  FilePath -> (FilePath -> Bool) -> [FilePath] -> Action(FilePath)
+findSourceWithFilterOrError key sieve allSources = do
+  let res = filter sieve allSources
+  case res of
+    (test_source:[]) -> return test_source
+    _                -> liftIO $ do
+                          mapM_ print allSources
+                          error ("In the above sources, there was no match, or too many: " ++ key)
 
 shakeIT :: Config -> IO()
-shakeIT c = shakeArgs shakeOptions{shakeFiles=(resultsDir c)
-                                  ,shakeThreads=6} $ do
+shakeIT c = shakeArgs shakeOptions{ shakeFiles=(resultsDir c)
+                                  , shakeThreads=6
+                                  , shakeReport = ["shake.trace"]
+                                  , shakeCreationCheck = False} $ do
   let resultDir = resultsDir c
       elf_file = resultDir </> "result.elf"
       hex_file = elf_file -<.> "hex"
@@ -72,9 +85,10 @@ shakeIT c = shakeArgs shakeOptions{shakeFiles=(resultsDir c)
   allSources <- liftIO $ getDirectoryFilesIO "" (sourceFiles c)
   allHeaders <- liftIO $ getDirectoryFilesIO "" (headerFiles c)
 
-  let uniqueDirs = nub (map dropFileName (allHeaders ++ allSources))
+  let uniqueDirs = reverse $ nub (map dropFileName (allHeaders ++ allSources))
       include_dirs = map (makeInclude . fromFilePath) uniqueDirs
       furtherCompileIncludes = map makeInclude (compileIncludes c)
+      sourceGenDir = resultDir </> "sourceGen"
       gcc = (cc c)
 
   phony "arm" $ do
@@ -99,7 +113,9 @@ shakeIT c = shakeArgs shakeOptions{shakeFiles=(resultsDir c)
     cmd_ (ccSize c) "--format=berkeley -x" [out]
 
   resultDir <//> "*.o" %> \out -> do
-    sourceFile <- sourceOfObjectFile out allSources
+    sourceFile <- case ((takeDirectory out) == sourceGenDir) of
+                    True -> return (out -<.> "c")
+                    False ->findSourceWithFilterOrError out (sieveSourceOfObjFile out) allSources
     need [sourceFile]
     let ending = takeExtension sourceFile
         m = out -<.> "m"
@@ -118,6 +134,27 @@ shakeIT c = shakeArgs shakeOptions{shakeFiles=(resultsDir c)
         asm
         neededMakefileDependencies m
       _ -> error ("Not A Valid FileEnding " ++ show ending)
+
+  resultDir <//> "run_*.c" %> \out -> do
+    let genRunnerScript = "bld" </> "generate_test_runner.rb"
+        runnerTemplate =  "bld" </> "runner_template.c"
+    test_source <- findSourceWithFilterOrError out (sieveTestSourceOfRunner out) allSources
+    cmd_ "ruby" genRunnerScript "-o" [out] "-t" runnerTemplate "-r" test_source
+
+  "test_*" %> \out -> do
+    let executable = resultDir </> out -<.> ".exe"
+    need [executable]
+    command_ [] executable [] 
+    
+  resultDir <//> "test_*" <.> "exe" %> \out -> do
+    sources <- getDirectoryFiles "" (sourceFiles c)
+    let runner_c = sourceGenDir </> (test_to_runner out) <.> "c"
+        _os = [resultDir </> source -<.> "o" | source <- (sources)]
+        os = ((runner_c -<.> "o"):_os)
+    need [runner_c]
+    need os
+    cmd_ gcc "-o" [out] os (ccLinkOptions c) (ccLinkLibs c)
+      
 
 loadConfig :: String -> IO(Config)
 loadConfig filename = do
@@ -146,4 +183,3 @@ main = do
 
 fromFilePath :: FilePath -> String
 fromFilePath xs = xs
-

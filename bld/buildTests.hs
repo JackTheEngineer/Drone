@@ -62,11 +62,6 @@ sourceOfObjectFile o_file allSources = do
           mapM_ print allSources
           error ("The UNIMAGINABLE happened. 'sourceOfObjectFile' failed on " ++ o_file)
 
-
-startsWith :: String -> String -> Bool
-startsWith key wholestring =
-  (take (length key) wholestring) == key
-
 -- should support targets "test" -> runs all available tests and test_files
 -- and "test_something"
 -- and "test_something"
@@ -89,15 +84,6 @@ shakeIT c = shakeArgs shakeOptions{ shakeFiles= (resultsDir c)
       furtherCompileIncludes = map makeInclude (compileIncludes c)
       gcc = (cc c)
 
-  -- Calls all Tests
-  -- Does not work yet
-  -- Decision between single file with all
-  -- source_definitions for tests
-  -- or, multiple yaml files, each own with it's source defines
-  phony "test" $ do
-    test_sources <- getDirectoryFiles "" ["test//test_*.c"]
-    need $ map takeBaseName test_sources
-  
   resultDir <//> "run_*.c" %> \out -> do
     let genRunnerScript = "bld" </> "generate_test_runner.rb"
         runnerTemplate =  "bld" </> "runner_template.c"
@@ -110,7 +96,6 @@ shakeIT c = shakeArgs shakeOptions{ shakeFiles= (resultsDir c)
         error ("Failed on  finding the test_source for: " ++ test_name)
       (test_source:[]) -> do
         cmd_ "ruby" genRunnerScript "-o" [out] "-t" runnerTemplate "-r" test_source
-    
 
   "test_*" %> \out -> do
     let executable = resultDir </> out -<.> ".exe"
@@ -126,14 +111,24 @@ shakeIT c = shakeArgs shakeOptions{ shakeFiles= (resultsDir c)
     need os
     cmd_ gcc "-o" [out] os (ccLinkOptions c) (ccLinkLibs c)
 
+  -- Calls all Tests
+  -- Does not work yet
+  -- Decision between single file with all
+  -- source_definitions for tests
+  -- or, multiple yaml files, each own with it's source defines
+  phony "test" $ do
+    test_sources <- getDirectoryFiles "" ["test//test_*.c"]
+    need $ map takeBaseName test_sources -- does not work, as the sources are different
+  
+
   resultDir <//> "*.o" %> \out -> do
     sourceFile <- case ((takeDirectory out) == sourceGenDir) of
                      True -> return (out -<.> "c")
                      False -> sourceOfObjectFile out allSources
+    need [sourceFile]
     let m = out -<.> "m"
         cOpts = intercalate " " ((ccCompileOptions c) ++ furtherCompileIncludes ++ include_dirs)
     cmd_ gcc sourceFile "-MMD -MF" [m] cOpts "-o" [out]
-    
     neededMakefileDependencies m
     
 
