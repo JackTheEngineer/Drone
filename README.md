@@ -64,6 +64,10 @@ setup. The rake scripts and task definitions are within the folder rakelibs. the
 Currently the only Hardware I use is an ARM-M4-Evaluation Board by Infineon using the XMC4500.
 I haven't ordered any Drone Hardware like motors and sensors yet. 
 
+### Plotting over Uart
+
+	pip instlal pyserial pyqtgraph numpy
+	
 ###### A note about licensing:
 Unless the Source files have their own Licensing note,
 or are contained within the Folders "vendor" or "XMC_Libs",

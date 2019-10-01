@@ -1,7 +1,7 @@
 # The //*.c means all c sources arbitrarily deep directories
 # All directories of the source and the header files
 # will be includeded with the "-I src/some/path" at the end in the commandline
-
+resultsDir: targetBuild
 sourceFiles:
   - src//*.c
   - vendor/Libraries/XMCLib/src//*.c
