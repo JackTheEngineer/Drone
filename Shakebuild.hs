@@ -3,10 +3,16 @@ import Development.Shake.Command
 import Development.Shake.FilePath
 import Development.Shake.Util
 import Data.List
+import qualified Data.Yaml as Y
+import Data.Yaml (FromJSON(..), (.:))
+import qualified Data.ByteString.Char8 as BS
+import qualified Data.Text as DT
+
+import System.Environment
 
 -- Attention ! The build system relies on the results directory
 -- being exactly 1 directory deep.
--- You may change the name of the result directory.
+-- You can change the name of the result directory.
 -- BUT f.e "shakebuild/something" is not allowed.
 -- If you need it to be deep, you have to
 -- update the dule on building '.o' files,
@@ -19,7 +25,7 @@ resultsDir = "shakebuild"
 arm_base = "/home/jakov/bin/gcc-arm-none-eabi-4_9-2014q4/bin" 
 gcc = arm_base </> "arm-none-eabi-gcc"
 objcopy = arm_base </> "arm-none-eabi-objcopy"
-size_cmd = arm_base </> "arm-none-eabi-size"
+sizeCmd = arm_base </> "arm-none-eabi-size"
 
 armAsmOptions = [ "-x assembler-with-cpp"
                 , "-c"
@@ -57,15 +63,15 @@ armLinkOptions = [ "-nostartfiles"
                  , "-mcpu=cortex-m4"
                  , "-mthumb"
                  , "-g3"
-                 , "-gdwarf-2"] 
-linkedLibraries = [ "-lm" ]
+                 , "-gdwarf-2"] :: [String]
+linkedLibraries = [ "-lm" ] :: [String]
 
 makeInclude = ((++) "-I ")
 -- At the command line they end up like:
 -- '-I "compile-include-path"', f.e '-I "PATH_TO_ARM_BASE/arm-none-eabi/include"'
 -- where ' are the string literals
 -- please make sure to add a '/' literal at the end
-further_compile_includes = map makeInclude
+furtherCompileIncludes = map makeInclude
                            [arm_base </> "arm-none-eabi/include/"
                            , "vendor/Libraries/XMCLib/inc/"
                            , "vendor/Libraries/CMSIS/Include/"
@@ -88,17 +94,54 @@ sourceOfObjectFile o_file allSources = do
       case res of
         (x:[]) -> return x
         _ -> error "The UNIMAGINABLE happened. The function 'sourceOfObjectFile' did not work"
-  
 
-main :: IO ()
-main = shakeArgs shakeOptions{shakeFiles=resultsDir
-                             ,shakeThreads=6} $ do
+data Config = Config {
+  ccBase :: FilePath
+  , cc :: FilePath
+  , ccObjCopy :: FilePath
+  , ccSize :: FilePath
+  , sourceFiles :: [FilePattern]
+  , headerFiles :: [FilePattern]
+  , ccAsmOptions :: [String]
+  , ccCompileOptions :: [String]
+  , ccLinkOptions :: [String]
+  , ccLinkLibs :: [String]
+  , compileIncludes :: [FilePath]
+  , linkerFile :: String
+} deriving Show
+
+pa = DT.pack
+
+instance FromJSON Config where
+  parseJSON (Y.Object v) =
+    Config <$>
+    v .: pa "ccBase" <*>
+    v .: pa "cc" <*>
+    v .: pa "ccObjCopy" <*>
+    v .: pa "ccSize" <*>
+    v .: pa "sourceFiles" <*>
+    v .: pa "headerFiles" <*>
+    v .: pa "ccAsmOptions" <*>
+    v .: pa "ccCompileOptions" <*>
+    v .: pa "ccLinkOptions" <*>
+    v .: pa "ccLinkLibs" <*>
+    v .: pa "compileIncludes" <*>
+    v .: pa "linkerFile"
+  parseJSON _ = fail "Expected Object for Config value"
+
+
+shakeIT :: Config -> IO()
+shakeIT c = shakeArgs shakeOptions{shakeFiles=resultsDir
+                                  ,shakeThreads=6} $ do
   let elf_file = resultsDir </> "result.elf"
       hex_file = elf_file -<.> "hex"
       bin_file = elf_file -<.> "bin"
       map_file = elf_file -<.> "map"
       
   want [elf_file, hex_file, bin_file]
+  allSources <- liftIO $ getDirectoryFilesIO "" (sourceFiles c)
+  allHeaders <- liftIO $ getDirectoryFilesIO "" (headerFiles c)
+  let uniqueDirs = nub (map dropFileName (allHeaders ++ allSources))
 
   phony "clean" $ do
     putNormal ("Cleaning files in " ++ resultsDir)
@@ -113,23 +156,18 @@ main = shakeArgs shakeOptions{shakeFiles=resultsDir
     cmd_ objcopy "-O binary" elf_file [out]
     
   elf_file %> \out -> do
-    cs <- getDirectoryFiles "" source_files
-    let os = [resultsDir </> c -<.> "o" | c <- cs]
+    let os = [resultsDir </> c -<.> "o" | c <- allSources]
     need (linker_file : os) 
     cmd_ gcc "-o" [out] os ("-T" ++ linker_file) ("-Wl,-Map," ++ map_file) armLinkOptions linkedLibraries
 
-
   resultsDir <//> "*.o" %> \out -> do
-    allSources <- liftIO $ getDirectoryFilesIO "" source_files
-    allHeaders <- liftIO $ getDirectoryFilesIO "" header_files
     sourceFile <- sourceOfObjectFile out allSources
     need [sourceFile]
     let ending = takeExtension sourceFile
         m = out -<.> "m"
-        uniqueDirs = nub (map dropFileName (allHeaders ++ allSources))
         include_dirs = map (makeInclude . fromFilePath) uniqueDirs
-        asmOpts = intercalate " " (armAsmOptions ++  further_compile_includes ++ include_dirs)
-        cOpts = intercalate " " (armCompileOptions ++ further_compile_includes ++ include_dirs)
+        asmOpts = intercalate " " (armAsmOptions ++  furtherCompileIncludes ++ include_dirs)
+        cOpts = intercalate " " (armCompileOptions ++ furtherCompileIncludes ++ include_dirs)
         asm = cmd_ gcc "-MMD -MF" [m] asmOpts sourceFile "-o" [out]
         cCmd = cmd_ gcc sourceFile "-MMD -MF" [m] cOpts "-o" [out]
     case ending of
@@ -143,8 +181,17 @@ main = shakeArgs shakeOptions{shakeFiles=resultsDir
         asm
         neededMakefileDependencies m
       _ -> error "Not A Valid FileEnding"
+  
+
+main = do
+  args <- getArgs
+  print args
+  file <- BS.readFile (args !! 0) 
+  config <- Y.decodeThrow file :: IO(Config)
+  shakeIT config
     
 
 
 fromFilePath :: FilePath -> String
 fromFilePath xs = xs
+
