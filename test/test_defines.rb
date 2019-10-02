@@ -10,7 +10,7 @@ $TESTS = {
   "test_physical_helpers" => [
     "physical_helpers",
     "matrix_operations",
-    "vector_operations"
+    "vector_operations",
   ],
   "test_vector_operations" => [
     "vector_operations",

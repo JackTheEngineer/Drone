@@ -1,0 +1,73 @@
+# The //*.c means all c sources arbitrarily deep directories
+# All directories of the source and the header files
+# will be includeded with the "-I src/some/path" at the end in the commandline
+
+resultsDir: "_testbuild"
+sourceFiles:
+  - test//test_propeller.c
+  - test//propeller.c
+  - vendor/Unity/src/unity.c
+  - vendor/Unity/extras/fixture/src/unity_fixture.c
+headerFiles:
+  - test//*.h
+  - src//*.h
+
+# For compilation, ccBase and the others are joined with
+# ccBase </> cc, resulting in
+# f.e "/home/joe/bin/gcc-arm-none-eabi-4_9-2014q4/bin/arm-none-eabi-gcc
+# please use absolute paths for ccBase
+# The replacement rule is not generally supported by YAML,
+# and works only for the 'ccBase' parameter
+
+ccBase: ""
+cc: gcc 
+ccObjCopy: ""
+ccSize: ""
+ccAsmOptions: []
+ccCompileOptions:
+  - -c
+  - -DUNITY_INCLUDE_DOUBLE
+  - -std=gnu11
+  - -Wall
+  - -Wextra
+  - -fshort-wchar
+  - -Wpointer-arith
+  - -Woverflow
+  - -Wcast-align
+  - -Wwrite-strings
+  - -Wswitch-default
+  - -Wunreachable-code
+  - -Winit-self
+  - -Wmissing-field-initializers
+  - -Wno-unknown-pragmas
+  - -Wstrict-prototypes
+  - -Wundef
+  - -Wold-style-definition
+  - -Wmissing-prototypes
+  - -Wmissing-declarations
+  - -Wno-missing-field-initializers
+  - -Wno-unused-parameter
+  - -Wno-sign-compare
+  - -g3 
+  - -O0
+#  -Werror
+#  -Wno-pointer-to-int-cast
+#  -Wno-unused-but-set-variable
+#  -Wno-unused-variable
+#  -Wno-implicit-function-declaration
+#  -Wno-missing-prototypes
+#  -Wno-missing-declarations
+
+ccLinkOptions:
+  - -g3
+ccLinkLibs:  
+  - -lm
+  
+# At the command line they end up like:
+# "-I"compile-include-path" -I"PATH_TO_ARM_BASE/arm-none-eabi/include"
+compileIncludes:
+  - vendor/Unity/src/
+  - vendor/Unity/extras/fixture/src/
+# make an empty string if you don't have any
+linkerFile: ""
+

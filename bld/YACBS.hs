@@ -8,6 +8,7 @@ import Data.Yaml (FromJSON(..), (.:))
 import qualified Data.ByteString.Char8 as BS
 import qualified Data.Text as DT
 import System.Environment
+import System.Process
 
 data Config = Config {
   resultsDir :: FilePath
@@ -24,9 +25,6 @@ data Config = Config {
   , compileIncludes :: [FilePath]
   , linkerFile :: String
 } deriving Show
-
-pck = DT.pack
-unpck = DT.unpack
 
 instance FromJSON Config where
   parseJSON (Y.Object v) =
@@ -46,21 +44,23 @@ instance FromJSON Config where
     v .: pck "linkerFile"
   parseJSON _ = fail "Expected Object for Config value"
 
+pck = DT.pack
+unpck = DT.unpack
+
+fromFilePath :: FilePath -> String
+fromFilePath xs = xs
+
 makeInclude = ((++) "-I ")
 
 runner_to_test r = "test" ++  (((drop 4) . takeBaseName) r)
 test_to_runner t = "run_" ++ (((drop 4) . takeBaseName) t)
 
   -- If you want to make an arbitrarily deep results directory,
-  -- change this func underneath the funny symbols   :>>----------------------------<<:,
+  -- change this func underneath the funny symbols  :>>----------------------------<<:,
   -- and pass it the result directory as a parameter
-sieveSourceOfObjFile o_file =   let pathNoExtension = (dropExtension . dropDirectory1) o_file
-                                    compare = (\cp p -> (dropExtension p) == cp) in 
-                                  (compare pathNoExtension)
-  
-sieveTestSourceOfRunner r = let compare = (\cp p -> (takeBaseName p) == cp)
-                                test_name = (runner_to_test r) in
-                             (compare test_name) 
+sieveSourceOfObjFile o_file p  = ((dropExtension . dropDirectory1) o_file) == (dropExtension p)
+
+sieveTestSourceOfRunner r p = (runner_to_test r) == (takeBaseName p)
   
 findSourceWithFilterOrError ::  FilePath -> (FilePath -> Bool) -> [FilePath] -> Action(FilePath)
 findSourceWithFilterOrError key sieve allSources = do
@@ -144,7 +144,7 @@ shakeIT c = shakeArgs shakeOptions{ shakeFiles=(resultsDir c)
   "test_*" %> \out -> do
     let executable = resultDir </> out -<.> ".exe"
     need [executable]
-    command_ [] executable [] 
+    cmd_ executable
     
   resultDir <//> "test_*" <.> "exe" %> \out -> do
     sources <- getDirectoryFiles "" (sourceFiles c)
@@ -158,8 +158,7 @@ shakeIT c = shakeArgs shakeOptions{ shakeFiles=(resultsDir c)
 
 loadConfig :: String -> IO(Config)
 loadConfig filename = do
-  file <- BS.readFile filename
-  cfg <- Y.decodeThrow file :: IO(Config)
+  cfg <- Y.decodeFileThrow filename :: IO(Config)
   let rpl = DT.replace
       rep a = unpck ((rpl (pck "<ccBase>") (pck (ccBase cfg))) (pck a))
       updated_config c = c { cc = rep (cc cfg)
@@ -168,18 +167,38 @@ loadConfig filename = do
                            , compileIncludes = map rep (compileIncludes cfg)
                            , sourceFiles = map rep (sourceFiles cfg)
                            , headerFiles = map rep (headerFiles cfg)}
-      newcfg = updated_config cfg
-  return newcfg
+  return $ updated_config cfg
 
+runAllTests :: IO()
+runAllTests = do
+  yamls <- getDirectoryFilesIO "" ["test" </> "test_*.yml"]
+  let testnames = map takeBaseName yamls
+      zipped = zip testnames yamls
+      command (t, y) = "stack runghc bld/YACBS.hs " ++ t ++ " " ++ y
+      commands = map command zipped
+  --mapM_ print commands
+  mapM_ callCommand commands
+
+checkTests :: String -> IO()
+checkTests arg = do
+  case arg of
+    "tests" -> runAllTests
+    _ -> printUsage
+
+
+-- Counting arguments diables usage of flags :(
+main :: IO()
 main = do
   args <- getArgs
-  if (length(args) < 2) then
-    do
-      print("Usage: stack runghc Shakebuild.hs <target> configYaml.yml")
-    else
-    do
-      newcfg <- loadConfig (args !! 1)
-      shakeIT newcfg
+  case length(args) of 
+    1 -> checkTests (args !! 0)
+    2 -> (loadConfig (args !! 1)) >>= shakeIT
+    _ -> printUsage
 
-fromFilePath :: FilePath -> String
-fromFilePath xs = xs
+printUsage :: IO()
+printUsage = do  
+  print("For one target, f.e:")
+  print("    # stack runghc bld/YACBS.hs arm bld/arm.yml")
+  print("Or, if you want to run all tests execute: ")
+  print("    # stack runghc bld/YACBS.hs tests")
+
