@@ -9,10 +9,10 @@ import qualified Data.ByteString.Char8 as BS
 import qualified Data.Text as DT
 import System.Environment
 import System.Process
+import System.Console.GetOpt
 
 data Config = Config {
-  resultsDir :: FilePath
-  , sourceFiles :: [FilePattern]
+   sourceFiles :: [FilePattern]
   , headerFiles :: [FilePattern]
   , ccBase :: FilePath
   , cc :: FilePath
@@ -29,7 +29,6 @@ data Config = Config {
 instance FromJSON Config where
   parseJSON (Y.Object v) =
     Config <$>
-    v .: pck "resultsDir" <*>
     v .: pck "sourceFiles" <*>
     v .: pck "headerFiles" <*>
     v .: pck "ccBase" <*>
@@ -71,56 +70,91 @@ findSourceWithFilterOrError key sieve allSources = do
                           mapM_ print allSources
                           error ("In the above sources, there was no match, or too many: " ++ key)
 
-shakeIT :: Config -> IO()
-shakeIT c = shakeArgs shakeOptions{ shakeFiles=(resultsDir c)
-                                  , shakeThreads=6
-                                  , shakeReport = ["shake.trace"]
-                                  , shakeCreationCheck = False} $ do
-  let resultDir = resultsDir c
-      elf_file = resultDir </> "result.elf"
+
+loadConfig filecontent = do
+  cfg <- case Y.decodeEither' (BS.pack filecontent) of
+           Right res -> return res
+           Left err -> error $ show err
+  let rpl = DT.replace
+      rep a = unpck ((rpl (pck "<ccBase>") (pck (ccBase cfg))) (pck a))
+      updated_config c = c { cc = rep (cc cfg)
+                           , ccObjCopy = rep (ccObjCopy cfg)
+                           , ccSize = rep (ccSize cfg)
+                           , compileIncludes = map rep (compileIncludes cfg)
+                           , sourceFiles = map rep (sourceFiles cfg)
+                           , headerFiles = map rep (headerFiles cfg)}
+  return $ updated_config cfg
+
+
+data YCF = MkYCF String deriving Show
+
+flags :: [OptDescr (Either String YCF)]
+flags = []
+
+resultDir = "_build"
+opt = shakeOptions{ shakeFiles=resultDir
+                  , shakeThreads=8
+                  , shakeReport = [resultDir </> "shake.trace"]
+                  , shakeCreationCheck = False}
+
+
+shakeIT :: IO()
+shakeIT = shakeArgsWith opt flags $ \flags targets -> return $ Just $ do
+  
+  let elf_file = resultDir </> "result.elf"
       hex_file = elf_file -<.> "hex"
       bin_file = elf_file -<.> "bin"
       map_file = elf_file -<.> "map"
-      
-  allSources <- liftIO $ getDirectoryFilesIO "" (sourceFiles c)
-  allHeaders <- liftIO $ getDirectoryFilesIO "" (headerFiles c)
-
-  let uniqueDirs = reverse $ nub (map dropFileName (allHeaders ++ allSources))
-      include_dirs = map (makeInclude . fromFilePath) uniqueDirs
-      furtherCompileIncludes = map makeInclude (compileIncludes c)
       sourceGenDir = resultDir </> "sourceGen"
-      gcc = (cc c)
+      conf = targets !! 0
 
-  phony "arm" $ do
-    need [elf_file, hex_file, bin_file]
-  
+  want [(takeBaseName conf)]
+
   phony "clean" $ do
     putNormal ("Cleaning files in " ++ resultDir)
     removeFilesAfter resultDir ["//*"]
 
+  phony "arm" $ do 
+    need [elf_file, hex_file, bin_file]
+
+  yamlCfg <- newCache $ \f -> (readFile' f >>= loadConfig)
+
   bin_file %> \out -> do
     need [elf_file]
+    c <- yamlCfg conf :: Action( Config )
     cmd_ (ccObjCopy c) "-O ihex" elf_file [out]
 
   hex_file %> \out -> do
     need [elf_file]
+    c <- yamlCfg conf :: Action( Config )
     cmd_ (ccObjCopy c) "-O binary" elf_file [out]
-    
+
   elf_file %> \out -> do
+    c <- yamlCfg conf :: Action( Config )
+    allSources <- getDirectoryFiles "" (sourceFiles c)
+    allHeaders <- getDirectoryFiles "" (headerFiles c)
     let os = [resultDir </> source -<.> "o" | source <- allSources]
+        gcc = (cc c)
     need ((linkerFile c): os)
     cmd_ gcc "-o" [out] os ("-T" ++ (linkerFile c)) ("-Wl,-Map," ++ map_file) (ccLinkOptions c) (ccLinkLibs c)
     cmd_ (ccSize c) "--format=berkeley -x" [out]
 
   resultDir <//> "*.o" %> \out -> do
+    c <- yamlCfg conf :: Action( Config )
+    allSources <- getDirectoryFiles "" (sourceFiles c)
+    allHeaders <- getDirectoryFiles "" (headerFiles c)
     sourceFile <- case ((takeDirectory out) == sourceGenDir) of
                     True -> return (out -<.> "c")
                     False ->findSourceWithFilterOrError out (sieveSourceOfObjFile out) allSources
     need [sourceFile]
-    let ending = takeExtension sourceFile
+    let uniqueDirs = reverse $ nub (map dropFileName (allHeaders ++ allSources))
+        include_dirs = map (makeInclude . fromFilePath) uniqueDirs
+        furtherCompileIncludes = map makeInclude (compileIncludes c)
+        ending = takeExtension sourceFile
         m = out -<.> "m"
         asmOpts = intercalate " " ((ccAsmOptions c) ++  furtherCompileIncludes ++ include_dirs)
         cOpts = intercalate " " ((ccCompileOptions c) ++ furtherCompileIncludes ++ include_dirs)
+        gcc = (cc c)
         asm = cmd_ gcc "-MMD -MF" [m] asmOpts sourceFile "-o" [out]
         cCmd = cmd_ gcc sourceFile "-MMD -MF" [m] cOpts "-o" [out]
     case ending of
@@ -138,6 +172,8 @@ shakeIT c = shakeArgs shakeOptions{ shakeFiles=(resultsDir c)
   resultDir <//> "run_*.c" %> \out -> do
     let genRunnerScript = "bld" </> "generate_test_runner.rb"
         runnerTemplate =  "bld" </> "runner_template.c"
+    c <- yamlCfg conf :: Action( Config )
+    allSources <- getDirectoryFiles "" (sourceFiles c)
     test_source <- findSourceWithFilterOrError out (sieveTestSourceOfRunner out) allSources
     cmd_ "ruby" genRunnerScript "-o" [out] "-t" runnerTemplate "-r" test_source
 
@@ -147,58 +183,18 @@ shakeIT c = shakeArgs shakeOptions{ shakeFiles=(resultsDir c)
     cmd_ executable
     
   resultDir <//> "test_*" <.> "exe" %> \out -> do
+    c <- yamlCfg conf :: Action( Config )
     sources <- getDirectoryFiles "" (sourceFiles c)
     let runner_c = sourceGenDir </> (test_to_runner out) <.> "c"
         _os = [resultDir </> source -<.> "o" | source <- (sources)]
         os = ((runner_c -<.> "o"):_os)
+        gcc = (cc c)
     need [runner_c]
     need os
     cmd_ gcc "-o" [out] os (ccLinkOptions c) (ccLinkLibs c)
-      
-
-loadConfig :: String -> IO(Config)
-loadConfig filename = do
-  cfg <- Y.decodeFileThrow filename :: IO(Config)
-  let rpl = DT.replace
-      rep a = unpck ((rpl (pck "<ccBase>") (pck (ccBase cfg))) (pck a))
-      updated_config c = c { cc = rep (cc cfg)
-                           , ccObjCopy = rep (ccObjCopy cfg)
-                           , ccSize = rep (ccSize cfg)
-                           , compileIncludes = map rep (compileIncludes cfg)
-                           , sourceFiles = map rep (sourceFiles cfg)
-                           , headerFiles = map rep (headerFiles cfg)}
-  return $ updated_config cfg
-
-runAllTests :: IO()
-runAllTests = do
-  yamls <- getDirectoryFilesIO "" ["test" </> "test_*.yml"]
-  let testnames = map takeBaseName yamls
-      zipped = zip testnames yamls
-      command (t, y) = "stack runghc bld/YACBS.hs " ++ t ++ " " ++ y
-      commands = map command zipped
-  --mapM_ print commands
-  mapM_ callCommand commands
-
-checkTests :: String -> IO()
-checkTests arg = do
-  case arg of
-    "tests" -> runAllTests
-    _ -> printUsage
-
 
 -- Counting arguments diables usage of flags :(
 main :: IO()
 main = do
-  args <- getArgs
-  case length(args) of 
-    1 -> checkTests (args !! 0)
-    2 -> (loadConfig (args !! 1)) >>= shakeIT
-    _ -> printUsage
-
-printUsage :: IO()
-printUsage = do  
-  print("For one target, f.e:")
-  print("    # stack runghc bld/YACBS.hs arm bld/arm.yml")
-  print("Or, if you want to run all tests execute: ")
-  print("    # stack runghc bld/YACBS.hs tests")
+  shakeIT 
 
