@@ -100,12 +100,7 @@ opt = shakeOptions{ shakeFiles=resultDir
 
 shakeIT :: IO()
 shakeIT = shakeArgsWith opt flags $ \flags targets -> return $ Just $ do
-  
-  let elf_file = resultDir </> "result.elf"
-      hex_file = elf_file -<.> "hex"
-      bin_file = elf_file -<.> "bin"
-      map_file = elf_file -<.> "map"
-      sourceGenDir = resultDir </> "sourceGen"
+  let sourceGenDir = resultDir </> "sourceGen"
       conf = targets !! 0
 
   want [(takeBaseName conf)]
@@ -114,27 +109,33 @@ shakeIT = shakeArgsWith opt flags $ \flags targets -> return $ Just $ do
     putNormal ("Cleaning files in " ++ resultDir)
     removeFilesAfter resultDir ["//*"]
 
-  phony "arm" $ do 
+  phony "arm" $ do
+    let elf_file = resultDir </> "result.elf"
+        hex_file = elf_file -<.> "hex"
+        bin_file = elf_file -<.> "bin"
     need [elf_file, hex_file, bin_file]
 
   yamlCfg <- newCache $ \f -> (readFile' f >>= loadConfig)
 
-  bin_file %> \out -> do
+  resultDir <//> "*.hex" %> \out -> do
+    let elf_file = out -<.> "elf"
     need [elf_file]
     c <- yamlCfg conf :: Action( Config )
     cmd_ (ccObjCopy c) "-O ihex" elf_file [out]
 
-  hex_file %> \out -> do
+  resultDir <//> "*.bin" %> \out -> do
+    let elf_file = out -<.> "elf"
     need [elf_file]
     c <- yamlCfg conf :: Action( Config )
     cmd_ (ccObjCopy c) "-O binary" elf_file [out]
 
-  elf_file %> \out -> do
+  resultDir <//> "*.elf" %> \out -> do
     c <- yamlCfg conf :: Action( Config )
     allSources <- getDirectoryFiles "" (sourceFiles c)
     allHeaders <- getDirectoryFiles "" (headerFiles c)
     let os = [resultDir </> source -<.> "o" | source <- allSources]
         gcc = (cc c)
+        map_file = out -<.> "map"
     need ((linkerFile c): os)
     cmd_ gcc "-o" [out] os ("-T" ++ (linkerFile c)) ("-Wl,-Map," ++ map_file) (ccLinkOptions c) (ccLinkLibs c)
     cmd_ (ccSize c) "--format=berkeley -x" [out]
@@ -160,14 +161,13 @@ shakeIT = shakeArgsWith opt flags $ \flags targets -> return $ Just $ do
     case ending of
       ".c" -> do
         cCmd
-        neededMakefileDependencies m
       ".S" -> do
         asm
-        neededMakefileDependencies m
       ".asm" -> do
         asm
-        neededMakefileDependencies m
       _ -> error ("Not A Valid FileEnding " ++ show ending)
+    neededMakefileDependencies m
+
 
   resultDir <//> "run_*.c" %> \out -> do
     let genRunnerScript = "bld" </> "generate_test_runner.rb"
@@ -195,6 +195,5 @@ shakeIT = shakeArgsWith opt flags $ \flags targets -> return $ Just $ do
 
 -- Counting arguments diables usage of flags :(
 main :: IO()
-main = do
-  shakeIT 
+main = shakeIT 
 

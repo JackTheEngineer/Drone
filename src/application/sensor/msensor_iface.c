@@ -12,7 +12,7 @@
 uint8_t Mscale = 1; // Choose either 14-bit or 16-bit magnetometer resolution
 uint8_t Mmode = 0x02; // 2 for 8 Hz, 6 for 100 Hz continuous magnetometer data read
 uint32_t i2c_duration_count = 0;
-#define MAX_COUNT 50000
+#define MAX_COUNT 150000
 
 void MSensor_Iface_Init(void){
 	I2C_MASTER_Init(&I2C_MASTER_0);

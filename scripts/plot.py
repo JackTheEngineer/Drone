@@ -34,26 +34,20 @@ class Plot(object):
                         del self.data[curve_index][0]
 
 def readSerialAndUpdatePlot(ser_port, plots):
-      bytes_per_value = 4
-
-      while(ser_port.in_waiting != 0):
+    bytes_per_value = 4
+    while(ser_port.in_waiting != 0):
         values = []
         bytess = ser_port.readline()
+        print(bytess)
         if(len(bytess) == 37):
-          for i in range(9): # 9 Integer Numbers, using 36 Bytes , last byte is "\n"
-            values.append(int.from_bytes(bytess[(bytes_per_value*i):(bytes_per_value*(i+1))],
-                                         'little', signed=True))
-          for i, oneArray in enumerate(data):
-            value = values[i]
+            for i in range(9): # 9 Integer Numbers, using 36 Bytes , last byte is "\n"
+                values.append(int.from_bytes(bytess[(bytes_per_value*i):(bytes_per_value*(i+1))],
+                                            'little', signed=True))
 
-            oneArray.append(value - 14.5)
-            curves[i].setData(np.array(oneArray))
-            while(len(oneArray) > 200):
-              del oneArray[0]
             
 def main():
       #ser_port = serial.Serial('/dev/ttyUSB0', 460800)
-      ser_port = serial.Serial('/dev/ttyUSB0', 460800)
+      ser_port = serial.Serial('/dev/ttyUSB3', 460800)
       #ser_port = serial.Serial('/dev/ttyUSB0', 115200)
 
       app = QtGui.QApplication([])
@@ -76,8 +70,6 @@ def main():
             plots.append(newplot)
 
       win.nextRow()
-
-
   
       timer = pg.QtCore.QTimer()
       timer.timeout.connect(fp(readSerialAndUpdatePlot,
