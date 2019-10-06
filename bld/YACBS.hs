@@ -178,22 +178,22 @@ shakeIT = shakeArgsWith opt flags $ \flags targets -> return $ Just $ do
     cmd_ "ruby" genRunnerScript "-o" [out] "-t" runnerTemplate "-r" test_source
 
   "test_*" %> \out -> do
-    let executable = resultDir </> out -<.> ".exe"
+    let executable = resultDir </> out -<.> exe
     need [executable]
     cmd_ executable
-    
-  resultDir <//> "test_*" <.> "exe" %> \out -> do
+
+  -- A rule that matches ("resultDir" <//> "test_*"), but not (resultDir <//> "*.o")
+  (\file -> (((resultDir <//> "test_*" <.> exe) ?== file) && (not ((resultDir <//> "*.o") ?== file)))) ?> \out -> do
     c <- yamlCfg conf :: Action( Config )
     sources <- getDirectoryFiles "" (sourceFiles c)
     let runner_c = sourceGenDir </> (test_to_runner out) <.> "c"
-        _os = [resultDir </> source -<.> "o" | source <- (sources)]
-        os = ((runner_c -<.> "o"):_os)
+        _objectFiles = [resultDir </> source -<.> "o" | source <- (sources)]
+        objectFiles = ((runner_c -<.> "o"):_objectFiles)
         gcc = (cc c)
     need [runner_c]
-    need os
-    cmd_ gcc "-o" [out] os (ccLinkOptions c) (ccLinkLibs c)
+    need objectFiles
+    cmd_ gcc "-o" [out] objectFiles (ccLinkOptions c) (ccLinkLibs c)
 
--- Counting arguments diables usage of flags :(
 main :: IO()
 main = shakeIT 
 
