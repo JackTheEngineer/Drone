@@ -95,6 +95,12 @@ opt = shakeOptions{ shakeFiles=resultDir
 
 flags = []
 
+
+-- Only with 'shakeArgsWith', there is no automatic "withoutActions"
+-- "withoutActions" makes Rules do nothing, and build the File,
+-- which was specified at the commandlineb.
+-- (with "withoutActions") If the file already exists,
+-- like with the yamlConfig in our case, it would do nothing
 shakeIT :: IO()
 shakeIT = shakeArgsWith opt flags $ \options args -> return $ Just $ do
   
@@ -121,15 +127,16 @@ shakeIT = shakeArgsWith opt flags $ \options args -> return $ Just $ do
 
   yamlCfg <- newCache $ \f -> (readFile' f >>= loadConfig)
 
+--- Helper Functions ---  
   let configNameFromSource s = (splitDirectories s) !! 1 
-
   let configFromSource s = do
         let configname = configNameFromSource s
         conf <- (-#>) configname sieveForYamlFile allConfigs
         yamlCfg conf
-
+        
   let _objDir s = resultDir </> configNameFromSource s
   let _sourceGenDir s = resultDir </> configNameFromSource s </> "sourceGen"
+--- Helper Functions ---
   
   resultDir <//> "*.hex" %> \out -> do
     let elf_file = out -<.> "elf"
@@ -196,7 +203,7 @@ shakeIT = shakeArgsWith opt flags $ \options args -> return $ Just $ do
     cmd_ executable
 
   -- A rule that matches ("resultDir" <//> "test_*"), but not (resultDir <//> "*.o")
-  (\file -> (((resultDir <//> "test_*" <.> exe) ?== file) && not ((resultDir <//> "*.o") ?== file))) ?> \out -> do
+  (\f -> (((resultDir <//> "test_*" <.> exe) ?== f) && not ((resultDir <//> "*.o") ?== f))) ?> \out -> do
     c <- configFromSource out :: Action( Config )
     sources <- getDirectoryFiles "" (sourceFiles c)
     let sourceGenDir = _sourceGenDir out
@@ -210,4 +217,3 @@ shakeIT = shakeArgsWith opt flags $ \options args -> return $ Just $ do
 
 main :: IO()
 main = shakeIT 
-

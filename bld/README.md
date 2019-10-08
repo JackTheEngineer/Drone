@@ -16,19 +16,8 @@ Architectural Difference between, test compiler, target compiler
 
 Header inclusion: test sources first, then arm headers first. 
 
-definition for tests with it's own test\_sources.yml
-
-Please use test\_*name* for the name and for the test definition in test_sources.yml
-
-If just a target is defined, and no command line arguments are given, uses:
-["test/test\_compiler.yml", 
-"bld/test\_compiler\_define.yml", 
-"test\_compilation\_definition.yml"]
-
-If no second argument is given, automatically searches in paths for 
-["test/test\_sources.yml", 
-"bld/test\_sources.yml"]
-
+The "tests" target looks for all "test_*.yml" files in the "test" directory, 
+compiles them, and runs them in Parallel !
 
 
 ## Install instruction
@@ -37,13 +26,11 @@ If no second argument is given, automatically searches in paths for
 
 		stack install shake yaml
 
-## Example Usage 
-	
+## Example Usage( from the 'Drone' directory)
+
 		stack bld/YACBS.hs bld/uC.yml
 		
-		(does not work yet) stack bld/YACBS.hs test_dummy test/test_sources.yml test/test_compilation_definition.yml
+		stack bld/YACBS.hs bld/test_dummy.yml
 		
-		(does not work yet) stack bld/YACBS.hs test_dummy 
-
-		
+		stack bld/YACBS.hs tests # Looks for "test/test_*.yml" files 
 		

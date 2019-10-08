@@ -1,5 +1,4 @@
-* All test targets depend on one File containing sources for tests, one file describing test options
-* Test object files belong in another directory, than arm object files, Separation by per yaml file basis
-* "tests" Target runs all tests -> depends on yaml files :: arm -> test_compiler -> test_sources
-* "all" target runs "uC" and tests
 * write haskell runner generator
+* make "uC" name agnostic and compile for "elf, hex, bin" with "YACBS.hs embeddedTarget -c bld/uC.yml"
+* "all" target runs "uC" and "tests", needs an argument for "YACBS.hs all -c bld/uC.yml"
+
