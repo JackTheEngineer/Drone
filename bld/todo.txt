@@ -1,5 +1,5 @@
 * All test targets depend on one File containing sources for tests, one file describing test options
-* Test object files belong in another directory, than arm object files, Separation by compiler-name
+* Test object files belong in another directory, than arm object files, Separation by per yaml file basis
 * "tests" Target runs all tests -> depends on yaml files :: arm -> test_compiler -> test_sources
-* "all" target runs arm and tests
+* "all" target runs "uC" and tests
 * write haskell runner generator

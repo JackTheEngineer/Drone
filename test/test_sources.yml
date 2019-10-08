@@ -1,0 +1,94 @@
+# Here you can use file/directory patterns from the shake buildsystem
+# Or include single file names 
+test_drone_physics:
+  - test//test_drone_physics.c
+  - test//drone_physics.c
+  - test//drone_masses.c
+  - test//vector_tester.c
+  - test//matrix_tester.c
+  - test//disturbing_force_injection.c
+  - src//matrix_operations.c
+  - src//vector_operations.c
+  - src//physical_helpers.c
+  - vendor/Unity/src/unity.c
+  - vendor/Unity/extras/fixture/src/unity_fixture.c
+test_simulation:
+  - test//test_simulation.c
+  - test//drone_physics.c
+  - test//disturbing_force_injection.c
+  - test//drone_masses.c
+  - test//fake_motors.c
+  - src//vector_operations.c
+  - src//physical_helpers.c
+  - src//matrix_operations.c
+  - vendor/Unity/src/unity.c
+  - vendor/Unity/extras/fixture/src/unity_fixture.c
+test_force_injection:
+  - test//test_force_injection.c
+  - test//disturbing_force_injection.c
+  - test//vector_tester.c
+  - src//vector_operations.c
+  - vendor/Unity/src/unity.c
+  - vendor/Unity/extras/fixture/src/unity_fixture.c
+test_fake_motion_sensor:  
+  - test//test_fake_motion_sensor.c
+  - test//fake_motors.c
+  - test//fake_motion_sensor.c
+  - test//fake_drone_physics.c
+  - test//vector_tester.c
+  - src//vector_operations.c
+  - vendor/Unity/src/unity.c
+  - vendor/Unity/extras/fixture/src/unity_fixture.c
+test_propeller:
+  - test//test_propeller.c
+  - test//propeller.c
+  - vendor/Unity/src/unity.c
+  - vendor/Unity/extras/fixture/src/unity_fixture.c
+test_dummy:
+  - test//test_dummy.c
+  - vendor/Unity/src/unity.c
+  - vendor/Unity/extras/fixture/src/unity_fixture.c
+test_fake_motors:
+  - test//test_fake_motors.c
+  - test//fake_motors.c
+  - test//fake_drone_physics.c
+  - src//vector_operations.c
+  - vendor/Unity/src/unity.c
+  - vendor/Unity/extras/fixture/src/unity_fixture.c
+test_vector_operations:
+  - test//test_vector_operations.c
+  - test//vector_tester.c
+  - src//vector_operations.c
+  - vendor/Unity/src/unity.c
+  - vendor/Unity/extras/fixture/src/unity_fixture.c
+test_pid_controller:
+  - test//test_pid_controller.c
+  - src//pid_controller.c
+  - vendor/Unity/src/unity.c
+  - vendor/Unity/extras/fixture/src/unity_fixture.c
+test_matrix_operations:
+  - test//test_matrix_operations.c
+  - src//matrix_operations.c
+  - src//vector_operations.c
+  - test//matrix_tester.c
+  - vendor/Unity/src/unity.c
+  - vendor/Unity/extras/fixture/src/unity_fixture.c
+test_drone_physics:  
+  - test//test_drone_physics.c
+  - test//drone_physics.c
+  - test//drone_masses.c
+  - test//vector_tester.c
+  - test//matrix_tester.c
+  - test//disturbing_force_injection.c
+  - src//matrix_operations.c
+  - src//vector_operations.c
+  - src//physical_helpers.c
+  - vendor/Unity/src/unity.c
+  - vendor/Unity/extras/fixture/src/unity_fixture.c
+test_physical_helpers:  
+  - test//test_physical_helpers.c
+  - src//physical_helpers.c
+  - src//matrix_operations.c
+  - src//vector_operations.c
+  - vendor/Unity/src/unity.c
+  - vendor/Unity/extras/fixture/src/unity_fixture.c

@@ -3,6 +3,7 @@ import Development.Shake.Command
 import Development.Shake.FilePath
 import Development.Shake.Util
 import Data.List
+import Data.Maybe (fromMaybe)
 import qualified Data.Yaml as Y
 import Data.Yaml (FromJSON(..), (.:))
 import qualified Data.ByteString.Char8 as BS
@@ -86,30 +87,63 @@ loadConfig filecontent = do
   return $ updated_config cfg
 
 
-data YCF = MkYCF String deriving Show
+data YamlConfig = MkYCFG String deriving Show
 
-flags :: [OptDescr (Either String YCF)]
-flags = []
+optDef :: Maybe String -> Either String YamlConfig
+optDef s = case s of
+              Nothing -> Left ""
+              Just a -> Right $ MkYCFG a
+
+argDef :: String -> Either String YamlConfig
+argDef s = case s of
+             "" -> Left "No argument passed"
+             _ -> Right $ MkYCFG s
+
+cmdFlags :: [OptDescr (Either String YamlConfig)]
+cmdFlags = [ Option ['t'] ["test_sources"] (OptArg optDef "Yaml File") "YAML that defines test sources"
+           , Option ['c'] ["compile_defines"] (ReqArg argDef "Yaml File") "Compilation Defines"
+           ]
 
 resultDir = "_build"
+sourceGenDir = resultDir </> "sourceGen"
+
 opt = shakeOptions{ shakeFiles=resultDir
                   , shakeThreads=8
                   , shakeReport = [resultDir </> "shake.trace"]
                   , shakeCreationCheck = False}
 
+testSourcesLookups = [ "test/test_sources.yml"
+                     , "bld/test_sources.yml"]
+testCompilerDefinesLookups = [ "test/test_compiler.yml"
+                             , "test/test_compilation_definition.yml"
+                             , "test/test_compiler_define.yml"
+                             , "bld/test_compiler.yml"
+                             , "bld/test_compilation_definition.yml"
+                             , "bld/test_compiler_define.yml"
+                             ]
+
+chooseCompilerDefine targets = do
+  return $ targets !! 0
+
+findTestSourcesYaml targets = do
+  return $ targets !! 0
+
 
 shakeIT :: IO()
-shakeIT = shakeArgsWith opt flags $ \flags targets -> return $ Just $ do
-  let sourceGenDir = resultDir </> "sourceGen"
-      conf = targets !! 0
+shakeIT = shakeArgsWith opt cmdFlags $ \flags targets -> return $ Just $ do
+  liftIO $ print flags
+  liftIO $ print targets
 
-  want [(takeBaseName conf)]
+  compilerConfig <- liftIO $ chooseCompilerDefine targets
+  testSources <- liftIO $ findTestSourcesYaml targets
+  
+  want [(takeBaseName compilerConfig)]
 
   phony "clean" $ do
     putNormal ("Cleaning files in " ++ resultDir)
     removeFilesAfter resultDir ["//*"]
 
-  phony "arm" $ do
+  phony "uC" $ do
     let elf_file = resultDir </> "result.elf"
         hex_file = elf_file -<.> "hex"
         bin_file = elf_file -<.> "bin"
@@ -120,17 +154,17 @@ shakeIT = shakeArgsWith opt flags $ \flags targets -> return $ Just $ do
   resultDir <//> "*.hex" %> \out -> do
     let elf_file = out -<.> "elf"
     need [elf_file]
-    c <- yamlCfg conf :: Action( Config )
+    c <- yamlCfg compilerConfig :: Action( Config )
     cmd_ (ccObjCopy c) "-O ihex" elf_file [out]
 
   resultDir <//> "*.bin" %> \out -> do
     let elf_file = out -<.> "elf"
     need [elf_file]
-    c <- yamlCfg conf :: Action( Config )
+    c <- yamlCfg compilerConfig :: Action( Config )
     cmd_ (ccObjCopy c) "-O binary" elf_file [out]
 
   resultDir <//> "*.elf" %> \out -> do
-    c <- yamlCfg conf :: Action( Config )
+    c <- yamlCfg compilerConfig :: Action( Config )
     allSources <- getDirectoryFiles "" (sourceFiles c)
     allHeaders <- getDirectoryFiles "" (headerFiles c)
     let os = [resultDir </> source -<.> "o" | source <- allSources]
@@ -141,7 +175,7 @@ shakeIT = shakeArgsWith opt flags $ \flags targets -> return $ Just $ do
     cmd_ (ccSize c) "--format=berkeley -x" [out]
 
   resultDir <//> "*.o" %> \out -> do
-    c <- yamlCfg conf :: Action( Config )
+    c <- yamlCfg compilerConfig :: Action( Config )
     allSources <- getDirectoryFiles "" (sourceFiles c)
     allHeaders <- getDirectoryFiles "" (headerFiles c)
     sourceFile <- case ((takeDirectory out) == sourceGenDir) of
@@ -172,7 +206,7 @@ shakeIT = shakeArgsWith opt flags $ \flags targets -> return $ Just $ do
   resultDir <//> "run_*.c" %> \out -> do
     let genRunnerScript = "bld" </> "generate_test_runner.rb"
         runnerTemplate =  "bld" </> "runner_template.c"
-    c <- yamlCfg conf :: Action( Config )
+    c <- yamlCfg compilerConfig :: Action( Config )
     allSources <- getDirectoryFiles "" (sourceFiles c)
     test_source <- findSourceWithFilterOrError out (sieveTestSourceOfRunner out) allSources
     cmd_ "ruby" genRunnerScript "-o" [out] "-t" runnerTemplate "-r" test_source
@@ -184,7 +218,7 @@ shakeIT = shakeArgsWith opt flags $ \flags targets -> return $ Just $ do
 
   -- A rule that matches ("resultDir" <//> "test_*"), but not (resultDir <//> "*.o")
   (\file -> (((resultDir <//> "test_*" <.> exe) ?== file) && (not ((resultDir <//> "*.o") ?== file)))) ?> \out -> do
-    c <- yamlCfg conf :: Action( Config )
+    c <- yamlCfg compilerConfig :: Action( Config )
     sources <- getDirectoryFiles "" (sourceFiles c)
     let runner_c = sourceGenDir </> (test_to_runner out) <.> "c"
         _objectFiles = [resultDir </> source -<.> "o" | source <- (sources)]
