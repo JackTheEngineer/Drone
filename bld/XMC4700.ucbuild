@@ -1,0 +1,75 @@
+# The //*.c means all c sources arbitrarily deep directories
+# All directories of the source and the header files
+# will be includeded with the "-I src/some/path" at the end in the commandline
+sourceFiles:
+  - Drone_src//*.c
+  - RFM75_src//*.c
+  - hardware/XMC4700Dave//*.c
+  - hardware/XMC4700Dave//*.S
+headerFiles:
+  - Drone_src//*.h
+  - RFM75_src//*.h
+  - hardware/XMC4700Dave//*.h
+  - <ccBase>/arm-none-eabi/include/*.h
+
+# For compilation, ccBase and the others are simply concatenated.
+# So please pay attention to the correct use of slashes.
+# f.e "/home/joe/bin/gcc-arm-none-eabi-4_9-2014q4/bin/arm-none-eabi-gcc
+# please use absolute paths for ccBase
+# The replacement rule is not generally supported by YAML,
+# and works only for the 'ccBase' parameter
+
+ccBase: /home/jakov/bin/gcc-arm-none-eabi-4_9-2014q4
+cc: <ccBase>/bin/arm-none-eabi-gcc # <ccBase> gets just replaced
+ccObjCopy: <ccBase>/bin/arm-none-eabi-objcopy
+ccSize: <ccBase>/bin/arm-none-eabi-size
+
+ccAsmOptions:
+  - -x assembler-with-cpp
+  - -c
+  - -DXMC4700_F144x2048
+  - -Wall
+  - -mfloat-abi=softfp
+  - -fmessage-length=0
+  - -mcpu=cortex-m4
+  - -mfpu=fpv4-sp-d16
+  - -mthumb
+  - -g
+  - -gdwarf-2
+
+ccCompileOptions:
+  - -c
+  - -DXMC4700_F144x2048 
+  - -O0 
+  - -ffunction-sections 
+  - -fdata-sections 
+  - -Wall 
+  - -Werror
+  - -std=gnu99 
+  - -mfloat-abi=softfp 
+  - -fmessage-length=0 
+  - -mcpu=cortex-m4 
+  - -mfpu=fpv4-sp-d16 
+  - -mthumb 
+  - -g 
+  - -gdwarf-2 
+
+ccLinkOptions:
+  - -nostartfiles 
+  - -Xlinker 
+  - --gc-sections 
+  - -specs=nano.specs 
+  - -specs=nosys.specs 
+  - -mfloat-abi=softfp 
+  - -mfpu=fpv4-sp-d16 
+  - -mcpu=cortex-m4 
+  - -mthumb 
+  - -g 
+  - -gdwarf-2 
+
+ccLinkLibs:  
+  - -lm
+  
+# Leave empty if you don't have any
+linkerFile: hardware/XMC4700Dave/XMC4700_2048_linker_script.ld
+

@@ -1,4 +1,3 @@
 * write haskell runner generator
-* make "uC" name agnostic and compile for "elf, hex, bin" with "YACBS.hs embeddedTarget -c bld/uC.yml"
-* "all" target runs "uC" and "tests", needs an argument for "YACBS.hs all -c bld/uC.yml"
+* "all" target runs "uC" and "tests", needs an argument for "YACBS.hs all bld/uC.ucbuild"
 

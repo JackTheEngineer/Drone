@@ -23,7 +23,6 @@ data Config = Config {
   , ccCompileOptions :: [String]
   , ccLinkOptions :: [String]
   , ccLinkLibs :: [String]
-  , compileIncludes :: [FilePath]
   , linkerFile :: String
 } deriving Show
 
@@ -40,7 +39,6 @@ instance FromJSON Config where
     v .: pck "ccCompileOptions" <*>
     v .: pck "ccLinkOptions" <*>
     v .: pck "ccLinkLibs" <*>
-    v .: pck "compileIncludes" <*>
     v .: pck "linkerFile"
   parseJSON _ = fail "Expected Object for Config value"
 
@@ -82,7 +80,6 @@ loadConfig filecontent = do
       updated_config c = c { cc = rep (cc cfg)
                            , ccObjCopy = rep (ccObjCopy cfg)
                            , ccSize = rep (ccSize cfg)
-                           , compileIncludes = map rep (compileIncludes cfg)
                            , sourceFiles = map rep (sourceFiles cfg)
                            , headerFiles = map rep (headerFiles cfg)}
   return $ updated_config cfg
@@ -103,24 +100,27 @@ flags = []
 -- like with the yamlConfig in our case, it would do nothing
 shakeIT :: IO()
 shakeIT = shakeArgsWith opt flags $ \options args -> return $ Just $ do
-  
-  want [takeBaseName (args !! 0)]
+
+  let target = (args !! 0)
+  case ("//*.ucbuild" ?== target ) of
+    True -> do -- Building for microcontroller
+      let buildname = takeBaseName target
+          elf_file = resultDir </> buildname </> buildname <.> "elf"
+          hex_file = elf_file -<.> "hex"
+          bin_file = elf_file -<.> "bin"
+      want [elf_file, hex_file, bin_file]
+    False -> do -- Building a test
+      want [takeBaseName target]
 
   test_yamls <- liftIO $ getDirectoryFilesIO "" ["test/test_*.yml"] 
 
-  let allConfigs = case elem (args !! 0) test_yamls of
+  let allConfigs = case elem target test_yamls of
                      True -> test_yamls
-                     False -> ((args !! 0):test_yamls)
+                     False -> (target:test_yamls)
                 
   phony "clean" $ do
     putNormal ("Cleaning files in " ++ resultDir)
     removeFilesAfter resultDir ["//*"]
-
-  phony "uC" $ do
-    let elf_file = resultDir </> "uC" </> "result.elf"
-        hex_file = elf_file -<.> "hex"
-        bin_file = elf_file -<.> "bin"
-    need [elf_file, hex_file, bin_file]
 
   phony "tests" $ do
     need $ (map takeBaseName test_yamls)
@@ -171,11 +171,10 @@ shakeIT = shakeArgsWith opt flags $ \options args -> return $ Just $ do
     need [sourceFile]
     let uniqueDirs = reverse $ nub (map dropFileName (allHeaders ++ allSources))
         include_dirs = map (makeInclude . fromFilePath) uniqueDirs
-        furtherCompileIncludes = map makeInclude (compileIncludes c)
         ending = takeExtension sourceFile
         m = out -<.> "m"
-        asmOpts = intercalate " " ((ccAsmOptions c) ++  furtherCompileIncludes ++ include_dirs)
-        cOpts = intercalate " " ((ccCompileOptions c) ++ furtherCompileIncludes ++ include_dirs)
+        asmOpts = intercalate " " ((ccAsmOptions c) ++ include_dirs)
+        cOpts = intercalate " " ((ccCompileOptions c) ++ include_dirs)
         gcc = (cc c)
         asm = cmd_ gcc "-MMD -MF" [m] asmOpts sourceFile "-o" [out]
         cCmd = cmd_ gcc sourceFile "-MMD -MF" [m] cOpts "-o" [out]

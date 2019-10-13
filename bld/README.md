@@ -17,20 +17,23 @@ Architectural Difference between, test compiler, target compiler
 Header inclusion: test sources first, then arm headers first. 
 
 The "tests" target looks for all "test_*.yml" files in the "test" directory, 
-compiles them, and runs them in Parallel !
+compiles and runs them all in parallel. This happens in perfect safety, 
+thanks to the awesome dependency tracking system of shake.
 
 
 ## Install instruction
 
-* install haskell stack
+* First install haskell stack, then:
 
 		stack install shake yaml
 
 ## Example Usage( from the 'Drone' directory)
 
-		stack bld/YACBS.hs bld/uC.yml
+		stack bld/YACBS.hs bld/XMC4500.ucbuild
 		
 		stack bld/YACBS.hs bld/test_dummy.yml
 		
 		stack bld/YACBS.hs tests # Looks for "test/test_*.yml" files 
+
+		
 		
