@@ -47,6 +47,16 @@
                 <Type>C File</Type>
             </Source_File>
             <Source_File>
+                <File_Name>i2c_master.c</File_Name>
+                <Path>\Dave\Generated\I2C_MASTER\i2c_master.c</Path>
+                <Type>C File</Type>
+            </Source_File>
+            <Source_File>
+                <File_Name>i2c_master_conf.c</File_Name>
+                <Path>\Dave\Generated\I2C_MASTER\i2c_master_conf.c</Path>
+                <Type>C File</Type>
+            </Source_File>
+            <Source_File>
                 <File_Name>pin_interrupt.c</File_Name>
                 <Path>\Dave\Generated\PIN_INTERRUPT\pin_interrupt.c</Path>
                 <Type>C File</Type>
@@ -131,6 +141,21 @@
             <Header_File>
                 <File_Name>digital_io_extern.h</File_Name>
                 <Path>\Dave\Generated\DIGITAL_IO\digital_io_extern.h</Path>
+                <Type>H File</Type>
+            </Header_File>
+            <Header_File>
+                <File_Name>i2c_master.h</File_Name>
+                <Path>\Dave\Generated\I2C_MASTER\i2c_master.h</Path>
+                <Type>H File</Type>
+            </Header_File>
+            <Header_File>
+                <File_Name>i2c_master_conf.h</File_Name>
+                <Path>\Dave\Generated\I2C_MASTER\i2c_master_conf.h</Path>
+                <Type>H File</Type>
+            </Header_File>
+            <Header_File>
+                <File_Name>i2c_master_extern.h</File_Name>
+                <Path>\Dave\Generated\I2C_MASTER\i2c_master_extern.h</Path>
                 <Type>H File</Type>
             </Header_File>
             <Header_File>

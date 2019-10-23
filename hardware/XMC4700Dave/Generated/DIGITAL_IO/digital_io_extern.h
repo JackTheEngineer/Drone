@@ -67,9 +67,9 @@
 
 extern const DIGITAL_IO_t LED1; 
 	
-extern const DIGITAL_IO_t RFM75_CE_PIN; 
-	
 extern const DIGITAL_IO_t LED2; 
+	
+extern const DIGITAL_IO_t RFM75_CE_PIN; 
 	
  
 #endif  /* DIGITAL_IO_EXTERN_H */

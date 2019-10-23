@@ -66,10 +66,10 @@ const DIGITAL_IO_t LED1 =
   .hwctrl = XMC_GPIO_HWCTRL_DISABLED
 };
 		
-const DIGITAL_IO_t RFM75_CE_PIN =
+const DIGITAL_IO_t LED2 =
 {
-  .gpio_port = XMC_GPIO_PORT6,
-  .gpio_pin = 5U,
+  .gpio_port = XMC_GPIO_PORT5,
+  .gpio_pin = 8U,
   .gpio_config = {
     .mode = XMC_GPIO_MODE_OUTPUT_PUSH_PULL,
     .output_level = XMC_GPIO_OUTPUT_LEVEL_LOW,
@@ -78,10 +78,10 @@ const DIGITAL_IO_t RFM75_CE_PIN =
   .hwctrl = XMC_GPIO_HWCTRL_DISABLED
 };
 		
-const DIGITAL_IO_t LED2 =
+const DIGITAL_IO_t RFM75_CE_PIN =
 {
-  .gpio_port = XMC_GPIO_PORT5,
-  .gpio_pin = 7U,
+  .gpio_port = XMC_GPIO_PORT6,
+  .gpio_pin = 5U,
   .gpio_config = {
     .mode = XMC_GPIO_MODE_OUTPUT_PUSH_PULL,
     .output_level = XMC_GPIO_OUTPUT_LEVEL_LOW,

@@ -26,8 +26,8 @@ Joystick_t r_joystick_buf[NUM_OF_MEASUREMENTS_TAKEN];
 uint8_t count = 0;
 
 void TimeTasks_run(uint32_t ticks, OS_t *os){
-	uint8_t sendbytes[16]; // it seems like it's at least necessary to send 16 bytes for a stable transmission :( bah.
-	uint32_t length = 16;
+	uint8_t sendbytes[32] = {0}; // it seems like it's at least necessary to send 16 bytes for a stable transmission :( bah.
+	uint32_t length = 32;
 
 	POINTER_TO_CONTAINER(Joystick_t, r_joystick);
 	POINTER_TO_CONTAINER(Joystick_t, l_joystick);
@@ -39,7 +39,7 @@ void TimeTasks_run(uint32_t ticks, OS_t *os){
 			count = 0;
 		}
 	}
-	if((ticks % 30) == 0){
+	if((ticks % 50) == 0){
 		median_filter(l_joystick, l_joystick_buf, retrieve_horizontal);
 		median_filter(l_joystick, l_joystick_buf, retrieve_vertical);
 		median_filter(r_joystick, r_joystick_buf, retrieve_horizontal);

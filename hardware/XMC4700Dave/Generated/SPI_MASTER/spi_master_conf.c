@@ -197,7 +197,7 @@ const SPI_MASTER_GPIO_CONFIG_t RFM75_SPI_SS_0_Config =
 
 XMC_SPI_CH_CONFIG_t RFM75_SPI_Channel_Config =
 {
-  .baudrate = 1000000U,
+  .baudrate = 2000000U,
   .bus_mode = (XMC_SPI_CH_BUS_MODE_t)XMC_SPI_CH_BUS_MODE_MASTER,
   .selo_inversion = XMC_SPI_CH_SLAVE_SEL_INV_TO_MSLS,
   .parity_mode = XMC_USIC_CH_PARITY_MODE_NONE
@@ -214,7 +214,7 @@ const SPI_MASTER_CONFIG_t RFM75_SPI_Config  =
   /* Clock Settings */
   .shift_clk_passive_level = XMC_SPI_CH_BRG_SHIFT_CLOCK_PASSIVE_LEVEL_0_DELAY_ENABLED, 
   .slave_select_lines      = (uint8_t)1,
-  .leading_trailing_delay  = (uint8_t)2,
+  .leading_trailing_delay  = (uint8_t)1,
   .spi_master_config_mode  = XMC_SPI_CH_MODE_STANDARD, /* spi master initial mode configured mode */
   .transmit_mode           = SPI_MASTER_TRANSFER_MODE_INTERRUPT,
   .receive_mode            = SPI_MASTER_TRANSFER_MODE_INTERRUPT,
@@ -300,7 +300,7 @@ static SPI_MASTER_STATUS_t RFM75_SPI_lInit(void)
                                        XMC_SPI_CH_BRG_SHIFT_CLOCK_PASSIVE_LEVEL_0_DELAY_ENABLED,
                                        XMC_SPI_CH_BRG_SHIFT_CLOCK_OUTPUT_SCLK);
   /* Configure Leading/Trailing delay */
-  XMC_SPI_CH_SetSlaveSelectDelay(XMC_SPI0_CH1, 2U);
+  XMC_SPI_CH_SetSlaveSelectDelay(XMC_SPI0_CH1, 1U);
 
                
   /* Configure the input pin properties */

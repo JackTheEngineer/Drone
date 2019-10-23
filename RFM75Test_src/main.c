@@ -34,9 +34,12 @@ int main(void){
 	uint8_t received_bytes[32] = {0};
 	uint8_t received_length;
 	while(1U){
-		if((g_systick_count % 100) == 0){
+		if((g_systick_count % 200) == 0){
 			received_length = RFM75_Receive_bytes(received_bytes);
-			asm("nop");
+			if(received_length != 0){
+				DIGITAL_IO_ToggleOutput(&LED2);
+				asm("nop");
+			}
 		}
 	}
 }

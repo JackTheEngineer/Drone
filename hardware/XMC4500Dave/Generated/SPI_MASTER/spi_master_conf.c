@@ -197,7 +197,7 @@ const SPI_MASTER_GPIO_CONFIG_t RFM75_SPI_SS_0_Config =
 
 XMC_SPI_CH_CONFIG_t RFM75_SPI_Channel_Config =
 {
-  .baudrate = 1000000U,
+  .baudrate = 2000000U,
   .bus_mode = (XMC_SPI_CH_BUS_MODE_t)XMC_SPI_CH_BUS_MODE_MASTER,
   .selo_inversion = XMC_SPI_CH_SLAVE_SEL_INV_TO_MSLS,
   .parity_mode = XMC_USIC_CH_PARITY_MODE_NONE
@@ -212,9 +212,9 @@ const SPI_MASTER_CONFIG_t RFM75_SPI_Config  =
   .tx_fifo_size            = (XMC_USIC_CH_FIFO_SIZE_t)XMC_USIC_CH_FIFO_SIZE_16WORDS,
   .rx_fifo_size            = (XMC_USIC_CH_FIFO_SIZE_t)XMC_USIC_CH_FIFO_SIZE_16WORDS,
   /* Clock Settings */
-  .shift_clk_passive_level = XMC_SPI_CH_BRG_SHIFT_CLOCK_PASSIVE_LEVEL_0_DELAY_DISABLED, 
+  .shift_clk_passive_level = XMC_SPI_CH_BRG_SHIFT_CLOCK_PASSIVE_LEVEL_0_DELAY_ENABLED, 
   .slave_select_lines      = (uint8_t)1,
-  .leading_trailing_delay  = (uint8_t)2,
+  .leading_trailing_delay  = (uint8_t)4,
   .spi_master_config_mode  = XMC_SPI_CH_MODE_STANDARD, /* spi master initial mode configured mode */
   .transmit_mode           = SPI_MASTER_TRANSFER_MODE_INTERRUPT,
   .receive_mode            = SPI_MASTER_TRANSFER_MODE_INTERRUPT,
@@ -297,10 +297,10 @@ static SPI_MASTER_STATUS_t RFM75_SPI_lInit(void)
 
   /* Configure the clock polarity and clock delay */
   XMC_SPI_CH_ConfigureShiftClockOutput(XMC_SPI0_CH0,
-                                       XMC_SPI_CH_BRG_SHIFT_CLOCK_PASSIVE_LEVEL_0_DELAY_DISABLED,
+                                       XMC_SPI_CH_BRG_SHIFT_CLOCK_PASSIVE_LEVEL_0_DELAY_ENABLED,
                                        XMC_SPI_CH_BRG_SHIFT_CLOCK_OUTPUT_SCLK);
   /* Configure Leading/Trailing delay */
-  XMC_SPI_CH_SetSlaveSelectDelay(XMC_SPI0_CH0, 2U);
+  XMC_SPI_CH_SetSlaveSelectDelay(XMC_SPI0_CH0, 4U);
 
                
   /* Configure the input pin properties */
@@ -328,7 +328,7 @@ static SPI_MASTER_STATUS_t RFM75_SPI_lInit(void)
   /* Configure transmit FIFO settings */
   XMC_USIC_CH_TXFIFO_Configure(XMC_SPI0_CH0,
                                16U,
-                               (XMC_USIC_CH_FIFO_SIZE_t)XMC_USIC_CH_FIFO_SIZE_16WORDS,
+                               (XMC_USIC_CH_FIFO_SIZE_t)XMC_USIC_CH_FIFO_SIZE_32WORDS,
                                1U);
 
   /* Configure the service interrupt nodes for standard transmit FIFO events */
@@ -339,7 +339,7 @@ static SPI_MASTER_STATUS_t RFM75_SPI_lInit(void)
   /* Configure receive FIFO settings */
   XMC_USIC_CH_RXFIFO_Configure(XMC_SPI0_CH0,
                                0U,
-                               (XMC_USIC_CH_FIFO_SIZE_t)XMC_USIC_CH_FIFO_SIZE_16WORDS,
+                               (XMC_USIC_CH_FIFO_SIZE_t)XMC_USIC_CH_FIFO_SIZE_32WORDS,
                                0U);
              
   XMC_USIC_CH_RXFIFO_SetInterruptNodePointer(XMC_SPI0_CH0,

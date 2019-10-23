@@ -61,7 +61,7 @@
  * EXTERN DECLARATIONS
 ***********************************************************************************************************************/
 
-/* Extern declaration for RFM75_PIN_INTERRUPT */
+/* Extern declaration for RFM75_INTERRUPT_PIN */
 extern const PIN_INTERRUPT_t RFM75_INTERRUPT_PIN;
 
 #endif /* End of PIN_INTERRUPT_EXTERN_H */

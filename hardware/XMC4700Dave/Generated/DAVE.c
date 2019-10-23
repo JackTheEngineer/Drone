@@ -79,8 +79,8 @@ __WEAK DAVE_STATUS_t DAVE_Init(void)
    } 
   if (init_status == DAVE_STATUS_SUCCESS)
   {
-	 /**  Initialization of PIN_INTERRUPT APP instance RFM75_PIN_INTERRUPT */
-	 init_status = (DAVE_STATUS_t)PIN_INTERRUPT_Init(&RFM75_INTERRUPT_PIN); 
+	 /**  Initialization of I2C_MASTER APP instance MotionSensor_I2C */
+	 init_status = (DAVE_STATUS_t)I2C_MASTER_Init(&MotionSensor_I2C); 
    } 
   if (init_status == DAVE_STATUS_SUCCESS)
   {
@@ -89,18 +89,23 @@ __WEAK DAVE_STATUS_t DAVE_Init(void)
    } 
   if (init_status == DAVE_STATUS_SUCCESS)
   {
+	 /**  Initialization of DIGITAL_IO APP instance LED2 */
+	 init_status = (DAVE_STATUS_t)DIGITAL_IO_Init(&LED2); 
+   } 
+  if (init_status == DAVE_STATUS_SUCCESS)
+  {
 	 /**  Initialization of DIGITAL_IO APP instance RFM75_CE_PIN */
 	 init_status = (DAVE_STATUS_t)DIGITAL_IO_Init(&RFM75_CE_PIN); 
    } 
   if (init_status == DAVE_STATUS_SUCCESS)
   {
-	 /**  Initialization of SYSTIMER APP instance SYSTIMER_0 */
-	 init_status = (DAVE_STATUS_t)SYSTIMER_Init(&SYSTIMER_0); 
+	 /**  Initialization of PIN_INTERRUPT APP instance RFM75_INTERRUPT_PIN */
+	 init_status = (DAVE_STATUS_t)PIN_INTERRUPT_Init(&RFM75_INTERRUPT_PIN); 
    } 
   if (init_status == DAVE_STATUS_SUCCESS)
   {
-	 /**  Initialization of DIGITAL_IO APP instance LED2 */
-	 init_status = (DAVE_STATUS_t)DIGITAL_IO_Init(&LED2); 
+	 /**  Initialization of SYSTIMER APP instance SYSTIMER_0 */
+	 init_status = (DAVE_STATUS_t)SYSTIMER_Init(&SYSTIMER_0); 
    }  
   return init_status;
 } /**  End of function DAVE_Init */

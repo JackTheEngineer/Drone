@@ -58,7 +58,7 @@
 const PIN_INTERRUPT_t RFM75_INTERRUPT_PIN =
 {
   .eru = XMC_ERU1,  /* ERU module 1 Mapped */
-  .port = XMC_GPIO_PORT2,  /* PORT 2 Mapped */
+  .port = XMC_GPIO_PORT1,  /* PORT 1 Mapped */
   .gpio_config =
    {
      .mode = XMC_GPIO_MODE_INPUT_TRISTATE  /* Pin Characteristics */
@@ -77,8 +77,8 @@ const PIN_INTERRUPT_t RFM75_INTERRUPT_PIN =
 #if(UC_FAMILY == XMC4)
   .irq_subpriority = 0,  /* Subpriority of the Interrupt */
 #endif
-  .etl = 1U,  /* ERU ETL channel number */
+  .etl = 2U,  /* ERU ETL channel number */
   .ogu = 0U,  /* ERU OGU channel number */
-  .pin = 7U, /* Mapped pin number */ 
+  .pin = 2U, /* Mapped pin number */ 
   .enable_at_init = false /* Enable Interrupt during initialization */ 
   };

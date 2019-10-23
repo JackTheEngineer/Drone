@@ -12,7 +12,7 @@ sourceFiles:
 headerFiles:
   - Drone_src//*.h
   - RFM75_src//*.h
-  - hardware/XMC4700Dave//*.h  
+  - hardware/XMC4500Dave//*.h  
   - <ccBase>/arm-none-eabi/include/*.h
 
 # For compilation, ccBase and the others are simply concatenated
@@ -43,7 +43,7 @@ ccAsmOptions:
 ccCompileOptions:
   - -c
   - -DXMC4500_F100x1024
-  - -O0 
+  - -O2
   - -ffunction-sections 
   - -fdata-sections 
   - -Wall
@@ -60,7 +60,8 @@ ccCompileOptions:
 ccLinkOptions:
   - -nostartfiles 
   - -Xlinker 
-  - --gc-sections 
+  - -O2
+#  - --gc-sections 
   - -specs=nano.specs 
   - -specs=nosys.specs 
   - -mfloat-abi=softfp 

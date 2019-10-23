@@ -9,13 +9,10 @@ sourceFiles:
   - RFM75Test_src//*.c
   - hardware/XMC4700Dave//*.c
   - hardware/XMC4700Dave//*.S  
-#  - hardware/XMC4500Dave//*.c
-#  - hardware/XMC4500Dave//*.S
 headerFiles:
   - Drone_src//*.h
   - RFM75_src//*.h
   - hardware/XMC4700Dave//*.h  
-#  - hardware/XMC4500Dave//*.h
   - <ccBase>/arm-none-eabi/include/*.h
 
 # For compilation, ccBase and the others are simply concatenated
@@ -33,7 +30,6 @@ ccSize: <ccBase>/bin/arm-none-eabi-size
 ccAsmOptions:
   - -x assembler-with-cpp
   - -c
-#  - -DXMC4500_F100x1024
   - -DXMC4700_F144x2048
   - -Wall
   - -mfloat-abi=softfp
@@ -46,7 +42,6 @@ ccAsmOptions:
 
 ccCompileOptions:
   - -c
-#  - -DXMC4500_F100x1024
   - -DXMC4700_F144x2048
   - -O0 
   - -ffunction-sections 
@@ -79,6 +74,5 @@ ccLinkLibs:
   - -lm
   
 # Leave empty if you don't have any
-#linkerFile: hardware/XMC4500Dave/XMC4500_1028_linker_script.ld
 linkerFile: hardware/XMC4700Dave/XMC4700_2048_linker_script.ld
 

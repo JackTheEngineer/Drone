@@ -86,7 +86,7 @@
 /**< Maximum No of timer */
 #define SYSTIMER_CFG_MAX_TMR  (1U)
 
-#define SYSTIMER_PRIORITY  (10U)
+#define SYSTIMER_PRIORITY  (2U)
 #define SYSTIMER_SUBPRIORITY  (0U)
  
 /**
