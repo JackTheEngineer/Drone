@@ -30,23 +30,19 @@ void RC_Iface_send_bytes(uint8_t const *bytes,
 	SPI_MASTER_EnableSlaveSelectSignal(&RFM75_SPI,
 			RFM75_SPI.config->slave_select_pin_config[0]->slave_select_ch);
 
-	_RC_Iface_clear_receive_indication();
 	for(uint8_t i=0; i<bufsize; i++){
-		SPI_MASTER_Transmit(&RFM75_SPI, &bytes[i], 1);
+		RC_Iface_send_byte(bytes[i]);
 	}
-	_RC_Iface_wait_for_receive();
-	_RC_Iface_clear_receive_indication();
 
 	if(csn_disable){
 		SPI_MASTER_DisableSlaveSelectSignal(&RFM75_SPI);
 	}
 }
-/*
 void RC_Iface_send_byte(uint8_t byte){
 	_RC_Iface_clear_receive_indication();
 	SPI_MASTER_Transmit(&RFM75_SPI, &byte, 1);
 	_RC_Iface_wait_for_receive();
-} */
+}
 
 void RC_Iface_read_bytes_no_cmd(uint8_t *bytes,
 		uint8_t bufsize,

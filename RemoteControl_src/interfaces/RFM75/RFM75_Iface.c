@@ -31,10 +31,9 @@ void RC_Iface_init(void){
 void RC_Iface_send_bytes(uint8_t const *bytes,
 		uint8_t bufsize,
 		Disable_CSN_e ce_disable){
-	SPI_MASTER_SetMode(&SPI_MASTER_0, XMC_SPI_CH_MODE_STANDARD);
 	SPI_MASTER_EnableSlaveSelectSignal(&SPI_MASTER_0,
 			SPI_MASTER_0.config->slave_select_pin_config[0]->slave_select_ch);
-
+	SPI_MASTER_SetMode(&SPI_MASTER_0, XMC_SPI_CH_MODE_STANDARD);
 	_RC_Iface_clear_receive_indication();
 	SPI_MASTER_Transmit(&SPI_MASTER_0, bytes, bufsize);
 
