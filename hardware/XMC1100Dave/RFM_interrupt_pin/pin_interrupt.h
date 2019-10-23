@@ -24,7 +24,7 @@ typedef struct PIN_INTERRUPT
 	bool enable_at_init;  /**< Interrupt enable for Node at initialization*/
 } PIN_INTERRUPT_t;
 
-const PIN_INTERRUPT_t RFM75_PIN_INTERRUPT;
+const PIN_INTERRUPT_t RFM75_INTERRUPT_PIN;
 
 void PIN_INTERRUPT_Init(const PIN_INTERRUPT_t *const handle);
 

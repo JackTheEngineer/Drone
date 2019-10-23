@@ -17,7 +17,7 @@ typedef enum PIN_INTERRUPT_EDGE
 void PIN_INTERRUPT_SetEdgeSensitivity(const PIN_INTERRUPT_t *const handle, const PIN_INTERRUPT_EDGE_t edge);
 PIN_INTERRUPT_EDGE_t PIN_INTERRUPT_GetEdgeSensitivity(const PIN_INTERRUPT_t *const handle);
 
-const PIN_INTERRUPT_t RFM75_PIN_INTERRUPT =
+const PIN_INTERRUPT_t RFM75_INTERRUPT_PIN =
 {
 	.eru = XMC_ERU0,  /* ERU module 0 Mapped */
 	.port = XMC_GPIO_PORT2,  /* PORT 2 Mapped */

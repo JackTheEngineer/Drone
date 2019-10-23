@@ -70,6 +70,12 @@
 #include "UART/uart.h"
   
 
+#include "DIGITAL_IO/digital_io.h"
+  
+
+#include "SYSTIMER/systimer.h"
+  
+
 #include "SPI_MASTER/spi_master.h"
   
 	

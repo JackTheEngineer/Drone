@@ -43,7 +43,7 @@ int main(void){
 
 	while(true){
 		if(UpdateTime(&last_ticks)){
-			Statemachine_run(last_ticks, os);
+			TimeTasks_run(last_ticks, os);
 		}
 	}
 	return 1;

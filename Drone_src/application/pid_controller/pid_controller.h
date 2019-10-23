@@ -8,8 +8,8 @@
 #ifndef SRC_PID_CONTROLLER_PID_CONTROLLER_H_
 #define SRC_PID_CONTROLLER_PID_CONTROLLER_H_
 
+#include "../motion_sensor/motion_sensor.h"
 #include "base.h"
-#include "motion_sensor.h"
 
 #define P_CONST 10
 #define I_CONST 5

@@ -5,8 +5,9 @@
  *      Author: jakov
  */
 
-#include "motion_sensor.h"
-#include "msensor_iface.h"
+#include "../motion_sensor/motion_sensor.h"
+
+#include "../motion_sensor/msensor_iface.h"
 
 void Motion_sensor_init(Sensordata_t *sensordata){
 	Motion_sensor_set_data_zero(sensordata);

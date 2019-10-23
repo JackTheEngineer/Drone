@@ -64,8 +64,8 @@
 #define I2C_MASTER_MINOR_VERSION 1U
 #define I2C_MASTER_PATCH_VERSION 28U
 
-#define I2C_MotionSensor_TX_IRQN ((IRQn_Type)99)
-#define I2C_MotionSensor_RX_IRQN ((IRQn_Type)98)
+#define MotionSensor_I2C_TX_IRQN ((IRQn_Type)99)
+#define MotionSensor_I2C_RX_IRQN ((IRQn_Type)98)
 #define I2C_MASTER_DMA_TX_ENABLED 0
 #define I2C_MASTER_DMA_RX_ENABLED 0
 #define I2C_MASTER_DIRECT_TX_ENABLED 0

@@ -19,17 +19,13 @@ void Joystick_Init(void){
 void Joysticks_get_current_values(Joystick_t *left_joystick, Joystick_t *right_joystick){
 	uint32_t count = 0;
 	new_result_available = false;
-
+	/* ADC_MEASUREMENT_Init(&ADC_MEASUREMENT_0); */
+	ADC_MEASUREMENT_StartConversion(&ADC_MEASUREMENT_0);
     /* Enable Background Scan Request source IRQ */
     NVIC_EnableIRQ(ADC_MEASUREMENT_0.result_intr_handle->node_id);
-	ADC_MEASUREMENT_StartConversion(&ADC_MEASUREMENT_0);
-
 
 	/* new_result_avalilable is to true by ADC_Measurement_Handler IRQ in ADC_conversion_decoding */
-	while((new_result_available == false) && (count < 10)){
-		if(count == 5){
-			ADC_MEASUREMENT_StartConversion(&ADC_MEASUREMENT_0); /*restarting the measurement if the adc got stuck */
-		}
+	while((new_result_available == false) && (count < 5)){
 		count++;
 		/* For whatever reason the ADC converter get's stuck every 5'th time,
 		 * and does not enter the Measurement Interrupt. The Data stays the same.

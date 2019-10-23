@@ -5,7 +5,8 @@
  *      Author: chocolate
  */
 
-#include "msensor_iface.h"
+#include "../motion_sensor/msensor_iface.h"
+
 #include "i2c_master.h"
 #include "delay.h"
 
@@ -15,7 +16,7 @@ uint32_t i2c_duration_count = 0;
 #define MAX_COUNT 150000
 
 void MSensor_Iface_Init(void){
-	I2C_MASTER_Init(&I2C_MASTER_0);
+	I2C_MASTER_Init(&I2C_MotionSensor);
 
 	MSensor_Iface_writeByte(PWR_MGMT_1, (H_RESET));
 	delay_ms(100);
@@ -42,17 +43,17 @@ void MSensor_Iface_readBytes(uint8_t startaddress, uint8_t *read_buf, uint8_t si
 
 void MSensor_Iface_readBytesFromi2c_addr(uint8_t i2c_addr, uint8_t startaddress,
 		uint8_t *read_buf, uint8_t size){
-	I2C_MASTER_Transmit(&I2C_MASTER_0, true, i2c_addr, &startaddress, 1, false);
+	I2C_MASTER_Transmit(&I2C_MotionSensor, true, i2c_addr, &startaddress, 1, false);
 	i2c_duration_count = 0;
-	while(I2C_MASTER_0.runtime->tx_busy){
+	while(I2C_MotionSensor.runtime->tx_busy){
 		i2c_duration_count++;
 		if(i2c_duration_count > MAX_COUNT){
 			return;
 		}
 	}
-	I2C_MASTER_Receive(&I2C_MASTER_0, true, i2c_addr, read_buf, size, true, true);
+	I2C_MASTER_Receive(&I2C_MotionSensor, true, i2c_addr, read_buf, size, true, true);
 	i2c_duration_count = 0;
-	while(I2C_MASTER_0.runtime->rx_busy){
+	while(I2C_MotionSensor.runtime->rx_busy){
 		i2c_duration_count++;
 		if(i2c_duration_count > MAX_COUNT){
 			return;
@@ -68,9 +69,9 @@ void MSensor_Iface_writeByteToi2c_addr(uint8_t i2c_addr, uint8_t address, uint8_
 	uint8_t sendbuf[2];
 	sendbuf[0] = address;
 	sendbuf[1] = value;
-	I2C_MASTER_Transmit(&I2C_MASTER_0, true, i2c_addr, &sendbuf[0], 2, true);
+	I2C_MASTER_Transmit(&I2C_MotionSensor, true, i2c_addr, &sendbuf[0], 2, true);
 	i2c_duration_count = 0;
-	while(I2C_MASTER_0.runtime->tx_busy){
+	while(I2C_MotionSensor.runtime->tx_busy){
 		i2c_duration_count++;
 		if(i2c_duration_count > MAX_COUNT){
 			return;
@@ -80,17 +81,17 @@ void MSensor_Iface_writeByteToi2c_addr(uint8_t i2c_addr, uint8_t address, uint8_
 
 uint8_t MSensor_Iface_readByte(uint8_t i2c_addr, uint8_t address){
 	uint8_t receive;
-	I2C_MASTER_Transmit(&I2C_MASTER_0, true, i2c_addr, &address, 1, false);
+	I2C_MASTER_Transmit(&I2C_MotionSensor, true, i2c_addr, &address, 1, false);
 	i2c_duration_count = 0;
-	while(I2C_MASTER_0.runtime->tx_busy){
+	while(I2C_MotionSensor.runtime->tx_busy){
 		i2c_duration_count++;
 		if(i2c_duration_count > MAX_COUNT){
 			return 0;
 		}
 	}
-	I2C_MASTER_Receive(&I2C_MASTER_0, true, i2c_addr, &receive, 1, true, true);
+	I2C_MASTER_Receive(&I2C_MotionSensor, true, i2c_addr, &receive, 1, true, true);
 	i2c_duration_count = 0;
-	while(I2C_MASTER_0.runtime->rx_busy){
+	while(I2C_MotionSensor.runtime->rx_busy){
 		i2c_duration_count++;
 		if(i2c_duration_count > MAX_COUNT){
 			return 0;

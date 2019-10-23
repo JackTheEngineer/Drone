@@ -126,6 +126,8 @@ shakeIT = shakeArgsWith opt flags $ \options args -> return $ Just $ do
     need $ (map takeBaseName test_yamls)
 
   yamlCfg <- newCache $ \f -> (readFile' f >>= loadConfig)
+  getFiles <- newCache $ \f -> do
+    liftIO $ getDirectoryFilesIO "" f
 
 --- Helper Functions ---  
   let configNameFromSource s = (splitDirectories s) !! 1 
@@ -152,8 +154,8 @@ shakeIT = shakeArgsWith opt flags $ \options args -> return $ Just $ do
 
   resultDir <//> "*.elf" %> \out -> do
     c <- configFromSource out :: Action( Config )
-    allSources <- getDirectoryFiles "" (sourceFiles c)
-    allHeaders <- getDirectoryFiles "" (headerFiles c)
+    allSources <- getFiles (sourceFiles c)
+    allHeaders <- getFiles (headerFiles c)
     let os = [(_objDir out) </> source -<.> "o" | source <- allSources]
         gcc = (cc c)
         map_file = out -<.> "map"

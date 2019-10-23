@@ -1,9 +1,9 @@
+#include "application/motion_sensor/motion_sensor.h"
 #include "motor_pwm.h"
 #include "timetasks.h"
 #include "led_module.h"
 #include "buttons.h"
 #include "os.h"
-#include "motion_sensor.h"
 #include "delay.h"
 #include "RFM75_driver.h"
 #include "statemachine.h"
@@ -31,7 +31,6 @@ int main(void)
 	uint32_t last_ticks = 0;
 	POINTER_TO_CONTAINER(OS_t, os);
 	POINTER_TO_CONTAINER(Sensordata_t, motion_sensor);
-	uint8_t address[5] = {1,0,0,0,0};
 	State_t state = STATE_CALIBRATE;
 	Button_t btn1 = {
 			.btn = BUTTON1,
@@ -77,9 +76,6 @@ int main(void)
 	RFM75_setChannel(50);
 
 	UART_Init(&DebugUart);
-
-	//blinkdelay(500, 9); /* waits 4,5 seconds */
-
 
 	CE_HIGH;
 

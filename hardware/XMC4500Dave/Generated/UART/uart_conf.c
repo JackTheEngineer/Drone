@@ -202,11 +202,11 @@ UART_STATUS_t DBG_UART_init()
        0x0U);
   /*Set priority and enable NVIC node for transmit interrupt*/
   NVIC_SetPriority((IRQn_Type)91, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),
-                        63U, 0U));
+                        55U, 0U));
   NVIC_EnableIRQ((IRQn_Type)91);
   /*Set priority and enable NVIC node for receive interrupt*/
   NVIC_SetPriority((IRQn_Type)90, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),
-                      63U, 0U));
+                      55U, 0U));
   NVIC_EnableIRQ((IRQn_Type)90);
   return status;
 }

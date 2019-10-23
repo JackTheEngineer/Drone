@@ -3,7 +3,6 @@
 # will be includeded with the "-I src/some/path" at the end in the commandline
 sourceFiles:
   - RemoteControl_src//*.c
-  - RFM75_src//*.c
   - hardware/XMC1100Dave//*.c
   - hardware/XMC1100Dave//*.S
 headerFiles:

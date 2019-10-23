@@ -88,49 +88,49 @@ void I2C_MASTER_TransmitHandler(I2C_MASTER_t * const handle);
  */
 void I2C_MASTER_ReceiveHandler(I2C_MASTER_t * const handle);
 
-void I2C_MotionSensor_init(void);
+void MotionSensor_I2C_init(void);
 #if (I2C_MASTER_DMA_TX_ENABLED == 1)
-void I2C_MotionSensor_dma_tx_handler(XMC_DMA_CH_EVENT_t event);
+void MotionSensor_I2C_dma_tx_handler(XMC_DMA_CH_EVENT_t event);
 #endif
 #if (I2C_MASTER_DMA_RX_ENABLED == 1)
-void I2C_MotionSensor_dma_rx_handler(XMC_DMA_CH_EVENT_t event);
+void MotionSensor_I2C_dma_rx_handler(XMC_DMA_CH_EVENT_t event);
 #endif
-  static const XMC_GPIO_CONFIG_t I2C_MotionSensor_sda_pin_config   =
+  static const XMC_GPIO_CONFIG_t MotionSensor_I2C_sda_pin_config   =
   { 
     .mode = XMC_GPIO_MODE_OUTPUT_OPEN_DRAIN_ALT1,
     .output_level   = XMC_GPIO_OUTPUT_LEVEL_HIGH,
     .output_strength = XMC_GPIO_OUTPUT_STRENGTH_STRONG_SHARP_EDGE
   }; 
-  static const XMC_GPIO_CONFIG_t I2C_MotionSensor_scl_pin_config   =
+  static const XMC_GPIO_CONFIG_t MotionSensor_I2C_scl_pin_config   =
   { 
     .mode = XMC_GPIO_MODE_OUTPUT_OPEN_DRAIN_ALT1,
     .output_level  = XMC_GPIO_OUTPUT_LEVEL_HIGH,
     .output_strength = XMC_GPIO_OUTPUT_STRENGTH_STRONG_SHARP_EDGE
   }; 
-const XMC_I2C_CH_CONFIG_t I2C_MotionSensor_channel_config =
+const XMC_I2C_CH_CONFIG_t MotionSensor_I2C_channel_config =
 {
   .baudrate = (uint32_t)(400000U),
   .address  = 0
 };
 
-static void I2C_MotionSensor_disable_io(void)
+static void MotionSensor_I2C_disable_io(void)
 {
   XMC_GPIO_SetMode((XMC_GPIO_PORT_t *)PORT5_BASE, (uint8_t)0, XMC_GPIO_MODE_INPUT_TRISTATE);
   XMC_GPIO_SetMode((XMC_GPIO_PORT_t *)PORT5_BASE, (uint8_t)2, XMC_GPIO_MODE_INPUT_TRISTATE);
 }
 
-static void I2C_MotionSensor_enable_io(void)
+static void MotionSensor_I2C_enable_io(void)
 {
-  XMC_GPIO_SetMode((XMC_GPIO_PORT_t *)PORT5_BASE, (uint8_t)0, I2C_MotionSensor_sda_pin_config.mode);
-  XMC_GPIO_SetMode((XMC_GPIO_PORT_t *)PORT5_BASE, (uint8_t)2, I2C_MotionSensor_scl_pin_config.mode);
+  XMC_GPIO_SetMode((XMC_GPIO_PORT_t *)PORT5_BASE, (uint8_t)0, MotionSensor_I2C_sda_pin_config.mode);
+  XMC_GPIO_SetMode((XMC_GPIO_PORT_t *)PORT5_BASE, (uint8_t)2, MotionSensor_I2C_scl_pin_config.mode);
 }
 
-const I2C_MASTER_CONFIG_t I2C_MotionSensor_config =
+const I2C_MASTER_CONFIG_t MotionSensor_I2C_config =
 {
-  .brg_config = &I2C_MotionSensor_channel_config,
-  .fptr_i2c_config = I2C_MotionSensor_init,
-  .fptr_i2c_enable_io = I2C_MotionSensor_enable_io,
-  .fptr_i2c_disable_io = I2C_MotionSensor_disable_io,
+  .brg_config = &MotionSensor_I2C_channel_config,
+  .fptr_i2c_config = MotionSensor_I2C_init,
+  .fptr_i2c_enable_io = MotionSensor_I2C_enable_io,
+  .fptr_i2c_disable_io = MotionSensor_I2C_disable_io,
   .tx_cbhandler = NULL,
   .rx_cbhandler = NULL,
   .nack_cbhandler = NULL,
@@ -142,20 +142,20 @@ const I2C_MASTER_CONFIG_t I2C_MotionSensor_config =
  
   .rxFIFO_size = XMC_USIC_CH_FIFO_SIZE_32WORDS,
   
-#if defined(I2C_MotionSensor_TX_IRQN)
-  .tx_irqn = I2C_MotionSensor_TX_IRQN,
+#if defined(MotionSensor_I2C_TX_IRQN)
+  .tx_irqn = MotionSensor_I2C_TX_IRQN,
 #else
   .tx_irqn = -1,
 #endif
 
-#if defined(I2C_MotionSensor_RX_IRQN)
-  .rx_irqn = I2C_MotionSensor_RX_IRQN
+#if defined(MotionSensor_I2C_RX_IRQN)
+  .rx_irqn = MotionSensor_I2C_RX_IRQN
 #else
   .rx_irqn = -1
 #endif
 
 };
-I2C_MASTER_RUNTIME_t I2C_MotionSensor_runtime =
+I2C_MASTER_RUNTIME_t MotionSensor_I2C_runtime =
 {
   .tx_ack_sr = 0x3U,
   .tx_busy = false,
@@ -164,19 +164,19 @@ I2C_MASTER_RUNTIME_t I2C_MotionSensor_runtime =
   .bus_acquired = false
 };
 
-I2C_MASTER_t I2C_MotionSensor =
+I2C_MASTER_t MotionSensor_I2C =
 {
   .channel = XMC_I2C2_CH0,
-  .config = &I2C_MotionSensor_config,
-  .runtime = &I2C_MotionSensor_runtime,
+  .config = &MotionSensor_I2C_config,
+  .runtime = &MotionSensor_I2C_runtime,
 };
 
-void I2C_MotionSensor_init(void)
+void MotionSensor_I2C_init(void)
 {
  
   const uint32_t tx_fifo_events = (uint32_t)(0);
   const uint32_t rx_fifo_events = (uint32_t)(XMC_USIC_CH_RXFIFO_EVENT_CONF_ALTERNATE | XMC_USIC_CH_RXFIFO_EVENT_CONF_STANDARD);
-  XMC_I2C_CH_Init(XMC_I2C2_CH0, &I2C_MotionSensor_channel_config);
+  XMC_I2C_CH_Init(XMC_I2C2_CH0, &MotionSensor_I2C_channel_config);
 
   XMC_USIC_CH_SetInputSource(XMC_I2C2_CH0, XMC_USIC_CH_INPUT_DX0, 1);
   XMC_USIC_CH_SetInputSource(XMC_I2C2_CH0, XMC_USIC_CH_INPUT_DX1, 0);
@@ -212,21 +212,21 @@ void I2C_MotionSensor_init(void)
                                        ((uint32_t)0));
   XMC_I2C_CH_Start(XMC_I2C2_CH0);
 
-  XMC_GPIO_Init((XMC_GPIO_PORT_t *)PORT5_BASE, (uint8_t)0, &I2C_MotionSensor_sda_pin_config);
-  XMC_GPIO_Init((XMC_GPIO_PORT_t *)PORT5_BASE, (uint8_t)2, &I2C_MotionSensor_scl_pin_config);
+  XMC_GPIO_Init((XMC_GPIO_PORT_t *)PORT5_BASE, (uint8_t)0, &MotionSensor_I2C_sda_pin_config);
+  XMC_GPIO_Init((XMC_GPIO_PORT_t *)PORT5_BASE, (uint8_t)2, &MotionSensor_I2C_scl_pin_config);
 /* Tx interrupt priority settings */
-  NVIC_SetPriority((IRQn_Type)99, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),63,0));
+  NVIC_SetPriority((IRQn_Type)99, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),51,0));
   NVIC_EnableIRQ((IRQn_Type)99);/* Rx interrupt priority settings */
-  NVIC_SetPriority((IRQn_Type)98, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),63,0));
+  NVIC_SetPriority((IRQn_Type)98, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),51,0));
   NVIC_EnableIRQ((IRQn_Type)98);}
 /*Transmit ISR*/
-void I2C_MotionSensor_TX_HANDLER()
+void MotionSensor_I2C_TX_HANDLER()
 {
-  I2C_MASTER_TransmitHandler(&I2C_MotionSensor);
+  I2C_MASTER_TransmitHandler(&MotionSensor_I2C);
 }
 /*Receive ISR*/
-void I2C_MotionSensor_RX_HANDLER()
+void MotionSensor_I2C_RX_HANDLER()
 {
-  I2C_MASTER_ReceiveHandler(&I2C_MotionSensor);
+  I2C_MASTER_ReceiveHandler(&MotionSensor_I2C);
 }
 

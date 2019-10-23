@@ -71,8 +71,8 @@ const uint8_t RFM7x_bank1R0EInit[] = {
 };
 
 bool RFM75_Init(void){
-	CE_LOW;
 	RC_Iface_init();
+	CE_LOW;
 	return RFM75_initRegisters();
 }
 
@@ -127,16 +127,14 @@ bool RFM75_initRegisters()
 	delay_ms(5);
 
 	//Check the ChipID
-	uint8_t ID;
-	ID = readRegVal(0x08);
-	if(ID != 0x63)
+	uint8_t id = readRegVal(0x08);
+	bool retval = true;
+	if(id != 0x63)
 	{
-		return false;
+		retval=false;
 	}
-
 	selectBank(0);
-
-	return true;
+	return retval;
 }
 
 void selectBank(uint8_t bank) 
@@ -235,10 +233,9 @@ void readRegBuf(uint8_t reg, uint8_t * buf, uint8_t len)
 	RC_Iface_read_bytes_no_cmd(buf, len, DISABLE_CE);
 }
 
-uint8_t writeRegPgmBuf(uint8_t * cmdbuf, uint8_t len) 
+void writeRegPgmBuf(uint8_t * cmdbuf, uint8_t len) 
 {
 	RC_Iface_send_bytes(cmdbuf, len, DISABLE_CE);
-	return 1;
 }
 
 uint8_t writeRegCmdBuf(uint8_t cmd,
@@ -497,10 +494,7 @@ void prepareForListening(const uint32_t *localAddress)
 		adr[i] = localAddress[i];
 	}
 	adr[4] = 0;
-	if (!configRxPipe(1, adr, 0, 1))
-	{
-		// fprintf(stderr, "Can't configure Rx Pipe properly!\n");
-	}
+	configRxPipe(1, adr, 0, 1);
 }
 
 void startListening(const uint8_t channel, const uint32_t *localAddress)

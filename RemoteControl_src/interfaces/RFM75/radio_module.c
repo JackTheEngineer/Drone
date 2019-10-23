@@ -22,11 +22,11 @@ const uint8_t RFM75_cmd_tog2[] = { (0x20 | 0x04), 0xF9, 0x96, 0x82, 0xDB};
 //************ Bank0 register initialization commands
 const uint8_t  RFM75_bank0Init[][2] = {
 		// address data
-		{ (0x20 | 0x00), 0x0F }, //CRC=1byte, POWER UP, RX
+		{ (0x20 | 0x00), 0x0F }, //Disable CRC ,CRC=1byte, POWER UP, RX
 		{ (0x20 | 0x01), 0x3F }, //Enable auto acknowledgement data pipe0-5
 		{ (0x20 | 0x02), 0x3F }, //Enable RX Addresses pipe0-5
 		{ (0x20 | 0x03), 0x03 }, //RX/TX address field width 4byte
-		{ (0x20 | 0x04), 0x0F }, //250us, 15 retries
+		{ (0x20 | 0x04), 0xFF }, //4ms, 15 retries
 		{ (0x20 | 0x05), 0x17 }, //channel = 0x17
 		{ (0x20 | 0x06), 0x2F }, //init register 6 for RFM73 (2M, LNA gain high, 5dBM) //2F
 		{ (0x20 | 0x07), 0x07 }, //
@@ -510,7 +510,7 @@ void startListening(const uint8_t channel, const uint32_t *localAddress)
 	CE_HIGH;
 }
 
-void RFM75_PinInterruptHandler(void){
+void PinInterruptHandler(void){
 	rxtx_interrupt = 1;
 	asm("NOP");
 }

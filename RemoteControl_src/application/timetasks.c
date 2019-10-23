@@ -21,11 +21,11 @@ uint16_t *retrieve_vertical(void *target);
 
 #define NUM_OF_MEASUREMENTS_TAKEN 10
 
-//Joystick_t l_joystick_buf[NUM_OF_MEASUREMENTS_TAKEN];
-//Joystick_t r_joystick_buf[NUM_OF_MEASUREMENTS_TAKEN];
+Joystick_t l_joystick_buf[NUM_OF_MEASUREMENTS_TAKEN];
+Joystick_t r_joystick_buf[NUM_OF_MEASUREMENTS_TAKEN];
 uint8_t count = 0;
 
-void Statemachine_run(uint32_t ticks, OS_t *os){
+void TimeTasks_run(uint32_t ticks, OS_t *os){
 	uint8_t sendbytes[16]; // it seems like it's at least necessary to send 16 bytes for a stable transmission :( bah.
 	uint32_t length = 16;
 
@@ -33,17 +33,17 @@ void Statemachine_run(uint32_t ticks, OS_t *os){
 	POINTER_TO_CONTAINER(Joystick_t, l_joystick);
 
 	if((ticks % 1) == 0){
-		Joysticks_get_current_values(l_joystick, r_joystick);
-//		count++;
-//		if(count >= NUM_OF_MEASUREMENTS_TAKEN){
-//			count = 0;
-//		}
+		Joysticks_get_current_values(&l_joystick_buf[count], &r_joystick_buf[count]);
+		count++;
+		if(count >= NUM_OF_MEASUREMENTS_TAKEN){
+			count = 0;
+		}
 	}
-	if((ticks % 5) == 0){
-//		median_filter(l_joystick, l_joystick_buf, retrieve_horizontal);
-//		median_filter(l_joystick, l_joystick_buf, retrieve_vertical);
-//		median_filter(r_joystick, r_joystick_buf, retrieve_horizontal);
-//		median_filter(r_joystick, r_joystick_buf, retrieve_vertical);
+	if((ticks % 30) == 0){
+		median_filter(l_joystick, l_joystick_buf, retrieve_horizontal);
+		median_filter(l_joystick, l_joystick_buf, retrieve_vertical);
+		median_filter(r_joystick, r_joystick_buf, retrieve_horizontal);
+		median_filter(r_joystick, r_joystick_buf, retrieve_vertical);
 
 		Joystick_serialize_data(l_joystick, r_joystick, sendbytes);
 

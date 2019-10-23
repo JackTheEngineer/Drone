@@ -17,6 +17,6 @@
 #define TIME2S (uint32_t)2000
 #define TIME10S (uint32_t)10000
 
-void Statemachine_run(uint32_t ticks, OS_t *os);
+void TimeTasks_run(uint32_t ticks, OS_t *os);
 
 #endif /* SRC_RTE_TIMETASKS_H_ */

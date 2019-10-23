@@ -24,11 +24,11 @@ void RC_Iface_init(void){
 	XMC_GPIO_Init(CE_PORT, CE_PIN, &gpio_config);
 	PinPulse_Init();
 	SPI_MASTER_Init(&SPI_MASTER_0);
-	PIN_INTERRUPT_Init(&RFM75_PIN_INTERRUPT);
+	PIN_INTERRUPT_Init(&RFM75_INTERRUPT_PIN);
 }
 
 
-void RC_Iface_send_bytes(const uint8_t *bytes,
+void RC_Iface_send_bytes(uint8_t const *bytes,
 		uint8_t bufsize,
 		Disable_CSN_e ce_disable){
 	SPI_MASTER_SetMode(&SPI_MASTER_0, XMC_SPI_CH_MODE_STANDARD);

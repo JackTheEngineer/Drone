@@ -164,7 +164,7 @@ I2C_MASTER_RUNTIME_t I2C_MASTER_0_runtime =
   .bus_acquired = false
 };
 
-I2C_MASTER_t I2C_MASTER_0 =
+I2C_MASTER_t I2C_MotionSensor =
 {
   .channel = XMC_I2C0_CH1,
   .config = &I2C_MASTER_0_config,
@@ -217,11 +217,11 @@ void I2C_MASTER_0_init(void)
 /*Transmit ISR*/
 void I2C_MASTER_0_TX_HANDLER()
 {
-  I2C_MASTER_TransmitHandler(&I2C_MASTER_0);
+  I2C_MASTER_TransmitHandler(&I2C_MotionSensor);
 }
 /*Receive ISR*/
 void I2C_MASTER_0_RX_HANDLER()
 {
-  I2C_MASTER_ReceiveHandler(&I2C_MASTER_0);
+  I2C_MASTER_ReceiveHandler(&I2C_MotionSensor);
 }
 

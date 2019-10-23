@@ -8,8 +8,8 @@
 #ifndef SRC_OS_H_
 #define SRC_OS_H_
 
+#include "application/motion_sensor/motion_sensor.h"
 #include "buttons.h"
-#include "motion_sensor.h"
 #include "states.h"
 
 typedef struct _os_{

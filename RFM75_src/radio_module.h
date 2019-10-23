@@ -132,7 +132,7 @@ uint8_t RFM75_getChannel(void);
 
 uint8_t readRegVal(uint8_t cmd);
 uint8_t writeRegVal(uint8_t cmd, uint8_t val);
-uint8_t writeRegPgmBuf(uint8_t * cmdbuf, uint8_t len);
+void writeRegPgmBuf(uint8_t * cmdbuf, uint8_t len);
 void readRegBuf(uint8_t reg, uint8_t * buf, uint8_t len);
 void selectBank(uint8_t bank);
 

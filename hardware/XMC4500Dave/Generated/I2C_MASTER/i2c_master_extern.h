@@ -60,11 +60,11 @@ extern "C" {
  * MACROS
  **********************************************************************************************************************/
 
-#define I2C_MotionSensor_TX_HANDLER	IRQ_Hdlr_99
+#define MotionSensor_I2C_TX_HANDLER	IRQ_Hdlr_99
 
-#define I2C_MotionSensor_RX_HANDLER	IRQ_Hdlr_98
+#define MotionSensor_I2C_RX_HANDLER	IRQ_Hdlr_98
 
-extern I2C_MASTER_t I2C_MotionSensor;
+extern I2C_MASTER_t MotionSensor_I2C;
 void I2C_MASTER_ProtocolHandler(I2C_MASTER_t * const handle);
 #ifdef __cplusplus
 }
