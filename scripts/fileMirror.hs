@@ -11,6 +11,7 @@ import Development.Shake.FilePath (splitPath
                                   , takeDirectory)
 import Control.Concurrent (threadDelay)
 import Data.String
+import Data.Time
 
 
 dropPreDir preDir file = let l = length(splitPath preDir) in foldr1 (</>) (drop l (splitDirectories file))
@@ -92,9 +93,21 @@ main = do
   let sourcedir = "/home/jakov/vmshare/XMC4500/Generated" :: String
       destdir = "/home/jakov/programming/Drone/hardware/XMC4500Dave/Generated" :: String
 
-  copyDir sourcedir destdir
+  -- copyDir sourcedir destdir
   
-  withManager $ \mgr -> do
+  -- withManager $ \mgr -> do
+  --   -- start a watching job (in the background)
+  --   watchTree
+  --     mgr          -- manager
+  --     sourcedir    -- directory to watch
+  --     (const True) -- predicate
+  --     (copyModifyingDirs sourcedir destdir)
+
+  let wconf = WatchConfig { confDebounce = Debounce (realToFrac 4.0)
+                          , confPollInterval = 4000000
+                          , confUsePolling = True}
+
+  withManagerConf wconf $ \mgr -> do
     -- start a watching job (in the background)
     watchTree
       mgr          -- manager

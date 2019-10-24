@@ -13,8 +13,8 @@
 #include "radio_module.h"
 
 typedef enum _Disable_CE_{
-	LEAVE_CE_ENABLED,
-	DISABLE_CE,
+	LEAVE_CSN_ENABLED,
+	DISABLE_CSN,
 }Disable_CSN_e;
 
 void RC_Iface_init(void);

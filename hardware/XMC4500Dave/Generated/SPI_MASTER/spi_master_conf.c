@@ -209,8 +209,8 @@ const SPI_MASTER_CONFIG_t RFM75_SPI_Config  =
   .channel_config          = &RFM75_SPI_Channel_Config,
   .fptr_spi_master_config  = RFM75_SPI_lInit,
   /* FIFO configuration */
-  .tx_fifo_size            = (XMC_USIC_CH_FIFO_SIZE_t)XMC_USIC_CH_FIFO_SIZE_16WORDS,
-  .rx_fifo_size            = (XMC_USIC_CH_FIFO_SIZE_t)XMC_USIC_CH_FIFO_SIZE_16WORDS,
+  .tx_fifo_size            = (XMC_USIC_CH_FIFO_SIZE_t)XMC_USIC_CH_FIFO_SIZE_32WORDS,
+  .rx_fifo_size            = (XMC_USIC_CH_FIFO_SIZE_t)XMC_USIC_CH_FIFO_SIZE_32WORDS,
   /* Clock Settings */
   .shift_clk_passive_level = XMC_SPI_CH_BRG_SHIFT_CLOCK_PASSIVE_LEVEL_0_DELAY_ENABLED, 
   .slave_select_lines      = (uint8_t)1,
@@ -327,7 +327,7 @@ static SPI_MASTER_STATUS_t RFM75_SPI_lInit(void)
             
   /* Configure transmit FIFO settings */
   XMC_USIC_CH_TXFIFO_Configure(XMC_SPI0_CH0,
-                               16U,
+                               32U,
                                (XMC_USIC_CH_FIFO_SIZE_t)XMC_USIC_CH_FIFO_SIZE_32WORDS,
                                1U);
 

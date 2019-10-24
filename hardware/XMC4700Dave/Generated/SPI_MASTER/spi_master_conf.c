@@ -300,7 +300,7 @@ static SPI_MASTER_STATUS_t RFM75_SPI_lInit(void)
                                        XMC_SPI_CH_BRG_SHIFT_CLOCK_PASSIVE_LEVEL_0_DELAY_ENABLED,
                                        XMC_SPI_CH_BRG_SHIFT_CLOCK_OUTPUT_SCLK);
   /* Configure Leading/Trailing delay */
-  XMC_SPI_CH_SetSlaveSelectDelay(XMC_SPI0_CH1, 1U);
+  XMC_SPI_CH_SetSlaveSelectDelay(XMC_SPI0_CH1, 4U);
 
                
   /* Configure the input pin properties */

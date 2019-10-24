@@ -216,34 +216,34 @@ uint8_t readRegVal(uint8_t cmd)
 			cmd,
 			0
 	};
-	RC_Iface_read_bytes(readbytes, 2, DISABLE_CE);
+	RC_Iface_read_bytes(readbytes, 2, DISABLE_CSN);
 	return readbytes[1];
 }
 
 uint8_t writeRegVal(uint8_t cmd, uint8_t val) 
 {	
 	uint8_t writebuf[2] = {cmd, val};
-	RC_Iface_send_bytes(writebuf, 2, DISABLE_CE);
+	RC_Iface_send_bytes(writebuf, 2, DISABLE_CSN);
 	return 1;
 }
 
 void readRegBuf(uint8_t reg, uint8_t * buf, uint8_t len) 
 {
-	RC_Iface_send_bytes(&reg, 1, LEAVE_CE_ENABLED);
-	RC_Iface_read_bytes_no_cmd(buf, len, DISABLE_CE);
+	RC_Iface_send_bytes(&reg, 1, LEAVE_CSN_ENABLED);
+	RC_Iface_read_bytes_no_cmd(buf, len, DISABLE_CSN);
 }
 
 void writeRegPgmBuf(uint8_t * cmdbuf, uint8_t len) 
 {
-	RC_Iface_send_bytes(cmdbuf, len, DISABLE_CE);
+	RC_Iface_send_bytes(cmdbuf, len, DISABLE_CSN);
 }
 
 uint8_t writeRegCmdBuf(uint8_t cmd,
 		const uint8_t * buf,
 		uint8_t len)
 {
-	RC_Iface_send_bytes(&cmd, 1, LEAVE_CE_ENABLED);
-	RC_Iface_send_bytes(buf, len, DISABLE_CE);
+	RC_Iface_send_bytes(&cmd, 1, LEAVE_CSN_ENABLED);
+	RC_Iface_send_bytes(buf, len, DISABLE_CSN);
 	return 1;
 }
 
@@ -378,8 +378,8 @@ uint8_t RFM75_Receive_bytes(uint8_t *payload)
 {
 	uint8_t len;
 	// check RX_FIFO
-	uint8_t status;
-	uint8_t fifo_sta;
+	uint8_t status=0;
+	uint8_t fifo_sta=0;
 
 	status = readRegVal(RFM7x_REG_STATUS);
 	if (status & RFM7x_IRQ_STATUS_RX_DR) { // RX_DR

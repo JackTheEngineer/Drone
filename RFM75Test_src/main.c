@@ -4,7 +4,7 @@
 #include "RFM75_driver.h"
 
 
-uint32_t volatile g_systick_count;
+extern volatile uint32_t g_systick_count;
 
 
 int main(void){
@@ -33,12 +33,17 @@ int main(void){
 
 	uint8_t received_bytes[32] = {0};
 	uint8_t received_length;
+	uint32_t remembered_systick_count = 0;
+
 	while(1U){
-		if((g_systick_count % 200) == 0){
-			received_length = RFM75_Receive_bytes(received_bytes);
-			if(received_length != 0){
-				DIGITAL_IO_ToggleOutput(&LED2);
-				asm("nop");
+		if(remembered_systick_count != g_systick_count){
+			remembered_systick_count = g_systick_count;
+			if((remembered_systick_count % 20) == 0){
+				received_length = RFM75_Receive_bytes(received_bytes);
+				if(received_length != 0){
+					DIGITAL_IO_ToggleOutput(&LED2);
+					asm("nop");
+				}
 			}
 		}
 	}

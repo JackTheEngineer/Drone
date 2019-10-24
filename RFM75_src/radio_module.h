@@ -36,13 +36,6 @@ typedef struct
 	uint32_t bytesSent;
 } TransmitResult_t;
 
-void startListening(const uint8_t channel,
-		    const uint32_t *localAddress);
-
-// buff has to be at least 32 bytes!
-bool received(uint8_t *buff, uint8_t *length);
-// Low level functions and definitions ----
-
 #define WITH_ACK     0x01 // parameter for sendPayload(..): send with ack expectation
 #define NO_ACK       0x00 // parameter for sendPayload(..): send without ack expectation
 #define MODE_PTX     0x00 // parameter for setMode(mode): set to transmitter

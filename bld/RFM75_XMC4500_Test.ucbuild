@@ -43,7 +43,7 @@ ccAsmOptions:
 ccCompileOptions:
   - -c
   - -DXMC4500_F100x1024
-  - -O2
+  - -O0
   - -ffunction-sections 
   - -fdata-sections 
   - -Wall
@@ -60,7 +60,7 @@ ccCompileOptions:
 ccLinkOptions:
   - -nostartfiles 
   - -Xlinker 
-  - -O2
+  - -O0
 #  - --gc-sections 
   - -specs=nano.specs 
   - -specs=nosys.specs 
