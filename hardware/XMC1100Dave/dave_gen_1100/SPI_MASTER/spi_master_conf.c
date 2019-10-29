@@ -265,7 +265,7 @@ SPI_MASTER_RUNTIME_t SPI_MASTER_0_runtime =
 		.rx_busy = false
 };
 
-SPI_MASTER_t SPI_MASTER_0 =
+SPI_MASTER_t RFM75_SPI =
 {
 		.channel = XMC_SPI0_CH1, /* USIC channel */
 		.config  = &SPI_MASTER_0_Config, /* spi master configuration structure pointer */
@@ -363,12 +363,12 @@ static SPI_MASTER_STATUS_t SPI_MASTER_0_lInit(void)
 /*Transmit ISR*/
 void SPI_MASTER_0_tx_handler()
 {
-	SPI_MASTER_lTransmitHandler(&SPI_MASTER_0);
+	SPI_MASTER_lTransmitHandler(&RFM75_SPI);
 }
 
 /*Receive ISR*/
 void SPI_MASTER_0_rx_handler()
 {
-	SPI_MASTER_lReceiveHandler(&SPI_MASTER_0);
+	SPI_MASTER_lReceiveHandler(&RFM75_SPI);
 }
 

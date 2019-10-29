@@ -8,8 +8,6 @@
 #include "led.h"
 #include <xmc_gpio.h>
 
-#define LEDPORT XMC_GPIO_PORT2
-#define LEDPIN 8
 #define NUMPINS 2
 
 typedef struct _Portpin_{

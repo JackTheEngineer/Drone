@@ -69,7 +69,7 @@
  * EXTERN DECLARATIONS
  ***********************************************************************************************************************/
 
-extern SPI_MASTER_t	SPI_MASTER_0; 
+extern SPI_MASTER_t	RFM75_SPI; 
 
 #endif  /* end of SPI_MASTER_EXTERN_H */
 
