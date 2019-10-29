@@ -4,12 +4,15 @@
 sourceFiles:
   - RemoteControl_src//*.c
   - RFM75_src//*.c
-  - hardware/XMC1100Dave//*.c
-  - hardware/XMC1100Dave//*.S
+#  - hardware/XMC1100Dave//*.c
+#  - hardware/XMC1100Dave//*.S
+  - hardware/XMC1100New//*.c
+  - hardware/XMC1100New//*.S
 headerFiles:
   - RemoteControl_src//*.h
   - RFM75_src//*.h
-  - hardware/XMC1100Dave//*.h
+#  - hardware/XMC1100Dave//*.h
+  - hardware/XMC1100New//*.h
   - <ccBase>/arm-none-eabi/include/*.h
 
 # For compilation, ccBase and the others are simply concatenated

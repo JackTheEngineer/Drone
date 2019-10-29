@@ -8,39 +8,22 @@
 #include "joystick.h"
 #include "adc_measurement.h"
 #include "ADC_conversion_decoding.h"
-
-extern bool new_result_available;
-extern ADC_result_t latest_results[NUM_OF_MEASURED_CHANNELS];
+#include "hardware.h"
 
 void Joystick_Init(void){
-	ADC_MEASUREMENT_Init(&ADC_MEASUREMENT_0);
+	// ADC_MEASUREMENT_Init(&JOYSTICK_ADC);
 }
 
 void Joysticks_get_current_values(Joystick_t *left_joystick, Joystick_t *right_joystick){
-	uint32_t count = 0;
-	new_result_available = false;
-	/* ADC_MEASUREMENT_Init(&ADC_MEASUREMENT_0); */
-	ADC_MEASUREMENT_StartConversion(&ADC_MEASUREMENT_0);
-    /* Enable Background Scan Request source IRQ */
-    NVIC_EnableIRQ(ADC_MEASUREMENT_0.result_intr_handle->node_id);
+	uint16_t results[NUM_OF_MEASURED_CHANNELS];
+	ADC_MEASUREMENT_StartConversion(&JOYSTICK_ADC);
 
-	/* new_result_avalilable is to true by ADC_Measurement_Handler IRQ in ADC_conversion_decoding */
-	while((new_result_available == false) && (count < 5)){
-		count++;
-		/* For whatever reason the ADC converter get's stuck every 5'th time,
-		 * and does not enter the Measurement Interrupt. The Data stays the same.
-		 *
-		 * In the case of the remote control, this is not too relevant.
-		 */
-	}
+	Joys_BlockingADC_Measurement(results);
 
-	NVIC_DisableIRQ(ADC_MEASUREMENT_0.result_intr_handle->node_id);
-
-
-	left_joystick->horizontal = latest_results[0].conversion_result;
-	left_joystick->vertical = latest_results[1].conversion_result;
-	right_joystick->horizontal =  latest_results[2].conversion_result;
-	right_joystick->vertical =  latest_results[3].conversion_result;
+	left_joystick->horizontal = results[0];
+	left_joystick->vertical = results[1];
+	right_joystick->horizontal =  results[2];
+	right_joystick->vertical =  results[3];
 }
 
 void Joystick_serialize_data(Joystick_t *l_joystick, Joystick_t *r_joystick, uint8_t *sendbytes){

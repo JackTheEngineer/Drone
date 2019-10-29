@@ -4,6 +4,7 @@
 #include "RFM75_driver.h"
 #include "led.h"
 #include "joystick.h"
+#include "hardware.h"
 
 uint32_t volatile tick_count;
 
@@ -26,10 +27,11 @@ int main(void){
 	uint8_t address[5] = {1,0,0,0,0};
 	bool initialization;
 	
+	(void)DAVE_Init();
 	SysTick_Config(SystemCoreClock/1000);
 	LED_init();
 	DelayTimer_Init();
-	Joystick_Init();
+	// Joystick_Init();
 	delay_ms(100);
 	initialization = RFM75_Init();
 	if(initialization == false){

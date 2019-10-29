@@ -90,8 +90,8 @@ copyModifyingDirs sourcedir destination ev =
 
 main :: IO()
 main = do
-  let sourcedir = "/home/jakov/vmshare/XMC4500/Generated" :: String
-      destdir = "/home/jakov/programming/Drone/hardware/XMC4500Dave/Generated" :: String
+  let sourcedir = "/home/jakov/vmshare/XMC1100/Generated" :: String
+      destdir = "/home/jakov/programming/Drone/hardware/XMC1100New/Generated" :: String
 
   -- copyDir sourcedir destdir
   
