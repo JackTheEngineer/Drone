@@ -40,10 +40,7 @@ void format_u8buf_to_two_ui12(uint8_t input_buf_pu8[],
 		uint16_t *zero_pos_pu16,
 		uint16_t *first_pos_pu16);
 void format_u8buf_to_four_ui12(uint8_t input_buf_pu8[],
-		uint16_t *zero_pos_pu16,
-		uint16_t *first_pos_pu16,
-		uint16_t *second_pos_pu16,
-		uint16_t *third_pos_pu16);
+				uint16_t *tgt);
 void format_two_u12_to_u8buf(uint16_t zero_pos_val_u12,
 		uint16_t first_pos_val_u12,
 		uint8_t BufferOut_pu8[]);

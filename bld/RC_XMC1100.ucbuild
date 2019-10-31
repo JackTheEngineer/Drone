@@ -4,14 +4,13 @@
 sourceFiles:
   - RemoteControl_src//*.c
   - RFM75_src//*.c
-#  - hardware/XMC1100Dave//*.c
-#  - hardware/XMC1100Dave//*.S
+  - Common_src//*.c
   - hardware/XMC1100New//*.c
   - hardware/XMC1100New//*.S
 headerFiles:
   - RemoteControl_src//*.h
   - RFM75_src//*.h
-#  - hardware/XMC1100Dave//*.h
+  - Common_src//*.h
   - hardware/XMC1100New//*.h
   - <ccBase>/arm-none-eabi/include/*.h
 
@@ -68,5 +67,5 @@ ccLinkLibs:
   - -lm
   
 # Leave empty if you don't have any
-linkerFile: hardware/XMC1100Dave/XMC1100_64_linker_script.ld
+linkerFile: hardware/XMC1100New/XMC1100_64_linker_script.ld
 

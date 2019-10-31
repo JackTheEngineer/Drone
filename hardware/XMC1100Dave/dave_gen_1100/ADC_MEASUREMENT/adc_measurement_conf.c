@@ -200,7 +200,7 @@ const XMC_VADC_BACKGROUND_CONFIG_t backgnd_config =
   .load_mode         = (uint32_t) XMC_VADC_SCAN_LOAD_OVERWRITE
 };
 
-ADC_MEASUREMENT_t ADC_MEASUREMENT_0=
+ADC_MEASUREMENT_t JOYSTICK_ADC=
 {
   .array		 	     = (ADC_MEASUREMENT_CHANNEL_ARRAY_t*) &ADC_MEASUREMENT_channel_array,
   .backgnd_config_handle = (XMC_VADC_BACKGROUND_CONFIG_t*) &backgnd_config,

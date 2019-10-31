@@ -9,16 +9,11 @@
 #define SRC_APPLICATION_JOYSTICK_H_
 
 #include "base.h"
-
-typedef struct Joystick{
-	uint16_t vertical;
-	uint16_t horizontal;
-}Joystick_t;
-
+#include "ADC_conversion_decoding.h"
 
 void Joystick_Init(void);
-void Joysticks_get_current_values(Joystick_t *left_joystick, Joystick_t *right_joystick);
-void Joystick_serialize_data(Joystick_t *l_joystick, Joystick_t *r_joystick, uint8_t *sendbytes);
+void Joysticks_get_newest_values(uint16_t results[NUM_OF_MEASURED_CHANNELS]);
+void Joystick_serialize_data(uint16_t joystick_data[4], uint8_t *targetbuf);
 
 
 

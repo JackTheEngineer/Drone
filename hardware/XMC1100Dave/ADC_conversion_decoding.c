@@ -7,8 +7,8 @@
 _STATIC_ void copy_and_sort_ADC_results(ADC_result_t *from, ADC_result_t *to, uint32_t size);
 _STATIC_ void copy_ADC_val(ADC_result_t *from, ADC_result_t *to);
 
-ADC_result_t buffered_results[NUM_OF_MEASURED_CHANNELS];
-ADC_result_t latest_results[NUM_OF_MEASURED_CHANNELS];
+volatile ADC_result_t buffered_results[NUM_OF_MEASURED_CHANNELS];
+volatile ADC_result_t latest_results[NUM_OF_MEASURED_CHANNELS];
 
 bool new_result_available;
 
@@ -19,9 +19,9 @@ void Adc_Measurement_Handler(void)
 
 	result = ADC_MEASUREMENT_GetGlobalDetailedResult();
 
-	/* I wouldn't know why the interrupt handler should be called otherwise, 
+	/* I wouldn't know why the interrupt handler should be called otherwise,
 	 * but it seems to be necessary to ask in the result for this bit ---.
-	 * As so often during development i just copy pasted this code from 
+	 * As so often during development i just copy pasted this code from
 	 * an Infineon Example.
 	 */
 	if((bool)(result >> VADC_GLOBRES_VF_Pos))
@@ -29,7 +29,7 @@ void Adc_Measurement_Handler(void)
 		buffered_results[index].channel_num = (result & VADC_GLOBRES_CHNR_Msk) >> VADC_GLOBRES_CHNR_Pos;
 		buffered_results[index].conversion_result = (result & VADC_GLOBRES_RESULT_Msk);
 		index++;
-		
+
 		if(index > NUM_OF_MEASURED_CHANNELS){
 			copy_and_sort_ADC_results(buffered_results, latest_results, NUM_OF_MEASURED_CHANNELS);
 			index=0;
@@ -58,6 +58,7 @@ _STATIC_ void copy_and_sort_ADC_results(ADC_result_t *from, ADC_result_t *to, ui
 		}
 	}
 }
+
 
 _STATIC_ void copy_ADC_val(ADC_result_t *from, ADC_result_t *to){
 	to->channel_num = from->channel_num;

@@ -4,11 +4,13 @@
 sourceFiles:
   - Drone_src//*.c
   - RFM75_src//*.c
+  - Common_src//*.c
   - hardware/XMC4700Dave//*.c
   - hardware/XMC4700Dave//*.S
 headerFiles:
   - Drone_src//*.h
   - RFM75_src//*.h
+  - Common_src//*.h
   - hardware/XMC4700Dave//*.h
   - <ccBase>/arm-none-eabi/include/*.h
 

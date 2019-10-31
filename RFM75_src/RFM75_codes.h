@@ -93,6 +93,18 @@
 #define RX_PIPE_NO_mask (0b111 < 1)
 #define TX_FULL_mask (1<<0)
 
+typedef union statusReg{
+	struct{
+		uint8_t tx_fifo_full:1;
+		uint8_t rx_pipe_num:3; /* 0b111 means RX FIFO is FUll */
+		uint8_t max_retransmits:1;
+		uint8_t tx_data_sent:1;
+		uint8_t rx_data_ready:1;
+		uint8_t rbank:1;
+	};
+	uint8_t all;
+}StatusReg_t;
+
 #define OBSERVE_TX 0x8
 #define PLOS_CNT_mask (0b1111 << 4)
 #define ARC_CNT_mask (0b1111)
@@ -137,6 +149,18 @@
 #define TX_EMPTY (1<<4) /* Read only, 1 means empty */
 #define RX_FULL (1<<1) /* Read only */
 #define RX_EMPTY (1<<0) /* Read only, 1 means empty */
+
+typedef union statusRegFifo{
+	struct{
+		uint8_t rx_empty:1;
+		uint8_t rx_full:1;
+		uint8_t _reserved:2;
+		uint8_t tx_empty:1;
+		uint8_t tx_full:1;
+		uint8_t tx_reuse:1;
+	};
+	uint8_t all;
+}StatusRegFifo_t;
 
 #define DYNPD 0x1C
 #define DPL_P5 (1<<5)

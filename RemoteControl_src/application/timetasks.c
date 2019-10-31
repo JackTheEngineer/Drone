@@ -12,40 +12,35 @@
 #include "led.h"
 #include "joystick.h"
 
+#define NUM_OF_MEASUREMENTS_TAKEN 10
+
+
 typedef uint16_t* (*Retrieve_function_f)(void *target);
 
+void calculate_average(uint16_t v[NUM_OF_MEASUREMENTS_TAKEN][4], uint16_t r[4]);
 void mergeSort(uint16_t arr[], uint16_t l, uint16_t r);
 void median_filter(void *target_val, void *buf_val, Retrieve_function_f retrieve);
 uint16_t *retrieve_horizontal(void *target);
 uint16_t *retrieve_vertical(void *target);
 
-#define NUM_OF_MEASUREMENTS_TAKEN 10
-
-Joystick_t l_joystick_buf[NUM_OF_MEASUREMENTS_TAKEN];
-Joystick_t r_joystick_buf[NUM_OF_MEASUREMENTS_TAKEN];
+uint16_t adc_values[NUM_OF_MEASUREMENTS_TAKEN][4];
 uint8_t count = 0;
 
 void TimeTasks_run(uint32_t ticks, OS_t *os){
 	uint8_t sendbytes[32] = {0}; // it seems like it's at least necessary to send 16 bytes for a stable transmission :( bah.
 	uint32_t length = 32;
 
-	POINTER_TO_CONTAINER(Joystick_t, r_joystick);
-	POINTER_TO_CONTAINER(Joystick_t, l_joystick);
-
 	if((ticks % 1) == 0){
-		Joysticks_get_current_values(&l_joystick_buf[count], &r_joystick_buf[count]);
+		Joysticks_get_newest_values(adc_values[count]);
 		count++;
 		if(count >= NUM_OF_MEASUREMENTS_TAKEN){
 			count = 0;
 		}
 	}
-	if((ticks % 50) == 0){
-		median_filter(l_joystick, l_joystick_buf, retrieve_horizontal);
-		median_filter(l_joystick, l_joystick_buf, retrieve_vertical);
-		median_filter(r_joystick, r_joystick_buf, retrieve_horizontal);
-		median_filter(r_joystick, r_joystick_buf, retrieve_vertical);
-
-		Joystick_serialize_data(l_joystick, r_joystick, sendbytes);
+	if((ticks % 20) == 0){
+		uint16_t averaged[4];
+		calculate_average(adc_values, averaged);
+		Joystick_serialize_data(averaged, sendbytes);
 
 		turnOn();
 		RC_Iface_CE_high();
@@ -59,25 +54,27 @@ void TimeTasks_run(uint32_t ticks, OS_t *os){
 	}
 }
 
+void calculate_average(uint16_t v[NUM_OF_MEASUREMENTS_TAKEN][4], uint16_t r[4]){
+	for(uint8_t i=0; i<NUM_OF_MEASUREMENTS_TAKEN; i++){
+		for(uint8_t j=0; j<4; j++){
+			r[j] += v[i][j];
+		}
+	}
+	for(uint8_t j=0; j<4; j++){
+		r[j] /= NUM_OF_MEASUREMENTS_TAKEN;
+	}
+}
+
 void median_filter(void *target_val, void *buf_val, Retrieve_function_f retrieve){
 	uint16_t valuearray[NUM_OF_MEASUREMENTS_TAKEN];
 	for(uint8_t i=0; i < NUM_OF_MEASUREMENTS_TAKEN; i++){
-		valuearray[i] = *(retrieve(&((Joystick_t *)buf_val)[i]));
+//		valuearray[i] = *((uint16_t *)retrieve(buf_val[i]));
 	}
 
 	mergeSort(valuearray, 1, NUM_OF_MEASUREMENTS_TAKEN);
 
 	*(retrieve(target_val)) = valuearray[NUM_OF_MEASUREMENTS_TAKEN/2];
 }
-
-uint16_t *retrieve_horizontal(void *target){
-	return &((Joystick_t *)target)->horizontal;
-}
-
-uint16_t *retrieve_vertical(void *target){
-	return &((Joystick_t *)target)->vertical;
-}
-
 
 // Merges two subarrays of arr[].
 // First subarray is arr[l..m]

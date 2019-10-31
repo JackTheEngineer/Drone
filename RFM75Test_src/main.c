@@ -2,6 +2,7 @@
 #include "base.h"
 #include "hardware.h"
 #include "RFM75_driver.h"
+#include "byte_formatting.h"
 
 
 extern volatile uint32_t g_systick_count;
@@ -35,6 +36,8 @@ int main(void){
 	uint8_t received_length;
 	uint32_t remembered_systick_count = 0;
 
+	uint16_t val = 1;
+	uint16_t joystick_bytes[4];
 	while(1U){
 		if(remembered_systick_count != g_systick_count){
 			remembered_systick_count = g_systick_count;
@@ -42,6 +45,8 @@ int main(void){
 				received_length = RFM75_Receive_bytes(received_bytes);
 				if(received_length != 0){
 					DIGITAL_IO_ToggleOutput(&LED2);
+					format_u8buf_to_four_ui12(received_bytes, joystick_bytes);
+					val = joystick_bytes[0];
 					asm("nop");
 				}
 			}

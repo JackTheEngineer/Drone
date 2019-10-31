@@ -4,11 +4,6 @@
 
 #define NUM_OF_MEASURED_CHANNELS 4
 
-_STATIC_ void copy_and_sort_ADC_results(ADC_result_t *from, ADC_result_t *to, uint32_t size);
-_STATIC_ void copy_ADC_val(ADC_result_t *from, ADC_result_t *to);
-
-ADC_result_t latest_results[NUM_OF_MEASURED_CHANNELS];
-
 void Joys_BlockingADC_Measurement(uint16_t *results_to_be_filled)
 {
 	uint32_t result;
@@ -40,26 +35,5 @@ void Joys_BlockingADC_Measurement(uint16_t *results_to_be_filled)
 	}
 	for(uint8_t i = 0; i < NUM_OF_MEASURED_CHANNELS; i++){
 		results_to_be_filled[i] = valid_results[i].conversion_result;
-	}
-}
-
-_STATIC_ void copy_and_sort_ADC_results(ADC_result_t *from, ADC_result_t *to, uint32_t size){
-	for(uint32_t i = 0; i < size; i++){
-		switch(from[i].channel_num){
-		case 0: /* Those are the hardware channel numbers in the XMC1100 */
-			copy_ADC_val(&from[i], &to[0]);
-			break;
-		case 1:
-			copy_ADC_val(&from[i], &to[1]);
-			break;
-		case 3:
-			copy_ADC_val(&from[i], &to[2]);
-			break;
-		case 5:
-			copy_ADC_val(&from[i], &to[3]);
-			break;
-		default:
-			break;
-		}
 	}
 }

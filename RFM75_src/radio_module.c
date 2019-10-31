@@ -377,24 +377,21 @@ uint8_t sendPayload(const uint8_t * payload,
 uint8_t RFM75_Receive_bytes(uint8_t *payload)
 {
 	uint8_t len;
-	// check RX_FIFO
-	uint8_t status=0;
-	uint8_t fifo_sta=0;
+	StatusReg_t status;
+	StatusRegFifo_t fifo_status;
 
-	status = readRegVal(RFM7x_REG_STATUS);
-	if (status & RFM7x_IRQ_STATUS_RX_DR) { // RX_DR
+	status.all = readRegVal(RFM7x_REG_STATUS);
+	if((bool)status.rx_data_ready && (status.all != 0xFF)){
 		len = readRegVal(RFM7x_CMD_RX_PL_WID); // Payload width
 		readRegBuf(RFM7x_CMD_RD_RX_PLOAD, payload, len);
-		fifo_sta = readRegVal(RFM7x_REG_FIFO_STATUS);
+		fifo_status.all = readRegVal(RFM7x_REG_FIFO_STATUS);
 
-		if (fifo_sta & RFM7x_FIFO_STATUS_RX_EMPTY) {
-			status|= 0x40 & 0xCF; // clear status bit rx_dr
-			writeRegVal(RFM7x_CMD_WRITE_REG | RFM7x_REG_STATUS, status); 
+		if (fifo_status.rx_empty) {
+			status.all |= 0x40 & 0xCF; // clear status bit rx_dr
+			writeRegVal(RFM7x_CMD_WRITE_REG | RFM7x_REG_STATUS, status.all);
 		}
 		return len;
-	}
-	else
-	{		
+	}else{
 		return 0;
 	}
 }
@@ -438,8 +435,9 @@ TransmitResult_t RFM75_Transmit_bytes(const uint8_t *buff,
 	TransmitResult_t result;
 	const uint32_t toSendLength = *length;
 	uint32_t i=0;
-	uint8_t status = 0;
 	bool readStatus = true;
+	StatusReg_t status;
+	status.all = 0;
 
 	sendPayload(buff, toSendLength, (uint8_t)requestAck);
 
@@ -447,29 +445,33 @@ TransmitResult_t RFM75_Transmit_bytes(const uint8_t *buff,
 	while((rxtx_interrupt == 0) &&
 			(i < maxTimeoutUs)){
 		_delay_us(20);
-		if(checkStatusForMissingIRQ(&status)){
-			readStatus=false;
+		status.all = readRegVal(RFM7x_REG_STATUS);
+		if(status.rx_pipe_num == 0b111){
+			readStatus = false;
 			break;
 		}
 		i++;
 	}
 
 	rxtx_interrupt = 0;
-	/* Clear the status interrupt */
-	writeRegVal(RFM7x_CMD_WRITE_REG | RFM7x_REG_STATUS, status);
+	/* Clear ALL the status interrupts.
+	 * When writing a bit that is set to 1,
+	 * it clears the bits, and also the MAX_RT BIT
+	 */
+	writeRegVal(RFM7x_CMD_WRITE_REG | RFM7x_REG_STATUS, status.all);
 
 	if (readStatus){
-		status = readRegVal(RFM7x_REG_STATUS);
+		status.all = readRegVal(RFM7x_REG_STATUS);
 	}
-	if (status & RFM7x_IRQ_STATUS_TX_DS){
+	if (status.tx_data_sent){
 		result.status = SUCCESS;
 		result.bytesSent = toSendLength;
 	}
-	else if (status & RFM7x_IRQ_STATUS_MAX_RT){
+	else if (status.max_retransmits){
 		result.status = MAXRT;
 		result.bytesSent = 0;
 	}
-	else if (status & RFM7x_IRQ_STATUS_TX_FULL){
+	else if (status.tx_fifo_full){
 		result.status = FIFOFULL;
 		result.bytesSent = 0;
 	}

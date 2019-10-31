@@ -13,4 +13,6 @@ typedef struct detailed_result_struct
 	bool valid;
 }ADC_result_t;
 
+void Joys_BlockingADC_Measurement(uint16_t *results_to_be_filled);
+
 #endif /* ADC_CONVERSION_DECODING_H */

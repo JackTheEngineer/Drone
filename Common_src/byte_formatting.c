@@ -127,12 +127,9 @@ void format_two_u12_to_u8buf(uint16_t zero_pos_val_u12,
 }
 
 void format_u8buf_to_four_ui12(uint8_t input_buf_pu8[],
-		uint16_t *zero_pos_pu16,
-		uint16_t *first_pos_pu16,
-		uint16_t *second_pos_pu16,
-		uint16_t *third_pos_pu16){
-	format_u8buf_to_two_ui12(input_buf_pu8, zero_pos_pu16, first_pos_pu16);
-	format_u8buf_to_two_ui12(&input_buf_pu8[3], second_pos_pu16, third_pos_pu16);
+		uint16_t *tgt){
+	format_u8buf_to_two_ui12(input_buf_pu8, &tgt[0], &tgt[1]);
+	format_u8buf_to_two_ui12(&input_buf_pu8[3], &tgt[2], &tgt[3]);
 }
 
 void format_u8buf_to_two_ui12(uint8_t input_buf_pu8[],

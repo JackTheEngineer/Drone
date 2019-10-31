@@ -12,4 +12,6 @@ typedef struct detailed_result_struct
 	uint16_t conversion_result;
 }ADC_result_t;
 
+bool checkMeasurementReady(void);
+
 #endif /* ADC_CONVERSION_DECODING_H */
