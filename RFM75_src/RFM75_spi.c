@@ -5,17 +5,17 @@
  *      Author: chocolate
  */
 
-#include "RFM75_Iface.h"
+#include "RFM75_spi.h"
 #include "spi_master.h"
 #include "xmc_gpio.h"
 #include "hardware.h"
 
 
-void _RC_Iface_wait_for_receive(void);
-void _RC_Iface_clear_receive_indication(void);
+_STATIC_ _INLINE_ void _RC_Iface_wait_for_receive(void);
+_STATIC_ _INLINE_ void _RC_Iface_clear_receive_indication(void);
 void RC_Iface_send_byte(uint8_t byte);
 
-void RC_Iface_init(void){
+void RFM75_hardware_init(void){
 	DIGITAL_IO_Init(&RFM75_CE_PIN);
 	SPI_MASTER_Init(&RFM75_SPI);
 	PIN_INTERRUPT_Init(&RFM75_INTERRUPT_PIN);
@@ -91,7 +91,7 @@ void RC_Iface_read_bytes(uint8_t *bytes,
 	}
 }
 
-void _RC_Iface_wait_for_receive(void){
+_STATIC_ _INLINE_ void _RC_Iface_wait_for_receive(void){
 	uint32_t status1;
 	uint32_t status2;
 	do
@@ -101,17 +101,52 @@ void _RC_Iface_wait_for_receive(void){
 	} while(((status1 == 0) && (status2 == 0)));
 }
 
-void _RC_Iface_clear_receive_indication(void){
+_STATIC_ _INLINE_ void _RC_Iface_clear_receive_indication(void){
 	/* Clear the flags */
 	SPI_MASTER_ClearFlag(&RFM75_SPI, XMC_SPI_CH_STATUS_FLAG_ALTERNATIVE_RECEIVE_INDICATION);
 	SPI_MASTER_ClearFlag(&RFM75_SPI, XMC_SPI_CH_STATUS_FLAG_RECEIVE_INDICATION);
 }
 
-void RC_Iface_CE_high(void){
+void RFM75_CE_PIN_high(void){
 	DIGITAL_IO_SetOutputHigh(&RFM75_CE_PIN);
 }
 
-void RC_Iface_CE_low(void){
+void RFM75_CE_PIN_low(void){
 	DIGITAL_IO_SetOutputLow(&RFM75_CE_PIN);
+}
+
+uint8_t RFM75_SPI_read_reg_value(uint8_t cmd)
+{
+	uint8_t readbytes[2] = {
+			cmd,
+			0
+	};
+	RC_Iface_read_bytes(readbytes, 2, DISABLE_CSN);
+	return readbytes[1];
+}
+
+void RFM75_SPI_write_reg_val(uint8_t cmd, uint8_t val)
+{
+	uint8_t writebuf[2] = {cmd, val};
+	RC_Iface_send_bytes(writebuf, 2, DISABLE_CSN);
+}
+
+void RFM75_SPI_read_buffer(uint8_t start_register, uint8_t * buf, uint8_t len)
+{
+	RC_Iface_send_bytes(&start_register, 1, LEAVE_CSN_ENABLED);
+	RC_Iface_read_bytes_no_cmd(buf, len, DISABLE_CSN);
+}
+
+void RFM75_SPI_write_buffer(uint8_t * cmdbuf, uint8_t len)
+{
+	RC_Iface_send_bytes(cmdbuf, len, DISABLE_CSN);
+}
+
+void RFM75_SPI_write_buffer_at_start_register(uint8_t start_register,
+												const uint8_t * buf,
+												uint8_t len)
+{
+	RC_Iface_send_bytes(&start_register, 1, LEAVE_CSN_ENABLED);
+	RC_Iface_send_bytes(buf, len, DISABLE_CSN);
 }
 

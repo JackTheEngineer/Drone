@@ -25,7 +25,7 @@
    uint8_t cmd = (WRITE_RFM)|(EN_AA);
    uint8_t value = (ENAA_P0);
 */
-#define CONFIG 0x00
+#define CONFIG_REG 0x00
 #define MASK_RX_DR (1 << 6)
 #define MASK_TX_DS (1 << 5)
 #define MASK_MAX_RT (1 << 4)
@@ -34,44 +34,65 @@
 #define PWR_UP (1 << 1)
 #define PRIM_RX (1 << 0)
 
-#define EN_AA 0x01
-#define ENAA_P5 (1 << 5)
-#define ENAA_P4 (1 << 4)
-#define ENAA_P3 (1 << 3)
-#define ENAA_P2 (1 << 2)
-#define ENAA_P1 (1 << 1)
-#define ENAA_P0 (1 << 0)
+typedef union configReg_t{
+	struct{
+		uint8_t primary_rx:1;
+		uint8_t power_up:1;
+		uint8_t crc_encoding_scheme:1; // 0 = 1 byte, 1 = 2 byte
+		uint8_t hide_max_rt_interrupt:1;
+		uint8_t hide_tx_data_sent_interrupt:1;
+		uint8_t hide_rx_data_ready_interrupt:1;
+		uint8_t _reserved;
+	};
+	uint8_t all;
+}configReg_t;
 
-#define EN_RXADDR 0x02
-#define ERX_P5 (1 << 5)
-#define ERX_P4 (1 << 4)
-#define ERX_P3 (1 << 3)
-#define ERX_P2 (1 << 2)
-#define ERX_P1 (1 << 1)
-#define ERX_P0 (1 << 0)
 
-#define SETUP_AW 0x03
+#define PIPE_5 (1 << 5)
+#define PIPE_4 (1 << 4)
+#define PIPE_3 (1 << 3)
+#define PIPE_2 (1 << 2)
+#define PIPE_1 (1 << 1)
+#define PIPE_0 (1 << 0)
+#define ALL_6_PIPES (PIPE_0 | PIPE_1 | PIPE_2 | PIPE_3 | PIPE_4 | PIPE_5 )
+
+#define ENABLE_AUTO_ACK_REG 0x01
+
+#define ENABLE_RX_ADDR_REG 0x02
+
+#define SETUP_ADDR_WIDTH 0x03
 #define ADDRESS_WIDTH_3 0b01
 #define ADDRESS_WIDTH_4 0b10
 #define ADDRESS_WIDTH_5 0b11
 
 #define SETUP_RETR 0x04
-#define AUTO_RETRANSMISSION_DELAY(x) ((x) << 4) /* MAX 4 bit, 1LSB waits for 250 uS */
-#define AUTO_RETRANSMISSION_COUNT(x) ((x)) /* Max retransmission on fail of AA */
+#define AUTO_RETR_DELAY(x) (0xF0 & ((x) << 4)) /* MAX 4 bit, 1LSB waits for 250 uS */
+#define AUTO_RETR_COUNT(x) ((x)) /* Max retransmission on fail of AUTO_ACK */
 
-#define RF_CH 0x05
-#define RF_CHANNEL(x) ((x)) /* 7 bits max, default 0b10 */
+#define RF_CH_REG 0x05
+#define RF_CHANNEL(x) ((0x7F) & (x)) /* 7 bits max, default 0b10 */
 #define RF_CHANNEL_DEFAULT 0b10
 
 /* Reset Settings are 'good' */
-#define RF_SETUP 0x06
-#define RF_DR_LOW (1<<5) 
-#define PLL_LOCK  (1<<4)
-#define RF_DR_HIGH (1<<3)
-#define RF_PWR(x) (0b110 & ((x)<< 1)) /* Max 2 bit */
+#define RF_SETTINGS_REG 0x06
+#define RF_DR_LOW (1 << 5)
+#define PLL_LOCK  (1 << 4)
+#define RF_DR_HIGH (1 << 3)
+#define RF_PWR(x) (0x6 & ((x) << 1)) /* Max 2 bit */
 #define LNA_HCURR (1 << 0)
+typedef union rfSetupReg{
+	struct{
+		uint8_t lna_hcurr:1;
+		uint8_t rf_power:2;
+		uint8_t rf_data_rate_high_bit:1;
+		uint8_t _pll_lock:1;
+		uint8_t rf_data_rate_low_bit:1;
+		uint8_t _reserved:2;
+	};
+	uint8_t all;
+}rfSetupReg_t;
 	
-#define RFM75_STATUS 0x07
+#define STATUS_REG 0x07
 #define RBANK ( 1 << 7)
 /* Data Ready RX FIFO interrupt
    Asserted when new data arrives RX FIFO
@@ -105,19 +126,20 @@ typedef union statusReg{
 	uint8_t all;
 }StatusReg_t;
 
-#define OBSERVE_TX 0x8
-#define PLOS_CNT_mask (0b1111 << 4)
-#define ARC_CNT_mask (0b1111)
+#define OBSERVE_TX_REG 0x8
+#define PLOS_CNT_mask (0xF0)
+#define ARC_CNT_mask (0xF)
 
-#define CD 0x9
+#define CARRIER_DETECT_REG 0x9
 #define CARR_DETECT (1<<0)
 
-#define RX_ADDR_P0 0xA
-#define RX_ADDR_P1 0xB
-#define RX_ADDR_P2 0xC
-#define RX_ADDR_P3 0xD
-#define RX_ADDR_P4 0xE
-#define RX_ADDR_P5 0xF
+
+#define RX_PIPE_0_ADDR_REG 0xA
+#define RX_PIPE_1_ADDR_REG 0xB
+#define RX_PIPE_2_ADDR_REG 0xC
+#define RX_PIPE_3_ADDR_REG 0xD
+#define RX_PIPE_4_ADDR_REG 0xE
+#define RX_PIPE_5_ADDR_REG 0xF
 
 /*
    Transmit address. Used for a PTX device
@@ -126,7 +148,7 @@ typedef union statusReg{
    handle automatic acknowledge if this is a
    PTX device only., 40bytes
 */
-#define TX_ADDR 0x10
+#define TX_ADDR_REG 0x10
 
 /* Number of bytes in RX payload in data
    pipe x (1 to 32 bytes).
@@ -135,19 +157,19 @@ typedef union statusReg{
    ...
    32 = 32 bytes, 
  */
-#define	RX_PW_P0 0x11
-#define	RX_PW_P1 0x12
-#define	RX_PW_P2 0x13
-#define	RX_PW_P3 0x14
-#define	RX_PW_P4 0x15
-#define	RX_PW_P5 0x16
-#define RX_PW_mask (0b11111)
+#define	RX_PIPE_0_PAYLOAD_LENGTH_REG 0x11
+#define	RX_PIPE_1_PAYLOAD_LENGTH_REG 0x12
+#define	RX_PIPE_2_PAYLOAD_LENGTH_REG 0x13
+#define	RX_PIPE_3_PAYLOAD_LENGTH_REG 0x14
+#define	RX_PIPE_4_PAYLOAD_LENGTH_REG 0x15
+#define	RX_PIPE_5_PAYLOAD_LENGTH_REG 0x16
+#define RX_PAYLOAD_LENGTH_MASK (0b11111)
 
-#define FIFO_STATUS 0x17
+#define FIFO_STATUS_REG 0x17
 #define TX_REUSE (1<<6) /* Read Only. Packet is retransmitted whenn CE is high */
 #define TX_FULL (1<<5)  /* Read only */
 #define TX_EMPTY (1<<4) /* Read only, 1 means empty */
-#define RX_FULL (1<<1) /* Read only */
+#define RX_FULL (1<<1)  /* Read only */
 #define RX_EMPTY (1<<0) /* Read only, 1 means empty */
 
 typedef union statusRegFifo{
@@ -162,18 +184,12 @@ typedef union statusRegFifo{
 	uint8_t all;
 }StatusRegFifo_t;
 
-#define DYNPD 0x1C
-#define DPL_P5 (1<<5)
-#define DPL_P4 (1<<4)
-#define DPL_P3 (1<<3)
-#define DPL_P2 (1<<2)
-#define DPL_P1 (1<<1)
-#define DPL_P0 (1<<0)
+#define DYNAMIC_PAYLOAD_LENGTH_REG 0x1C
 
-#define FEATURE 0x1D
-#define EN_DPL (1<<2) /* Enables Dynamic Payload Length */
-#define EN_ACK_PAY (1<<1) /* Enables Payload with ACK  */
-#define EN_DYN_ACK (1<<0) /* Enables the W_TX_PAYLOAD_NOACK command */
+#define FEATURE_REG 0x1D
+#define EN_DYNAMIC_PAYLOAD_LENGTH (1<<2) /* Enables Dynamic Payload Length */
+#define EN_PAYLOAD_WITH_ACK (1<<1) /* Enables Payload with ACK  */
+#define EN_SPECIAL_NOACK_COMMAND (1<<0) /* Enables the W_TX_PAYLOAD_NOACK command */
 
 #define ADDRESS_SIZE 5
 

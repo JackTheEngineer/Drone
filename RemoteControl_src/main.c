@@ -24,14 +24,13 @@ bool UpdateTime(uint32_t *last_ticks){
 int main(void){
 	POINTER_TO_CONTAINER(OS_t, os);
 	uint32_t last_ticks = 0;
-	uint8_t address[5] = {1,0,0,0,0};
+	uint8_t address[5] = {1,0xA,0xF,0xA,0x5};
 	bool initialization;
 	
 	(void)DAVE_Init();
 	SysTick_Config(SystemCoreClock/1000);
 	LED_init();
 	DelayTimer_Init();
-	// Joystick_Init();
 	delay_ms(100);
 	initialization = RFM75_Init();
 	if(initialization == false){
@@ -39,8 +38,8 @@ int main(void){
 
 		}
 	}
-	RFM75_setTxModeIfNeeded();
-	configTxPipe(address, TX_DPL);
+	RFM75_set_TX_mode_if_needed();
+	RFM75_configTxPipe(address, TX_DPL);
 	RFM75_setChannel(50);
 
 	while(true){

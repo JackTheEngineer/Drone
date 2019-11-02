@@ -31,6 +31,7 @@ int main(void)
 	uint32_t last_ticks = 0;
 	POINTER_TO_CONTAINER(OS_t, os);
 	POINTER_TO_CONTAINER(Sensordata_t, motion_sensor);
+	uint8_t address[5] = {1,0xA,0xF,0xA,0x5};
 	State_t state = STATE_CALIBRATE;
 	Button_t btn1 = {
 			.btn = BUTTON1,
@@ -68,8 +69,8 @@ int main(void)
 		led_toggle(LED0);
 	}
 
-	RFM75_setRxModeIfNeeded();
-	configRxPipe(/* Pipe number */ 0,
+	RFM75_set_RX_mode_if_needed();
+	RFM75_configRxPipe(/* Pipe number */ 0,
 		     address,
 		     /* Static = 1, Dynamic = 0 */ 0,
 		     /*	Enable Auto Acknowledge */ 1);
