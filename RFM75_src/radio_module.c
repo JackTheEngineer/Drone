@@ -4,6 +4,13 @@
 #include "delay_us.h"
 #include "RFM75_codes.h"
 
+/*
+ * The order of modifying the registers should be the same
+ * as in the datasheet.
+ * F.E If you want to modify the setting of a receive pipe,
+ * f.e acknoledge bits and dynamic payload length
+ * do it in ascending order of the registers in the datasheet.
+ */
 extern volatile uint8_t rxtx_interrupt;
 
 const uint8_t RFM75_cmd_adrRX0[] = { WRITE_COMMAND_RFM(0x0A), 0xAA, 0xAA, 0xAA, 0xAA, 0xAA};
@@ -361,6 +368,9 @@ void RFM75_flush_rx_FIFO()
 	RFM75_SPI_write_buffer((uint8_t *)RFM75_cmd_flush_rx_fifos, sizeof(RFM75_cmd_flush_rx_fifos));
 }
 
+/*
+ * Setting the CE Pin High is still necessary to f.e make the Chip transmit.
+ */
 void RFM75_turn_on()
 {
 	ConfigReg_t config;
