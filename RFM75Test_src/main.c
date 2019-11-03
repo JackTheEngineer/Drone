@@ -10,7 +10,7 @@ extern volatile uint32_t g_systick_count;
 
 
 int main(void){
-	uint8_t address[5] = {1,0,0,0,0};
+	uint8_t address[5] = {0x35, 0xAF, 0x42, 0x23, 0x99};
 	(void)DAVE_Init();
 
 	SYSTIMER_Start();
@@ -36,7 +36,7 @@ int main(void){
 	uint8_t received_bytes[32] = {0};
 	uint8_t received_length;
 	uint32_t remembered_systick_count = 0;
-#define NUM_UART_BYTES 9
+#define NUM_UART_BYTES 7
 	uint8_t uart_bytes[NUM_UART_BYTES];
 	uart_bytes[NUM_UART_BYTES - 1] = '\n';
 	uint16_t joystick_bytes[4];
@@ -48,8 +48,8 @@ int main(void){
 				if(received_length != 0){
 					DIGITAL_IO_ToggleOutput(&LED2);
 					format_u8buf_to_four_ui12(received_bytes, joystick_bytes);
-					for(uint32_t j=0; j < 4; j++){
-						format_u16_to_u8buf(joystick_bytes[j], &uart_bytes[j*2]);
+					for(uint8_t j=0; j < (NUM_UART_BYTES-1);j++){
+						uart_bytes[j] = received_bytes[j];
 					}
 					UART_Transmit(&DEBUG_UART, uart_bytes, NUM_UART_BYTES);
 				}
