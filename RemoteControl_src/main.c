@@ -24,7 +24,7 @@ bool UpdateTime(uint32_t *last_ticks){
 int main(void){
 	POINTER_TO_CONTAINER(OS_t, os);
 	uint32_t last_ticks = 0;
-	uint8_t address[5] = {1,0,0,0,0};
+	uint8_t address[5] = {0x35, 0xAF, 0x42, 0x23, 0x99};
 	bool initialization;
 	
 	(void)DAVE_Init();
@@ -42,7 +42,6 @@ int main(void){
 	RFM75_set_TX_mode();
 	RFM75_setChannel(50);
 	RFM75_turn_on();
-
 
 	while(true){
 		if(UpdateTime(&last_ticks)){

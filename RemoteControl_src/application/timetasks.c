@@ -12,8 +12,7 @@
 #include "led.h"
 #include "joystick.h"
 
-#define NUM_OF_MEASUREMENTS_TAKEN 10
-
+#define NUM_OF_MEASUREMENTS_TAKEN 20
 
 typedef uint16_t* (*Retrieve_function_f)(void *target);
 
@@ -46,12 +45,13 @@ void TimeTasks_run(uint32_t ticks, OS_t *os){
 }
 
 void calculate_average(uint16_t v[NUM_OF_MEASUREMENTS_TAKEN][4], uint16_t r[4]){
+	uint32_t acc[4] = {0};
 	for(uint8_t i=0; i<NUM_OF_MEASUREMENTS_TAKEN; i++){
 		for(uint8_t j=0; j<4; j++){
-			r[j] += v[i][j];
+			acc[j] += v[i][j];
 		}
 	}
 	for(uint8_t j=0; j<4; j++){
-		r[j] /= NUM_OF_MEASUREMENTS_TAKEN;
+		r[j] = acc[j]/NUM_OF_MEASUREMENTS_TAKEN;
 	}
 }

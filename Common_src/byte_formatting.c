@@ -108,22 +108,19 @@ void format_four_u16_to_u8buf(uint16_t zero_pos_val_u16,
 	output_buf_pu8[7] = (uint8_t)(third_pos_val_u16 >> 8) & 0xFF;
 }
 
-void format_four_u12_to_u8buf(uint16_t zero_pos_val_u12,
-		uint16_t first_pos_val_u12,
-		uint16_t second_pos_val_u12,
-		uint16_t third_pos_val_u12,
-		uint8_t output_buf_pu8[]){
-	format_two_u12_to_u8buf(zero_pos_val_u12, first_pos_val_u12, &output_buf_pu8[0]);
-	format_two_u12_to_u8buf(second_pos_val_u12, third_pos_val_u12, &output_buf_pu8[3]);
+void format_four_u12_to_u8buf(uint16_t * input_pu16,
+							uint8_t * output_buf_pu8){
+	format_two_u12_to_u8buf(input_pu16[0], input_pu16[1], &output_buf_pu8[0]);
+	format_two_u12_to_u8buf(input_pu16[2], input_pu16[3], &output_buf_pu8[3]);
 }
 
 void format_two_u12_to_u8buf(uint16_t zero_pos_val_u12,
 		uint16_t first_pos_val_u12,
-		uint8_t BufferOut_pu8[]){
-	BufferOut_pu8[0] = zero_pos_val_u12 & 0xFF;
-	BufferOut_pu8[1] = (zero_pos_val_u12 >> 8) & 0xF;
-	BufferOut_pu8[1] |= ((first_pos_val_u12) << 4) & 0xF0;
-	BufferOut_pu8[2] = (first_pos_val_u12 >> 4) & 0xFF;
+		uint8_t *BufferOut_pu8){
+	BufferOut_pu8[0] = (uint8_t)(zero_pos_val_u12 & 0xFF);
+	BufferOut_pu8[1] = (uint8_t)(zero_pos_val_u12 >> 8) & 0xF;
+	BufferOut_pu8[1] |= (uint8_t)((first_pos_val_u12) << 4) & 0xF0;
+	BufferOut_pu8[2] = (uint8_t)(first_pos_val_u12 >> 4) & 0xFF;
 }
 
 void format_u8buf_to_four_ui12(uint8_t input_buf_pu8[],
