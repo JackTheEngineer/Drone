@@ -24,7 +24,7 @@ const uint8_t  RFM75_Bank0[][2] = {
 		{ WRITE_COMMAND_RFM(SETUP_ADDR_WIDTH), ADDRESS_WIDTH_5 },
 		// AUTO_RETRANSMISSION_DELAY is given in multiples of 250 uS
 		{ WRITE_COMMAND_RFM(SETUP_RETR), ( AUTO_RETR_DELAY(15) | \
-												AUTO_RETR_COUNT(15)) }, // 4 ms retr. delay
+						   AUTO_RETR_COUNT(15)) }, // 4 ms retr. delay
 		{ WRITE_COMMAND_RFM(RF_CH_REG), RF_CHANNEL(0x17) },
 		{ WRITE_COMMAND_RFM(RF_SETTINGS_REG), 0x2F },
 		{ WRITE_COMMAND_RFM(STATUS_REG), 0x07 },
@@ -42,11 +42,11 @@ const uint8_t  RFM75_Bank0[][2] = {
 		{ WRITE_COMMAND_RFM(RX_PIPE_5_PAYLOAD_LENGTH_REG), 32 },
 		{ WRITE_COMMAND_RFM(FIFO_STATUS_REG), 0x00 },
 		{ WRITE_COMMAND_RFM(DYNAMIC_PAYLOAD_LENGTH_REG), ALL_6_PIPES},
-		{ WRITE_COMMAND_RFM(FEATURE_REG), (EN_DYNAMIC_PAYLOAD_LENGTH | \
-														EN_PAYLOAD_WITH_ACK) }
 /*		{ WRITE_COMMAND_RFM(FEATURE_REG), (EN_DYNAMIC_PAYLOAD_LENGTH | \
-												EN_PAYLOAD_WITH_ACK | \
-												EN_SPECIAL_NOACK_COMMAND) } */
+		EN_PAYLOAD_WITH_ACK) } */
+		{ WRITE_COMMAND_RFM(FEATURE_REG), (EN_DYNAMIC_PAYLOAD_LENGTH | \
+						   EN_PAYLOAD_WITH_ACK | \
+						   EN_SPECIAL_NOACK_COMMAND) } 
 };
 
 //************ Bank1 register initialization commands
@@ -149,6 +149,7 @@ void RFM75_selectBank(uint8_t bank)
 void RFM75_set_RX_mode(void)
 {
 	uint8_t val;
+	RFM75_flush_rx_FIFO();
 	RFM75_CE_PIN_low();
 
 	val = RFM75_SPI_read_reg_value(STATUS_REG);
@@ -158,8 +159,6 @@ void RFM75_set_RX_mode(void)
 	val = RFM75_SPI_read_reg_value(CONFIG_REG);
 	val |= PRIM_RX;
 	RFM75_SPI_write_reg_val(WRITE_COMMAND_RFM(CONFIG_REG), val);
-
-	RFM75_flush_rx_FIFO();
 }
 
 void RFM75_set_RX_mode_if_needed(void){
@@ -240,20 +239,6 @@ void RFM75_configRxPipe(uint8_t pipe_nr,
 		RFM75_SPI_write_reg_val(WRITE_COMMAND_RFM((RX_PIPE_0_ADDR_REG + pipe_nr)), adr[0]);
 	}
 
-	if(pipe_length == 0){
-		RFM75_SPI_write_reg_val(WRITE_COMMAND_RFM(RX_PIPE_0_PAYLOAD_LENGTH_REG + pipe_nr), 32);
-		tmp = RFM75_SPI_read_reg_value(DYNAMIC_PAYLOAD_LENGTH_REG);
-		tmp &= ~(1 << pipe_nr);
-	}else{
-		RFM75_SPI_write_reg_val(WRITE_COMMAND_RFM((RX_PIPE_0_PAYLOAD_LENGTH_REG + pipe_nr)), pipe_length);
-		/* Enable Dynamic payload length at pipe number */
-		tmp = RFM75_SPI_read_reg_value(DYNAMIC_PAYLOAD_LENGTH_REG);
-		tmp |= 1 << pipe_nr;
-	}
-	RFM75_SPI_write_reg_val(WRITE_COMMAND_RFM(DYNAMIC_PAYLOAD_LENGTH_REG), tmp);
-	RFM75_enableRxPipe(pipe_nr);
-
-	/* Set auto acknoledge according to setting */
 	tmp = RFM75_SPI_read_reg_value(ENABLE_AUTO_ACK_REG);
 	if (enable_auto_ack){
 		tmp |= 1 << pipe_nr;
@@ -261,6 +246,17 @@ void RFM75_configRxPipe(uint8_t pipe_nr,
 		tmp &= ~(1 << pipe_nr);
 	}
 	RFM75_SPI_write_reg_val(WRITE_COMMAND_RFM(ENABLE_AUTO_ACK_REG), tmp);
+
+	if (pipe_length > 0) {
+		tmp = RFM75_SPI_read_reg_value(DYNAMIC_PAYLOAD_LENGTH_REG);
+		tmp &= ~(1 << pipe_nr);
+		RFM75_SPI_write_reg_val(WRITE_COMMAND_RFM(DYNAMIC_PAYLOAD_LENGTH_REG), tmp);		
+	}else{
+		tmp = RFM75_SPI_read_reg_value(DYNAMIC_PAYLOAD_LENGTH_REG);
+		tmp |= 1 << pipe_nr;
+		RFM75_SPI_write_reg_val(WRITE_COMMAND_RFM(DYNAMIC_PAYLOAD_LENGTH_REG), tmp);		
+	}
+	RFM75_enableRxPipe(pipe_nr);
 }
 
 void RFM75_enableRxPipe(uint8_t pipe_nr) 

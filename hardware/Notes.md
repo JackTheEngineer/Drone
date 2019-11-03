@@ -12,3 +12,8 @@ DAVE\_common.h to DAVE\_Common.h in uart.h
 Add a errata note to the XMC1100-2Go TLI4790 on the schematic to 
 tell about the short circuits on the LED's.
 
+
+# Notes to RFM75 
+All registers have to be written. 
+The order of commands, in which a RX-pipe is configured, Matters. 
+The registers have to be set in the same ascending order as in the datasheet. 

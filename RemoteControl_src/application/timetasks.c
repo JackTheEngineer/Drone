@@ -33,7 +33,7 @@ void TimeTasks_run(uint32_t ticks, OS_t *os){
 		}
 	}
 	if((ticks % 20) == 0){
-		uint16_t averaged[4];
+		uint16_t averaged[4] = {0};
 		calculate_average(adc_values, averaged);
 		Joystick_serialize_data(averaged, sendbytes);
 		RFM75_Transmit_bytes(sendbytes,
