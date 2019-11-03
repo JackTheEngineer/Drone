@@ -37,15 +37,10 @@ void TimeTasks_run(uint32_t ticks, OS_t *os){
 		uint16_t averaged[4];
 		calculate_average(adc_values, averaged);
 		Joystick_serialize_data(averaged, sendbytes);
-
-		RFM75_turnOn();
-		RFM75_CE_PIN_high();
 		RFM75_Transmit_bytes(sendbytes,
 							 length,
-						     50,
+						     4000,
 						     true);
-		RFM75_CE_PIN_low();
-		RFM75_turnOff();
 		LED_toggle();
 	}
 }

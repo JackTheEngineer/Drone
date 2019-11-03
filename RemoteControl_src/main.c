@@ -38,9 +38,11 @@ int main(void){
 
 		}
 	}
-	RFM75_set_TX_mode_if_needed();
 	RFM75_configTxPipe(address, TX_DPL);
+	RFM75_set_TX_mode();
 	RFM75_setChannel(50);
+	RFM75_turn_on();
+
 
 	while(true){
 		if(UpdateTime(&last_ticks)){

@@ -61,6 +61,6 @@
 #define PIN_INTERRUPT_PATCH_VERSION (2U)
 
 /**< Mapped IRQ Node Number */
-#define UserIRQHandler IRQ_Hdlr_5  
+#define RFM75_PinInterruptHandler IRQ_Hdlr_5
 		
 #endif /* End of PIN_INTERRUPT_CONF_H */

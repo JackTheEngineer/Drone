@@ -5,10 +5,11 @@
 #define RFM75_RADIO_H
 
 #include "delay.h"
+#include "RFM75_codes.h"
 
 bool init();
-void RFM75_turnOn();
-void RFM75_turnOff();
+void RFM75_turn_on();
+void RFM75_turn_off();
 void RFM75_setPower(uint8_t pwr);
 void RFM75_set_RX_mode_if_needed(void);
 void RFM75_set_TX_mode_if_needed(void);
@@ -94,18 +95,20 @@ void RFM75_SPI_write_buffer(uint8_t * cmdbuf, uint8_t len);
 void RFM75_SPI_read_buffer(uint8_t reg, uint8_t * buf, uint8_t len);
 void RFM75_selectBank(uint8_t bank);
 
+void RFM75_reset_interrupts(void);
+
 // adr has to be 5 bytes!
-uint8_t RFM75_configRxPipe(uint8_t pipe_nr, uint8_t *adr, uint8_t plLen, uint8_t en_aa);
+void RFM75_configRxPipe(uint8_t pipe_nr, const uint8_t *adr, uint8_t plLen, bool enable_auto_ack);
 void RFM75_enableRxPipe(uint8_t pipe_nr);
 void RFM75_SPI_write_buffer_at_start_register(uint8_t cmd, const uint8_t * buf, uint8_t len);
 void RFM75_disableRxPipe(uint8_t pipe_nr);
 
 // adr has to be 5 bytes!
-void RFM75_configTxPipe(uint8_t * adr, uint8_t pltype);
-void RFM75_flushTxFIFO();
-void RFM75_flushRxFIFO();
+void RFM75_configTxPipe(uint8_t * adr, bool en_dynamic_payload);
+void RFM75_flush_tx_FIFO();
+void RFM75_flush_rx_FIFO();
 uint8_t RFM75_Receive_bytes(uint8_t *payload);
-uint8_t RFM75_sendPayload(const uint8_t * payload, const uint8_t len, const uint8_t toAck);
+CombinedReg_t RFM75_Receive_bytes_feedback(uint8_t *payload);
 
 #endif
 

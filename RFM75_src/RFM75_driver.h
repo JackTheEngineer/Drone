@@ -18,8 +18,8 @@ typedef enum __RFM75_RX_Status{
 }RFM75_Rx_Status_e;
 
 bool RFM75_Init(void);
-TransmitResult_t RFM75_Transmit_bytes(const uint8_t *buff,
-				    const uint32_t length,
+StatusReg_t RFM75_Transmit_bytes(const uint8_t *buff,
+				    const uint8_t length,
 				    const uint32_t maxTimeoutUs,
 				    bool requestAck);
 void RFM75_set_bank(uint8_t bank);

@@ -34,7 +34,7 @@
 #define PWR_UP (1 << 1)
 #define PRIM_RX (1 << 0)
 
-typedef union configReg_t{
+typedef union configReg{
 	struct{
 		uint8_t primary_rx:1;
 		uint8_t power_up:1;
@@ -45,7 +45,7 @@ typedef union configReg_t{
 		uint8_t _reserved;
 	};
 	uint8_t all;
-}configReg_t;
+}ConfigReg_t;
 
 
 #define PIPE_5 (1 << 5)
@@ -59,6 +59,7 @@ typedef union configReg_t{
 #define ENABLE_AUTO_ACK_REG 0x01
 
 #define ENABLE_RX_ADDR_REG 0x02
+
 
 #define SETUP_ADDR_WIDTH 0x03
 #define ADDRESS_WIDTH_3 0b01
@@ -98,7 +99,7 @@ typedef union rfSetupReg{
    Asserted when new data arrives RX FIFO
    Write 1 to clear bit. 
 */	
-#define RX_DR (1<<6)
+#define RX_DATA_READY_FLAG (1<<6)
 
 /* Data Sent TX FIFO interrupt
    Asserted when packet transmitted on TX.
@@ -106,11 +107,11 @@ typedef union rfSetupReg{
    high only when ACK is received.
    Write 1 to clear bit. 
  */
-#define TX_DS (1 << 5)
+#define TX_DATA_SENT_FLAG (1 << 5)
 
 /* If Max rt is asserted, it must be cleared to enable further 
    communication, Write 1 to clear bit. Maximum number of restransmits interrupt */
-#define MAX_RT (1<<4)
+#define MAX_RETRANSMITS_FLAG (1<<4)
 #define RX_PIPE_NO_mask (0b111 < 1)
 #define TX_FULL_mask (1<<0)
 
@@ -129,6 +130,13 @@ typedef union statusReg{
 #define OBSERVE_TX_REG 0x8
 #define PLOS_CNT_mask (0xF0)
 #define ARC_CNT_mask (0xF)
+typedef union observeTxReg{
+	struct{
+		uint8_t retransmit_cnt:4;
+		uint8_t packet_lost_cnt:4;
+	};
+	uint8_t all;
+}ObserveTxReg_t;
 
 #define CARRIER_DETECT_REG 0x9
 #define CARR_DETECT (1<<0)
@@ -183,6 +191,28 @@ typedef union statusRegFifo{
 	};
 	uint8_t all;
 }StatusRegFifo_t;
+
+typedef union CombinedReg{
+	struct{
+		uint32_t tx_fifo_full:1;
+		uint32_t rx_pipe_num:3; /* 0b111 means RX FIFO is FUll */
+		uint32_t max_retransmits:1;
+		uint32_t tx_data_sent:1;
+		uint32_t rx_data_ready:1;
+		uint32_t rbank:1;
+		uint32_t retransmit_cnt:4;
+		uint32_t packet_lost_cnt:4;
+		uint32_t rx_empty:1;
+		uint32_t rx_full:1;
+		uint32_t _reserved1:2;
+		uint32_t tx_empty:1;
+		uint32_t tx_full:1;
+		uint32_t tx_reuse:1;
+		uint32_t _reserved2:1;
+		uint32_t length:8;
+	};
+	uint32_t all;
+}CombinedReg_t;
 
 #define DYNAMIC_PAYLOAD_LENGTH_REG 0x1C
 

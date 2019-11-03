@@ -13,9 +13,6 @@ int main(void){
 	(void)DAVE_Init();
 
 	SYSTIMER_Start();
-	DIGITAL_IO_SetOutputHigh(&LED1);
-	DIGITAL_IO_SetOutputHigh(&LED2);
-
 	bool initialize=0;
 
 	while(initialize == 0){
@@ -23,35 +20,39 @@ int main(void){
 		initialize = RFM75_Init();
 		DIGITAL_IO_ToggleOutput(&LED1);
 	}
-	RFM75_set_RX_mode_if_needed();
+	DIGITAL_IO_SetOutputLow(&LED1);
+	DIGITAL_IO_SetOutputLow(&LED2);
+	RFM75_set_RX_mode();
 	RFM75_configRxPipe(/* Pipe number */ 0,
 		     address,
 		     /* Static = 1, Dynamic = 0 */ 0,
-		     /*	Enable Auto Acknowledge */ 1);
+		     /*	Enable Auto Acknowledge */ true);
 	RFM75_setChannel(50);
 	RFM75_CE_PIN_high();
 
 
 	uint8_t received_bytes[32] = {0};
 	uint8_t received_length;
-	uint16_t rfm_status;
+	CombinedReg_t creg;
 	uint32_t remembered_systick_count = 0;
 
 	uint16_t val = 1;
-	uint8_t uart_bytes[3];
-	uart_bytes[2] = '\n';
+	uint8_t uart_bytes[5];
+	uart_bytes[4] = '\n';
 	while(1U){
 		if(remembered_systick_count != g_systick_count){
 			remembered_systick_count = g_systick_count;
 			if((remembered_systick_count % 20) == 0){
 				//received_length = RFM75_Receive_bytes(received_bytes);
-				rfm_status = RFM75_Receive_bytes_feedback(received_bytes);
-				DIGITAL_IO_ToggleOutput(&LED2);
-				uart_bytes[0] = rfm_status;
-				uart_bytes[1] = (rfm_status >> 8);
-				UART_Transmit(&DEBUG_UART, uart_bytes, 3);
+				creg = RFM75_Receive_bytes_feedback(received_bytes);
+				if(creg.length == 0){
+					DIGITAL_IO_ToggleOutput(&LED1);
+				}else{
+					DIGITAL_IO_ToggleOutput(&LED2);
+				}
+				format_u32_to_u8buf(creg.all, uart_bytes);
+				UART_Transmit(&DEBUG_UART, uart_bytes, 5);
 			}
 		}
 	}
 }
-

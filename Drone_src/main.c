@@ -69,11 +69,11 @@ int main(void)
 		led_toggle(LED0);
 	}
 
-	RFM75_set_RX_mode_if_needed();
+	RFM75_set_RX_mode();
 	RFM75_configRxPipe(/* Pipe number */ 0,
 		     address,
 		     /* Static = 1, Dynamic = 0 */ 0,
-		     /*	Enable Auto Acknowledge */ 1);
+		     /*	Enable Auto Acknowledge */ true);
 	RFM75_setChannel(50);
 
 	UART_Init(&DebugUart);
