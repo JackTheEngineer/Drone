@@ -24,7 +24,7 @@ bool UpdateTime(uint32_t *last_ticks){
 int main(void){
 	POINTER_TO_CONTAINER(OS_t, os);
 	uint32_t last_ticks = 0;
-	uint8_t address[5] = {1,0xA,0xF,0xA,0x5};
+	uint8_t address[5] = {1,0,0,0,0};
 	bool initialization;
 	
 	(void)DAVE_Init();
@@ -38,7 +38,7 @@ int main(void){
 
 		}
 	}
-	RFM75_configTxPipe(address, TX_DPL);
+	RFM75_configTxPipe(address, true);
 	RFM75_set_TX_mode();
 	RFM75_setChannel(50);
 	RFM75_turn_on();

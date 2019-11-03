@@ -4,10 +4,7 @@
 #include "delay_us.h"
 #include "RFM75_codes.h"
 
-void RFM75_set_RX_mode(void);
-bool RFM75_initRegisters(void);
-
-_STATIC_ volatile uint8_t rxtx_interrupt;
+extern volatile uint8_t rxtx_interrupt;
 
 const uint8_t RFM75_cmd_adrRX0[] = { WRITE_COMMAND_RFM(0x0A), 0xAA, 0xAA, 0xAA, 0xAA, 0xAA};
 const uint8_t RFM75_cmd_adrTX[]  = { WRITE_COMMAND_RFM(0x10), 0xAA, 0xAA, 0xAA, 0xAA, 0xAA};
@@ -15,7 +12,7 @@ const uint8_t RFM75_cmd_adrRX1[] = { WRITE_COMMAND_RFM(0x0B), 0x35, 0x43, 0x10, 
 const uint8_t RFM75_cmd_switch_bank[] = { 0x50, 0x53 };
 const uint8_t RFM75_cmd_flush_rx_fifos[] = { 0xe2, 0x00 };
 const uint8_t RFM75_cmd_flush_tx_fifos[] = { 0xe1, 0x00 };
-const uint8_t RFM75_cmd_activate[] = { 0x50, 0x73 }; // Activates
+const uint8_t RFM75_cmd_activate[] = { ACTIVATE, ACTIVATE_BYTE }; // Activates
 const uint8_t RFM75_cmd_tog1[] = { WRITE_COMMAND_RFM(0x04), 0xF9 | 0x06, 0x96, 0x82, 0xDB };
 const uint8_t RFM75_cmd_tog2[] = { WRITE_COMMAND_RFM(0x04), 0xF9, 0x96, 0x82, 0xDB};
 
@@ -114,11 +111,11 @@ bool RFM75_initRegisters()
 		RFM75_SPI_write_buffer((uint8_t *)RFM75_Bank1[i], sizeof(RFM75_Bank1[i]));
 	}
 
-	RFM75_SPI_write_buffer(RFM7x_bank1_ramp_curve, sizeof(RFM7x_bank1_ramp_curve));
+	RFM75_SPI_write_buffer((uint8_t *)RFM7x_bank1_ramp_curve, sizeof(RFM7x_bank1_ramp_curve));
 
 	// do we have to toggle some bits here like in the example code?
-	RFM75_SPI_write_buffer(RFM75_cmd_tog1, sizeof(RFM75_cmd_tog1));
-	RFM75_SPI_write_buffer(RFM75_cmd_tog2, sizeof(RFM75_cmd_tog2));
+	RFM75_SPI_write_buffer((uint8_t *)RFM75_cmd_tog1, sizeof(RFM75_cmd_tog1));
+	RFM75_SPI_write_buffer((uint8_t *)RFM75_cmd_tog2, sizeof(RFM75_cmd_tog2));
 
 	delay_ms(50);
 
@@ -166,7 +163,7 @@ void RFM75_set_RX_mode(void)
 }
 
 void RFM75_set_RX_mode_if_needed(void){
-	if (RFM75_getMode() != MODE_PRIMARY_RX)
+	if (RFM75_getMode() != PRIM_RX)
 	{
 		RFM75_set_RX_mode();
 	}
@@ -202,15 +199,15 @@ void RFM75_set_TX_mode_if_needed(void){
 
 uint8_t RFM75_getMode(void) 
 {
-	return RFM75_SPI_read_reg_value(CONFIG_REG) & RFM7x_PIN_PRIM_RX;
+	return RFM75_SPI_read_reg_value(CONFIG_REG) & PRIM_RX;
 }
 
 void RFM75_setChannel(uint8_t cnum) 
 {
-	RFM75_SPI_write_reg_val( RFM7x_CMD_WRITE_REG | RF_CH_REG, cnum);
+	RFM75_SPI_write_reg_val( WRITE_COMMAND_RFM(RF_CH_REG), cnum);
 }
 
-uint8_t RFM75_getChannel(void) 
+uint8_t RFM75_getChannel(void)
 {
 	return RFM75_SPI_read_reg_value(RF_CH_REG);
 }
@@ -315,8 +312,8 @@ uint8_t RFM75_Receive_bytes(uint8_t *payload)
 
 	status.all = RFM75_SPI_read_reg_value(STATUS_REG);
 	if((bool)status.rx_data_ready && (status.all != 0xFF)){
-		len = RFM75_SPI_read_reg_value(RFM7x_CMD_RX_PL_WID); // Payload width
-		RFM75_SPI_read_buffer(RFM7x_CMD_RD_RX_PLOAD, payload, len);
+		len = RFM75_SPI_read_reg_value(READ_PAYLOAD_LENGTH); // Payload width
+		RFM75_SPI_read_buffer(READ_RX_PAYLOAD, payload, len);
 		fifo_status.all = RFM75_SPI_read_reg_value(FIFO_STATUS_REG);
 
 		if (fifo_status.rx_empty) {
@@ -341,8 +338,8 @@ CombinedReg_t RFM75_Receive_bytes_feedback(uint8_t *payload){
 	status.all = statusbuf[0];
 
 	if((bool)status.rx_data_ready && (status.all != 0xFF)){
-		len = RFM75_SPI_read_reg_value(RFM7x_CMD_RX_PL_WID);
-		RFM75_SPI_read_buffer(RFM7x_CMD_RD_RX_PLOAD, payload, len);
+		len = RFM75_SPI_read_reg_value(READ_PAYLOAD_LENGTH);
+		RFM75_SPI_read_buffer(READ_RX_PAYLOAD, payload, len);
 		fifo_status.all = RFM75_SPI_read_reg_value(FIFO_STATUS_REG);
 
 		if (fifo_status.rx_empty) {
@@ -390,7 +387,6 @@ StatusReg_t RFM75_Transmit_bytes(const uint8_t *payload,
 									  const uint32_t maxTimeoutUs,
 									  bool requestAck)
 {
-	TransmitResult_t result;
 	uint32_t i=0;
 	bool readStatus = true;
 	uint8_t statusbuf[2];
@@ -403,7 +399,7 @@ StatusReg_t RFM75_Transmit_bytes(const uint8_t *payload,
 	_delay_us(20);
 	RFM75_reset_interrupts();
 
-	uint8_t cmd = RFM7x_CMD_WR_TX_PLOAD;
+	uint8_t cmd = WRITE_TX_PAYLOAD;
 	// uint8_t cmd = RFM7x_CMD_W_ACK_PAYLOAD;
 	// uint8_t cmd = RFM7x_CMD_W_TX_PAYLOAD_NOACK;
 
@@ -463,6 +459,4 @@ void RFM75_startListening(const uint8_t channel, const uint8_t * address){
 	RFM75_CE_PIN_high();
 }
 
-void RFM75_PinInterruptHandler(void){
-	rxtx_interrupt = 1;
-}
+

@@ -10,6 +10,7 @@
 #include "xmc_gpio.h"
 #include "hardware.h"
 
+volatile uint8_t rxtx_interrupt;
 
 _STATIC_ _INLINE_ void _RC_Iface_wait_for_receive(void);
 _STATIC_ _INLINE_ void _RC_Iface_clear_receive_indication(void);
@@ -150,5 +151,9 @@ void RFM75_SPI_write_buffer_at_start_register(uint8_t start_register,
 {
 	RC_Iface_send_bytes(&start_register, 1, LEAVE_CSN_ENABLED);
 	RC_Iface_send_bytes(buf, len, DISABLE_CSN);
+}
+
+void RFM75_PinInterruptHandler(void){
+	rxtx_interrupt = 1;
 }
 

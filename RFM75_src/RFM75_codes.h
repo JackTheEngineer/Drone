@@ -1,18 +1,23 @@
 #ifndef __RFM75_CODES__H__
 #define __RFM75_CODES__H__
 
-#define READ_RFM 0x0
-#define WRITE_RFM (1<<5)
-#define READ_COMMAND_RFM(x) (0x1F & (x))
-#define WRITE_COMMAND_RFM(x) ((0x7F) & (WRITE_RFM|(x)))
+#define MODE_PRIMARY_TX     0x00 // parameter for setMode(mode): set to transmitter
+#define MODE_PRIMARY_RX     0x01 // parameter for setMode(mode): set to receiver
 
-#define R_RX_PAYLOAD 0x61
-#define W_TX_PAYLOAD 0xA0
+#define READ_RX_PAYLOAD 0x61
+#define WRITE_TX_PAYLOAD 0xA0
+#define RFM7x_CMD_REUSE_TX_PL 0xE3 // Define reuse TX payload register command
+#define RFM7x_CMD_W_TX_PAYLOAD_NOACK 0xb0 // Define TX payload NOACK command
+#define RFM7x_CMD_W_ACK_PAYLOAD 0xa8 // Define Write ack command
+#define READ_PAYLOAD_LENGTH 0x60 // Define received payload width command
+
+#define WRITE_RFM (1<<5)
+#define WRITE_COMMAND_RFM(x) ((0x7F) & (WRITE_RFM|(x)))
 
 #define FLUSH_TX 0b11100001
 #define FLUSH_RX 0b11100010
 
-#define ACTIVATE 0b01010000
+#define ACTIVATE 0x50
 #define ACTIVATE_BYTE 0x73
 
 #define R_RX_PL_WID 0b01100000

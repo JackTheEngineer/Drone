@@ -11,6 +11,7 @@
 #include "base.h"
 #include "pin_interrupt.h"
 #include "radio_module.h"
+#include "hardware.h"
 
 typedef enum _Disable_CE_{
 	LEAVE_CSN_ENABLED,
