@@ -214,7 +214,7 @@ const SPI_MASTER_CONFIG_t RFM75_SPI_Config  =
   /* Clock Settings */
   .shift_clk_passive_level = XMC_SPI_CH_BRG_SHIFT_CLOCK_PASSIVE_LEVEL_0_DELAY_ENABLED, 
   .slave_select_lines      = (uint8_t)1,
-  .leading_trailing_delay  = (uint8_t)1,
+  .leading_trailing_delay  = (uint8_t)4,
   .spi_master_config_mode  = XMC_SPI_CH_MODE_STANDARD, /* spi master initial mode configured mode */
   .transmit_mode           = SPI_MASTER_TRANSFER_MODE_INTERRUPT,
   .receive_mode            = SPI_MASTER_TRANSFER_MODE_INTERRUPT,
