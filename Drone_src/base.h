@@ -10,9 +10,17 @@
 
 #define SQR(x) ((x)*(x))
 
-#define _STATIC_ static
-#define _INLINE_ inline
-#define _FLOAT_ float
+#ifndef _STATIC_
+	#define _STATIC_ static
+#endif
+
+#ifndef _INLINE_
+	#define _INLINE_ inline
+#endif
+
+#ifndef _FLOAT_
+	#define _FLOAT_ float
+#endif
 
 #define TWO_TO_N_MIN_ONE(n) ((1<<(n)) - 1)
 

@@ -9,8 +9,8 @@
 #define SRC_INTERFACE_RFM75_DRIVER_H_
 
 #include "RFM75_codes.h"
-#include "RFM75_spi.h"
 #include "radio_module.h"
+#include "RFM75_hardware.h"
 
 typedef enum __RFM75_RX_Status{
 	RFM_RX_SUCCESS,

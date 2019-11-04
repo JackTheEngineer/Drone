@@ -39,7 +39,7 @@
 #define PWR_UP (1 << 1)
 #define PRIM_RX (1 << 0)
 
-typedef union configReg{
+typedef union __attribute__((packed, aligned(1))) configReg{
 	struct{
 		uint8_t primary_rx:1;
 		uint8_t power_up:1;
@@ -86,7 +86,7 @@ typedef union configReg{
 #define RF_DR_HIGH (1 << 3)
 #define RF_PWR(x) (0x6 & ((x) << 1)) /* Max 2 bit */
 #define LNA_HCURR (1 << 0)
-typedef union rfSetupReg{
+typedef union __attribute__((packed, aligned(1))) rfSetupReg{
 	struct{
 		uint8_t lna_hcurr:1;
 		uint8_t rf_power:2;
@@ -120,7 +120,7 @@ typedef union rfSetupReg{
 #define RX_PIPE_NO_mask (0b111 < 1)
 #define TX_FULL_mask (1<<0)
 
-typedef union statusReg{
+typedef union __attribute__((packed, aligned(1))) statusReg{
 	struct{
 		uint8_t tx_fifo_full:1;
 		uint8_t rx_pipe_num:3; /* 0b111 means RX FIFO is FUll */
@@ -135,7 +135,7 @@ typedef union statusReg{
 #define OBSERVE_TX_REG 0x8
 #define PLOS_CNT_mask (0xF0)
 #define ARC_CNT_mask (0xF)
-typedef union observeTxReg{
+typedef union __attribute__((packed, aligned(1))) observeTxReg{
 	struct{
 		uint8_t retransmit_cnt:4;
 		uint8_t packet_lost_cnt:4;
@@ -185,7 +185,7 @@ typedef union observeTxReg{
 #define RX_FULL (1<<1)  /* Read only */
 #define RX_EMPTY (1<<0) /* Read only, 1 means empty */
 
-typedef union statusRegFifo{
+typedef union __attribute__((packed, aligned(1))) statusRegFifo{
 	struct{
 		uint8_t rx_empty:1;
 		uint8_t rx_full:1;
@@ -197,7 +197,7 @@ typedef union statusRegFifo{
 	uint8_t all;
 }StatusRegFifo_t;
 
-typedef union CombinedReg{
+typedef union __attribute__((packed, aligned(4))) CombinedReg{
 	struct{
 		uint32_t tx_fifo_full:1;
 		uint32_t rx_pipe_num:3; /* 0b111 means RX FIFO is FUll */

@@ -394,7 +394,6 @@ StatusReg_t RFM75_Transmit_bytes(const uint8_t *payload,
 									  bool requestAck)
 {
 	uint32_t i=0;
-	bool readStatus = true;
 	uint8_t statusbuf[2];
 	StatusReg_t status;
 	ObserveTxReg_t obs_tx;
@@ -428,7 +427,6 @@ StatusReg_t RFM75_Transmit_bytes(const uint8_t *payload,
 
 		if(status.rx_pipe_num == 0x7){
 			// Missing IRQ, stop
-			readStatus = false;
 			break;
 		}
 		i += TIMEOUT_uS;

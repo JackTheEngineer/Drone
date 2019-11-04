@@ -1,6 +1,22 @@
-Todo:
-        Momente der Motoren herausfinden
-        Propellermassen herausfinden 
-        constanten in fake_motors.h berechnen und setzen
+# Todos
+## Build system
 
+   * write haskell runner generator
+   * "all" target runs "uC" and "tests", needs an argument for "YACBS.hs all bld/uC.ucbuild"
 
+## Hardware
+
+   * make two different SPI implementations possible for RFM75 code
+   * Test speed increase in SPI ( relating to only code change, not frequency )
+
+## Testing the Code:
+   * Either Continue Euler Integral Simulation
+     - Find out moments of the Motors
+     - Find propeller masses
+     - Find and set constants for fake_motors.h
+     
+   * Find a 3D simulator and adapt it to my code
+   
+## Motion Sensor
+
+   * Implement quaternion rotation
