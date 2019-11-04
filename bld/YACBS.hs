@@ -3,6 +3,7 @@ import Development.Shake.Command
 import Development.Shake.FilePath
 import Development.Shake.Util
 import Data.List
+import Data.List.Split
 import Data.Maybe (fromMaybe)
 import qualified Data.Yaml as Y
 import Data.Yaml (FromJSON(..), (.:))
@@ -10,7 +11,7 @@ import qualified Data.ByteString.Char8 as BS
 import qualified Data.Text as DT
 import System.Environment
 import System.Process
-
+-- import Text.ParserCombinators.ReadP
 
 data Config = Config {
    sourceFiles :: [FilePattern]
@@ -60,6 +61,15 @@ sieveSourceOfObjFile result_Dir o_file p  = ((dropExtension . (dropPreDir result
 sieveTestSourceOfRunner r p = (runner_to_test r) == (takeBaseName p)
 sieveForYamlFile r p = (takeBaseName r) == (takeBaseName p)
   
+-- generateRunner :: FilePath -> FilePath -> FilePath -> IO()
+-- generateRunner testSource runnerSource resultname = do
+--   t <- readFile' testSource
+--   groups_and_names <- groupAndNameParser t
+--   let runCommands = createRunnerCommands groups_and_names
+--   splitOn "//CONTENT"
+--   writeFile' 
+  
+
 findSourceWithFilterOrError ::  FilePath -> (FilePath -> FilePath -> Bool) -> [FilePath] -> Action(FilePath)
 findSourceWithFilterOrError key sieve allSources = do
   let res = filter (sieve key) allSources
@@ -196,6 +206,7 @@ shakeIT = shakeArgsWith opt flags $ \options args -> return $ Just $ do
     c <- configFromSource out :: Action( Config )
     allSources <- getDirectoryFiles "" (sourceFiles c)
     test_source <- (-#>) out sieveTestSourceOfRunner allSources
+    -- generateRunner test_source runner_template out
     cmd_ "ruby" genRunnerScript "-o" [out] "-t" runnerTemplate "-r" test_source
 
   "test_*" %> \out -> do
