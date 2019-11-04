@@ -8,6 +8,7 @@
 
    * make two different SPI implementations possible for RFM75 code
    * Test speed increase in SPI ( relating to only code change, not frequency )
+      - Optionally, for speedup implement the spi with transfer functions
 
 ## Testing the Code:
    * Either Continue Euler Integral Simulation
@@ -18,5 +19,6 @@
    * Find a 3D simulator and adapt it to my code
    
 ## Motion Sensor
-
    * Implement quaternion rotation
+ 
+ 

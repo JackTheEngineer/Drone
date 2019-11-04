@@ -11,7 +11,7 @@
  * f.e acknoledge bits and dynamic payload length
  * do it in ascending order of the registers in the datasheet.
  */
-extern volatile uint8_t rxtx_interrupt;
+extern volatile uint32_t rxtx_interrupt;
 
 const uint8_t RFM75_cmd_adrRX0[] = { WRITE_COMMAND_RFM(0x0A), 0xAA, 0xAA, 0xAA, 0xAA, 0xAA};
 const uint8_t RFM75_cmd_adrTX[]  = { WRITE_COMMAND_RFM(0x10), 0xAA, 0xAA, 0xAA, 0xAA, 0xAA};
@@ -389,7 +389,7 @@ void RFM75_turn_off()
 }
 
 StatusReg_t RFM75_Transmit_bytes(const uint8_t *payload,
-									  const uint8_t length,
+								 const uint8_t length,
 									  const uint32_t maxTimeoutUs,
 									  bool requestAck)
 {
@@ -407,7 +407,6 @@ StatusReg_t RFM75_Transmit_bytes(const uint8_t *payload,
 	uint8_t cmd = WRITE_TX_PAYLOAD;
 	// uint8_t cmd = RFM7x_CMD_W_ACK_PAYLOAD;
 	// uint8_t cmd = RFM7x_CMD_W_TX_PAYLOAD_NOACK;
-
 	// status.all = RFM75_SPI_read_reg_value(FIFO_STATUS_REG);
 
 	RFM75_SPI_read_buffer(STATUS_REG, statusbuf, 2);
@@ -421,26 +420,19 @@ StatusReg_t RFM75_Transmit_bytes(const uint8_t *payload,
 #define TIMEOUT_uS 20
 		_delay_us(TIMEOUT_uS);
 		// status.all = RFM75_SPI_read_reg_value(STATUS_REG);
-		RFM75_SPI_read_buffer(STATUS_REG, statusbuf, 2);
-		status.all = statusbuf[0];
-		obs_tx.all = statusbuf[1];
-
-		if(status.rx_pipe_num == 0x7){
-			// Missing IRQ, stop
+		status.all = RFM75_SPI_read_reg_value(STATUS_REG);
+		obs_tx.all = RFM75_SPI_read_reg_value(OBSERVE_TX_REG);
+		if((status.tx_data_sent) || (status.max_retransmits)){
 			break;
 		}
 		i += TIMEOUT_uS;
 	}
-
+	asm("NOP");
 	rxtx_interrupt = 0;
 	/* Clear ALL the status interrupts.
 	 * When writing a bit that is set to 1,
 	 * it clears the bits, and also the MAX_RT BIT
 	 */
-	RFM75_SPI_read_buffer(STATUS_REG, statusbuf, 2);
-	status.all = statusbuf[0];
-	obs_tx.all = statusbuf[1];
-
 	RFM75_SPI_write_reg_val(WRITE_COMMAND_RFM(STATUS_REG), (status.all | \
 															TX_DATA_SENT_FLAG | \
 															RX_DATA_READY_FLAG | \

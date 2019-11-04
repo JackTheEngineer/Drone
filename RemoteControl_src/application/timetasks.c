@@ -38,7 +38,7 @@ void TimeTasks_run(uint32_t ticks, OS_t *os){
 		Joystick_serialize_data(averaged, sendbytes);
 		RFM75_Transmit_bytes(sendbytes,
 							 length,
-						     4000,
+						     1000,
 						     true);
 		LED_toggle();
 	}

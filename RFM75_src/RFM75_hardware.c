@@ -8,7 +8,7 @@
 #include "RFM75_hardware.h"
 #include "rfm_spi.h"
 
-volatile uint8_t rxtx_interrupt;
+volatile uint32_t rxtx_interrupt;
 
 void RFM75_hardware_init(void){
 	DIGITAL_IO_Init(&RFM75_CE_PIN);
