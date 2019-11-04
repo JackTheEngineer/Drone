@@ -10,6 +10,8 @@
    * Test speed increase in SPI ( relating to only code change, not frequency )
       - Optionally, for speedup implement the spi with transfer functions
 
+   * check what's wrong with the rxtx_interrupt
+
 ## Testing the Code:
    * Either Continue Euler Integral Simulation
      - Find out moments of the Motors

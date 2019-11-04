@@ -394,28 +394,29 @@ StatusReg_t RFM75_Transmit_bytes(const uint8_t *payload,
 									  bool requestAck)
 {
 	uint32_t i=0;
-	uint8_t statusbuf[2];
 	StatusReg_t status;
+	status.all = 0;
 	ObserveTxReg_t obs_tx;
 
-	status.all = RFM75_SPI_read_reg_value(FIFO_STATUS_REG);
 
+	status.all = RFM75_SPI_read_reg_value(STATUS_REG);
+	if(status.tx_fifo_full){
+		RFM75_flush_tx_FIFO();
+	}
+	RFM75_SPI_write_reg_val(WRITE_COMMAND_RFM(STATUS_REG), (status.all | \
+															TX_DATA_SENT_FLAG | \
+															RX_DATA_READY_FLAG | \
+															MAX_RETRANSMITS_FLAG));
 	RFM75_CE_PIN_high();
 	_delay_us(20);
-	RFM75_reset_interrupts();
+
+	rxtx_interrupt = 0;
 
 	uint8_t cmd = WRITE_TX_PAYLOAD;
 	// uint8_t cmd = RFM7x_CMD_W_ACK_PAYLOAD;
 	// uint8_t cmd = RFM7x_CMD_W_TX_PAYLOAD_NOACK;
-	// status.all = RFM75_SPI_read_reg_value(FIFO_STATUS_REG);
-
-	RFM75_SPI_read_buffer(STATUS_REG, statusbuf, 2);
-	status.all = statusbuf[0];
-	obs_tx.all = statusbuf[1];
-
 	RFM75_SPI_write_buffer_at_start_register(cmd, payload, length);
 
-	rxtx_interrupt = 0;
 	while((rxtx_interrupt == 0) && (i < maxTimeoutUs)){
 #define TIMEOUT_uS 20
 		_delay_us(TIMEOUT_uS);

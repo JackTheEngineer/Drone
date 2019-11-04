@@ -46,9 +46,11 @@ int main(void){
 				//received_length = RFM75_Receive_bytes(received_bytes);
 				rx_length = RFM75_Receive_bytes(received_bytes);
 				if(rx_length == 0){
-					DIGITAL_IO_ToggleOutput(&LED1);
+					DIGITAL_IO_SetOutputHigh(&LED1);
+					DIGITAL_IO_SetOutputLow(&LED2);
 				}else{
 					DIGITAL_IO_ToggleOutput(&LED2);
+					DIGITAL_IO_SetOutputLow(&LED1);
 					format_u8buf_to_four_ui12(received_bytes, joystick_bytes);
 					for(uint8_t j=0; j < (NUM_UART_BYTES-1);j++){
 						uart_bytes[j] = received_bytes[j];
