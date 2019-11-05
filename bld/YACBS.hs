@@ -2,6 +2,11 @@ import Development.Shake
 import Development.Shake.Command
 import Development.Shake.FilePath
 import Development.Shake.Util
+
+import Text.Parsec.Char hiding (newline)
+import Text.ParserCombinators.Parsec
+import Text.ParserCombinators.Parsec.Char (digit)
+
 import Data.List
 import Data.List.Split
 import Data.Maybe (fromMaybe)
@@ -11,7 +16,6 @@ import qualified Data.ByteString.Char8 as BS
 import qualified Data.Text as DT
 import System.Environment
 import System.Process
--- import Text.ParserCombinators.ReadP
 
 data Config = Config {
    sourceFiles :: [FilePattern]
@@ -43,6 +47,76 @@ instance FromJSON Config where
     v .: pck "linkerFile"
   parseJSON _ = fail "Expected Object for Config value"
 
+-----------------------   Test Runner Generation --------------------------
+lexeme :: Parser a -> Parser a
+lexeme p = do
+           x <- p
+           many space
+           return x
+cIdentifier = many1 ((satisfy (\char -> (char >= 'A' &&
+                                         char <= 'Z') ||
+                                        (char >= 'a' &&
+                                         char <= 'z') ||
+                                        (char >= '0' &&
+                                         char <= '9') ||
+                                        (char == '_'))))
+skipUntilEOL = do
+  skipMany (satisfy (\c -> ((c /= '\n') && (c /= '\r'))))
+  endOfLine
+       
+tP :: Parser (Maybe (String, String))
+tP = do
+  many space
+  lexeme $ (try (string "IGNORE_TEST") <|> string ("TEST"))
+  lexeme $ char '('
+  group <- lexeme $ cIdentifier
+  lexeme $ char ','
+  name <- lexeme $ cIdentifier
+  lexeme $ char ')'
+  skipUntilEOL
+  return $ Just (group, name)
+
+readGroupsAndNames :: Parser ([(String, String)])
+readGroupsAndNames = do
+  res <- many ((try tP) <|> (skipUntilEOL >> (return Nothing)))
+  return [m | Just m <- res]
+
+genGroupRunner :: [(String, String)] -> String
+genGroupRunner groupBlock =
+  let gn = fst (groupBlock!!0)
+      runs = (concatMap (\(g, f) ->  "    RUN_TEST_CASE("++g++","++f++");\n") groupBlock) in 
+    "TEST_GROUP_RUNNER("++gn++"){\n" ++ runs ++ "}\n\n";
+
+genRunAllGroups :: [String] -> String
+genRunAllGroups groups =
+  let runs = (concatMap (\g -> "    RUN_TEST_GROUP("++g++");\n") groups) in
+    "static void run_all_tests(void){\n" ++ runs ++ "}\n"
+
+genRunAllTests groupsAndNames =
+  let groups = nub $ map fst groupsAndNames
+      filterFuncs = map (\g e -> (filter (\e -> (fst e) == g) groupsAndNames)) groups 
+      groupBlocks = map ($ groupsAndNames) filterFuncs
+      groupRunners = concatMap genGroupRunner groupBlocks
+      allRunner = genRunAllGroups groups in
+    groupRunners ++ allRunner
+  
+generateRunner :: FilePath -> FilePath -> FilePath -> Action()
+generateRunner testSource runnerTemplate resultname = do
+  t <- readFile' testSource
+  rt <- readFile' runnerTemplate
+  let e_groupsAndNames =  parse readGroupsAndNames "(unknown)" t
+  groupsAndNames <- case e_groupsAndNames of
+                      Right res -> return res
+                      Left err -> error $ show err
+  let runAllTestsCode = genRunAllTests groupsAndNames
+      blocks = splitOn "//CONTENT" rt
+  runnerCode <- case length blocks of
+                  2 -> return ((blocks !! 0) ++ runAllTestsCode ++ (blocks !! 1))
+                  _ -> error "There was an error with splitting the runner Template on the keyword '//CONTENT'"
+  writeFile' resultname runnerCode
+
+---------------------------------------------------------------------------
+
 pck = DT.pack
 unpck = DT.unpack
 
@@ -60,15 +134,6 @@ dropPreDir preDir file = let l = length(splitPath preDir) in
 sieveSourceOfObjFile result_Dir o_file p  = ((dropExtension . (dropPreDir result_Dir)) o_file) == (dropExtension p)
 sieveTestSourceOfRunner r p = (runner_to_test r) == (takeBaseName p)
 sieveForYamlFile r p = (takeBaseName r) == (takeBaseName p)
-  
--- generateRunner :: FilePath -> FilePath -> FilePath -> IO()
--- generateRunner testSource runnerSource resultname = do
---   t <- readFile' testSource
---   groups_and_names <- groupAndNameParser t
---   let runCommands = createRunnerCommands groups_and_names
---   splitOn "//CONTENT"
---   writeFile' 
-  
 
 findSourceWithFilterOrError ::  FilePath -> (FilePath -> FilePath -> Bool) -> [FilePath] -> Action(FilePath)
 findSourceWithFilterOrError key sieve allSources = do
@@ -101,8 +166,6 @@ opt = shakeOptions{ shakeFiles=resultDir
                   , shakeCreationCheck = False}
 
 flags = []
-
-
 -- Only with 'shakeArgsWith', there is no automatic "withoutActions"
 -- "withoutActions" makes Rules do nothing, and build the File,
 -- which was specified at the commandlineb.
@@ -201,13 +264,11 @@ shakeIT = shakeArgsWith opt flags $ \options args -> return $ Just $ do
     neededMakefileDependencies m
 
   resultDir <//> "run_*.c" %> \out -> do
-    let genRunnerScript = "bld" </> "generate_test_runner.rb"
-        runnerTemplate =  "bld" </> "runner_template.c"
+    let runnerTemplate =  "bld" </> "runner_template.c"
     c <- configFromSource out :: Action( Config )
     allSources <- getDirectoryFiles "" (sourceFiles c)
     test_source <- (-#>) out sieveTestSourceOfRunner allSources
-    -- generateRunner test_source runner_template out
-    cmd_ "ruby" genRunnerScript "-o" [out] "-t" runnerTemplate "-r" test_source
+    generateRunner test_source runnerTemplate out
 
   "test_*" %> \out -> do
     let executable = resultDir </> (takeBaseName out) </> out -<.> exe

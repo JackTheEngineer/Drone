@@ -25,7 +25,7 @@ thanks to the awesome dependency tracking system of shake.
 
 * First install haskell stack, then:
 
-		stack install shake yaml
+		stack install shake yaml parsec
 
 ## Example Usage( from the 'Drone' directory)
 

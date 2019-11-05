@@ -1,8 +1,8 @@
 # Todos
 ## Build system
 
-   * write haskell runner generator
-   * "all" target runs "uC" and "tests", needs an argument for "YACBS.hs all bld/uC.ucbuild"
+   * "all" target runs hardcoded specified targets and "tests", needs  for
+     like "stack runghc bld/YACBS.hs all"
 
 ## Hardware
 

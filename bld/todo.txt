@@ -1,3 +1,0 @@
-* write haskell runner generator
-* "all" target runs "uC" and "tests", needs an argument for "YACBS.hs all bld/uC.ucbuild"
-
