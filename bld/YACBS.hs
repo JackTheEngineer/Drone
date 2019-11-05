@@ -17,37 +17,9 @@ import qualified Data.Text as DT
 import System.Environment
 import System.Process
 
-data Config = Config {
-   sourceFiles :: [FilePattern]
-  , headerFiles :: [FilePattern]
-  , ccBase :: FilePath
-  , cc :: FilePath
-  , ccObjCopy :: FilePath
-  , ccSize :: FilePath
-  , ccAsmOptions :: [String]
-  , ccCompileOptions :: [String]
-  , ccLinkOptions :: [String]
-  , ccLinkLibs :: [String]
-  , linkerFile :: String
-} deriving Show
-
-instance FromJSON Config where
-  parseJSON (Y.Object v) =
-    Config <$>
-    v .: pck "sourceFiles" <*>
-    v .: pck "headerFiles" <*>
-    v .: pck "ccBase" <*>
-    v .: pck "cc" <*>
-    v .: pck "ccObjCopy" <*>
-    v .: pck "ccSize" <*>
-    v .: pck "ccAsmOptions" <*>
-    v .: pck "ccCompileOptions" <*>
-    v .: pck "ccLinkOptions" <*>
-    v .: pck "ccLinkLibs" <*>
-    v .: pck "linkerFile"
-  parseJSON _ = fail "Expected Object for Config value"
-
------------------------   Test Runner Generation --------------------------
+--   +-+-+-+-+-+-+-+-+ +-+-+-+-+ +-+-+-+-+-+-+ 
+--   |G|e|n|e|r|a|t|e| |T|E|S|T| |R|u|n|n|e|r| 
+--   +-+-+-+-+-+-+-+-+ +-+-+-+-+ +-+-+-+-+-+-+
 lexeme :: Parser a -> Parser a
 lexeme p = do
            x <- p
@@ -115,7 +87,39 @@ generateRunner testSource runnerTemplate resultname = do
                   _ -> error "There was an error with splitting the runner Template on the keyword '//CONTENT'"
   writeFile' resultname runnerCode
 
----------------------------------------------------------------------------
+--   +-+-+-+ +-+-+-+-+-+-+-+-+ +-+-+-+-+ +-+-+-+-+-+-+
+--   |E|N|D| |G|e|n|e|r|a|t|e| |T|e|s|t| |R|u|n|n|e|r|
+--   +-+-+-+ +-+-+-+-+-+-+-+-+ +-+-+-+-+ +-+-+-+-+-+-+
+
+data Config = Config {
+   sourceFiles :: [FilePattern]
+  , headerFiles :: [FilePattern]
+  , ccBase :: FilePath
+  , cc :: FilePath
+  , ccObjCopy :: FilePath
+  , ccSize :: FilePath
+  , ccAsmOptions :: [String]
+  , ccCompileOptions :: [String]
+  , ccLinkOptions :: [String]
+  , ccLinkLibs :: [String]
+  , linkerFile :: String
+} deriving Show
+
+instance FromJSON Config where
+  parseJSON (Y.Object v) =
+    Config <$>
+    v .: pck "sourceFiles" <*>
+    v .: pck "headerFiles" <*>
+    v .: pck "ccBase" <*>
+    v .: pck "cc" <*>
+    v .: pck "ccObjCopy" <*>
+    v .: pck "ccSize" <*>
+    v .: pck "ccAsmOptions" <*>
+    v .: pck "ccCompileOptions" <*>
+    v .: pck "ccLinkOptions" <*>
+    v .: pck "ccLinkLibs" <*>
+    v .: pck "linkerFile"
+  parseJSON _ = fail "Expected Object for Config value"
 
 pck = DT.pack
 unpck = DT.unpack
