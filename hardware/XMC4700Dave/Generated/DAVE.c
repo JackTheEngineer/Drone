@@ -104,13 +104,28 @@ __WEAK DAVE_STATUS_t DAVE_Init(void)
    } 
   if (init_status == DAVE_STATUS_SUCCESS)
   {
-	 /**  Initialization of SYSTIMER APP instance SYSTIMER_0 */
-	 init_status = (DAVE_STATUS_t)SYSTIMER_Init(&SYSTIMER_0); 
+	 /**  Initialization of UART APP instance DEBUG_UART */
+	 init_status = (DAVE_STATUS_t)UART_Init(&DEBUG_UART); 
    } 
   if (init_status == DAVE_STATUS_SUCCESS)
   {
-	 /**  Initialization of UART APP instance DEBUG_UART */
-	 init_status = (DAVE_STATUS_t)UART_Init(&DEBUG_UART); 
+	 /**  Initialization of PWM_CCU4 APP instance PWM_CCU4_0 */
+	 init_status = (DAVE_STATUS_t)PWM_CCU4_Init(&PWM_CCU4_0); 
+   } 
+  if (init_status == DAVE_STATUS_SUCCESS)
+  {
+	 /**  Initialization of PWM_CCU4 APP instance PWM_CCU4_1 */
+	 init_status = (DAVE_STATUS_t)PWM_CCU4_Init(&PWM_CCU4_1); 
+   } 
+  if (init_status == DAVE_STATUS_SUCCESS)
+  {
+	 /**  Initialization of PWM_CCU4 APP instance PWM_CCU4_2 */
+	 init_status = (DAVE_STATUS_t)PWM_CCU4_Init(&PWM_CCU4_2); 
+   } 
+  if (init_status == DAVE_STATUS_SUCCESS)
+  {
+	 /**  Initialization of PWM_CCU4 APP instance PWM_CCU4_3 */
+	 init_status = (DAVE_STATUS_t)PWM_CCU4_Init(&PWM_CCU4_3); 
    }  
   return init_status;
 } /**  End of function DAVE_Init */
