@@ -7,6 +7,11 @@
 #include "delay.h"
 #include "RFM75_codes.h"
 
+typedef struct __attribute__((packed)) addressAndChannel{
+	uint8_t address[5];
+	uint8_t channel;
+}AddressAndChannel_t;
+
 bool RFM75_initRegisters();
 void RFM75_turn_on();
 void RFM75_turn_off();
@@ -34,11 +39,12 @@ void RFM75_enableRxPipe(uint8_t pipe_nr);
 void RFM75_SPI_write_buffer_at_start_register(uint8_t cmd, const uint8_t * buf, uint8_t len);
 void RFM75_disableRxPipe(uint8_t pipe_nr);
 
-void RFM75_configTxPipe(uint8_t * adr, bool en_dynamic_payload);
-void RFM75_flush_tx_FIFO();
-void RFM75_flush_rx_FIFO();
+void RFM75_configTxPipe(const uint8_t * adr, bool en_dynamic_payload);
+
 uint8_t RFM75_Receive_bytes(uint8_t *payload);
 CombinedReg_t RFM75_Receive_bytes_feedback(uint8_t *payload);
+void RFM75_startListening(const AddressAndChannel_t * address_and_channel);
+void RFM75_prepareForTransmission(const AddressAndChannel_t * address_and_channel);
 
 #endif
 

@@ -4,31 +4,28 @@
 #include "RFM75_driver.h"
 #include "byte_formatting.h"
 
+extern const AddressAndChannel_t default_RFM75_Addr;
 
-extern volatile uint32_t g_systick_count;
+uint32_t volatile tick_count;
 
+extern void SysTick_Handler(void){
+	tick_count++;
+}
 
 int main(void){
-	uint8_t address[5] = {0x35, 0xAF, 0x42, 0x23, 0x99};
 	(void)DAVE_Init();
+	SysTick_Config(SystemCoreClock/1000);
 
-	SYSTIMER_Start();
-	bool initialize=0;
-
+	bool initialize = false;
 	while(initialize == 0){
 		delay_ms(25);
 		initialize = RFM75_Init();
 		DIGITAL_IO_ToggleOutput(&LED1);
 	}
+	RFM75_startListening(&default_RFM75_Addr);
+
 	DIGITAL_IO_SetOutputLow(&LED1);
 	DIGITAL_IO_SetOutputLow(&LED2);
-	RFM75_set_RX_mode();
-	RFM75_configRxPipe(0 		/* Pipe number */ ,
-		     	 	   address,
-					   0, 		/* Static = 1, Dynamic = 0 */
-					   true); 	/*	Enable Auto Acknowledge */
-	RFM75_setChannel(50);
-	RFM75_CE_PIN_high();
 
 	uint8_t received_bytes[32] = {0};
 	uint8_t rx_length=0;
@@ -40,8 +37,8 @@ int main(void){
 	uint16_t joystick_bytes[4];
 
 	while(1U){
-		if(remembered_systick_count != g_systick_count){
-			remembered_systick_count = g_systick_count;
+		if(remembered_systick_count != tick_count){
+			remembered_systick_count = tick_count;
 			if((remembered_systick_count % 20) == 0){
 				//received_length = RFM75_Receive_bytes(received_bytes);
 				rx_length = RFM75_Receive_bytes(received_bytes);

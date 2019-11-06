@@ -36,11 +36,13 @@ void TimeTasks_run(uint32_t ticks, OS_t *os){
 		uint16_t averaged[4] = {0};
 		calculate_average(adc_values, averaged);
 		Joystick_serialize_data(averaged, sendbytes);
-		RFM75_Transmit_bytes(sendbytes,
-							 length,
-						     1000,
-						     true);
-		LED_toggle();
+		StatusReg_t s = RFM75_Transmit_bytes(sendbytes,
+											length,
+											1000,
+											true);
+		if(s.tx_data_sent){
+			LED_toggle();
+		}
 	}
 }
 

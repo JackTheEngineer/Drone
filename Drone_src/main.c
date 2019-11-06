@@ -10,7 +10,7 @@
 #include "uart.h"
 #include "byte_formatting.h"
 
-void blinkdelay(uint32_t time, uint32_t times);
+extern const AddressAndChannel_t default_RFM75_Addr;
 
 uint32_t volatile tick_count;
 extern void SysTick_Handler(void){
@@ -63,22 +63,14 @@ int main(void)
 	buttons_init();
 	delay_ms(200);
 	/* This delay is needed for Vcc stabilization of the RFM75 transmitter */
-	bool initialize = RFM75_Init();
-	while(initialize == 0){
+
+	bool initialize = false;
+	while(initialize == false){
 		delay_ms(25);
-		led_toggle(LED0);
+		initialize = RFM75_Init();
+		DIGITAL_IO_ToggleOutput(&LED1);
 	}
-
-	RFM75_set_RX_mode();
-	RFM75_configRxPipe(/* Pipe number */ 0,
-		     address,
-		     /* Static = 1, Dynamic = 0 */ 0,
-		     /*	Enable Auto Acknowledge */ true);
-	RFM75_setChannel(50);
-
-	UART_Init(&DebugUart);
-
-	CE_HIGH;
+	RFM75_startListening(&default_RFM75_Addr);
 
 	while(1U){
 		if(UpdateTime(&last_ticks)){
@@ -86,11 +78,4 @@ int main(void)
 		}
 	}
 	return 1;
-}
-
-void blinkdelay(uint32_t time, uint32_t times){
-	for(uint32_t i=0; i< times; i++){
-		delay_ms(time);
-		led_toggle(LED1);
-	}
 }

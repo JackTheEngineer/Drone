@@ -85,7 +85,6 @@ void State_Run(uint32_t ticks, OS_t *os){
 		if(received_length == 0){
 			rc_no_data_receive_count++;
 		}
-		delay_ms(2);
 		Vect_i32_set_all_values_to(helper_speed, 0);
 		Motion_sensor_get_data(os->motion_sensor);
 		Vect_i32_times_const(&start_offset.angle_speed, -1, helper_speed);
@@ -106,8 +105,6 @@ void State_Run(uint32_t ticks, OS_t *os){
 			Vect_i32_copy_from_to(&angular_speeds[2], &angular_speeds[0]);
 			integrator_count = 0;
 		}
-
-
 		if(received_length == 16){
 			RC_Control_decode_message(received_bytes, rc_data);
 			Motors_set_all_data_speed(motors, rc_data->throttle/4);
@@ -122,10 +119,7 @@ void State_Run(uint32_t ticks, OS_t *os){
 		serialize_vector_as_i32(&os->motion_sensor->acceleration, &send_bytes[0]);
 		serialize_vector_as_i32(&os->motion_sensor->angle_speed, &send_bytes[12]);
 		serialize_vector_as_i32(&os->motion_sensor->magnetic_field, &send_bytes[24]);
-		UART_Transmit(&DebugUart, send_bytes, 37);
-	}
-	if((ticks % 500) == 0){
-		led_toggle(LED1);
+		UART_Transmit(&DEBUG_UART, send_bytes, 37);
 	}
 }
 

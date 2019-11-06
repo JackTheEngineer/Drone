@@ -4,6 +4,14 @@
 #include "delay_us.h"
 #include "RFM75_codes.h"
 
+const AddressAndChannel_t default_RFM75_Addr = {
+			{0x35, 0xAF, 0x42, 0x23, 0x99}, /* ADDRESS */
+			50 /* RF Channel */
+};
+
+_STATIC_ _INLINE_ void RFM75_flush_tx_FIFO();
+_STATIC_ _INLINE_ void RFM75_flush_rx_FIFO();
+
 /*
  * The order of modifying the registers should be the same
  * as in the datasheet.
@@ -13,17 +21,17 @@
  */
 extern volatile uint32_t rxtx_interrupt;
 
-const uint8_t RFM75_cmd_adrRX0[] = { WRITE_COMMAND_RFM(0x0A), 0xAA, 0xAA, 0xAA, 0xAA, 0xAA};
-const uint8_t RFM75_cmd_adrTX[]  = { WRITE_COMMAND_RFM(0x10), 0xAA, 0xAA, 0xAA, 0xAA, 0xAA};
-const uint8_t RFM75_cmd_adrRX1[] = { WRITE_COMMAND_RFM(0x0B), 0x35, 0x43, 0x10, 0x10, 0x02};
-const uint8_t RFM75_cmd_switch_bank[] = { 0x50, 0x53 };
-const uint8_t RFM75_cmd_flush_rx_fifos[] = { 0xe2, 0x00 };
-const uint8_t RFM75_cmd_flush_tx_fifos[] = { 0xe1, 0x00 };
-const uint8_t RFM75_cmd_activate[] = { ACTIVATE, ACTIVATE_BYTE }; // Activates
-const uint8_t RFM75_cmd_tog1[] = { WRITE_COMMAND_RFM(0x04), 0xF9 | 0x06, 0x96, 0x82, 0xDB };
-const uint8_t RFM75_cmd_tog2[] = { WRITE_COMMAND_RFM(0x04), 0xF9, 0x96, 0x82, 0xDB};
+_STATIC_ const uint8_t RFM75_cmd_adrTX[]  = { WRITE_COMMAND_RFM(0x10), 0xAA, 0xAA, 0xAA, 0xAA, 0xAA};
+_STATIC_ const uint8_t RFM75_cmd_adrRX0[] = { WRITE_COMMAND_RFM(0x0A), 0xAA, 0xAA, 0xAA, 0xAA, 0xAA};
+_STATIC_ const uint8_t RFM75_cmd_adrRX1[] = { WRITE_COMMAND_RFM(0x0B), 0x35, 0x43, 0x10, 0x10, 0x02};
+_STATIC_ const uint8_t RFM75_cmd_switch_bank[] = { 0x50, 0x53 };
+_STATIC_ const uint8_t RFM75_cmd_flush_rx_fifos[] = { 0xe2, 0x00 };
+_STATIC_ const uint8_t RFM75_cmd_flush_tx_fifos[] = { 0xe1, 0x00 };
+_STATIC_ const uint8_t RFM75_cmd_activate[] = { ACTIVATE, ACTIVATE_BYTE }; // Activates
+_STATIC_ const uint8_t RFM75_cmd_tog1[] = { WRITE_COMMAND_RFM(0x04), 0xF9 | 0x06, 0x96, 0x82, 0xDB };
+_STATIC_ const uint8_t RFM75_cmd_tog2[] = { WRITE_COMMAND_RFM(0x04), 0xF9, 0x96, 0x82, 0xDB};
 
-const uint8_t  RFM75_Bank0[][2] = {
+_STATIC_ const uint8_t  RFM75_Bank0[][2] = {
 		// address data
 		{ WRITE_COMMAND_RFM(CONFIG_REG), 0x0F }, //CRC=1byte, POWER UP, RX
 		{ WRITE_COMMAND_RFM(ENABLE_AUTO_ACK_REG), ALL_6_PIPES },
@@ -57,7 +65,7 @@ const uint8_t  RFM75_Bank0[][2] = {
 };
 
 //************ Bank1 register initialization commands
-const uint8_t RFM75_Bank1[][5] = {
+_STATIC_ const uint8_t RFM75_Bank1[][5] = {
 		{ WRITE_COMMAND_RFM(0x00), 0x40, 0x4B, 0x01, 0xE2 },
 		{ WRITE_COMMAND_RFM(0x01), 0xC0, 0x4B, 0x00, 0x00 },
 		{ WRITE_COMMAND_RFM(0x02), 0xD0, 0xFC, 0x8C, 0x02 },
@@ -74,7 +82,7 @@ const uint8_t RFM75_Bank1[][5] = {
 		{ WRITE_COMMAND_RFM(0x0D), 0x36, 0xb4, 0x80, 0x00 }
 };
 
-const uint8_t RFM7x_bank1_ramp_curve[] = {
+_STATIC_ const uint8_t RFM7x_bank1_ramp_curve[] = {
 		WRITE_COMMAND_RFM(0x0E), 0x41, 0x20, 0x08, 0x04, 0x81, 0x20, 0xCF, 0xF7, 0xFE, 0xFF, 0xFF
 };
 
@@ -156,8 +164,8 @@ void RFM75_selectBank(uint8_t bank)
 void RFM75_set_RX_mode(void)
 {
 	uint8_t val;
-	RFM75_flush_rx_FIFO();
 	RFM75_CE_PIN_low();
+	RFM75_flush_rx_FIFO();
 
 	val = RFM75_SPI_read_reg_value(STATUS_REG);
 	val |= (TX_DATA_SENT_FLAG | RX_DATA_READY_FLAG | MAX_RETRANSMITS_FLAG);
@@ -288,14 +296,14 @@ void RFM75_disableRxPipe(uint8_t pipe_nr)
 	RFM75_SPI_write_reg_val(WRITE_COMMAND_RFM(ENABLE_RX_ADDR_REG), tmp);
 }
 
-void RFM75_configTxPipe(uint8_t * adr, bool en_dynamic_payload)
+void RFM75_configTxPipe(const uint8_t * adr, bool enable_dynamic_payload)
 {
 	RFM75_SPI_write_buffer_at_start_register(WRITE_COMMAND_RFM(TX_ADDR_REG), adr, 5);
 	RFM75_SPI_write_buffer_at_start_register(WRITE_COMMAND_RFM(RX_PIPE_0_ADDR_REG), adr, 5);
 	// set static or dynamic payload on the receive pipe
 	uint8_t dyn_pl_reg;
 	dyn_pl_reg = RFM75_SPI_read_reg_value(DYNAMIC_PAYLOAD_LENGTH_REG);
-	if(en_dynamic_payload){
+	if(enable_dynamic_payload){
 		dyn_pl_reg |= (1 << PIPE_0);
 	}else{
 		dyn_pl_reg &= ~(1 << PIPE_0);
@@ -319,7 +327,7 @@ uint8_t RFM75_Receive_bytes(uint8_t *payload)
 		RFM75_SPI_read_buffer(READ_RX_PAYLOAD, payload, len);
 		fifo_status.all = RFM75_SPI_read_reg_value(FIFO_STATUS_REG);
 
-		if (fifo_status.rx_empty) {
+		if (fifo_status.rx_empty){
 			status.rx_data_ready = 1; // clear status bit by setting it to 1
 			RFM75_SPI_write_reg_val(WRITE_COMMAND_RFM(STATUS_REG), status.all);
 		}
@@ -358,12 +366,12 @@ CombinedReg_t RFM75_Receive_bytes_feedback(uint8_t *payload){
 	}
 }
 
-void RFM75_flush_tx_FIFO() 
+_STATIC_ _INLINE_ void RFM75_flush_tx_FIFO()
 {
 	RFM75_SPI_write_buffer((uint8_t *)RFM75_cmd_flush_tx_fifos, sizeof(RFM75_cmd_flush_tx_fifos));
 }
 
-void RFM75_flush_rx_FIFO() 
+_STATIC_ _INLINE_ void RFM75_flush_rx_FIFO()
 {
 	RFM75_SPI_write_buffer((uint8_t *)RFM75_cmd_flush_rx_fifos, sizeof(RFM75_cmd_flush_rx_fifos));
 }
@@ -396,8 +404,6 @@ StatusReg_t RFM75_Transmit_bytes(const uint8_t *payload,
 	uint32_t i=0;
 	StatusReg_t status;
 	status.all = 0;
-	ObserveTxReg_t obs_tx;
-
 
 	status.all = RFM75_SPI_read_reg_value(STATUS_REG);
 	if(status.tx_fifo_full){
@@ -408,7 +414,7 @@ StatusReg_t RFM75_Transmit_bytes(const uint8_t *payload,
 															RX_DATA_READY_FLAG | \
 															MAX_RETRANSMITS_FLAG));
 	RFM75_CE_PIN_high();
-	_delay_us(20);
+	_delay_us(15);
 
 	rxtx_interrupt = 0;
 
@@ -422,7 +428,6 @@ StatusReg_t RFM75_Transmit_bytes(const uint8_t *payload,
 		_delay_us(TIMEOUT_uS);
 		// status.all = RFM75_SPI_read_reg_value(STATUS_REG);
 		status.all = RFM75_SPI_read_reg_value(STATUS_REG);
-		obs_tx.all = RFM75_SPI_read_reg_value(OBSERVE_TX_REG);
 		if((status.tx_data_sent) || (status.max_retransmits)){
 			break;
 		}
@@ -434,26 +439,38 @@ StatusReg_t RFM75_Transmit_bytes(const uint8_t *payload,
 	 * When writing a bit that is set to 1,
 	 * it clears the bits, and also the MAX_RT BIT
 	 */
-	RFM75_SPI_write_reg_val(WRITE_COMMAND_RFM(STATUS_REG), (status.all | \
-															TX_DATA_SENT_FLAG | \
-															RX_DATA_READY_FLAG | \
-															MAX_RETRANSMITS_FLAG));
+	RFM75_SPI_write_reg_val(WRITE_COMMAND_RFM(STATUS_REG),
+			(status.all | \
+					TX_DATA_SENT_FLAG | \
+					RX_DATA_READY_FLAG | \
+					MAX_RETRANSMITS_FLAG));
 	RFM75_CE_PIN_low();
 	return status;
 }
 
-void RFM75_prepareForListening(const uint8_t * address){
-	RFM75_set_RX_mode_if_needed();
-	RFM75_configRxPipe(0 /* pipeNr, starting from 0 */,
-			address,
-			0 /* pipe Length */,
-			true /* enable Auto Ack */);
+void RFM75_prepareForListening(const AddressAndChannel_t * address_and_channel){
+	if(address_and_channel == NULL){
+		return;
+	}
+	RFM75_set_RX_mode();
+	RFM75_configRxPipe(0 		/* Pipe number */ ,
+					   address_and_channel->address,
+					   0, 		/* Static = 1, Dynamic = 0 */
+					   true); 	/*	Enable Auto Acknowledge */
+	RFM75_setChannel(address_and_channel->channel);
 }
 
-void RFM75_startListening(const uint8_t channel, const uint8_t * address){
-	RFM75_prepareForListening(address);
-	RFM75_setChannel(channel);
+void RFM75_prepareForTransmission(const AddressAndChannel_t * address_and_channel){
+	RFM75_configTxPipe(address_and_channel->address, true);
+	RFM75_set_TX_mode();
+	RFM75_setChannel(address_and_channel->channel);
+	RFM75_turn_on();
+}
+
+void RFM75_startListening(const AddressAndChannel_t * address_and_channel){
+	if(address_and_channel == NULL){
+		return;
+	}
+	RFM75_prepareForListening(address_and_channel);
 	RFM75_CE_PIN_high();
 }
-
-

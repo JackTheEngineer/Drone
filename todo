@@ -12,15 +12,19 @@
 
    * check what's wrong with the rxtx_interrupt
 
-   * rename pin interrupt handler to USR IRQ Handler
+   * DAVE rename pin interrupt handler to USR IRQ Handler
+
+
 
 ## Testing the Code:
+   * Compile with -02
+
    * Either Continue Euler Integral Simulation
      - Find out moments of the Motors
      - Find propeller masses
      - Find and set constants for fake_motors.h
      
-   * Find a 3D simulator and adapt it to my code
+   * Find a 3D simulator and adapt it to my code / or my code to it
    
 ## Motion Sensor
    * Implement quaternion rotation

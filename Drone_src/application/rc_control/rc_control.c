@@ -11,10 +11,12 @@
 
 /* received_bytes should be at least of length 8 */
 void RC_Control_decode_message(uint8_t *received_bytes, RC_Data_t* rc_data){
-	rc_data->throttle = format_u8buf_to_u16(&received_bytes[0]);
-	rc_data->rotation = (int16_t)format_u8buf_to_u16(&received_bytes[2]);
-	rc_data->x_tilt = (int16_t)format_u8buf_to_u16(&received_bytes[4]);
-	rc_data->y_tilt = (int16_t)format_u8buf_to_u16(&received_bytes[6]);
+	uint16_t joystick_values[4];
+	format_u8buf_to_four_ui12(received_bytes, joystick_values);
+	rc_data->throttle = joystick_values[0];
+	rc_data->rotation = joystick_values[1];
+	rc_data->x_tilt = joystick_values[2];
+	rc_data->y_tilt = joystick_values[3];
 }
 
 
