@@ -45,23 +45,23 @@ void Generate_Rotation_Matrix(Matrix_t *rotation_matrix, Vector_t *angles){
 	POINTER_TO_CONTAINER(Matrix_t, R_z);
 	Mat_set_all_values_to(R_z, 0.0);
 	
-	Mat_write(R_x, 1,1, 1.0);
-	Mat_write(R_x, 2,2, cos(Vect_read(angles, 1)));
-	Mat_write(R_x, 2,3, -sin(Vect_read(angles,1)));
-	Mat_write(R_x, 3,3, cos(Vect_read(angles,1)));
-	Mat_write(R_x, 3,2, sin(Vect_read(angles,1)));
+	Mat_write(R_x, 0,0, 1.0);
+	Mat_write(R_x, 1,1, cos(Vect_read(angles, 0)));
+	Mat_write(R_x, 1,2, -sin(Vect_read(angles,0)));
+	Mat_write(R_x, 2,2, cos(Vect_read(angles,0)));
+	Mat_write(R_x, 2,1, sin(Vect_read(angles,0)));
 	
-	Mat_write(R_y, 2,2, 1.0);
-	Mat_write(R_y, 1,1, cos(Vect_read(angles, 2)));
-	Mat_write(R_y, 1,3, -sin(Vect_read(angles,2)));
-	Mat_write(R_y, 3,3, cos(Vect_read(angles,2)));
-	Mat_write(R_y, 3,1, sin(Vect_read(angles,2)));
+	Mat_write(R_y, 1,1, 1.0);
+	Mat_write(R_y, 0,0, cos(Vect_read(angles, 1)));
+	Mat_write(R_y, 0,2, -sin(Vect_read(angles,1)));
+	Mat_write(R_y, 2,2, cos(Vect_read(angles,1)));
+	Mat_write(R_y, 2,0, sin(Vect_read(angles,1)));
 	
-	Mat_write(R_z, 3,3, 1.0);
-	Mat_write(R_z, 1,1, cos(Vect_read(angles,3)));
-	Mat_write(R_z, 1,2, -sin(Vect_read(angles,3)));
-	Mat_write(R_z, 2,2, cos(Vect_read(angles,3)));
-	Mat_write(R_z, 2,1, sin(Vect_read(angles,3)));
+	Mat_write(R_z, 2,2, 1.0);
+	Mat_write(R_z, 0,0, cos(Vect_read(angles,2)));
+	Mat_write(R_z, 0,1, -sin(Vect_read(angles,2)));
+	Mat_write(R_z, 1,1, cos(Vect_read(angles,2)));
+	Mat_write(R_z, 1,0, sin(Vect_read(angles,2)));
 	
 	/* Last parameter is the matrix to which the result is saved */
 	Mat_times_mat(R_z,R_y,R_y); 
@@ -99,7 +99,7 @@ void Drone_calculate_next_values(Physical_Drone_t *drone, double timestep){
 	Vect_set_all_values_to(g_acceleration, 0.0);
 	Vect_set_all_values_to(sum_of_forces, 0.0);
 	Vect_set_all_values_to(sum_of_moments, 0.0);
-	Vect_write(g_acceleration, 3, G_ACCELERATION);
+	Vect_write(g_acceleration, 2, G_ACCELERATION);
 	
 	/* Forces are being calculated in the Drone reference frame */
 	Calculate_Sum_of_forces(sum_of_forces, drone);

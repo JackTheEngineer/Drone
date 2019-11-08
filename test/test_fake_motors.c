@@ -2,7 +2,7 @@
  * test_fake_motors.h
  *
  *  Created on: Jul 30, 2016
- *      Author: chocolate
+ *      Author: Jakov Kholodkov
  */
 
 
@@ -111,8 +111,8 @@ _STATIC_ void calculate_quadratic_multipliers(_FLOAT_ *multipliers, Motor_t moto
     _FLOAT_ speed;
 
     for(i=0; i<NMBR_OF_MOTORS; i++){
-        speed = Vect_read(&(motors[i].speed), 3);
-        multipliers[i] = Vect_read(&(motors[i].thrust), 3)/SQR(speed);
+        speed = Vect_read(&(motors[i].speed), 2);
+        multipliers[i] = Vect_read(&(motors[i].thrust), 2)/SQR(speed);
     }
 }
 
@@ -120,7 +120,7 @@ _STATIC_ void Test_multipliers_equal_and_nonzero(_FLOAT_ *multipliers1, _FLOAT_ 
 	uint32_t i;
 
 	for(i=0; i<NMBR_OF_MOTORS; i++){
-		TEST_ASSERT_DOUBLE_WITHIN(0.000001, multipliers1[i], multipliers2[i]);
+		TEST_ASSERT_DOUBLE_WITHIN(0.00001, multipliers1[i], multipliers2[i]);
 		TEST_ASSERT_TRUE(multipliers1[i] != 0.0);
 	}
 }

@@ -30,7 +30,6 @@ uint32_t rc_no_data_receive_count = 0;
 
 typedef Vector_i32_t* (*Selector_func)(void *target, uint32_t index);
 
-
 void State_Run(uint32_t ticks, OS_t *os);
 void State_Calibrate(uint32_t ticks, OS_t *os);
 
@@ -38,8 +37,6 @@ void average_i32_vector_with_selector(void *data, Selector_func selector, uint32
 Vector_i32_t* select_acceleration(void *sensordata, uint32_t index);
 Vector_i32_t* select_angle_speed(void *sensordata, uint32_t index);
 Vector_i32_t* select_magnetic_field(void *sensordata, uint32_t index);
-
-
 
 void Statemachine_do(uint32_t ticks, OS_t *os){
 	switch(*(os->current_state)){
@@ -105,10 +102,10 @@ void State_Run(uint32_t ticks, OS_t *os){
 			Vect_i32_copy_from_to(&angular_speeds[2], &angular_speeds[0]);
 			integrator_count = 0;
 		}
-		if(received_length == 16){
+		if(received_length == 32){
+			led_toggle(_LED2);
 			RC_Control_decode_message(received_bytes, rc_data);
 			Motors_set_all_data_speed(motors, rc_data->throttle/4);
-			led_toggle(LED1);
 			rc_no_data_receive_count = 0;
 		}
 		if(rc_no_data_receive_count > 20){

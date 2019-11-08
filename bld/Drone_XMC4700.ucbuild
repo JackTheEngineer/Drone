@@ -46,7 +46,7 @@ ccCompileOptions:
   - -ffunction-sections 
   - -fdata-sections 
   - -Wall 
-  - -Werror
+#  - -Werror
   - -std=gnu99 
   - -mfloat-abi=softfp 
   - -fmessage-length=0 

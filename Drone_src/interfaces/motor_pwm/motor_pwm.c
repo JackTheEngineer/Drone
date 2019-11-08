@@ -11,8 +11,6 @@
 
 #define CPU_FREQU 144000000UL
 
-
-
 PWM_CCU4_t *pwms[NUM_OF_MOTORS] = {
 		&PWM_CCU4_0,
 		&PWM_CCU4_1,
@@ -37,6 +35,13 @@ void PWM_Motor_Set_Rate(uint16_t Speed, uint8_t motor_index){
 	if(Speed > 1000){
 		Speed = 1000;
 	}
-	duty_cycle = 498 + Speed/2;
+
+	duty_cycle = 470 + Speed/2;
+	/*
+	 PWM accepts duty cycle from 0 to 10000.
+	 Assuming the pwm period is configured for 20ms
+	 duty cycle value of 1000 means 2 ms ON Time,
+	 duty cycle value of 500 means 1 ms ON Time,
+	 */
 	PWM_CCU4_SetDutyCycle(pwms[motor_index], duty_cycle);
 }

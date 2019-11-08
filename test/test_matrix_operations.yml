@@ -5,14 +5,14 @@
 resultsDir: "_testbuild"
 sourceFiles:
   - test//test_matrix_operations.c
-  - src//matrix_operations.c
-  - src//vector_operations.c
+  - Drone_src//matrix_operations.c
+  - Drone_src//vector_operations.c
   - test//matrix_tester.c
   - vendor/Unity/src/unity.c
   - vendor/Unity/extras/fixture/src/unity_fixture.c
 headerFiles:
   - test//*.h
-  - src//*.h
+  - Drone_src//*.h
 
 # For compilation, ccBase and the others are joined with
 # ccBase </> cc, resulting in

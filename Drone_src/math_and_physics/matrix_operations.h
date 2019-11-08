@@ -10,8 +10,14 @@
 
 #include "physical_definitions.h"
 
-void Mat_write(Matrix_t *M, uint8_t i, uint8_t j, _FLOAT_ value);
-_FLOAT_ Mat_read(Matrix_t *M, uint8_t i, uint8_t j);
+static inline void Mat_write(Matrix_t *M, uint8_t i, uint8_t j, _FLOAT_ value){
+		M->M[i][j] = value;
+}
+
+static inline _FLOAT_ Mat_read(Matrix_t *M, uint8_t i, uint8_t j){
+		return M->M[i][j];
+}
+
 void Mat_set_all_values_to(Matrix_t *M, _FLOAT_ value);
 void Mat_set_diag_to(Matrix_t *M, _FLOAT_ value);
 void Mat_times_const(Matrix_t *M, _FLOAT_ constant);

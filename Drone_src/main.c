@@ -31,7 +31,6 @@ int main(void)
 	uint32_t last_ticks = 0;
 	POINTER_TO_CONTAINER(OS_t, os);
 	POINTER_TO_CONTAINER(Sensordata_t, motion_sensor);
-	uint8_t address[5] = {1,0xA,0xF,0xA,0x5};
 	State_t state = STATE_CALIBRATE;
 	Button_t btn1 = {
 			.btn = BUTTON1,

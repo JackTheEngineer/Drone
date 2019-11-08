@@ -1,6 +1,6 @@
 
-#ifndef _MATH__HELPERS__
-#define _MATH__HELPERS__
+#ifndef _VECTOR_OPERATIONS__
+#define _VECTOR_OPERATIONS__
 
 #include "base.h"
 
@@ -13,13 +13,21 @@ typedef struct Vector_i32{
 }Vector_i32_t;
 
 
-bool kron_delta(uint8_t ind_1, uint8_t ind_2);
+static inline bool kron_delta(uint8_t ind_1, uint8_t ind_2){
+    return ind_1 == ind_2;
+}
 
-_FLOAT_ Vect_read(const Vector_t *vect, uint8_t index);
+static inline _FLOAT_ Vect_read(const Vector_t *vect, uint8_t index){
+	return vect->v[index];
+}
+
+static inline void Vect_write(Vector_t *vect, uint8_t index, _FLOAT_ value){
+	vect->v[index] = value;
+}
+
 _FLOAT_ Vect_length(const Vector_t *vect);
 _FLOAT_ Vect_dot(const Vector_t *vect_1, const Vector_t *vect_2);
 void Vect_set_all_values_to(Vector_t *vect, _FLOAT_ value);
-void Vect_write(Vector_t *vect, uint8_t index, _FLOAT_ value);
 void Vect_add_to(Vector_t *sum_vect, const Vector_t *vect);
 void Vect_add(const Vector_t *vect_1, const Vector_t *vect_2, Vector_t *sum_vect);
 void Vect_uniform(const Vector_t *vector, Vector_t *uniformed_vector);
@@ -31,8 +39,18 @@ void Vect_sum_up_list_of_vectors(const Vector_t *vectorlist, Vector_t *sum_vecto
 void Vect_set_vectorlist_to_value(Vector_t vectorlist[], uint32_t listlength, _FLOAT_ value);
 _FLOAT_ *Vect_pointer_to_index(Vector_t *vect, uint8_t index);
 
-int32_t Vect_i32_read(const Vector_i32_t *vect, uint8_t index);
-void Vect_i32_write(Vector_i32_t *vect, uint8_t index, int32_t value);
+
+// ------------------------------------------------------------------------
+
+
+static inline int32_t Vect_i32_read(const Vector_i32_t *vect, uint8_t index){
+	return vect->v[index];
+}
+
+static inline void Vect_i32_write(Vector_i32_t *vect, uint8_t index, int32_t value){
+	vect->v[index] = value;
+}
+
 void Vect_i32_set_all_values_to(Vector_i32_t *vect, int32_t value);
 void Vect_i32_add(const Vector_i32_t *vect_1, const Vector_i32_t *vect_2, Vector_i32_t *sum_vect);
 void Vect_i32_add_to(Vector_i32_t *sum_vect, const Vector_i32_t *vect);
@@ -44,4 +62,4 @@ void Vect_i32_cross_multiply(const Vector_i32_t *vector_1, const Vector_i32_t *v
 void Vect_i32_sum_up_list_of_vectors(const Vector_i32_t vectorlist[], Vector_i32_t *sum_vector, uint32_t listlength);
 void Vect_transform_float_to_i32_with_limits(const Vector_t *float_vect, Vector_i32_t *si_vect, uint8_t resolution, _FLOAT_ limit);
 
-#endif
+#endif /* _VECTOR_OPERATIONS__ */

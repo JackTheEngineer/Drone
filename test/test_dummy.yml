@@ -9,7 +9,7 @@ sourceFiles:
   - vendor/Unity/extras/fixture/src/unity_fixture.c
 headerFiles:
   - test//*.h
-  - src//*.h
+  - Drone_src//*.h
 
 # For compilation, ccBase and the others are joined with
 # ccBase </> cc, resulting in

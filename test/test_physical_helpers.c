@@ -35,7 +35,7 @@ TEST_SETUP(physical_helper){
 TEST_TEAR_DOWN(physical_helper){
 }
 
-TEST(physical_helper, calculation_of_moment_of_interia){
+IGNORE_TEST(physical_helper, calculation_of_moment_of_interia){
     Mat_set_all_values_to(mom_of_inertia, 0.0);
     physics_calculate_moment_of_inertia(masspoints, NMBR_MASSES, mom_of_inertia);
     TEST_ASSERT_EQUAL_DOUBLE(mom_of_inertia->M[0][0], 56.0);

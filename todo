@@ -12,9 +12,7 @@
 
    * check what's wrong with the rxtx_interrupt
 
-   * DAVE rename pin interrupt handler to USR IRQ Handler
-
-
+   * DAVE rename USR IRQ Handler to PinInterruptHandler
 
 ## Testing the Code:
    * Compile with -02

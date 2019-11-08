@@ -9,12 +9,12 @@ sourceFiles:
   - test//fake_motion_sensor.c
   - test//fake_drone_physics.c
   - test//vector_tester.c
-  - src//vector_operations.c
+  - Drone_src//vector_operations.c
   - vendor/Unity/src/unity.c
   - vendor/Unity/extras/fixture/src/unity_fixture.c
 headerFiles:
   - test//*.h
-  - src//*.h
+  - Drone_src//*.h
 
 # For compilation, ccBase and the others are joined with
 # ccBase </> cc, resulting in

@@ -23,10 +23,10 @@ TEST_SETUP(drone_simulation){
 	Drone_set_drone_data_zero(drone);
 }
 
-TEST_TEAR_DOWN(drone_simulation){
-}
+TEST_TEAR_DOWN(drone_simulation){}
 
-TEST(drone_simulation, set_zero_should_work){
+
+IGNORE_TEST(drone_simulation, set_zero_should_work){
 	Vect_set_all_values_to(&(drone->angular_position), 5.0);
 	Vect_set_all_values_to(&(drone->angular_speed), 5.0);
 	Vect_set_all_values_to(&(drone->position), 5.0);
@@ -47,7 +47,7 @@ _STATIC_ void Test_Drone_data_being_zero(Physical_Drone_t *drone){
 	Test_vectors_equal(zero_vector, &(drone->speed));
 }
 
-TEST(drone_simulation, Rotation_matrix_inverse_and_transpose_should_be_the_same){
+IGNORE_TEST(drone_simulation, Rotation_matrix_inverse_and_transpose_should_be_the_same){
 	POINTER_TO_CONTAINER(Vector_t, angles);
 	POINTER_TO_CONTAINER(Matrix_t, R_zyx);
 	POINTER_TO_CONTAINER(Matrix_t, inverse);
@@ -62,14 +62,14 @@ TEST(drone_simulation, Rotation_matrix_inverse_and_transpose_should_be_the_same)
 	Test_Mat_equal(inverse, transpose);
 }
 
-TEST(drone_simulation, Rotation_from_earth_frame_to_drone_frame_and_back_again_should_give_the_same_vector){
+IGNORE_TEST(drone_simulation, Rotation_from_earth_frame_to_drone_frame_and_back_again_should_give_the_same_vector){
 	POINTER_TO_CONTAINER(Vector_t, angles);
 	POINTER_TO_CONTAINER(Vector_t, rotated_vector);
 	POINTER_TO_CONTAINER(Vector_t, compare_vector);
 
-	Vect_write(rotated_vector, 1, 1.557);
-	Vect_write(rotated_vector, 2, 5.2347);
-	Vect_write(rotated_vector, 3, 4.3442);
+	Vect_write(rotated_vector, 0, 1.557);
+	Vect_write(rotated_vector, 1, 5.2347);
+	Vect_write(rotated_vector, 2, 4.3442);
 	Vect_copy_from_to(rotated_vector, compare_vector);
 
 	_assign_angles_values(angles);
@@ -82,7 +82,7 @@ TEST(drone_simulation, Rotation_from_earth_frame_to_drone_frame_and_back_again_s
 
 
 _STATIC_ void _assign_angles_values(Vector_t *angles){
-	Vect_write(angles, 1, 1.234);
-	Vect_write(angles, 2, 0.9434);
-	Vect_write(angles, 3, 0.8884);
+	Vect_write(angles, 0, 1.234);
+	Vect_write(angles, 1, 0.9434);
+	Vect_write(angles, 2, 0.8884);
 }

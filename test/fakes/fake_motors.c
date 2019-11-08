@@ -66,10 +66,10 @@ void fake_Motor_calculate_currents_from_controlvalues(Motor_t motors[NMBR_OF_MOT
 }
 
 void fake_Motor_calculate_speeds_from_currents(Motor_t motors[NMBR_OF_MOTORS]){
-        Vect_write(&(motors[0].speed), 3, motors[0].current * CURRENT_TO_SPEED);
-        Vect_write(&(motors[1].speed), 3, -motors[1].current * CURRENT_TO_SPEED);
-        Vect_write(&(motors[2].speed), 3, motors[2].current * CURRENT_TO_SPEED);
-        Vect_write(&(motors[3].speed), 3, -motors[3].current * CURRENT_TO_SPEED);
+        Vect_write(&(motors[0].speed), 2, motors[0].current * CURRENT_TO_SPEED);
+        Vect_write(&(motors[1].speed), 2, -motors[1].current * CURRENT_TO_SPEED);
+        Vect_write(&(motors[2].speed), 2, motors[2].current * CURRENT_TO_SPEED);
+        Vect_write(&(motors[3].speed), 2, -motors[3].current * CURRENT_TO_SPEED);
 }
 
 void fake_Motor_calculate_thrust_from_speed(Motor_t motors[NMBR_OF_MOTORS]){
@@ -77,7 +77,7 @@ void fake_Motor_calculate_thrust_from_speed(Motor_t motors[NMBR_OF_MOTORS]){
     double speed;
 
     for(i=0; i<NMBR_OF_MOTORS; i++){
-        speed = Vect_read(&(motors[i].speed), 3);
-        Vect_write(&(motors[i].thrust), 3, (SPEED_TO_THRUST*SQR(speed))); 
+        speed = Vect_read(&(motors[i].speed), 2);
+        Vect_write(&(motors[i].thrust), 2, (SPEED_TO_THRUST*SQR(speed)));
     }
 }

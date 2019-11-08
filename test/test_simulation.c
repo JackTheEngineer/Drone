@@ -66,7 +66,7 @@ _STATIC_ void Write_dronedata_to_file_in_a_line(FILE *file, double time){
 
 _STATIC_ void Append_Vector_to_file(FILE *file, Vector_t *vector){
 	uint8_t i;
-	for(i=1;i<=3;i++){
+	for(i = 0; i < 3;i++){
 		fprintf(file, "\t%.5f", Vect_read(vector, i));
 	}
 }
