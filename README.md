@@ -30,41 +30,68 @@ Good comments if required.
 
 ## Development environment 
 ### The Software Environment 
-haskell stack:  [https://docs.haskellstack.org/en/stable/README/](https://docs.haskellstack.org/en/stable/README/)
-				Install it, in the way it is described in the link. 
-haskell shake:  A very cool syntax in haskell to define dependencies.
-				[https://shakebuild.com/](https://shakebuild.com/) 
-				Install it with `shake install shake yaml parsec`, to be able to run the build system.
-				The `bld/YACBS.hs` is programmed with shake. 
-				It requires a yaml file with the ending '.ucbuild' to build 
-				an elf, hex and bin file for the microcontroller. 
-ARM-C-Compiler: [gcc-arm-none-eabi-4_9-2014q4](https://launchpad.net/gcc-arm-embedded/+milestone/4.9-2014-q4-major)  
-                I highly recommend you to download it separately as a binary, and specify the correct binary within the `.ucbuild` files.
-ARM-C-GDB:      It comes along with the gcc arm none eabi installation and is used for debugging.  
-GCC-C-Compiler: For Windows the latest Version of [MinGW](http://www.mingw.org/) works fine. 
-                For Linux take a look at your repositories. ;)  
-cppcheck:       [cppcheck](http://cppcheck.sourceforge.net/) With the current configuration 
-                it is currently invoked plainly with "cppcheck", without having a nice Global configuration.  
-Jlink:          [segger-jlink](https://www.segger.com/jlink-software.html). 
-                The Software responsible for the connection to the ARM-device, using the "Single wire-debug"  
-Eclipse-CPP:    [eclipse C\C++ IDE](http://www.eclipse.org/downloads/packages/eclipse-ide-cc-developers/mars2)  
-Gnuplot :	[gnuplot](http://www.gnuplot.info/)  
-and obviously - [git](https://git-scm.com/)
+- Haskell stack:  
+  [Haskell stack](https://docs.haskellstack.org/en/stable/README/)
+  Install it, in the way it is described in the link. 
+- Haskell Shake:  
+  A very cool syntax in haskell to define dependencies.
+  [https://shakebuild.com/](https://shakebuild.com/) 
+  Install it with `shake install shake yaml`, to be able to run the build system. 
+  I have do admit that i didn't dive in too deeply into the stack build system and 
+  package management, but there is also the option to add the dependencies to 
+  `extra-deps` of your `~/.stack/global-project/stack.yaml` as
+  
+		extra-deps:
+			- shake-0.18.3
+			- yaml-0.11.2.0
+					
+	The `bld/YACBS.hs` is programmed with shake. 
+	It requires a yaml file with the ending '.ucbuild' to build 
+	an elf, hex and bin file for the microcontroller.
+	It also supports building selected sources
+	for a software test on your laptop, by using the awesome embedded 
+	Unity test framework by 'Throw The Switch'.
+
+- ARM-C-Compiler: 
+  [gcc-arm-none-eabi-4_9-2014q4](https://launchpad.net/gcc-arm-embedded/+milestone/4.9-2014-q4-major)  I highly recommend you to download it separately as a binary, 
+  and specify the correct binary within the `.ucbuild` files.
+- ARM-C-GDB:  
+  It comes along with the gcc arm none eabi installation and is used for debugging.  
+- GCC-C-Compiler:  
+  For Windows the latest Version of [MinGW](http://www.mingw.org/) works fine. 
+  For Linux take a look at your repositories. ;)  
+- cppcheck:  
+  [cppcheck](http://cppcheck.sourceforge.net/)  
+  With the current configuration  it is currently invoked plainly with "cppcheck", 
+  without having a nice Global configuration.  
+- Jlink:  
+  [segger-jlink](https://www.segger.com/jlink-software.html). 
+  The Software responsible for the connection to the ARM-device, using the "Single wire-debug"  
+- Eclipse-CPP:    
+  [eclipse C\C++ IDE](http://www.eclipse.org/downloads/packages/eclipse-ide-cc-developers/mars2)  
+- [git](https://git-scm.com/)
 
 ### Folder setup
-`hardware/`:  	This is the hardware abstraction layer. 
-				All stuff belonging to SPI, GPIO, UART and so on goes here.
-				In case of switching hardware, this makes it much easier to 
-				port Code to another Mikrocontroller. The Content is currently 
-				generated with Infineon DAVE. 
-`Drone_src/`: 	This is the actual Code for the Drone, without the hardware part
-`RFM75_src/`: 	The common code for the RFM75 Radio tranceiver used both by the 
-				Remote control and by the Drone, again, without the hardware.
-				Maybe this will become an own repository.
-`RemoteControl_src`: This is the code For the remote control only
-`Common_src`: Some code that is also shared between the projects.			 
-`test/`: The code for testing the mikrocontroller Code
-`vendor/`: contains unity sources and makros for compiling the tests
+- `hardware/`:  	
+  This is the hardware abstraction layer. 
+  All stuff belonging to SPI, GPIO, UART and so on goes here.
+  In case of switching hardware, this makes it much easier to 
+  port Code to another Mikrocontroller. The Content is currently 
+  generated with Infineon DAVE. 
+- `Drone_src/`: 	
+  This is the actual Code for the Drone, without the hardware part
+- `RFM75_src/`: 	
+  The common code for the RFM75 Radio tranceiver used both by the 
+  Remote control and by the Drone, again, without the hardware.
+  Maybe this will become an own repository.
+- `RemoteControl_src`: 
+  This is the code For the remote control only
+- `Common_src`: 
+  Some code that is also shared between the projects.			 
+- `test/`: 
+  The code for testing the mikrocontroller Code
+- `vendor/`: 
+  contains unity sources and makros for compiling the tests, [Unity Test framework](http://www.throwtheswitch.org/unity/).
 
 
 ### Hardware
@@ -77,14 +104,14 @@ with either the AB step, nor the AC step as the generated code with the code exa
 does not correctly control the SPI interface. After the first byte, it just sends
 5 more sck pulses and stops for some reason. I didn't read it up and did not want to 
 fiddle with the register values of the USIC to fiddle it out.
-There are quite some errors listed in the ERRATA sheets belonging to the USICS.   
+There are quite some errors listed in the ERRATA sheets belonging to the USICS.  
 In the XMC4700 and XMC1100 these errors have been fixed, and the SPI works.
 
 For the remote Control I use the Chinese HopeRF RFM75 Chip, Bought at Pollin.
 
 For the gyroscope and accelerometer i use the MPU 9265 sensor.
 
-### Plotting over Uart
+### Libraries for Plotting over Uart 
 
 	pip install pyserial pyqtgraph numpy
 	

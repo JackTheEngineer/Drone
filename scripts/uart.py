@@ -19,11 +19,11 @@ bitfield_format = [[1], [1], [2], [1], [1], [1], [1],
                    [1], [3], [1], [1], [1], [1]]
 
 messages = ['J0', 'J1', 'J2', 'J3']
-size = 12
+size = 16
 joystick_bitfieldformat = [[size],[size],[size],[size]]
 
 def main():
-    ser_port = serial.Serial('/dev/ttyUSB3', 460800)
+    ser_port = serial.Serial('/dev/ttyUSB3', 115200)
 
     while(True):
         byt = ser_port.readline()

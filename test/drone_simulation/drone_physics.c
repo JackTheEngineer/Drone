@@ -47,25 +47,25 @@ void Generate_Rotation_Matrix(Matrix_t *rotation_matrix, Vector_t *angles){
 	
 	Mat_write(R_x, 0,0, 1.0);
 	Mat_write(R_x, 1,1, cos(Vect_read(angles, 0)));
-	Mat_write(R_x, 1,2, -sin(Vect_read(angles,0)));
-	Mat_write(R_x, 2,2, cos(Vect_read(angles,0)));
-	Mat_write(R_x, 2,1, sin(Vect_read(angles,0)));
+	Mat_write(R_x, 1,2, -sin(Vect_read(angles, 0)));
+	Mat_write(R_x, 2,2, cos(Vect_read(angles, 0)));
+	Mat_write(R_x, 2,1, sin(Vect_read(angles, 0)));
 	
 	Mat_write(R_y, 1,1, 1.0);
 	Mat_write(R_y, 0,0, cos(Vect_read(angles, 1)));
-	Mat_write(R_y, 0,2, -sin(Vect_read(angles,1)));
-	Mat_write(R_y, 2,2, cos(Vect_read(angles,1)));
-	Mat_write(R_y, 2,0, sin(Vect_read(angles,1)));
+	Mat_write(R_y, 0,2, -sin(Vect_read(angles, 1)));
+	Mat_write(R_y, 2,2, cos(Vect_read(angles, 1)));
+	Mat_write(R_y, 2,0, sin(Vect_read(angles, 1)));
 	
 	Mat_write(R_z, 2,2, 1.0);
-	Mat_write(R_z, 0,0, cos(Vect_read(angles,2)));
-	Mat_write(R_z, 0,1, -sin(Vect_read(angles,2)));
-	Mat_write(R_z, 1,1, cos(Vect_read(angles,2)));
-	Mat_write(R_z, 1,0, sin(Vect_read(angles,2)));
+	Mat_write(R_z, 0,0, cos(Vect_read(angles, 2)));
+	Mat_write(R_z, 0,1, -sin(Vect_read(angles, 2)));
+	Mat_write(R_z, 1,1, cos(Vect_read(angles, 2)));
+	Mat_write(R_z, 1,0, sin(Vect_read(angles, 2)));
 	
 	/* Last parameter is the matrix to which the result is saved */
-	Mat_times_mat(R_z,R_y,R_y); 
-	Mat_times_mat(R_y,R_x,rotation_matrix);
+	Mat_times_mat(R_z, R_y, R_y);
+	Mat_times_mat(R_y, R_x, rotation_matrix);
 }
 
 void Rotate_from_earth_frame_to_drone_frame(Vector_t *vect_to_rotate, Vector_t *angles_for_rotation){

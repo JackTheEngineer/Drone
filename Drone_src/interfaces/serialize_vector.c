@@ -8,7 +8,7 @@
 
 
 #include "vector_operations.h"
-#include "byte_formatting.h"
+#include "byte_manip.h"
 
 #define SHORT_MAX 32767
 #define SHORT_MIN -32768

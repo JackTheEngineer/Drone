@@ -93,7 +93,7 @@ UART_STATUS_t DEBUG_UART_init(void);
 /*USIC channel configuration*/
 const XMC_UART_CH_CONFIG_t DEBUG_UART_channel_config =
 {
-  .baudrate      = 480600U,
+  .baudrate      = 115200U,
   .data_bits     = 8U,
   .frame_length  = 8U,
   .stop_bits     = 1U,

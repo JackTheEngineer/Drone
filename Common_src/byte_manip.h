@@ -12,10 +12,7 @@
 
 void format_u64_to_u8buf(uint64_t input_u64, uint8_t output_buf_pu8[]);
 void format_u64_to_u8buf_highbyte_first(uint64_t input_u64, uint8_t output_buf_pu8[]);
-void format_four_u16_to_u8buf(uint16_t zero_pos_val_u16,
-		uint16_t first_pos_val_u16,
-		uint16_t second_pos_val_u16,
-		uint16_t third_pos_val_u16,
+void format_four_u16_to_u8buf(uint16_t *input_buf,
 		uint8_t output_buf_pu8[]);
 void format_four_u12_to_u8buf(uint16_t * input_pu16, uint8_t * output_buf_pu8);
 uint32_t format_u8buf_to_u32(uint8_t buf_pu8[]);
@@ -48,5 +45,10 @@ void format_u8buf_to_two_u28(uint8_t input_buf_pu8[],
 			     uint32_t *second_pu28);
 void format_copy_u8_buf(uint8_t *from_u8, uint8_t *to_u8, uint32_t size);
 void format_set_u8_buf_to(uint8_t value, uint8_t *set_to_pu8, uint32_t size);
+
+void copy_u8_buf(uint8_t *from, uint8_t *to, uint32_t count);
+
+uint32_t overflow_save_diff_u32(uint32_t minuend,
+		uint32_t subtrahend);
 
 #endif /* SOURCES_INTERFACE_BYTE_FORMATTING_BYTE_FORMATTING_H_ */

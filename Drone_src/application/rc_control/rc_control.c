@@ -7,7 +7,8 @@
  */
 
 #include "rc_control.h"
-#include "byte_formatting.h"
+#include "byte_manip.h"
+
 
 /* received_bytes should be at least of length 8 */
 void RC_Control_decode_message(uint8_t *received_bytes, RC_Data_t* rc_data){

@@ -2,7 +2,7 @@
 #include "base.h"
 #include "hardware.h"
 #include "RFM75_driver.h"
-#include "byte_formatting.h"
+#include "byte_manip.h"
 
 extern const AddressAndChannel_t default_RFM75_Addr;
 
@@ -31,7 +31,7 @@ int main(void){
 	uint8_t rx_length=0;
 	uint32_t remembered_systick_count = 0;
 	
-#define NUM_UART_BYTES 7
+#define NUM_UART_BYTES 9
 	uint8_t uart_bytes[NUM_UART_BYTES];
 	uart_bytes[NUM_UART_BYTES - 1] = '\n';
 	uint16_t joystick_bytes[4];
@@ -49,9 +49,7 @@ int main(void){
 					DIGITAL_IO_ToggleOutput(&LED2);
 					DIGITAL_IO_SetOutputLow(&LED1);
 					format_u8buf_to_four_ui12(received_bytes, joystick_bytes);
-					for(uint8_t j=0; j < (NUM_UART_BYTES-1);j++){
-						uart_bytes[j] = received_bytes[j];
-					}
+					format_four_u16_to_u8buf(joystick_bytes, uart_bytes);
 					UART_Transmit(&DEBUG_UART, uart_bytes, NUM_UART_BYTES);
 				}
 			}

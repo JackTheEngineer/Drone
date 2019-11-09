@@ -5,7 +5,7 @@
  *      Author: jakov
  */
 
-#include "byte_formatting.h"
+#include "byte_manip.h"
 
 void format_u64_to_u8buf(uint64_t input_u64, uint8_t output_buf_pu8[]){
 	output_buf_pu8[0] = (uint8_t)input_u64;
@@ -93,19 +93,16 @@ void format_u16_to_u8_highbyte_first(uint16_t input_u16, uint8_t *output_buf_pu8
 	output_buf_pu8[1] = (uint8_t)input_u16;
 }
 
-void format_four_u16_to_u8buf(uint16_t zero_pos_val_u16,
-		uint16_t first_pos_val_u16,
-		uint16_t second_pos_val_u16,
-		uint16_t third_pos_val_u16,
+void format_four_u16_to_u8buf(uint16_t *input_buf,
 		uint8_t output_buf_pu8[]){
-	output_buf_pu8[0] = (uint8_t)(zero_pos_val_u16 >> 0) & 0xFF;
-	output_buf_pu8[1] = (uint8_t)(zero_pos_val_u16 >> 8) & 0xFF;
-	output_buf_pu8[2] = (uint8_t)(first_pos_val_u16 >> 0) & 0xFF;
-	output_buf_pu8[3] = (uint8_t)(first_pos_val_u16 >> 8) & 0xFF;
-	output_buf_pu8[4] = (uint8_t)(second_pos_val_u16 >> 0) & 0xFF;
-	output_buf_pu8[5] = (uint8_t)(second_pos_val_u16 >> 8) & 0xFF;
-	output_buf_pu8[6] = (uint8_t)(third_pos_val_u16 >> 0) & 0xFF;
-	output_buf_pu8[7] = (uint8_t)(third_pos_val_u16 >> 8) & 0xFF;
+	output_buf_pu8[0] = (uint8_t)(input_buf[0] >> 0) & 0xFF;
+	output_buf_pu8[1] = (uint8_t)(input_buf[0] >> 8) & 0xFF;
+	output_buf_pu8[2] = (uint8_t)(input_buf[1] >> 0) & 0xFF;
+	output_buf_pu8[3] = (uint8_t)(input_buf[1] >> 8) & 0xFF;
+	output_buf_pu8[4] = (uint8_t)(input_buf[2] >> 0) & 0xFF;
+	output_buf_pu8[5] = (uint8_t)(input_buf[2] >> 8) & 0xFF;
+	output_buf_pu8[6] = (uint8_t)(input_buf[3] >> 0) & 0xFF;
+	output_buf_pu8[7] = (uint8_t)(input_buf[3] >> 8) & 0xFF;
 }
 
 void format_four_u12_to_u8buf(uint16_t * input_pu16,
@@ -197,4 +194,21 @@ void format_set_u8_buf_to(uint8_t value, uint8_t *set_to_pu8, uint32_t size){
 	for(i=0; i < size; i++){
 		set_to_pu8[i] = value;
 	}
+}
+
+void copy_u8_buf(uint8_t *from, uint8_t *to, uint32_t count){
+	for(uint32_t i; i < count; i++){
+		to[i] = from[i];
+	}
+}
+
+uint32_t overflow_save_diff_u32(uint32_t minuend, 
+		uint32_t subtrahend){
+	uint32_t diff_time;
+	if (minuend < subtrahend) {
+		diff_time = 0xFFFFFFFF - subtrahend + minuend;
+	}else{
+		diff_time = minuend - subtrahend;
+	}
+	return diff_time;
 }

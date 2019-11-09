@@ -16,7 +16,7 @@
 #include "uart.h"
 #include "pid_controller.h"
 #include "serialize_vector.h"
-#include "byte_formatting.h"
+#include "byte_manip.h"
 
 #define OFFSET_MEASUREMENTS 100
 
@@ -68,16 +68,20 @@ void State_Calibrate(uint32_t ticks, OS_t *os){
 }
 
 void State_Run(uint32_t ticks, OS_t *os){
+	static uint32_t remembered_time;
 	uint8_t received_bytes[32];
 	uint8_t received_length;
 	POINTER_TO_CONTAINER(RC_Data_t, rc_data);
 	POINTER_TO_CONTAINER(Motorcontrolvalues_t, motors);
 	POINTER_TO_CONTAINER(Vector_i32_t, helper_speed);
-	uint8_t send_bytes[37];
-	format_set_u8_buf_to(0, send_bytes, 36);
-	send_bytes[36] = '\n';
+#define NUM_UART_BYTES 43
+	uint8_t send_bytes[NUM_UART_BYTES];
+	format_set_u8_buf_to(0, send_bytes, NUM_UART_BYTES-1);
+	send_bytes[NUM_UART_BYTES-1] = '\n';
 
-	if((ticks % 20) == 0){
+	if(overflow_save_diff_u32(ticks, remembered_time) >= 20){
+		remembered_time = ticks;
+
 		received_length = RFM75_Receive_bytes(received_bytes);
 		if(received_length == 0){
 			rc_no_data_receive_count++;
@@ -116,7 +120,10 @@ void State_Run(uint32_t ticks, OS_t *os){
 		serialize_vector_as_i32(&os->motion_sensor->acceleration, &send_bytes[0]);
 		serialize_vector_as_i32(&os->motion_sensor->angle_speed, &send_bytes[12]);
 		serialize_vector_as_i32(&os->motion_sensor->magnetic_field, &send_bytes[24]);
-		UART_Transmit(&DEBUG_UART, send_bytes, 37);
+
+		copy_u8_buf(received_bytes, &send_bytes[36], 6);
+
+		UART_Transmit(&DEBUG_UART, send_bytes, NUM_UART_BYTES);
 	}
 }
 

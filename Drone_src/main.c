@@ -1,4 +1,4 @@
-#include "application/motion_sensor/motion_sensor.h"
+#include "motion_sensor.h"
 #include "motor_pwm.h"
 #include "timetasks.h"
 #include "led_module.h"
@@ -8,7 +8,7 @@
 #include "RFM75_driver.h"
 #include "statemachine.h"
 #include "uart.h"
-#include "byte_formatting.h"
+#include "byte_manip.h"
 
 extern const AddressAndChannel_t default_RFM75_Addr;
 

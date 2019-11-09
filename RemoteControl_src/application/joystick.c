@@ -8,7 +8,7 @@
 #include "joystick.h"
 #include "adc_measurement.h"
 #include "ADC_conversion_decoding.h"
-#include "byte_formatting.h"
+#include "byte_manip.h"
 #include "hardware.h"
 
 void Joysticks_get_newest_values(uint16_t results[NUM_OF_MEASURED_CHANNELS]){
