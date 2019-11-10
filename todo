@@ -5,18 +5,23 @@
      like "stack runghc bld/YACBS.hs all"
 
 ## Hardware
+   * rename XMC1100 DBG_UART to DEBUG_UART
 
-   * make two different SPI implementations possible for RFM75 code
-   * Test speed increase in SPI ( relating to only code change, not frequency )
-      - Optionally, for speedup implement the spi with transfer functions
+   * Test UART over predefinded DEBUG USB for drone and remotecontrol
 
-   * check what's wrong with the rxtx_interrupt
+   * on transmit and receive send rfm75 transmission information over uart
 
-   * DAVE rename USR IRQ Handler to PinInterruptHandler
+   * write a haskell parser for the transmission information
+
+   * test RFM75 data tranmission from Primary RX device to Primary TX device.
+
+   * for -O2 ---> try using SPI config app, and test 'coded' version of clock select signal,
+     and 32 fifo buffer bytes.
+
+   PRIO 2:
+   * Optionally, for speedup implement the spi with TRANSFER functions
 
 ## Testing the Code:
-   * Compile with -02
-
    * Either Continue Euler Integral Simulation
      - Find out moments of the Motors
      - Find propeller masses

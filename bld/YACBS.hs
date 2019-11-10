@@ -164,6 +164,13 @@ loadConfig filecontent = do
   return $ updated_config cfg
 
 resultDir = "_build"
+uC_Triple buildname = let 
+  elf_file = resultDir </> buildname </> buildname <.> "elf"
+  hex_file = elf_file -<.> "hex"
+  bin_file = elf_file -<.> "bin" in
+    [elf_file, hex_file, bin_file]
+
+
 opt = shakeOptions{ shakeFiles=resultDir
                   , shakeThreads=8
                   , shakeReport = [resultDir </> "shakereport.html"]
@@ -182,10 +189,7 @@ shakeIT = shakeArgsWith opt flags $ \options args -> return $ Just $ do
   case ("//*.ucbuild" ?== target ) of
     True -> do -- Building for microcontroller
       let buildname = takeBaseName target
-          elf_file = resultDir </> buildname </> buildname <.> "elf"
-          hex_file = elf_file -<.> "hex"
-          bin_file = elf_file -<.> "bin"
-      want [elf_file, hex_file, bin_file]
+      want $ uC_Triple buildname
     False -> do -- Building a test
       want [takeBaseName target]
 
@@ -198,6 +202,11 @@ shakeIT = shakeArgsWith opt flags $ \options args -> return $ Just $ do
   phony "clean" $ do
     putNormal ("Cleaning files in " ++ resultDir)
     removeFilesAfter resultDir ["//*"]
+
+  -- phony "all" $ do
+  --   ucfiles <- getDirectoryFiles "" ["bld/*.ucbuild"]
+  --   let elf_hex_binfiles = concatMap ( uC_Triple . takeBaseName ) ucfiles
+  --   need $ "tests":elf_hex_binfiles
 
   phony "tests" $ do
     need $ (map takeBaseName test_yamls)

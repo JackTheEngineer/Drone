@@ -426,25 +426,21 @@ StatusReg_t RFM75_Transmit_bytes(const uint8_t *payload,
 	while((rxtx_interrupt == 0) && (i < maxTimeoutUs)){
 #define TIMEOUT_uS 20
 		_delay_us(TIMEOUT_uS);
-		// status.all = RFM75_SPI_read_reg_value(STATUS_REG);
-		status.all = RFM75_SPI_read_reg_value(STATUS_REG);
-		if((status.tx_data_sent) || (status.max_retransmits)){
-			break;
-		}
 		i += TIMEOUT_uS;
 	}
 	asm("NOP");
-	rxtx_interrupt = 0;
 	/* Clear ALL the status interrupts.
 	 * When writing a bit that is set to 1,
 	 * it clears the bits, and also the MAX_RT BIT
 	 */
+	status.all = RFM75_SPI_read_reg_value(STATUS_REG);
 	RFM75_SPI_write_reg_val(WRITE_COMMAND_RFM(STATUS_REG),
 			(status.all | \
 					TX_DATA_SENT_FLAG | \
 					RX_DATA_READY_FLAG | \
 					MAX_RETRANSMITS_FLAG));
 	RFM75_CE_PIN_low();
+	rxtx_interrupt = 0;
 	return status;
 }
 
