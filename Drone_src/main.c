@@ -66,11 +66,14 @@ int main(void)
 	PWM_Motor_Set_Rate(0, 3);
 
 	DIGITAL_IO_Init(&DBG_PIN);
+	buttons_init();
+	leds_init();
 	SysTick_Config(SystemCoreClock/1000); /* 1 ms Tick */
 	DelayTimer_Init();
 
+	delay_ms(150);
+
 	Motion_sensor_init(os->motion_sensor);
-	buttons_init();
 
 	bool initialize = false;
 	while(initialize == false){
@@ -78,10 +81,7 @@ int main(void)
 		initialize = RFM75_Init();
 		DIGITAL_IO_ToggleOutput(&LED1);
 	}
-
-	delay_ms(100);
-	DIGITAL_IO_SetOutputLow(&LED1);
-
+	led_off(_LED1);
 	while(1U){
 		if(UpdateTime(&last_ticks)){
 			Statemachine_do(last_ticks, os);

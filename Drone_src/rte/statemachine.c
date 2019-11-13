@@ -6,6 +6,7 @@
  */
 
 #include "timetasks.h"
+#include "led_module.h"
 #include "motors.h"
 #include "i2c_master.h"
 #include "RFM75_driver.h"
@@ -93,7 +94,7 @@ void State_Run(uint32_t ticks, OS_t *os){
 			rc_no_data_receive_count++;
 		}
 		if(creg.length == 32){
-			DIGITAL_IO_ToggleOutput(&LED2);
+			led_toggle(_LED2);
 			RC_Control_decode_message(received_bytes, rc_data);
 			Motors_set_all_data_speed(motors, rc_data->throttle/4);
 			rc_no_data_receive_count = 0;

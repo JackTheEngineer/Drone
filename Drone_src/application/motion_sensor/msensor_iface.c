@@ -16,7 +16,7 @@ uint32_t i2c_duration_count = 0;
 #define MAX_COUNT 150000
 
 void Motionsensor_Init(void){
-	// I2C_MASTER_Init(&MotionSensor_I2C);
+	I2C_MASTER_Init(&MotionSensor_I2C);
 
 	Motionsensor_I2C_writeByte(PWR_MGMT_1, (H_RESET));
 	delay_ms(100);

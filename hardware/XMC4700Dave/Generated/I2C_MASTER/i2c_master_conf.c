@@ -109,7 +109,7 @@ void MotionSensor_I2C_dma_rx_handler(XMC_DMA_CH_EVENT_t event);
   }; 
 const XMC_I2C_CH_CONFIG_t MotionSensor_I2C_channel_config =
 {
-  .baudrate = (uint32_t)(100000U),
+  .baudrate = (uint32_t)(400000U),
   .address  = 0
 };
 
