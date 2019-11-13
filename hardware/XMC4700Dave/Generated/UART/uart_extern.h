@@ -67,6 +67,8 @@ extern "C" {
 /*Extern declaration for callback functions and UART APP instance handles*/
 
   extern UART_t DEBUG_UART; 
+
+  extern UART_t GPS_UART; 
                     
 #ifdef __cplusplus
 }

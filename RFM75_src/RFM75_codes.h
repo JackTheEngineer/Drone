@@ -31,9 +31,9 @@
    uint8_t value = (ENAA_P0);
 */
 #define CONFIG_REG 0x00
-#define MASK_RX_DR (1 << 6)
-#define MASK_TX_DS (1 << 5)
-#define MASK_MAX_RT (1 << 4)
+#define HIDE_DATA_RECEIVED_INTERRUPT (1 << 6)
+#define HIDE_TX_DATA_SENT_INTERRUPT (1 << 5)
+#define HIDE_MAX_RETRANSMITS_INTERRUPT (1 << 4)
 #define EN_CRC (1 << 3)
 #define CRCO (1 << 2)
 #define PWR_UP (1 << 1)
@@ -195,9 +195,9 @@ typedef union __attribute__((packed, aligned(1))) statusRegFifo{
 		uint8_t tx_reuse:1;
 	};
 	uint8_t all;
-}StatusRegFifo_t;
+}FifoStatusReg_t;
 
-typedef union __attribute__((packed, aligned(4))) CombinedReg{
+typedef union __attribute__((packed, aligned(1))) CombinedReg{
 	struct{
 		uint32_t tx_fifo_full:1;
 		uint32_t rx_pipe_num:3; /* 0b111 means RX FIFO is FUll */

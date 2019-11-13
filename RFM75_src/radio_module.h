@@ -13,7 +13,7 @@ typedef struct __attribute__((packed)) addressAndChannel{
 }AddressAndChannel_t;
 
 bool RFM75_initRegisters();
-void RFM75_turn_on();
+void RFM75_turn_on(uint8_t config_mask);
 void RFM75_turn_off();
 void RFM75_setPower(uint8_t pwr);
 void RFM75_set_RX_mode_if_needed(void);

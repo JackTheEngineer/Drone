@@ -28,10 +28,10 @@ int main(void){
 	DIGITAL_IO_SetOutputLow(&LED2);
 
 	uint8_t received_bytes[32] = {0};
-	uint8_t rx_length=0;
+	CombinedReg_t creg;
 	uint32_t remembered_systick_count = 0;
 	
-#define NUM_UART_BYTES 9
+#define NUM_UART_BYTES 4 + 1
 	uint8_t uart_bytes[NUM_UART_BYTES];
 	uart_bytes[NUM_UART_BYTES - 1] = '\n';
 	uint16_t joystick_bytes[4];
@@ -41,17 +41,18 @@ int main(void){
 			remembered_systick_count = tick_count;
 			if((remembered_systick_count % 20) == 0){
 				//received_length = RFM75_Receive_bytes(received_bytes);
-				rx_length = RFM75_Receive_bytes(received_bytes);
-				if(rx_length == 0){
+				creg = RFM75_Receive_bytes_feedback(received_bytes);
+				if(creg.length == 0){
 					DIGITAL_IO_SetOutputHigh(&LED1);
 					DIGITAL_IO_SetOutputLow(&LED2);
 				}else{
 					DIGITAL_IO_ToggleOutput(&LED2);
 					DIGITAL_IO_SetOutputLow(&LED1);
-					format_u8buf_to_four_ui12(received_bytes, joystick_bytes);
-					format_four_u16_to_u8buf(joystick_bytes, uart_bytes);
-					UART_Transmit(&DEBUG_UART, uart_bytes, NUM_UART_BYTES);
+					// format_u8buf_to_four_ui12(received_bytes, joystick_bytes);
+					// format_four_u16_to_u8buf(joystick_bytes, uart_bytes);
 				}
+				format_u32_to_u8buf(creg.all, uart_bytes);
+				UART_Transmit(&DEBUG_UART, uart_bytes, NUM_UART_BYTES);
 			}
 		}
 	}

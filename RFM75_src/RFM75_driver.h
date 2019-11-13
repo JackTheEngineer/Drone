@@ -18,7 +18,7 @@ typedef enum __RFM75_RX_Status{
 }RFM75_Rx_Status_e;
 
 bool RFM75_Init(void);
-StatusReg_t RFM75_Transmit_bytes(const uint8_t *buff,
+CombinedReg_t RFM75_Transmit_bytes(const uint8_t *buff,
 				    const uint8_t length,
 				    const uint32_t maxTimeoutUs,
 				    bool requestAck);

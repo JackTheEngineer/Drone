@@ -243,8 +243,8 @@ const SPI_MASTER_CONFIG_t RFM75_SPI_Config  =
                               NULL, NULL
                              },
 
-  .tx_sr   = (SPI_MASTER_SR_ID_t)SPI_MASTER_SR_ID_3,
-  .rx_sr   = (SPI_MASTER_SR_ID_t)SPI_MASTER_SR_ID_5,
+  .tx_sr   = (SPI_MASTER_SR_ID_t)SPI_MASTER_SR_ID_1,
+  .rx_sr   = (SPI_MASTER_SR_ID_t)SPI_MASTER_SR_ID_3,
 };
                            
 SPI_MASTER_RUNTIME_t RFM75_SPI_runtime =
@@ -335,7 +335,7 @@ static SPI_MASTER_STATUS_t RFM75_SPI_lInit(void)
                
   XMC_USIC_CH_TXFIFO_SetInterruptNodePointer(XMC_SPI0_CH1,
                                              XMC_USIC_CH_TXFIFO_INTERRUPT_NODE_POINTER_STANDARD,
-                                             (uint32_t)SPI_MASTER_SR_ID_3);
+                                             (uint32_t)SPI_MASTER_SR_ID_1);
   /* Configure receive FIFO settings */
   XMC_USIC_CH_RXFIFO_Configure(XMC_SPI0_CH1,
                                0U,
@@ -344,21 +344,21 @@ static SPI_MASTER_STATUS_t RFM75_SPI_lInit(void)
              
   XMC_USIC_CH_RXFIFO_SetInterruptNodePointer(XMC_SPI0_CH1,
                                              XMC_USIC_CH_RXFIFO_INTERRUPT_NODE_POINTER_STANDARD,
-                                             (uint32_t)SPI_MASTER_SR_ID_5);
+                                             (uint32_t)SPI_MASTER_SR_ID_3);
   XMC_USIC_CH_RXFIFO_SetInterruptNodePointer(XMC_SPI0_CH1,
                                              XMC_USIC_CH_RXFIFO_INTERRUPT_NODE_POINTER_ALTERNATE,
-                                             (uint32_t)SPI_MASTER_SR_ID_5);
+                                             (uint32_t)SPI_MASTER_SR_ID_3);
   /* Set priority of the Transmit interrupt */
-  NVIC_SetPriority((IRQn_Type)87, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), 50U, 0U));
+  NVIC_SetPriority((IRQn_Type)85, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), 50U, 0U));
      
   /* Enable Transmit interrupt */
-  NVIC_EnableIRQ((IRQn_Type)87);
+  NVIC_EnableIRQ((IRQn_Type)85);
              
   /* Set priority of the Receive interrupt */
-  NVIC_SetPriority((IRQn_Type)89, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), 49U, 0U));
+  NVIC_SetPriority((IRQn_Type)87, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), 49U, 0U));
     
   /* Enable Receive interrupt */
-  NVIC_EnableIRQ((IRQn_Type)89);
+  NVIC_EnableIRQ((IRQn_Type)87);
     
   return status;
 }

@@ -10,7 +10,19 @@
 #include "uart.h"
 #include "byte_manip.h"
 
-extern const AddressAndChannel_t default_RFM75_Addr;
+
+#include "digital_io.h"
+const DIGITAL_IO_t DBG_PIN =
+{
+  .gpio_port = XMC_GPIO_PORT1,
+  .gpio_pin = 11U,
+  .gpio_config = {
+    .mode = XMC_GPIO_MODE_OUTPUT_PUSH_PULL,
+    .output_level = XMC_GPIO_OUTPUT_LEVEL_LOW,
+
+  },
+  .hwctrl = XMC_GPIO_HWCTRL_DISABLED
+};
 
 uint32_t volatile tick_count;
 extern void SysTick_Handler(void){
@@ -53,15 +65,12 @@ int main(void)
 	PWM_Motor_Set_Rate(0, 2);
 	PWM_Motor_Set_Rate(0, 3);
 
+	DIGITAL_IO_Init(&DBG_PIN);
 	SysTick_Config(SystemCoreClock/1000); /* 1 ms Tick */
 	DelayTimer_Init();
 
 	Motion_sensor_init(os->motion_sensor);
-
-	leds_init();
 	buttons_init();
-	delay_ms(200);
-	/* This delay is needed for Vcc stabilization of the RFM75 transmitter */
 
 	bool initialize = false;
 	while(initialize == false){
@@ -69,7 +78,9 @@ int main(void)
 		initialize = RFM75_Init();
 		DIGITAL_IO_ToggleOutput(&LED1);
 	}
-	RFM75_startListening(&default_RFM75_Addr);
+
+	delay_ms(100);
+	DIGITAL_IO_SetOutputLow(&LED1);
 
 	while(1U){
 		if(UpdateTime(&last_ticks)){

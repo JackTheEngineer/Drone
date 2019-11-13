@@ -69,7 +69,7 @@ const PIN_INTERRUPT_t RFM75_INTERRUPT_PIN =
     .input_a = (uint32_t)XMC_ERU_ETL_INPUT_A0, /* Event input selection for A(0-3) */
     .input_b = (uint32_t)XMC_ERU_ETL_INPUT_B0, /* Event input selection for B(0-3) */
     .enable_output_trigger = (uint32_t)1,
-    .edge_detection = (XMC_ERU_ETL_EDGE_DETECTION_t)PIN_INTERRUPT_EDGE_RISING, /* Select the edge to convert as event */
+    .edge_detection = (XMC_ERU_ETL_EDGE_DETECTION_t)PIN_INTERRUPT_EDGE_FALLING, /* Select the edge to convert as event */
     .output_trigger_channel = XMC_ERU_ETL_OUTPUT_TRIGGER_CHANNEL0, /* Select the source for event */
     .source = XMC_ERU_ETL_SOURCE_B
   },

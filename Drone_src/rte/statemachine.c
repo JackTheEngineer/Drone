@@ -6,7 +6,6 @@
  */
 
 #include "timetasks.h"
-#include "led_module.h"
 #include "motors.h"
 #include "i2c_master.h"
 #include "RFM75_driver.h"
@@ -20,6 +19,8 @@
 
 #define OFFSET_MEASUREMENTS 100
 
+extern const AddressAndChannel_t default_RFM75_Addr;
+
 uint32_t offset_count = 0;
 Sensordata_t offset_measurements[OFFSET_MEASUREMENTS];
 Sensordata_t start_offset;
@@ -29,6 +30,8 @@ uint32_t integrator_count = 0;
 uint32_t rc_no_data_receive_count = 0;
 
 typedef Vector_i32_t* (*Selector_func)(void *target, uint32_t index);
+
+extern const DIGITAL_IO_t DBG_PIN;
 
 void State_Run(uint32_t ticks, OS_t *os);
 void State_Calibrate(uint32_t ticks, OS_t *os);
@@ -63,29 +66,45 @@ void State_Calibrate(uint32_t ticks, OS_t *os){
 			average_i32_vector_with_selector(offset_measurements, select_magnetic_field, OFFSET_MEASUREMENTS, &start_offset.magnetic_field);
 			offset_count = 0;
 			*os->current_state = STATE_RUN;
+			RFM75_startListening(&default_RFM75_Addr);
 		}
 	}
 }
 
 void State_Run(uint32_t ticks, OS_t *os){
-	static uint32_t remembered_time;
-	uint8_t received_bytes[32];
-	uint8_t received_length;
+	static uint32_t remembered_time_20ms=0;
+	static uint32_t remembered_time_10ms=0;
+	static uint8_t received_bytes[32];
+	CombinedReg_t creg;
 	POINTER_TO_CONTAINER(RC_Data_t, rc_data);
 	POINTER_TO_CONTAINER(Motorcontrolvalues_t, motors);
 	POINTER_TO_CONTAINER(Vector_i32_t, helper_speed);
-#define NUM_UART_BYTES 43
-	uint8_t send_bytes[NUM_UART_BYTES];
-	format_set_u8_buf_to(0, send_bytes, NUM_UART_BYTES-1);
-	send_bytes[NUM_UART_BYTES-1] = '\n';
+#define NUM_UART_BYTES 4 + 1
+	uint8_t uart_bytes[NUM_UART_BYTES];
+	format_set_u8_buf_to(0, uart_bytes, NUM_UART_BYTES-1);
+	uart_bytes[NUM_UART_BYTES-1] = '\n';
 
-	if(overflow_save_diff_u32(ticks, remembered_time) >= 20){
-		remembered_time = ticks;
+	DIGITAL_IO_ToggleOutput(&DBG_PIN);
 
-		received_length = RFM75_Receive_bytes(received_bytes);
-		if(received_length == 0){
+	if(overflow_save_diff_u32(ticks, remembered_time_10ms) >= 10){
+		remembered_time_10ms = ticks;
+		creg = RFM75_Receive_bytes_feedback(received_bytes);
+		if(creg.length == 0){
 			rc_no_data_receive_count++;
 		}
+		if(creg.length == 32){
+			DIGITAL_IO_ToggleOutput(&LED2);
+			RC_Control_decode_message(received_bytes, rc_data);
+			Motors_set_all_data_speed(motors, rc_data->throttle/4);
+			rc_no_data_receive_count = 0;
+		}
+		format_u32_to_u8buf(creg.all, uart_bytes);
+		UART_Transmit(&DEBUG_UART, uart_bytes, NUM_UART_BYTES);
+	}
+
+	if(overflow_save_diff_u32(ticks, remembered_time_20ms) >= 20){
+		remembered_time_20ms = ticks;
+
 		Vect_i32_set_all_values_to(helper_speed, 0);
 		Motion_sensor_get_data(os->motion_sensor);
 		Vect_i32_times_const(&start_offset.angle_speed, -1, helper_speed);
@@ -106,24 +125,11 @@ void State_Run(uint32_t ticks, OS_t *os){
 			Vect_i32_copy_from_to(&angular_speeds[2], &angular_speeds[0]);
 			integrator_count = 0;
 		}
-		if(received_length == 32){
-			led_toggle(_LED2);
-			RC_Control_decode_message(received_bytes, rc_data);
-			Motors_set_all_data_speed(motors, rc_data->throttle/4);
-			rc_no_data_receive_count = 0;
-		}
+
 		if(rc_no_data_receive_count > 20){
 			Motors_set_all_data_speed(motors, 0);
 		}
 		Motors_act_on_pwm(motors);
-
-		serialize_vector_as_i32(&os->motion_sensor->acceleration, &send_bytes[0]);
-		serialize_vector_as_i32(&os->motion_sensor->angle_speed, &send_bytes[12]);
-		serialize_vector_as_i32(&os->motion_sensor->magnetic_field, &send_bytes[24]);
-
-		copy_u8_buf(received_bytes, &send_bytes[36], 6);
-
-		UART_Transmit(&DEBUG_UART, send_bytes, NUM_UART_BYTES);
 	}
 }
 

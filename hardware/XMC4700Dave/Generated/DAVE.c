@@ -126,6 +126,11 @@ __WEAK DAVE_STATUS_t DAVE_Init(void)
   {
 	 /**  Initialization of PWM_CCU4 APP instance PWM_CCU4_3 */
 	 init_status = (DAVE_STATUS_t)PWM_CCU4_Init(&PWM_CCU4_3); 
+   } 
+  if (init_status == DAVE_STATUS_SUCCESS)
+  {
+	 /**  Initialization of UART APP instance GPS_UART */
+	 init_status = (DAVE_STATUS_t)UART_Init(&GPS_UART); 
    }  
   return init_status;
 } /**  End of function DAVE_Init */

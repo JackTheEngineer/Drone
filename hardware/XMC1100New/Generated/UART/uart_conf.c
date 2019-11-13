@@ -88,12 +88,12 @@ extern void UART_lProtocolHandler(const UART_t * const handle);
 /**********************************************************************************************************************
  * DATA STRUCTURES
  **********************************************************************************************************************/
-UART_STATUS_t DBG_UART_init(void);
+UART_STATUS_t DEBUG_UART_init(void);
 
 /*USIC channel configuration*/
-const XMC_UART_CH_CONFIG_t DBG_UART_channel_config =
+const XMC_UART_CH_CONFIG_t DEBUG_UART_channel_config =
 {
-  .baudrate      = 460800U,
+  .baudrate      = 115200U,
   .data_bits     = 8U,
   .frame_length  = 8U,
   .stop_bits     = 1U,
@@ -101,27 +101,27 @@ const XMC_UART_CH_CONFIG_t DBG_UART_channel_config =
   .parity_mode   = XMC_USIC_CH_PARITY_MODE_NONE
 };
 /*Transmit pin configuration*/
-const XMC_GPIO_CONFIG_t DBG_UART_tx_pin_config   = 
+const XMC_GPIO_CONFIG_t DEBUG_UART_tx_pin_config   = 
 { 
   .mode             = XMC_GPIO_MODE_OUTPUT_PUSH_PULL_ALT6, 
   .output_level     = XMC_GPIO_OUTPUT_LEVEL_HIGH
 };
 
 /*Transmit pin configuration used for initializing*/
-const UART_TX_CONFIG_t DBG_UART_tx_pin = 
+const UART_TX_CONFIG_t DEBUG_UART_tx_pin = 
 {
   .port = (XMC_GPIO_PORT_t *)PORT2_BASE,
-  .config = &DBG_UART_tx_pin_config,
+  .config = &DEBUG_UART_tx_pin_config,
   .pin = 1U
 };
 
 /*UART APP configuration structure*/
-const UART_CONFIG_t DBG_UART_config = 
+const UART_CONFIG_t DEBUG_UART_config = 
 {
-  .channel_config   = &DBG_UART_channel_config,
+  .channel_config   = &DEBUG_UART_channel_config,
 
 
-  .fptr_uart_config = DBG_UART_init,
+  .fptr_uart_config = DEBUG_UART_init,
   .tx_cbhandler = NULL,
   .rx_cbhandler = NULL,  
   .sync_error_cbhandler = NULL,  
@@ -129,7 +129,7 @@ const UART_CONFIG_t DBG_UART_config =
   .format_error_bit0_cbhandler = NULL,  
   .format_error_bit1_cbhandler = NULL,  
   .collision_error_cbhandler = NULL,
-  .tx_pin_config    = &DBG_UART_tx_pin,
+  .tx_pin_config    = &DEBUG_UART_tx_pin,
   .mode             = UART_MODE_FULLDUPLEX,
   .transmit_mode = UART_TRANSFER_MODE_INTERRUPT,
   .receive_mode = UART_TRANSFER_MODE_INTERRUPT,
@@ -139,22 +139,22 @@ const UART_CONFIG_t DBG_UART_config =
 };
 
 /*Runtime handler*/
-UART_RUNTIME_t DBG_UART_runtime = 
+UART_RUNTIME_t DEBUG_UART_runtime = 
 {
   .tx_busy = false,  
   .rx_busy = false,
 };
 
 /*APP handle structure*/
-UART_t DBG_UART = 
+UART_t DEBUG_UART = 
 {
   .channel = XMC_UART0_CH0,
-  .config  = &DBG_UART_config,
-  .runtime = &DBG_UART_runtime
+  .config  = &DEBUG_UART_config,
+  .runtime = &DEBUG_UART_runtime
 };
 
 /*Receive pin configuration*/
-const XMC_GPIO_CONFIG_t DBG_UART_rx_pin_config   = {
+const XMC_GPIO_CONFIG_t DEBUG_UART_rx_pin_config   = {
   .mode             = XMC_GPIO_MODE_INPUT_TRISTATE,
   .output_level     = XMC_GPIO_OUTPUT_LEVEL_HIGH,
   .input_hysteresis = XMC_GPIO_INPUT_HYSTERESIS_STANDARD
@@ -163,13 +163,13 @@ const XMC_GPIO_CONFIG_t DBG_UART_rx_pin_config   = {
  * API IMPLEMENTATION
  **********************************************************************************************************************/
 /*Channel initialization function*/
-UART_STATUS_t DBG_UART_init()
+UART_STATUS_t DEBUG_UART_init()
 {
   UART_STATUS_t status = UART_STATUS_SUCCESS;
   /*Configure Receive pin*/
-  XMC_GPIO_Init((XMC_GPIO_PORT_t *)PORT2_BASE, 2U, &DBG_UART_rx_pin_config);
+  XMC_GPIO_Init((XMC_GPIO_PORT_t *)PORT2_BASE, 2U, &DEBUG_UART_rx_pin_config);
   /* Initialize USIC channel in UART mode*/
-  XMC_UART_CH_Init(XMC_UART0_CH0, &DBG_UART_channel_config);
+  XMC_UART_CH_Init(XMC_UART0_CH0, &DEBUG_UART_channel_config);
   /*Set input source path*/
   XMC_USIC_CH_SetInputSource(XMC_UART0_CH0, XMC_USIC_CH_INPUT_DX0, 6U);
   XMC_USIC_CH_SetInputSource(XMC_UART0_CH0, XMC_USIC_CH_INPUT_DX3, 0U);
@@ -188,7 +188,7 @@ UART_STATUS_t DBG_UART_init()
   XMC_UART_CH_Start(XMC_UART0_CH0);
 
   /* Initialize UART TX pin */
-  XMC_GPIO_Init((XMC_GPIO_PORT_t *)PORT2_BASE, 1U, &DBG_UART_tx_pin_config);
+  XMC_GPIO_Init((XMC_GPIO_PORT_t *)PORT2_BASE, 1U, &DEBUG_UART_tx_pin_config);
 
   /*Set service request for UART protocol events*/
   XMC_USIC_CH_SetInterruptNodePointer(XMC_UART0_CH0, XMC_USIC_CH_INTERRUPT_NODE_POINTER_PROTOCOL,
@@ -211,15 +211,15 @@ UART_STATUS_t DBG_UART_init()
 }
 /*Interrupt handlers*/
 /*Transmit ISR*/
-void DBG_UART_TX_HANDLER()
+void DEBUG_UART_TX_HANDLER()
 {
-  UART_lTransmitHandler(&DBG_UART);
+  UART_lTransmitHandler(&DEBUG_UART);
 }
 
 /*Receive ISR*/
-void DBG_UART_RX_HANDLER()
+void DEBUG_UART_RX_HANDLER()
 {
-  UART_lReceiveHandler(&DBG_UART);
+  UART_lReceiveHandler(&DEBUG_UART);
 }
 
 /*CODE_BLOCK_END*/

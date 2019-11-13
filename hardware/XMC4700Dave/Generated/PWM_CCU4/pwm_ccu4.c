@@ -468,6 +468,7 @@ PWM_CCU4_STATUS_t PWM_CCU4_SetDutyCycle(PWM_CCU4_t* handle_ptr, uint32_t duty_cy
   XMC_ASSERT("PWM_CCU4_SetDutyCycle:handle_ptr NULL", (handle_ptr != NULL));
   if (PWM_CCU4_STATE_UNINITIALIZED != handle_ptr->state)
   {
+    /* duty cycle has to be in between 0 and 100 */
     if ((duty_cycle > PWM_CCU4_SYM_DUTY_MAX))
     {
       XMC_DEBUG("PWM_CCU4_SetDutyCycle:Cannot set duty cycle > 100%%");
