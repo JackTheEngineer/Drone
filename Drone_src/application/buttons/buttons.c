@@ -21,10 +21,10 @@ void buttons_init(void){
 }
 
 uint32_t button_read(Hdw_button_t button){
-	if(button == BUTTON1){
+	if(button == _BUTTON1){
 		return XMC_GPIO_GetInput(XMC_GPIO_PORT15, 13);
 	}
-	if(button == BUTTON2){
+	if(button == _BUTTON2){
 		return XMC_GPIO_GetInput(XMC_GPIO_PORT15, 12);
 	}
 	return 0;

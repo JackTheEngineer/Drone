@@ -11,8 +11,8 @@
 #include "base.h"
 
 typedef enum _button_{
-	BUTTON1,
-	BUTTON2,
+	_BUTTON1,
+	_BUTTON2,
 }Hdw_button_t;
 
 typedef enum _edge_type_{

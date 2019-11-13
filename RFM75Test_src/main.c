@@ -52,7 +52,7 @@ int main(void){
 					// format_four_u16_to_u8buf(joystick_bytes, uart_bytes);
 				}
 				format_u32_to_u8buf(creg.all, uart_bytes);
-				UART_Transmit(&DEBUG_UART, uart_bytes, NUM_UART_BYTES);
+				// UART_Transmit(&DEBUG_UART, uart_bytes, NUM_UART_BYTES);
 			}
 		}
 	}

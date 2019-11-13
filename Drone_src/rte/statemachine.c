@@ -32,8 +32,6 @@ uint32_t rc_no_data_receive_count = 0;
 
 typedef Vector_i32_t* (*Selector_func)(void *target, uint32_t index);
 
-extern const DIGITAL_IO_t DBG_PIN;
-
 void State_Run(uint32_t ticks, OS_t *os);
 void State_Calibrate(uint32_t ticks, OS_t *os);
 
@@ -100,7 +98,7 @@ void State_Run(uint32_t ticks, OS_t *os){
 			rc_no_data_receive_count = 0;
 		}
 		format_u32_to_u8buf(creg.all, uart_bytes);
-		UART_Transmit(&DEBUG_UART, uart_bytes, NUM_UART_BYTES);
+		// UART_Transmit(&DEBUG_UART, uart_bytes, NUM_UART_BYTES);
 	}
 
 	if(overflow_save_diff_u32(ticks, remembered_time_20ms) >= 20){

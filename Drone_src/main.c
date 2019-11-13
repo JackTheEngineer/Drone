@@ -10,20 +10,6 @@
 #include "uart.h"
 #include "byte_manip.h"
 
-
-#include "digital_io.h"
-const DIGITAL_IO_t DBG_PIN =
-{
-  .gpio_port = XMC_GPIO_PORT1,
-  .gpio_pin = 11U,
-  .gpio_config = {
-    .mode = XMC_GPIO_MODE_OUTPUT_PUSH_PULL,
-    .output_level = XMC_GPIO_OUTPUT_LEVEL_LOW,
-
-  },
-  .hwctrl = XMC_GPIO_HWCTRL_DISABLED
-};
-
 uint32_t volatile tick_count;
 extern void SysTick_Handler(void){
 	tick_count++;
@@ -45,12 +31,12 @@ int main(void)
 	POINTER_TO_CONTAINER(Sensordata_t, motion_sensor);
 	State_t state = STATE_CALIBRATE;
 	Button_t btn1 = {
-			.btn = BUTTON1,
+			.btn = _BUTTON1,
 			.laststate = false,
 	};
 
 	Button_t btn2 = {
-			.btn = BUTTON2,
+			.btn = _BUTTON2,
 			.laststate = false,
 	};
 
@@ -65,7 +51,6 @@ int main(void)
 	PWM_Motor_Set_Rate(0, 2);
 	PWM_Motor_Set_Rate(0, 3);
 
-	DIGITAL_IO_Init(&DBG_PIN);
 	buttons_init();
 	leds_init();
 	SysTick_Config(SystemCoreClock/1000); /* 1 ms Tick */
