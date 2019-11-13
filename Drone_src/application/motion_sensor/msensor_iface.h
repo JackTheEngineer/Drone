@@ -37,11 +37,11 @@
 /*
  * ADDRESSES
  */
-#define CONFIG 26
-#define GYRO_CONFIG 27
-#define ACCEL_CONFIG 28
+#define MSU_CONFIG_REG 26
+#define MSU_GYRO_CONFIG_REG 27
+#define MSU_ACCEL_CONFIG_REG 28
 
-#define FIFO_ENABLE 35
+#define MSU_FIFO_ENABLE_REG 35
 #define ACCEL_XOUT_H 59
 #define ACCEL_XOUT_L 60
 #define ACCEL_YOUT_H 61
@@ -89,13 +89,13 @@
 /* At max sensitivity */
 #define ACCEL_SENSITIVITY 16384 /* LSB for 1 g = 9.81 m/s^2 */
 
-uint8_t MSensor_Iface_readByte(uint8_t i2c_addr, uint8_t address);
-void MSensor_Iface_readBytesFromi2c_addr(uint8_t i2c_addr, uint8_t startaddress,
+uint8_t Motionsensor_I2C_readByte(uint8_t i2c_addr, uint8_t address);
+void Motionsensor_I2C_readBytesFromi2c_addr(uint8_t i2c_addr, uint8_t startaddress,
 		uint8_t *read_buf, uint8_t size);
-void MSensor_Iface_writeByte(uint8_t address, uint8_t value);
-void MSensor_Iface_writeByteToi2c_addr(uint8_t i2c_addr, uint8_t address, uint8_t value);
-void MSensor_Iface_readBytes(uint8_t startaddress, uint8_t *read_buf, uint8_t size);
-void MSensor_Iface_Init(void);
+void Motionsensor_I2C_writeByte(uint8_t address, uint8_t value);
+void Motionsensor_I2C_writeByteToi2c_addr(uint8_t i2c_addr, uint8_t address, uint8_t value);
+void Motionsensor_I2C_readBytes(uint8_t startaddress, uint8_t *read_buf, uint8_t size);
+void Motionsensor_Init(void);
 
 
 #endif /* SRC_APPLICATION_SENSOR_MSENSOR_IFACE_H_ */
