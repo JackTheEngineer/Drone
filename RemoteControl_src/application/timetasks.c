@@ -25,6 +25,7 @@ uint8_t count = 0;
 void TimeTasks_run(uint32_t ticks, OS_t *os){
 	uint8_t sendbytes[32] = {0}; // it seems like it's at least necessary to send 16 bytes for a stable transmission :( bah.
 	uint32_t length = 32;
+	uint8_t rx_bytes[32] = {0};
 	static uint32_t remembered_time_20_ms;
 
 #define NUM_UART_BYTES (4 + 1)
@@ -45,6 +46,7 @@ void TimeTasks_run(uint32_t ticks, OS_t *os){
 		CombinedReg_t creg = RFM75_Transmit_bytes(sendbytes,
 												length,
 												4000,
+												rx_bytes,
 												true);
 		format_u32_to_u8buf(creg.all, uart_bytes);
 		if(creg.tx_data_sent){

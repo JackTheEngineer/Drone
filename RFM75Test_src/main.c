@@ -13,6 +13,13 @@ extern void SysTick_Handler(void){
 }
 
 int main(void){
+	uint8_t sendbytes[32] = {0};
+	sendbytes[31] = 11;
+	sendbytes[0] = 11;
+	sendbytes[1] = 22;
+	sendbytes[2] = 33;
+	sendbytes[3] = 44;
+
 	(void)DAVE_Init();
 	SysTick_Config(SystemCoreClock/1000);
 
@@ -41,6 +48,7 @@ int main(void){
 			remembered_systick_count = tick_count;
 			if((remembered_systick_count % 20) == 0){
 				//received_length = RFM75_Receive_bytes(received_bytes);
+				RFM75_SPI_write_buffer_at_start_register(W_ACK_PAYLOAD(0), sendbytes, 32);
 				creg = RFM75_Receive_bytes_feedback(received_bytes);
 				if(creg.length == 0){
 					DIGITAL_IO_SetOutputHigh(&LED1);
@@ -48,11 +56,8 @@ int main(void){
 				}else{
 					DIGITAL_IO_ToggleOutput(&LED2);
 					DIGITAL_IO_SetOutputLow(&LED1);
-					// format_u8buf_to_four_ui12(received_bytes, joystick_bytes);
-					// format_four_u16_to_u8buf(joystick_bytes, uart_bytes);
 				}
 				format_u32_to_u8buf(creg.all, uart_bytes);
-				// UART_Transmit(&DEBUG_UART, uart_bytes, NUM_UART_BYTES);
 			}
 		}
 	}

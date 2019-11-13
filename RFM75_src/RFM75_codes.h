@@ -6,9 +6,7 @@
 
 #define READ_RX_PAYLOAD 0x61
 #define WRITE_TX_PAYLOAD 0xA0
-#define RFM7x_CMD_REUSE_TX_PL 0xE3 // Define reuse TX payload register command
-#define RFM7x_CMD_W_TX_PAYLOAD_NOACK 0xb0 // Define TX payload NOACK command
-#define RFM7x_CMD_W_ACK_PAYLOAD 0xa8 // Define Write ack command
+#define CMD_REUSE_TX_PL 0xE3 // Define reuse TX payload register command
 #define READ_PAYLOAD_LENGTH 0x60 // Define received payload width command
 
 #define WRITE_RFM (1<<5)
@@ -20,9 +18,7 @@
 #define ACTIVATE 0x50
 #define ACTIVATE_BYTE 0x73
 
-#define R_RX_PL_WID 0b01100000
-
-#define W_ACK_PAYLOAD (10101 << 3)
+#define W_ACK_PAYLOAD(pipe) ((0b10101 << 3) | pipe)
 #define W_TX_PAYLOAD_NO_ACK 0b10110000
 
 /* 

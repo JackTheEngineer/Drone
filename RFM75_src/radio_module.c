@@ -21,9 +21,9 @@ _STATIC_ _INLINE_ void RFM75_flush_rx_FIFO();
  */
 extern volatile uint32_t rxtx_interrupt;
 
-_STATIC_ const uint8_t RFM75_cmd_adrTX[]  = { WRITE_COMMAND_RFM(0x10), 0xAA, 0xAA, 0xAA, 0xAA, 0xAA};
-_STATIC_ const uint8_t RFM75_cmd_adrRX0[] = { WRITE_COMMAND_RFM(0x0A), 0xAA, 0xAA, 0xAA, 0xAA, 0xAA};
-_STATIC_ const uint8_t RFM75_cmd_adrRX1[] = { WRITE_COMMAND_RFM(0x0B), 0x35, 0x43, 0x10, 0x10, 0x02};
+_STATIC_ const uint8_t RFM75_cmd_adrTX[]  = { WRITE_COMMAND_RFM(0x10), 0x35, 0xAF, 0x42, 0x23, 0x99};
+_STATIC_ const uint8_t RFM75_cmd_adrRX0[] = { WRITE_COMMAND_RFM(0x0A), 0x35, 0xAF, 0x42, 0x23, 0x99};
+_STATIC_ const uint8_t RFM75_cmd_adrRX1[] = { WRITE_COMMAND_RFM(0x0B), 0x45, 0x43, 0x10, 0x10, 0x02};
 _STATIC_ const uint8_t RFM75_cmd_switch_bank[] = { 0x50, 0x53 };
 _STATIC_ const uint8_t RFM75_cmd_flush_rx_fifos[] = { 0xe2, 0x00 };
 _STATIC_ const uint8_t RFM75_cmd_flush_tx_fifos[] = { 0xe1, 0x00 };
@@ -347,29 +347,38 @@ _STATIC_ _INLINE_ CombinedReg_t combinedReg(uint8_t msglen, uint8_t fifo, uint8_
 }
 
 CombinedReg_t RFM75_Receive_bytes_feedback(uint8_t *payload){
-	uint8_t len;
 	StatusReg_t status;
-	FifoStatusReg_t fifo_status;
-	uint8_t cnt=0;
 
 	status.all = RFM75_SPI_read_reg_value(STATUS_REG);
 	if((bool)status.rx_data_ready && (status.all != 0xFF)){
-		do{
-			len = RFM75_SPI_read_reg_value(READ_PAYLOAD_LENGTH);
-			RFM75_SPI_read_buffer(READ_RX_PAYLOAD, payload, len);
-			status.all = RFM75_SPI_read_reg_value(STATUS_REG);
-			fifo_status.all = RFM75_SPI_read_reg_value(FIFO_STATUS_REG);
-
-			if (fifo_status.rx_empty){
-				status.rx_data_ready = 1; // clear status bit by setting it to 1
-				RFM75_SPI_write_reg_val(WRITE_COMMAND_RFM(STATUS_REG), status.all);
-			}
-			cnt +=1;
-		}while(fifo_status.rx_empty != 1);
-		return combinedReg(len, fifo_status.all, cnt, status.all);
+		return RFM75_Receive_bytes_when_data_present(status, payload);
 	}else{
 		return combinedReg(0, 0, 0, status.all);
 	}
+}
+
+CombinedReg_t RFM75_Receive_bytes_when_data_present(StatusReg_t incoming_status, uint8_t *receive_buffer){
+	FifoStatusReg_t fifo_status;
+	StatusReg_t fresh_status;
+	uint8_t cnt=0;
+	uint8_t len=0;
+
+	if(receive_buffer == NULL){
+		return combinedReg(0,0,0,0);
+	}
+	do{
+		uint8_t len = RFM75_SPI_read_reg_value(READ_PAYLOAD_LENGTH);
+		RFM75_SPI_read_buffer(READ_RX_PAYLOAD, receive_buffer, len);
+		fresh_status.all = RFM75_SPI_read_reg_value(STATUS_REG);
+		fifo_status.all = RFM75_SPI_read_reg_value(FIFO_STATUS_REG);
+
+		if (fifo_status.rx_empty){
+			fresh_status.rx_data_ready = 1; // clear status bit by setting it to 1
+			RFM75_SPI_write_reg_val(WRITE_COMMAND_RFM(STATUS_REG), fresh_status.all);
+		}
+		cnt +=1;
+	}while(fifo_status.rx_empty != 1);
+	return combinedReg(len, fifo_status.all, cnt, (incoming_status.all | fresh_status.all));
 }
 
 _STATIC_ _INLINE_ void RFM75_flush_tx_FIFO()
@@ -403,13 +412,13 @@ void RFM75_turn_off()
 	RFM75_CE_PIN_low();
 }
 
-CombinedReg_t RFM75_Transmit_bytes(const uint8_t *payload,
-								 const uint8_t length,
-									  const uint32_t maxTimeoutUs,
-									  bool requestAck){
+CombinedReg_t RFM75_Transmit_bytes(const uint8_t *send_payload,
+								 	 const uint8_t length,
+									 const uint32_t maxTimeoutUs,
+									 uint8_t *receive_payload,
+									 bool expected_ack_data){
 	uint32_t timeout=0;
 	StatusReg_t status;
-	FifoStatusReg_t fifo;
 	status.all = 0;
 
 	status.all = RFM75_SPI_read_reg_value(STATUS_REG);
@@ -418,13 +427,8 @@ CombinedReg_t RFM75_Transmit_bytes(const uint8_t *payload,
 	}
 	RFM75_SPI_write_reg_val(WRITE_COMMAND_RFM(STATUS_REG), (status.all | \
 															TX_DATA_SENT_FLAG | \
-															RX_DATA_READY_FLAG | \
 															MAX_RETRANSMITS_FLAG));
-
-	uint8_t cmd = WRITE_TX_PAYLOAD;
-	// uint8_t cmd = RFM7x_CMD_W_ACK_PAYLOAD;
-	// uint8_t cmd = RFM7x_CMD_W_TX_PAYLOAD_NOACK;
-	RFM75_SPI_write_buffer_at_start_register(cmd, payload, length);
+	RFM75_SPI_write_buffer_at_start_register(WRITE_TX_PAYLOAD, send_payload, length);
 	rxtx_interrupt = 0;
 	RFM75_CE_PIN_high();
 
@@ -443,10 +447,12 @@ CombinedReg_t RFM75_Transmit_bytes(const uint8_t *payload,
 	RFM75_SPI_write_reg_val(WRITE_COMMAND_RFM(STATUS_REG),
 			(status.all | \
 					TX_DATA_SENT_FLAG | \
-					RX_DATA_READY_FLAG | \
 					MAX_RETRANSMITS_FLAG));
 	rxtx_interrupt = 0;
-	return combinedReg(0, fifo.all, 0, status.all);
+	if(expected_ack_data && (status.rx_data_ready == 1)){
+			return RFM75_Receive_bytes_when_data_present(status, receive_payload);
+	}
+	return combinedReg(0, 0, 0, status.all);
 }
 
 void RFM75_prepareForListening(const AddressAndChannel_t * address_and_channel){

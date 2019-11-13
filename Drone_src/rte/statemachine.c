@@ -83,8 +83,6 @@ void State_Run(uint32_t ticks, OS_t *os){
 	format_set_u8_buf_to(0, uart_bytes, NUM_UART_BYTES-1);
 	uart_bytes[NUM_UART_BYTES-1] = '\n';
 
-	DIGITAL_IO_ToggleOutput(&DBG_PIN);
-
 	if(overflow_save_diff_u32(ticks, remembered_time_10ms) >= 10){
 		remembered_time_10ms = ticks;
 		creg = RFM75_Receive_bytes_feedback(received_bytes);

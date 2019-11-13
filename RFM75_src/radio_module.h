@@ -45,6 +45,7 @@ uint8_t RFM75_Receive_bytes(uint8_t *payload);
 CombinedReg_t RFM75_Receive_bytes_feedback(uint8_t *payload);
 void RFM75_startListening(const AddressAndChannel_t * address_and_channel);
 void RFM75_prepareForTransmission(const AddressAndChannel_t * address_and_channel);
+CombinedReg_t RFM75_Receive_bytes_when_data_present(StatusReg_t status, uint8_t *receive_buffer);
 
 #endif
 
