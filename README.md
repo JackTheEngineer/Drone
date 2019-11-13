@@ -17,7 +17,7 @@ This Code is supposed to fulfill three goals:
     I am especially refering to the moments where i kept thinking that "There has to be a better way".  
     And there really is: It's called TDD !
 * To help me learn how to write physics simulations in C. Before the Microcontroller gets to contol any hardware stuff,   
-	the code has to prove itself on a self-written Drone Simulation. 
+	the code should to prove itself on some Drone Simulation program.
 * To help me get a real good flying Drone. 
 
 ## The coding philosophy
@@ -95,21 +95,24 @@ Good comments if required.
 
 
 ### Hardware
-For the Drone main Controller I use the ARM-M4-Evaluation Board
-[https://www.infineon.com/cms/en/product/evaluation-boards/kit_xmc47_relax_5v_ad_v1/](XMC4700 Relax Kit Lite 5V) 
-by Infineon with an XMC4700 Mikrocontroller.
-For The Remote Control I use the 2Go-XMC1100 Mikrocontroller. 
-I Don't recommend bying the XMC4500 Relax 
-with either the AB step, nor the AC step as the generated code with the code examples
-does not correctly control the SPI interface. After the first byte, it just sends
-5 more sck pulses and stops for some reason. I didn't read it up and did not want to 
-fiddle with the register values of the USIC to fiddle it out.
-There are quite some errors listed in the ERRATA sheets belonging to the USICS.  
+As the Code evolved, I was using two Infineon Boards at the same time, the XMC4500 relax kit lite and
+the ARM-M4-Evaluation Board
+[https://www.infineon.com/cms/en/product/evaluation-boards/kit_xmc47_relax_5v_ad_v1/](XMC4700 Relax Kit Lite 5V)  by Infineon with an XMC4700 Mikrocontroller.
+
+The build system builds both of the targets, each with different pinouts. 
+If you would like me to upload the DAVE projects, 
+which generated the 'hardware/XMC4X00/Generated' Code, leave an Issue in the Issuetracker.
+For The Remote Control I use the 2Go-XMC1100 Mikrocontroller.
+With neither the XMC4500 AA step, nor the AC step, the generated code with the code examples correctly control the SPI interface. Immediately
+There are quite some errors listed in the ERRATA sheets belonging to the USICS of the XMC4500.  
 In the XMC4700 and XMC1100 these errors have been fixed, and the SPI works.
 
+Nevertheless, after some magic things happened -- probably some minor modifications 
+to the SPI code -- the SPI started to work on the XMC4500. 
+Yet, i don't know exacly, what the reason was. ( The breaking code change )
 For the remote Control I use the Chinese HopeRF RFM75 Chip, Bought at Pollin.
-
-For the gyroscope and accelerometer i use the MPU 9265 sensor.
+For the gyroscope and accelerometer I use the MPU 9265 sensor, 
+the most common 9D-Motion Sensor.
 
 ### Libraries for Plotting over Uart 
 
@@ -121,8 +124,8 @@ or are contained within the Folders "vendor" or "XMC_Libs",
 they are provided with the GNU-GPL3 freedom. With the current use of the 
 XMC-4500 Infineon-ARM-hardware, the **binaries are NOT GNU-GPL3-Free**. 
 If you share the compiled binaries, you have to provide the infineon and the ARM 
-licensinc notes found in the top sections of every file of "XMC_Libs" and "CIMSIS_Libs". 
-I know, that i cannot provide everything GNU-GPL3 free, but everything 
+licensing notes found in the top sections of every file of `XMC_Libs` and `CIMSIS_Libs`. 
+I know, that i cannot provide everything GNU-GPL3 free, but everything apart
 from the hardware part, i want you to extensively use and modify.
 Probably there is a License supporting this kind of configuration.
 I haven't read enought about different types of licences.

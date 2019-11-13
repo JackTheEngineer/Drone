@@ -104,8 +104,8 @@ __WEAK DAVE_STATUS_t DAVE_Init(void)
    } 
   if (init_status == DAVE_STATUS_SUCCESS)
   {
-	 /**  Initialization of UART APP instance DBG_UART */
-	 init_status = (DAVE_STATUS_t)UART_Init(&DBG_UART); 
+	 /**  Initialization of UART APP instance DEBUG_UART */
+	 init_status = (DAVE_STATUS_t)UART_Init(&DEBUG_UART); 
    } 
   if (init_status == DAVE_STATUS_SUCCESS)
   {

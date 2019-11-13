@@ -72,7 +72,6 @@ void State_Calibrate(uint32_t ticks, OS_t *os){
 
 void State_Run(uint32_t ticks, OS_t *os){
 	static uint32_t remembered_time_20ms=0;
-	static uint32_t remembered_time_10ms=0;
 	static uint8_t received_bytes[32];
 	CombinedReg_t creg;
 	POINTER_TO_CONTAINER(RC_Data_t, rc_data);
@@ -83,8 +82,8 @@ void State_Run(uint32_t ticks, OS_t *os){
 	format_set_u8_buf_to(0, uart_bytes, NUM_UART_BYTES-1);
 	uart_bytes[NUM_UART_BYTES-1] = '\n';
 
-	if(overflow_save_diff_u32(ticks, remembered_time_10ms) >= 10){
-		remembered_time_10ms = ticks;
+	if(overflow_save_diff_u32(ticks, remembered_time_20ms) >= 20){
+		remembered_time_20ms = ticks;
 		creg = RFM75_Receive_bytes_feedback(received_bytes);
 		if(creg.length == 0){
 			rc_no_data_receive_count++;
@@ -96,11 +95,6 @@ void State_Run(uint32_t ticks, OS_t *os){
 			rc_no_data_receive_count = 0;
 		}
 		format_u32_to_u8buf(creg.all, uart_bytes);
-		// UART_Transmit(&DEBUG_UART, uart_bytes, NUM_UART_BYTES);
-	}
-
-	if(overflow_save_diff_u32(ticks, remembered_time_20ms) >= 20){
-		remembered_time_20ms = ticks;
 
 		Vect_i32_set_all_values_to(helper_speed, 0);
 		Motion_sensor_get_data(os->motion_sensor);
@@ -123,7 +117,7 @@ void State_Run(uint32_t ticks, OS_t *os){
 			integrator_count = 0;
 		}
 
-		if(rc_no_data_receive_count > 20){
+		if(rc_no_data_receive_count > 15){
 			Motors_set_all_data_speed(motors, 0);
 		}
 		Motors_act_on_pwm(motors);

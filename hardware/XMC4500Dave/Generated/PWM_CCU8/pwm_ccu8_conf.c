@@ -275,7 +275,7 @@
                 .prescaler_shadow_txfr_msk           = (uint32_t)XMC_CCU8_SHADOW_TRANSFER_PRESCALER_SLICE_0,
 
                 .state                               = PWM_CCU8_STATE_UNINITIALIZED,
-                .sym_duty1                           = 1000U,
+                .sym_duty1                           = 500U,
                 .sym_duty2                           = 5004U,
                 .asym_duty                           = 0U,
                 .asym_shift                          = 0U,
@@ -495,7 +495,7 @@
                 .prescaler_shadow_txfr_msk           = (uint32_t)XMC_CCU8_SHADOW_TRANSFER_PRESCALER_SLICE_1,
 
                 .state                               = PWM_CCU8_STATE_UNINITIALIZED,
-                .sym_duty1                           = 1000U,
+                .sym_duty1                           = 500U,
                 .sym_duty2                           = 5004U,
                 .asym_duty                           = 0U,
                 .asym_shift                          = 0U,
@@ -715,7 +715,7 @@
                 .prescaler_shadow_txfr_msk           = (uint32_t)XMC_CCU8_SHADOW_TRANSFER_PRESCALER_SLICE_2,
 
                 .state                               = PWM_CCU8_STATE_UNINITIALIZED,
-                .sym_duty1                           = 1000U,
+                .sym_duty1                           = 500U,
                 .sym_duty2                           = 5004U,
                 .asym_duty                           = 0U,
                 .asym_shift                          = 0U,
@@ -935,7 +935,7 @@
                 .prescaler_shadow_txfr_msk           = (uint32_t)XMC_CCU8_SHADOW_TRANSFER_PRESCALER_SLICE_3,
 
                 .state                               = PWM_CCU8_STATE_UNINITIALIZED,
-                .sym_duty1                           = 1000U,
+                .sym_duty1                           = 500U,
                 .sym_duty2                           = 5004U,
                 .asym_duty                           = 0U,
                 .asym_shift                          = 0U,

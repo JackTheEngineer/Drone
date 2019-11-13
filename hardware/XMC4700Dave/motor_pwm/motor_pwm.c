@@ -6,10 +6,7 @@
  */
 
 #include "motor_pwm.h"
-#include "pwm_ccu4.h"
-#include "pwm_ccu4_conf.h"
-
-#define CPU_FREQU 144000000UL
+#include "hardware.h"
 
 PWM_CCU4_t *pwms[NUM_OF_MOTORS] = {
 		&PWM_CCU4_0,

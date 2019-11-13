@@ -367,7 +367,7 @@ CombinedReg_t RFM75_Receive_bytes_when_data_present(StatusReg_t incoming_status,
 		return combinedReg(0,0,0,0);
 	}
 	do{
-		uint8_t len = RFM75_SPI_read_reg_value(READ_PAYLOAD_LENGTH);
+		len = RFM75_SPI_read_reg_value(READ_PAYLOAD_LENGTH);
 		RFM75_SPI_read_buffer(READ_RX_PAYLOAD, receive_buffer, len);
 		fresh_status.all = RFM75_SPI_read_reg_value(STATUS_REG);
 		fifo_status.all = RFM75_SPI_read_reg_value(FIFO_STATUS_REG);

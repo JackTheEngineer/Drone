@@ -45,6 +45,7 @@ int main(void)
 	os->button_2 = &btn2;
 	os->current_state = &state;
 
+	DAVE_Init();
 	PWM_Init();
 	PWM_Motor_Set_Rate(0, 0);
 	PWM_Motor_Set_Rate(0, 1);
