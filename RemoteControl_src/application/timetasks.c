@@ -23,14 +23,14 @@ uint16_t adc_values[NUM_OF_MEASUREMENTS_TAKEN][4];
 uint8_t count = 0;
 
 void TimeTasks_run(uint32_t ticks, OS_t *os){
+	static uint32_t remembered_time_20_ms;
 	uint8_t sendbytes[32] = {0}; // it seems like it's at least necessary to send 16 bytes for a stable transmission :( bah.
 	uint32_t length = 32;
-	uint8_t rx_bytes[32] = {0};
-	static uint32_t remembered_time_20_ms;
 
-#define NUM_UART_BYTES (4 + 1)
-	uint8_t uart_bytes[NUM_UART_BYTES];
-	uart_bytes[NUM_UART_BYTES-1] = '\n';
+#define NUM_RX_BYTES 34
+	uint8_t rx_bytes[NUM_RX_BYTES] = {0};
+	rx_bytes[NUM_RX_BYTES - 2] = '\r';
+	rx_bytes[NUM_RX_BYTES - 1] = '\n';
 
 	Joysticks_get_newest_values(adc_values[count]);
 	count++;
@@ -48,11 +48,10 @@ void TimeTasks_run(uint32_t ticks, OS_t *os){
 												4000,
 												rx_bytes,
 												true);
-		format_u32_to_u8buf(creg.all, uart_bytes);
 		if(creg.tx_data_sent){
 			LED_toggle();
 		}
-		UART_Transmit(&DEBUG_UART, uart_bytes, NUM_UART_BYTES);
+		UART_Transmit(&DEBUG_UART, rx_bytes, NUM_RX_BYTES);
 	}
 }
 

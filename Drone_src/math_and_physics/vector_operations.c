@@ -55,9 +55,11 @@ void Vect_copy_from_to(const Vector_t *vector_from, Vector_t *vector_to){
 }
 
 void Vect_cross_multiply(const Vector_t *vector_1, const Vector_t *vector_2, Vector_t *resultvector){
-    Vect_write(resultvector, 0, vector_1->v[1] * vector_2->v[2] - vector_1->v[2] * vector_2->v[1]);
-    Vect_write(resultvector, 1, vector_1->v[2] * vector_2->v[0] - vector_1->v[0] * vector_2->v[2]);
-    Vect_write(resultvector, 2, vector_1->v[0] * vector_2->v[1] - vector_1->v[1] * vector_2->v[0]);
+	POINTER_TO_CONTAINER(Vector_t, intermediate);
+    Vect_write(intermediate, 0, vector_1->v[1] * vector_2->v[2] - vector_1->v[2] * vector_2->v[1]);
+    Vect_write(intermediate, 1, vector_1->v[2] * vector_2->v[0] - vector_1->v[0] * vector_2->v[2]);
+    Vect_write(intermediate, 2, vector_1->v[0] * vector_2->v[1] - vector_1->v[1] * vector_2->v[0]);
+    Vect_copy_from_to(intermediate, resultvector);
 }
 
 void Vect_sum_up_list_of_vectors(const Vector_t vectorlist[], Vector_t *sum_vector, uint32_t listlength){
@@ -95,7 +97,9 @@ void Vect_i32_add(const Vector_i32_t *vect_1, const Vector_i32_t *vect_2, Vector
 	Vect_i32_write(sum_vect, 2, Vect_i32_read(vect_1, 2) + Vect_i32_read(vect_2, 2));
 }
 
-void Vect_i32_write_three_values(Vector_i32_t *vector, int32_t value_1, int32_t value_2, int32_t value_3){
+void Vect_i32_write_three_values(Vector_i32_t *vector, int32_t value_1,
+		int32_t value_2,
+		int32_t value_3){
 	Vect_i32_write(vector, 0, value_1);
 	Vect_i32_write(vector, 1, value_2);
 	Vect_i32_write(vector, 2, value_3);
@@ -129,13 +133,26 @@ void Vect_i32_cross_multiply(const Vector_i32_t *vector_1, const Vector_i32_t *v
 
 void Vect_i32_sum_up_list_of_vectors(const Vector_i32_t vectorlist[], Vector_i32_t *sum_vector, uint32_t listlength){
 	uint32_t i;
-	Vect_i32_set_all_values_to(sum_vector, 0.0);
+	Vect_i32_set_all_values_to(sum_vector, 0);
 	for(i=0; i<listlength; i++){
 		Vect_i32_add(&(vectorlist[i]), sum_vector, sum_vector);
 	}
 }
 
-void Vect_transform_float_to_i32_with_limits(const Vector_t *float_vect, Vector_i32_t *si_vect, uint8_t resolution, _FLOAT_ limit){
+void Vect_transform_i32_to_float(Vector_i32_t *si_vect, Vector_t *target){
+	for(uint8_t i=0; i < 3; i++){
+		target->v[i] = (float)si_vect->v[i];
+	}
+}
+
+void Vect_transform_i32_to_float_with_mult(Vector_i32_t *si_vect, Vector_t *target, _FLOAT_ c){
+	for(uint8_t i=0; i < 3; i++){
+		target->v[i] = c * (float)si_vect->v[i];
+	}
+}
+
+void Vect_transform_float_to_i32_with_limits(const Vector_t *float_vect, Vector_i32_t *si_vect,
+		uint8_t resolution, _FLOAT_ limit){
 	/*
 	  Linear tranformaton from float to int32 vector 
 	 */

@@ -45,6 +45,8 @@ void format_u8buf_to_two_u28(uint8_t input_buf_pu8[],
 			     uint32_t *second_pu28);
 void format_copy_u8_buf(uint8_t *from_u8, uint8_t *to_u8, uint32_t size);
 void format_set_u8_buf_to(uint8_t value, uint8_t *set_to_pu8, uint32_t size);
+void format_float_to_u8_buf(float f, uint8_t *buf);
+void format_float_buf_to_u8_buf(float *floatbuf, uint32_t bufsize, uint8_t *targetbuf);
 
 void copy_u8_buf(uint8_t *from, uint8_t *to, uint32_t count);
 

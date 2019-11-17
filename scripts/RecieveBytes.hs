@@ -8,6 +8,8 @@ import Data.Word
 import Data.ByteString as B
 import Data.ByteString.Lazy.Internal as BLI
 import Data.ByteString.Lazy as BL
+import Data.Binary.IEEE754 
+-- import Prelude.Math
 
 -- data StatusCode = StatusCode { txFifoFull :: Word8
 --                              , rxPipeNum :: Word8
@@ -54,6 +56,17 @@ parseBinary :: Get [Word16]
 parseBinary = do
   replicateM 4 G.getWord16le
 
+parseFloats :: Get [Float]
+parseFloats = do
+  q1 <- getFloat32le
+  q2 <- getFloat32le
+  q3 <- getFloat32le
+  q4 <- getFloat32le
+  let psi = atan2 (2*q2*q3 - 2*q1*q4) (2*q1*q1 + 2*q2*q2 - 1)
+      theta = -1 * (asin (2*q2*q4 - 2*q1*q3))
+      phi = atan2 (2*q3*q4 - 2*q1*q2) (2*q1*q1 * 2*q4*q4 - 1)
+  return [psi, theta, phi]
+
 parseRFM75_StatusCode = do
   status <- G.getByteString 1
   otx <- G.getByteString 1
@@ -70,13 +83,15 @@ thrd (_, _, c, _) = c
 fourth (_, _, _, d) = d
 
 getAndPrint serport = do
-  bytes <- B.hGetLine serport 
-  print bytes
-  let rfm = G.runGet parseRFM75_StatusCode $ fromStrict bytes
-  print $ first rfm
-  print $ scnd rfm
-  print $ thrd rfm
-  print $ fourth rfm
+  bytes <- B.hGetLine serport
+  if (B.length bytes) == 32 then do
+    print $ G.runGet parseFloats $ fromStrict bytes
+  else return ()
+  -- let rfm = G.runGet parseRFM75_StatusCode $ fromStrict bytes
+  -- print $ first rfm
+  -- print $ scnd rfm
+  -- print $ thrd rfm
+  -- print $ fourth rfm
   
 receiveByteAndPrint :: IO ()
 receiveByteAndPrint = do

@@ -22,8 +22,8 @@ void Test_vectors_i32_equal(const Vector_i32_t * vector_1, const Vector_i32_t * 
 
 void print_vector(Vector_t *vector, const char *name){
   uint8_t i;
-  printf("%s\n", name);
-  for(i=1; i<=3; i++){
-    printf("%.3f\n", Vect_read(vector,i));
+  printf("\n%s\n", name);
+  for(i=0; i<3; i++){
+    printf("%.8f\n", Vect_read(vector,i));
   }
 }

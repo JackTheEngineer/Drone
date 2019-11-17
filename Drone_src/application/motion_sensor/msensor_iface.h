@@ -18,6 +18,14 @@
 #define H_RESET (1<<7)
 #define OPTIMAL_CLOCK (1)
 
+#define XG_OFFSET_H 19
+#define XG_OFFSET_L 20
+#define YG_OFFSET_H 21
+#define YG_OFFSET_L 22
+#define ZG_OFFSET_H 23
+#define ZG_OFFSET_L 24
+
+
 #define GYRO_250DPS (00)
 #define GYRO_500DPS (0b01 << 3)
 #define GYRO_1000DPS (0b10 << 3)

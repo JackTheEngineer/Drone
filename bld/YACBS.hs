@@ -247,7 +247,7 @@ shakeIT = shakeArgsWith opt flags $ \options args -> return $ Just $ do
         map_file = out -<.> "map"
     need ((linkerFile c): os)
     cmd_ gcc "-o" [out] os ("-T" ++ (linkerFile c)) ("-Wl,-Map," ++ map_file) (ccLinkOptions c) (ccLinkLibs c)
-    cmd_ (ccSize c) "--format=berkeley -x" [out]
+    cmd_ (ccSize c) "--format=berkeley -d" [out]
 
   resultDir <//> "*.o" %> \out -> do
     c <- configFromSource out :: Action( Config )

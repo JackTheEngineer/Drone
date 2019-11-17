@@ -6,6 +6,7 @@
  */
 
 #include "motion_sensor.h"
+#include "byte_manip.h"
 #include "msensor_iface.h"
 
 void Motion_sensor_init(Sensordata_t *sensordata){
@@ -40,6 +41,19 @@ void Motion_sensor_get_data(Sensordata_t *sensordata){
 //			Vect_i32_write(&sensordata->magnetic_field, 3, (int16_t)((((uint16_t)vals[4]) << 8)|(vals[5])));
 //		}
 //	}
+}
+
+void Motion_sensor_set_angular_speed_offset(Vector_i32_t *omega_offset){
+	int16_t si16_val;
+	uint8_t vals[7] = {0};
+	for(uint8_t i=0; i < 3; i++){
+		si16_val = (-1)*(int16_t)Vect_i32_read(omega_offset, i);
+		format_u16_to_u8_highbyte_first(si16_val, &vals[i*2]);
+	}
+
+	for(uint8_t i=0; i < 6; i++){
+		Motionsensor_I2C_writeByte((XG_OFFSET_H + i), vals[i]);
+	}
 }
 
 

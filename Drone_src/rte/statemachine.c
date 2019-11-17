@@ -17,8 +17,12 @@
 #include "pid_controller.h"
 #include "serialize_vector.h"
 #include "byte_manip.h"
+#include "madgwickFilter.h"
+#include "control_loop.h"
 
 #define OFFSET_MEASUREMENTS 100
+#define PI 3.141592653589793f
+#define IMU_TO_RAD (PI*1000.0f/(32767.0f * 180.0f))
 
 extern const AddressAndChannel_t default_RFM75_Addr;
 
@@ -63,6 +67,7 @@ void State_Calibrate(uint32_t ticks, OS_t *os){
 			average_i32_vector_with_selector(offset_measurements, select_acceleration, OFFSET_MEASUREMENTS, &start_offset.acceleration);
 			average_i32_vector_with_selector(offset_measurements, select_angle_speed, OFFSET_MEASUREMENTS, &start_offset.angle_speed);
 			average_i32_vector_with_selector(offset_measurements, select_magnetic_field, OFFSET_MEASUREMENTS, &start_offset.magnetic_field);
+			Motion_sensor_set_angular_speed_offset(&start_offset.angle_speed);
 			offset_count = 0;
 			*os->current_state = STATE_RUN;
 			RFM75_startListening(&default_RFM75_Addr);
@@ -71,19 +76,37 @@ void State_Calibrate(uint32_t ticks, OS_t *os){
 }
 
 void State_Run(uint32_t ticks, OS_t *os){
-	static uint32_t remembered_time_20ms=0;
+	static uint32_t remembered_time_20ms;
+	static uint32_t remembered_time_5ms;
 	static uint8_t received_bytes[32];
+	static Quaternion_t quaternion = {{1.0f, 0.0, 0.0, 0.0}};
+	static ControlParams_t control_params = {
+			.P.v = {20.0, 0.0, 0.0},
+			.I.v = {20.0, 0.0, 0.0},
+			.D.v = {20.0, 0.0, 0.0},
+			.sum_err.v = {0.0, 0.0, 0.0},
+			.last_err.v = {0.0, 0.0, 0.0},
+	};
 	CombinedReg_t creg;
+
+	static uint8_t sendbytes[32];
+
 	POINTER_TO_CONTAINER(RC_Data_t, rc_data);
-	POINTER_TO_CONTAINER(Motorcontrolvalues_t, motors);
-	POINTER_TO_CONTAINER(Vector_i32_t, helper_speed);
-#define NUM_UART_BYTES 4 + 1
-	uint8_t uart_bytes[NUM_UART_BYTES];
-	format_set_u8_buf_to(0, uart_bytes, NUM_UART_BYTES-1);
-	uart_bytes[NUM_UART_BYTES-1] = '\n';
+	STATIC_POINTER_TO_CONTAINER(Motorcontrolvalues_t, motors);
+	POINTER_TO_CONTAINER(Vector_t, acc);
+	POINTER_TO_CONTAINER(Vector_t, omega);
+
+	if(overflow_save_diff_u32(ticks, remembered_time_5ms) >= 5){
+		Motion_sensor_get_data(os->motion_sensor);
+		Vect_transform_i32_to_float(&os->motion_sensor->acceleration, acc);
+		Vect_transform_i32_to_float_with_mult(&os->motion_sensor->angle_speed, omega, IMU_TO_RAD);
+		MadgwickAHRSupdateIMU(omega, acc, &quaternion);
+		format_float_buf_to_u8_buf(&quaternion.q[0], 4, sendbytes);
+	}
 
 	if(overflow_save_diff_u32(ticks, remembered_time_20ms) >= 20){
 		remembered_time_20ms = ticks;
+		RFM75_SPI_write_buffer_at_start_register(W_ACK_PAYLOAD(0), sendbytes, 32);
 		creg = RFM75_Receive_bytes_feedback(received_bytes);
 		if(creg.length == 0){
 			rc_no_data_receive_count++;
@@ -94,28 +117,8 @@ void State_Run(uint32_t ticks, OS_t *os){
 			Motors_set_all_data_speed(motors, rc_data->throttle/4);
 			rc_no_data_receive_count = 0;
 		}
-		format_u32_to_u8buf(creg.all, uart_bytes);
 
-		Vect_i32_set_all_values_to(helper_speed, 0);
-		Motion_sensor_get_data(os->motion_sensor);
-		Vect_i32_times_const(&start_offset.angle_speed, -1, helper_speed);
-		Vect_i32_add(&os->motion_sensor->angle_speed, helper_speed, helper_speed);
-		integrator_count++;
-
-		/* Now helper speed has the value without offset */
-		Vect_i32_copy_from_to(helper_speed, &angular_speeds[integrator_count]);
-
-		if(integrator_count >= 2){
-			Vect_i32_times_const(&angular_speeds[1], 4, helper_speed);
-			Vect_i32_add_to(helper_speed, &angular_speeds[2]);
-			Vect_i32_add_to(helper_speed, &angular_speeds[0]);
-
-			Vect_i32_div_by_const(helper_speed, 6, helper_speed);
-			Vect_i32_add_to(&angular_position, helper_speed);
-
-			Vect_i32_copy_from_to(&angular_speeds[2], &angular_speeds[0]);
-			integrator_count = 0;
-		}
+		ControlLoop_run(&quaternion, &control_params, motors);
 
 		if(rc_no_data_receive_count > 15){
 			Motors_set_all_data_speed(motors, 0);
@@ -124,7 +127,8 @@ void State_Run(uint32_t ticks, OS_t *os){
 	}
 }
 
-void average_i32_vector_with_selector(void *data, Selector_func selector, uint32_t length, Vector_i32_t *result){
+void average_i32_vector_with_selector(void *data, Selector_func selector,
+		uint32_t length, Vector_i32_t *result){
 	Vector_i32_t copy_vector_list[length];
 
 	for(uint32_t i = 0; i < length; i++){

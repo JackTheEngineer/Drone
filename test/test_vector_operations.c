@@ -139,7 +139,6 @@ TEST(vector_operations, Vect_length_should_return_one_with_vector_magnitude_1){
     for(i=0; i<3; i++){
         Vect_set_all_values_to(vect, 0.0);
         Vect_write(vect, i, 1.0);
-        printf("vect: %f \n", Vect_length(vect));
         TEST_ASSERT_EQUAL_DOUBLE(1.0, Vect_length(vect));
     }
 }
@@ -256,6 +255,15 @@ TEST(vector_operations, Vect_cross_multiply_index_3_should_follow_rule){
             TEST_ASSERT_EQUAL_DOUBLE(Vect_read(vect, 2), i*l - k*j);
         }
     }
+}
+
+TEST(vector_operations, Vect_cross_multiply_should_be_able_to_take_same_vector_as_output){
+	POINTER_TO_CONTAINER(Vector_t, should_be_vector);
+	Vect_write_three_values(should_be_vector, 73.57399750, -6.35799789, 63.04000092);
+	Vect_write_three_values(vect_1, 2.8, 9.2, -2.34);
+	Vect_write_three_values(vect_2,-5.3, 5.1, 6.7);
+    Vect_cross_multiply(vect_1, vect_2, vect_2);
+    Test_vectors_equal(vect_2, should_be_vector);
 }
 
 TEST(vector_operations, sum_up_list_of_Vectors_should_work){

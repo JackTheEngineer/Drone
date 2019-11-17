@@ -65,7 +65,7 @@ int main(void)
 	while(initialize == false){
 		delay_ms(25);
 		initialize = RFM75_Init();
-		DIGITAL_IO_ToggleOutput(&LED1);
+		led_toggle(_LED1);
 	}
 	led_off(_LED1);
 	while(1U){

@@ -28,5 +28,6 @@ typedef struct Sensordata{
 void Motion_sensor_init(Sensordata_t *sensordata);
 void Motion_sensor_get_data(Sensordata_t *sensordata);
 void Motion_sensor_set_data_zero(Sensordata_t *sensordata);
+void Motion_sensor_set_angular_speed_offset(Vector_i32_t *omega_offset);
 
 #endif /* SRC_SENSOR_MOTION_SENSOR_H_ */
