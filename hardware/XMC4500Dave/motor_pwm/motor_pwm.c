@@ -10,9 +10,9 @@
 
 PWM_CCU8_t *pwms[NUM_OF_MOTORS] = {
 		&PWM_CCU8_0,
+		&PWM_CCU8_3,
 		&PWM_CCU8_1,
 		&PWM_CCU8_2,
-		&PWM_CCU8_3,
 };
 
 void PWM_Init(void){
@@ -29,9 +29,14 @@ void PWM_Motor_Set_Rate(uint16_t Speed, uint8_t motor_index){
 	if(motor_index >= NUM_OF_MOTORS){
 		return;
 	}
+
+	if(Speed >= 32768){
+		Speed = 0;
+	}
 	if(Speed > 1000){
 		Speed = 1000;
 	}
+
 
 	duty_cycle = 470 + Speed/2;
 	/*

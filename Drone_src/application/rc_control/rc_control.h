@@ -12,9 +12,9 @@
 
 typedef struct Flight_Data{
 	uint16_t throttle;
-	int32_t rotation;
-	int32_t x_tilt;
-	int32_t y_tilt;
+	int16_t rotation;
+	int16_t x_tilt;
+	int16_t y_tilt;
 }RC_Data_t;
 
 void RC_Control_decode_message(uint8_t *received_bytes, RC_Data_t* rc_data);

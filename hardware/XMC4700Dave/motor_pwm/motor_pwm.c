@@ -29,6 +29,11 @@ void PWM_Motor_Set_Rate(uint16_t Speed, uint8_t motor_index){
 	if(motor_index >= NUM_OF_MOTORS){
 		return;
 	}
+
+	if(Speed >= 32768){
+		Speed = 0;
+	}
+
 	if(Speed > 1000){
 		Speed = 1000;
 	}

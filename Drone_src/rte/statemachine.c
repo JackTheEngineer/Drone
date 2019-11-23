@@ -20,9 +20,9 @@
 #include "madgwickFilter.h"
 #include "control_loop.h"
 
-#define OFFSET_MEASUREMENTS 100
+#define OFFSET_MEASUREMENTS 200
 #define PI 3.141592653589793f
-#define IMU_TO_RAD (PI*1000.0f/(32767.0f * 180.0f))
+#define IMU_TO_RAD ((PI*250.0f)/(32767.0f * 180.0f) *(3.0f/4.0f))
 
 extern const AddressAndChannel_t default_RFM75_Addr;
 
@@ -81,7 +81,7 @@ void State_Run(uint32_t ticks, OS_t *os){
 	static uint8_t received_bytes[32];
 	static Quaternion_t quaternion = {{1.0f, 0.0, 0.0, 0.0}};
 	static ControlParams_t control_params = {
-			.P.v = {20.0, 0.0, 0.0},
+			.P.v = {300.0, 0.0, 0.0},
 			.I.v = {20.0, 0.0, 0.0},
 			.D.v = {20.0, 0.0, 0.0},
 			.sum_err.v = {0.0, 0.0, 0.0},
@@ -89,9 +89,9 @@ void State_Run(uint32_t ticks, OS_t *os){
 	};
 	CombinedReg_t creg;
 
-	static uint8_t sendbytes[32];
+	static uint8_t sendbytes[32]={0};
 
-	POINTER_TO_CONTAINER(RC_Data_t, rc_data);
+	STATIC_POINTER_TO_CONTAINER(RC_Data_t, remote_control_data);
 	STATIC_POINTER_TO_CONTAINER(Motorcontrolvalues_t, motors);
 	POINTER_TO_CONTAINER(Vector_t, acc);
 	POINTER_TO_CONTAINER(Vector_t, omega);
@@ -106,22 +106,25 @@ void State_Run(uint32_t ticks, OS_t *os){
 
 	if(overflow_save_diff_u32(ticks, remembered_time_20ms) >= 20){
 		remembered_time_20ms = ticks;
-		RFM75_SPI_write_buffer_at_start_register(W_ACK_PAYLOAD(0), sendbytes, 32);
+
 		creg = RFM75_Receive_bytes_feedback(received_bytes);
 		if(creg.length == 0){
 			rc_no_data_receive_count++;
 		}
 		if(creg.length == 32){
 			led_toggle(_LED2);
-			RC_Control_decode_message(received_bytes, rc_data);
-			Motors_set_all_data_speed(motors, rc_data->throttle/4);
+			RC_Control_decode_message(received_bytes, remote_control_data);
 			rc_no_data_receive_count = 0;
 		}
 
-		ControlLoop_run(&quaternion, &control_params, motors);
+		ControlLoop_run(&quaternion, &control_params, remote_control_data, motors);
+		format_u16buf_to_u8buf(motors->motorspeeds, NMBR_OF_MOTORS, &sendbytes[16]);
+		RFM75_SPI_write_buffer_at_start_register(W_ACK_PAYLOAD(0), sendbytes, 32);
 
 		if(rc_no_data_receive_count > 15){
 			Motors_set_all_data_speed(motors, 0);
+			remote_control_data->throttle = 0;
+			Motors_act_on_pwm(motors);
 		}
 		Motors_act_on_pwm(motors);
 	}
@@ -129,12 +132,11 @@ void State_Run(uint32_t ticks, OS_t *os){
 
 void average_i32_vector_with_selector(void *data, Selector_func selector,
 		uint32_t length, Vector_i32_t *result){
-	Vector_i32_t copy_vector_list[length];
+	Vector_i32_t sumvect;
 
 	for(uint32_t i = 0; i < length; i++){
-		Vect_i32_copy_from_to(selector(data, i), &copy_vector_list[i]);
+		Vect_i32_add_to(&sumvect, selector(data, i));
 	}
-	Vect_i32_sum_up_list_of_vectors(copy_vector_list, result, OFFSET_MEASUREMENTS);
 	Vect_i32_div_by_const(result, length, result);
 }
 

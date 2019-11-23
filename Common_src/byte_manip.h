@@ -22,6 +22,7 @@ void format_u32_to_u8buf(uint32_t input_u32, uint8_t output_buf_pu8[]);
 void format_u32_to_u8buf_highbyte_first(uint32_t input_u32, uint8_t output_buf_pu8[]);
 
 void format_u16_to_u8buf(uint16_t input_u16, uint8_t *output_buf_pu8);
+void format_u16buf_to_u8buf(uint16_t *inputbuf_u16, uint32_t inputlen, uint8_t *output_buf_pu8);
 void format_u16_to_u8_highbyte_first(uint16_t input_u16, uint8_t *output_buf_pu8);
 
 uint16_t format_u8buf_to_u16(uint8_t buf_pu8[]);

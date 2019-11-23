@@ -56,15 +56,15 @@ parseBinary :: Get [Word16]
 parseBinary = do
   replicateM 4 G.getWord16le
 
-parseFloats :: Get [Float]
+parseFloats :: Get [Int]
 parseFloats = do
   q1 <- getFloat32le
   q2 <- getFloat32le
   q3 <- getFloat32le
   q4 <- getFloat32le
-  let psi = atan2 (2*q2*q3 - 2*q1*q4) (2*q1*q1 + 2*q2*q2 - 1)
-      theta = -1 * (asin (2*q2*q4 - 2*q1*q3))
-      phi = atan2 (2*q3*q4 - 2*q1*q2) (2*q1*q1 * 2*q4*q4 - 1)
+  let psi = round ((atan2 (2*q2*q3 - 2*q1*q4) (2*q1*q1 + 2*q2*q2 - 1)) * 180.0/pi)
+      theta = round ((-1 * (asin (2*q2*q4 - 2*q1*q3))) * 180.0/pi)
+      phi = round ((atan2 (2*q3*q4 - 2*q1*q2) (2*q1*q1 * 2*q4*q4 - 1)) * 180.0/pi)
   return [psi, theta, phi]
 
 parseRFM75_StatusCode = do
@@ -84,9 +84,10 @@ fourth (_, _, _, d) = d
 
 getAndPrint serport = do
   bytes <- B.hGetLine serport
-  if (B.length bytes) == 32 then do
+  if (B.length bytes) == 33 then do
     print $ G.runGet parseFloats $ fromStrict bytes
-  else return ()
+  else do
+    return ()
   -- let rfm = G.runGet parseRFM75_StatusCode $ fromStrict bytes
   -- print $ first rfm
   -- print $ scnd rfm

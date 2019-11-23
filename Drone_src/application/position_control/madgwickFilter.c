@@ -4,8 +4,7 @@
 #define SAMPLE_FREQ	200.0f		//  in Hz
 #define BETA_DEF    0.1f	        // 2 * proportional gain
 
-volatile float beta = BETA_DEF;					// 2 * proportional gain (Kp)
-
+float beta = BETA_DEF;					// 2 * proportional gain (Kp)
 float invSqrt(float x);
 
 void MadgwickAHRSupdate(Vector_t *g, Vector_t *a, Vector_t *m, Quaternion_t *q){

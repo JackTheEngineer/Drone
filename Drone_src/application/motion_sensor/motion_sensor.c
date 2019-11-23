@@ -45,7 +45,7 @@ void Motion_sensor_get_data(Sensordata_t *sensordata){
 
 void Motion_sensor_set_angular_speed_offset(Vector_i32_t *omega_offset){
 	int16_t si16_val;
-	uint8_t vals[7] = {0};
+	uint8_t vals[6] = {0};
 	for(uint8_t i=0; i < 3; i++){
 		si16_val = (-1)*(int16_t)Vect_i32_read(omega_offset, i);
 		format_u16_to_u8_highbyte_first(si16_val, &vals[i*2]);

@@ -88,6 +88,12 @@ void format_u16_to_u8buf(uint16_t input_u16, uint8_t *output_buf_pu8){
 	output_buf_pu8[1] = (uint8_t)(input_u16 >> 8);
 }
 
+void format_u16buf_to_u8buf(uint16_t *inputbuf_u16, uint32_t inputlen, uint8_t *output_buf_pu8){
+	for(uint32_t i=0; i < inputlen; i++){
+		format_u16_to_u8buf(inputbuf_u16[i], &output_buf_pu8[i*2]);
+	}
+}
+
 void format_u16_to_u8_highbyte_first(uint16_t input_u16, uint8_t *output_buf_pu8){
 	output_buf_pu8[0] = (uint8_t)(input_u16 >> 8);
 	output_buf_pu8[1] = (uint8_t)input_u16;
