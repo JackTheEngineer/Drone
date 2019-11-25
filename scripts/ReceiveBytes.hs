@@ -107,3 +107,4 @@ openUart port = do
 main :: IO()
 main = do
   receiveByteAndPrint  
+

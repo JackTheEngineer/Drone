@@ -5,6 +5,7 @@
  *      Author: chocolate
  */
 
+#include "control_loop.h"
 #include "timetasks.h"
 #include "led_module.h"
 #include "motors.h"
@@ -18,7 +19,6 @@
 #include "serialize_vector.h"
 #include "byte_manip.h"
 #include "madgwickFilter.h"
-#include "control_loop.h"
 
 #define OFFSET_MEASUREMENTS 200
 #define PI 3.141592653589793f
@@ -78,10 +78,11 @@ void State_Calibrate(uint32_t ticks, OS_t *os){
 void State_Run(uint32_t ticks, OS_t *os){
 	static uint32_t remembered_time_20ms;
 	static uint32_t remembered_time_5ms;
-	static uint8_t received_bytes[32];
+	static uint8_t received_bytes[32] = {0};
 	static Quaternion_t quaternion = {{1.0f, 0.0, 0.0, 0.0}};
+	static uint8_t sendbytes[32]={0};
 	static ControlParams_t control_params = {
-			.P.v = {300.0, 0.0, 0.0},
+			.P.v = {250.0, 0.0, 0.0},
 			.I.v = {20.0, 0.0, 0.0},
 			.D.v = {20.0, 0.0, 0.0},
 			.sum_err.v = {0.0, 0.0, 0.0},
@@ -89,7 +90,6 @@ void State_Run(uint32_t ticks, OS_t *os){
 	};
 	CombinedReg_t creg;
 
-	static uint8_t sendbytes[32]={0};
 
 	STATIC_POINTER_TO_CONTAINER(RC_Data_t, remote_control_data);
 	STATIC_POINTER_TO_CONTAINER(Motorcontrolvalues_t, motors);
@@ -114,6 +114,7 @@ void State_Run(uint32_t ticks, OS_t *os){
 		if(creg.length == 32){
 			led_toggle(_LED2);
 			RC_Control_decode_message(received_bytes, remote_control_data);
+			RC_Control_decode_PID(received_bytes, &control_params);
 			rc_no_data_receive_count = 0;
 		}
 

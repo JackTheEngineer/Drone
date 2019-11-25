@@ -5,13 +5,13 @@
  *      Author: jakov
  */
 
-
 #include "madgwickFilter.h"
 #include "control_loop.h"
-#include <math.h>
 
-void ControlLoop_run(Quaternion_t const *q, ControlParams_t const *control,
-		RC_Data_t const *remote_control, Motorcontrolvalues_t *motors){
+void ControlLoop_run(Quaternion_t *q,
+					ControlParams_t *control,
+					RC_Data_t *remote_control,
+					Motorcontrolvalues_t *motors){
 
 	int16_t diff;
 	Vector_t err;
@@ -34,6 +34,8 @@ void ControlLoop_run(Quaternion_t const *q, ControlParams_t const *control,
 
 	diff = (int16_t)((-err.v[0] - err.v[1] + MOTOR_CONSTELLATION*err.v[2])*control->P.v[0]);
 	motors->motorspeeds[3] = ((motors->motorspeeds[3] + diff) < 0) ? 0 : (motors->motorspeeds[3] + diff);
+
+	Vect_add_to(&control->sum_err, &err);
 
 	if(remote_control->throttle < 150){
 		Motors_set_all_data_speed(motors, 0);
