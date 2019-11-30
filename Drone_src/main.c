@@ -24,8 +24,7 @@ bool UpdateTime(uint32_t *last_ticks){
 	}
 }
 
-int main(void)
-{
+int main(void){
 	uint32_t last_ticks = 0;
 	POINTER_TO_CONTAINER(OS_t, os);
 	POINTER_TO_CONTAINER(Sensordata_t, motion_sensor);
@@ -57,7 +56,7 @@ int main(void)
 	SysTick_Config(SystemCoreClock/1000); /* 1 ms Tick */
 	DelayTimer_Init();
 
-	delay_ms(150);
+	delay_ms(250);
 
 	Motion_sensor_init(os->motion_sensor);
 

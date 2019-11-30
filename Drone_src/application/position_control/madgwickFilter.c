@@ -1,8 +1,8 @@
 #include <math.h>
 #include "madgwickFilter.h"
 
-#define SAMPLE_FREQ	200.0f		//  in Hz
-#define BETA_DEF    0.1f	        // 2 * proportional gain
+#define SAMPLE_FREQ	500.0f		//  in Hz
+#define BETA_DEF    0.08f	        // 2 * proportional gain
 
 float beta = BETA_DEF;					// 2 * proportional gain (Kp)
 float invSqrt(float x);

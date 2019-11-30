@@ -215,6 +215,17 @@ void format_float_buf_to_u8_buf(float *floatbuf, uint32_t bufsize, uint8_t *targ
 	}
 }
 
+float format_u8_buf_to_float(uint8_t *u8_buf){
+	float *ptr = (float *)u8_buf;
+	return *ptr;
+}
+
+void format_u8_buf_to_float_buf(uint8_t *u8_buf, uint32_t floatbufsize, float *floatbuf){
+	for(uint32_t i=0; i < floatbufsize; i++){
+		floatbuf[i] = format_u8_buf_to_float(&u8_buf[i*4]);
+	}
+}
+
 void copy_u8_buf(uint8_t *from, uint8_t *to, uint32_t count){
 	for(uint32_t i; i < count; i++){
 		to[i] = from[i];

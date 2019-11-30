@@ -11,11 +11,8 @@
 #include "vector_operations.h"
 
 typedef struct ControlParams{
-	Vector_t P;
-	Vector_t I;
-	Vector_t D;
-	Vector_t sum_err;
-	Vector_t last_err;
+	_FLOAT_ P;
+	_FLOAT_ D;
 }ControlParams_t;
 
 

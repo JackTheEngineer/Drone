@@ -11,7 +11,7 @@ void Joys_BlockingADC_Measurement(uint16_t *results_to_be_filled)
 	uint8_t channel_num=0;
 	bool all_channels_ready = false;
 	bool _all_channels_valid = false;
-	ADC_result_t valid_results[NUM_OF_MEASURED_CHANNELS] = {0};
+	ADC_result_t valid_results[NUM_OF_MEASURED_CHANNELS] = {{0}};
 	const uint8_t required_channels[NUM_OF_MEASURED_CHANNELS] = {1,3,0,5};
 
 

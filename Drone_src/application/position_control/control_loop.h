@@ -19,6 +19,7 @@
 void ControlLoop_run(Quaternion_t *q,
 					ControlParams_t *control,
 					RC_Data_t *remote_control,
+					Vector_i32_t *omega,
 					Motorcontrolvalues_t *motors);
 
 #endif /* DRONE_SRC_APPLICATION_POSITION_CONTROL_CONTROL_LOOP_H_ */

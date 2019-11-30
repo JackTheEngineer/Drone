@@ -36,10 +36,11 @@ int main(void){
 	while(initialize == false){
 		delay_ms(25);
 		initialize = RFM75_Init();
-		LED_toggle();
+		LED_toggle(1);
 	}
 	RFM75_prepareForTransmission(&default_RFM75_Addr);
-	LED_off();
+	LED_off(0);
+	LED_off(1);
 
 	while(true){
 		if(UpdateTime(&last_ticks)){

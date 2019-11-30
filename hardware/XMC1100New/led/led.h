@@ -12,8 +12,8 @@
 #include "xmc_gpio.h"
 
 void LED_init();
-void LED_on(void);
-void LED_off(void);
-void LED_toggle(void);
+void LED_on(uint8_t lednum);
+void LED_off(uint8_t lednum);
+void LED_toggle(uint8_t lednum);
 
 #endif /* SRC_HARDWARE_LED_LED_H_ */

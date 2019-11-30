@@ -48,6 +48,8 @@ void format_copy_u8_buf(uint8_t *from_u8, uint8_t *to_u8, uint32_t size);
 void format_set_u8_buf_to(uint8_t value, uint8_t *set_to_pu8, uint32_t size);
 void format_float_to_u8_buf(float f, uint8_t *buf);
 void format_float_buf_to_u8_buf(float *floatbuf, uint32_t bufsize, uint8_t *targetbuf);
+float format_u8_buf_to_float(uint8_t *u8_buf);
+void format_u8_buf_to_float_buf(uint8_t *u8_buf, uint32_t floatbufsize, float *floatbuf);
 
 void copy_u8_buf(uint8_t *from, uint8_t *to, uint32_t count);
 

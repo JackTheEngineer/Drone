@@ -18,7 +18,7 @@ typedef struct RC_Data{
 	int16_t y_tilt;
 }RC_Data_t;
 
-void RC_Control_decode_message(uint8_t *received_bytes, RC_Data_t* rc_data);
-void RC_Control_decode_PID(uint8_t *received_bytes, ControlParams_t *control_params);
+void RC_Control_decode_message(uint8_t *received_bytes, RC_Data_t* rc_data, ControlParams_t *control_params);
+bool RC_Control_decode_PID(uint8_t *received_bytes, ControlParams_t *control_params);
 
 #endif /* RC_CONTROL_H_ */
