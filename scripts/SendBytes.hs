@@ -22,7 +22,7 @@ openUart port = do
 
 genBs =  mconcat [ BB.word8  1
                  , floatHost 180.0  -- Kp 
-                 , floatHost 0.09    -- Kd 
+                 , floatHost 18.0   -- Kd 
                  , BB.word8 $ 10 ]
 
   

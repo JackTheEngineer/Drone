@@ -10,16 +10,15 @@
 
 #include "base.h"
 #include "motors.h"
-#include "rc_control.h"
 #include "vector_operations.h"
 #include "quaternions.h"
 #include "control_params.h"
 
 
-void ControlLoop_run(Quaternion_t *q,
+bool ControlLoop_run(Quaternion_t *errorQuaternion,
 					ControlParams_t *control,
-					RC_Data_t *remote_control,
-					Vector_i32_t *omega,
+					Vector_t *omega,
+					 uint16_t throttle, /* a value from 0 - 1000 */
 					Motorcontrolvalues_t *motors);
 
 #endif /* DRONE_SRC_APPLICATION_POSITION_CONTROL_CONTROL_LOOP_H_ */

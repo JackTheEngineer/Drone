@@ -28,7 +28,9 @@ int main(void){
 	uint32_t last_ticks = 0;
 	POINTER_TO_CONTAINER(OS_t, os);
 	POINTER_TO_CONTAINER(Sensordata_t, motion_sensor);
-	State_t state = STATE_CALIBRATE;
+	Quaternion_t base_quaternion = {{1.0f, 0.0, 0.0, 0.0}};
+	Quaternion_t position_quaternion = {{1.0f, 0.0, 0.0, 0.0}};
+	State_t state = STATE_CALIBRATE_MOTION_SENSOR;
 	Button_t btn1 = {
 			.btn = _BUTTON1,
 			.laststate = false,
@@ -43,6 +45,8 @@ int main(void){
 	os->button_1 = &btn1;
 	os->button_2 = &btn2;
 	os->current_state = &state;
+	os->base_quat = &base_quaternion;
+	os->position_quat = &position_quaternion;
 
 	DAVE_Init();
 	PWM_Init();

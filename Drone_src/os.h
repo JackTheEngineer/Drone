@@ -10,13 +10,15 @@
 
 #include "application/motion_sensor/motion_sensor.h"
 #include "buttons.h"
+#include "quaternions.h"
 #include "states.h"
 
 typedef struct _os_{
 	Button_t *button_1;
 	Button_t *button_2;
 	State_t *current_state;
-
+	Quaternion_t *base_quat;
+	Quaternion_t *position_quat;
 	Sensordata_t *motion_sensor;
 }OS_t;
 
