@@ -46,12 +46,25 @@ bool ControlLoop_run(Quaternion_t *errorQuaternion,
 
 	int16_t diff;
 	Vector_t err;
+	_FLOAT_ theta_half;
+	_FLOAT_ factor;
+	_FLOAT_ q0;
+
 
 	if(throttle > 37){ /* Of 1000 */
+		q0 = errorQuaternion->q[0];
+		theta_half = acos(q0);
+		/*
+		 * the factor is for scaling linerarly with the error angle:
+		 * theta_half = acos(q0)
+		 * acos(q0)/sin(theta_half) = acos(q0)/(sqrt(1 - q0**2))
+		 */
+		factor = theta_half * invSqrt(1 - q0*q0);
+
 		Vect_write_three_values(&err,
-					errorQuaternion->q[1],
-					errorQuaternion->q[2],
-					errorQuaternion->q[3]);
+					errorQuaternion->q[1]*factor,
+					errorQuaternion->q[2]*factor,
+					errorQuaternion->q[3]*factor);
 
 		Motors_set_all_data_speed(motors, throttle);
 

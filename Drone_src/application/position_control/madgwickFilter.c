@@ -1,8 +1,8 @@
 #include <math.h>
 #include "madgwickFilter.h"
 
-#define SAMPLE_FREQ	500.0f		//  in Hz
-#define BETA_DEF    0.12f	        // 2 * proportional gain
+#define SAMPLE_FREQ	333.33f		//  in Hz
+#define BETA_DEF    0.2f	        // 2 * proportional gain
 
 float beta = BETA_DEF;					// 2 * proportional gain (Kp)
 float invSqrt(float x);
@@ -238,17 +238,4 @@ void MadgwickAHRSupdateIMU(Vector_t *g, Vector_t *a, Quaternion_t *q) {
 	q->q[1] = q1;
 	q->q[2] = q2;
 	q->q[3] = q3;
-}
-
-/* Fast inverse square-root
-   See: http://en.wikipedia.org/wiki/Fast_inverse_square_root
-*/
-float invSqrt(float x) {
-	float halfx = 0.5f * x;
-	float y = x;
-	long i = *(long*)&y;
-	i = 0x5f3759df - (i>>1);
-	y = *(float*)&i;
-	y = y * (1.5f - (halfx * y * y));
-	return y;
 }

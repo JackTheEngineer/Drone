@@ -32,7 +32,7 @@ void Vect_add(const Vector_t *vect_1, const Vector_t *vect_2, Vector_t *sum_vect
 
 void Vect_uniform(const Vector_t *vector, Vector_t *uniformed_vector){
     Vect_copy_from_to(vector, uniformed_vector);
-    Vect_times_const(uniformed_vector, 1/(Vect_length(vector)), uniformed_vector);    
+    Vect_times_const(uniformed_vector, 1/(Vect_length(vector)), uniformed_vector);
 }
 
 void Vect_write_three_values(Vector_t *vector, _FLOAT_ value_1, _FLOAT_ value_2, _FLOAT_ value_3){
@@ -183,4 +183,18 @@ _STATIC_ _INLINE_ _FLOAT_ abs_of_float(_FLOAT_ floatnum){
 
 _STATIC_ _INLINE_ int32_t sign(_FLOAT_ floatnum){
 	return ((floatnum > 0) - (floatnum < 0));
+}
+
+/* Fast inverse square-root
+   See: http://en.wikipedia.org/wiki/Fast_inverse_square_root
+*/
+float invSqrt(float x) {
+	const float halfx = 0.5f * x;
+	float y = x;
+	long i = *(long*)&y;
+	i = 0x5f3759df - (i>>1);
+	y = *(float*)&i;
+	y = y * (1.5f - (halfx * y * y));
+	y = y * (1.5f - (halfx * y * y));
+	return y;
 }

@@ -9,6 +9,7 @@ typedef struct Quaternion{
 
 void Quat_mult(Quaternion_t *q1, Quaternion_t *q2, Quaternion_t *resultQ);
 void Quat_copy(Quaternion_t *from, Quaternion_t *to);
+void Quat_conjugate(Quaternion_t *q, Quaternion_t *res);
 
 
 #endif /* _QUATERNIONS_H__ */

@@ -32,3 +32,10 @@ void Quat_copy(Quaternion_t *from, Quaternion_t *to){
 		to->q[i] = from->q[i];
 	}
 }
+
+void Quat_conjugate(Quaternion_t *q, Quaternion_t *res){
+	res->q[0] = q->q[0];
+	for(uint8_t i=1; i < 4; i++){
+		res->q[i] = -q->q[i];
+	}
+}

@@ -28,10 +28,6 @@ extern const AddressAndChannel_t default_RFM75_Addr;
 
 uint32_t calibrations_count = 0;
 Sensordata_t offset_measurements[OFFSET_MEASUREMENTS];
-Sensordata_t start_offset;
-Vector_i32_t angular_position;
-Vector_i32_t angular_speeds[3];
-uint32_t integrator_count = 0;
 uint32_t rc_no_data_receive_count = 0;
 
 typedef Vector_i32_t* (*Selector_func)(void *target, uint32_t index);
@@ -52,9 +48,6 @@ void Statemachine_do(uint32_t ticks, OS_t *os){
 		case STATE_CALIBRATE_MOTION_SENSOR:
 			State_CalibrateAngularSpeed(ticks, os);
 			break;
-		case STATE_CALIBRATE_QUATERNION:
-			State_CalibrateQuaterion(ticks, os);
-			break;
 		case STATE_RUN:
 			State_Run(ticks, os);
 			break;
@@ -68,23 +61,12 @@ void State_CalibrateAngularSpeed(uint32_t ticks, OS_t *os){
 		Motion_sensor_get_data(&offset_measurements[calibrations_count]);
 		calibrations_count++;
 		if(calibrations_count >= OFFSET_MEASUREMENTS){
-			average_i32_vector_with_selector(offset_measurements, select_angle_speed, OFFSET_MEASUREMENTS, &start_offset.angle_speed);
-			Motion_sensor_set_angular_speed_offset(&start_offset.angle_speed);
+			POINTER_TO_CONTAINER(Vector_i32_t, omega_offs);
+			average_i32_vector_with_selector(offset_measurements, select_angle_speed, OFFSET_MEASUREMENTS, omega_offs);
+			Motion_sensor_set_angular_speed_offset(omega_offs);
 			calibrations_count = 0;
-			*os->current_state = STATE_CALIBRATE_QUATERNION;
-			RFM75_startListening(&default_RFM75_Addr);
-		}
-	}
-}
-
-void State_CalibrateQuaterion(uint32_t ticks, OS_t *os){
-	if((ticks % 2) == 0){
-		MeasureAndUpdateQuaternion(os, os->base_quat);
-		calibrations_count++;
-		if(calibrations_count >= 50){
-			calibrations_count = 0;
-			Quat_copy(os->base_quat, os->position_quat);
 			*os->current_state = STATE_RUN;
+			RFM75_startListening(&default_RFM75_Addr);
 		}
 	}
 }
@@ -103,7 +85,7 @@ void MeasureAndUpdateQuaternion(OS_t *os, Quaternion_t *quaternion){
 
 void State_Run(uint32_t ticks, OS_t *os){
 	static uint32_t remembered_time_20ms;
-	static uint32_t remembered_time_2ms;
+	static uint32_t remembered_time_3ms;
 	static uint8_t received_bytes[32] = {0};
 	static uint8_t sendbytes[32]={0};
 	static ControlParams_t control_params_container = {
@@ -119,8 +101,8 @@ void State_Run(uint32_t ticks, OS_t *os){
 	STATIC_POINTER_TO_CONTAINER(Vector_i32_t, omega_avg);
 	static uint32_t average_counter = 0;
 
-	if(overflow_save_diff_u32(ticks, remembered_time_2ms) >= 2){
-		remembered_time_2ms = ticks;
+	if(overflow_save_diff_u32(ticks, remembered_time_3ms) >= 3){
+		remembered_time_3ms = ticks;
 
 		MeasureAndUpdateQuaternion(os, os->position_quat);
 		Vect_i32_add_to(omega_avg, &os->motion_sensor->angle_speed);
@@ -151,13 +133,8 @@ void State_Run(uint32_t ticks, OS_t *os){
 
 		if(!ControlLoop_run(err_quat, control_params,
 				    omega, throttle, motors)){
-			remembered_time_2ms = 0;
-			remembered_time_20ms = 0;
-			os->base_quat->q[0] = 1.0f;
-			os->base_quat->q[1] = 0.0f;
-			os->base_quat->q[2] = 0.0f;
-			os->base_quat->q[3] = 0.0f;
-			*os->current_state = STATE_CALIBRATE_QUATERNION;
+			Quat_copy(os->position_quat, os->base_quat);
+			Quat_conjugate(os->base_quat, os->base_quat);
 		}
 
 		Vect_i32_set_all_values_to(omega_avg, 0);

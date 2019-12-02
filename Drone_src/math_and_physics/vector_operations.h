@@ -66,4 +66,6 @@ void Vect_i32_copy_from_to(const Vector_i32_t *vector_from, Vector_i32_t *vector
 void Vect_i32_cross_multiply(const Vector_i32_t *vector_1, const Vector_i32_t *vector_2, Vector_i32_t *resultvector);
 void Vect_i32_sum_up_list_of_vectors(const Vector_i32_t vectorlist[], Vector_i32_t *sum_vector, uint32_t listlength);
 
+
+float invSqrt(float x);
 #endif /* _VECTOR_OPERATIONS__ */
