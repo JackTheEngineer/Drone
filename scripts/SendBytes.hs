@@ -21,8 +21,8 @@ openUart port = do
                                          , timeout = 3000}
 
 genBs =  mconcat [ BB.word8  1
-                 , floatHost 180.0  -- Kp 
-                 , floatHost 18.0   -- Kd 
+                 , floatHost 150.0  -- Kp 
+                 , floatHost 40.5   -- Kd 
                  , BB.word8 $ 10 ]
 
   

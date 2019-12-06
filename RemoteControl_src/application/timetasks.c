@@ -13,17 +13,18 @@
 #include "joystick.h"
 #include "byte_manip.h"
 
-#define NUM_OF_MEASUREMENTS_TAKEN 20
+#define NUM_OF_MEASUREMENTS_TAKEN 7
 
 typedef uint16_t* (*Retrieve_function_f)(void *target);
 
 void calculate_average(uint16_t v[NUM_OF_MEASUREMENTS_TAKEN][4], uint16_t r[4]);
+int16_t recalculate_joystickValue(uint16_t value, int16_t min, int16_t max, int16_t offset);
 
 uint16_t adc_values[NUM_OF_MEASUREMENTS_TAKEN][4];
 uint8_t count = 0;
 
 void TimeTasks_run(uint32_t ticks, OS_t *os){
-	static uint32_t remembered_time_20_ms;
+	static uint32_t remembered_time_8_ms;
 #define NUM_RFM75_BYTES 32
 	uint8_t sendbytes[NUM_RFM75_BYTES] = {0}; // it seems like it's at least necessary to send 16 bytes for a stable transmission :( bah.
 
@@ -33,16 +34,24 @@ void TimeTasks_run(uint32_t ticks, OS_t *os){
 
 #define NUM_BASE_TO_DRONE_BYTES ((4*2) + 2)
 	static uint8_t baseToDrone_bytes[NUM_BASE_TO_DRONE_BYTES] = {0};
+
+
+
+
 	Joysticks_get_newest_values(adc_values[count]);
 	count++;
 	if(count >= NUM_OF_MEASUREMENTS_TAKEN){
 		count = 0;
 	}
 
-	if(overflow_save_diff_u32(ticks, remembered_time_20_ms) >= 20){
-		remembered_time_20_ms = ticks;
+	if(overflow_save_diff_u32(ticks, remembered_time_8_ms) >= 8){
+		remembered_time_8_ms = ticks;
 		uint16_t averaged[4] = {0};
 		calculate_average(adc_values, averaged);
+
+		averaged[0] = (recalculate_joystickValue(averaged[0], 3, 4094, 2064) + 2048);
+		averaged[1] = (recalculate_joystickValue(averaged[1], 5, 4093, 2063) + 2048);
+		averaged[2] = (recalculate_joystickValue(averaged[2], 4080, 150, 2003) + 2048);
 		Joystick_serialize_data(averaged, sendbytes);
 
 
@@ -53,7 +62,6 @@ void TimeTasks_run(uint32_t ticks, OS_t *os){
 								NUM_BASE_TO_DRONE_BYTES-2);
 			LED_on(1);
 		}
-
 
 		CombinedReg_t creg = RFM75_Transmit_bytes(sendbytes,
 													NUM_RFM75_BYTES,
@@ -80,5 +88,21 @@ void calculate_average(uint16_t v[NUM_OF_MEASUREMENTS_TAKEN][4], uint16_t r[4]){
 	}
 	for(uint8_t j=0; j<4; j++){
 		r[j] = acc[j]/NUM_OF_MEASUREMENTS_TAKEN;
+	}
+}
+
+/* Outputs a fix range from  (-2048) to (2047) */
+int16_t recalculate_joystickValue(uint16_t value, int16_t min, int16_t max, int16_t offset){
+	float val = value;
+	float mif = min;
+	float maf = max;
+	float offs = offset;
+	int16_t r = (val - offs)*((4095.0f)/(maf-mif));
+	if(r >= 2047){
+		return 2047;
+	}else if(r <= (-2048)){
+		return -2048;
+	}else{
+		return r;
 	}
 }

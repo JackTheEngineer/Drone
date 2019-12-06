@@ -17,9 +17,9 @@ void RC_Control_decode_message(uint8_t *received_bytes, RC_Data_t* rc_data, Cont
 	format_u8buf_to_four_ui12(received_bytes, joystick_values);
 	position = 6;
 	rc_data->throttle = joystick_values[3];
-	rc_data->rotation = joystick_values[2];
-	rc_data->x_tilt = joystick_values[1];
-	rc_data->y_tilt = joystick_values[0];
+	rc_data->rotation = joystick_values[2] - 2048;
+	rc_data->x_tilt = joystick_values[1] - 2048;
+	rc_data->y_tilt = joystick_values[0] - 2048;
 
 
 	float testfloat;

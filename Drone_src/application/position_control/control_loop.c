@@ -8,7 +8,7 @@
 #include "madgwickFilter.h"
 #include "control_loop.h"
 
-#define PROPELLER_ROTATION_DIRECTION (-1)
+#define PROPELLER_ROTATION_DIRECTION (1.0f)
 
 _STATIC_ _INLINE_ int16_t M0_Diff(Vector_t err, _FLOAT_ factor){
 	return (int16_t)((-err.v[0] + err.v[1] - PROPELLER_ROTATION_DIRECTION*err.v[2])*factor);

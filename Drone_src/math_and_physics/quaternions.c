@@ -39,3 +39,5 @@ void Quat_conjugate(Quaternion_t *q, Quaternion_t *res){
 		res->q[i] = -q->q[i];
 	}
 }
+
+

@@ -19,6 +19,7 @@
 #include "serialize_vector.h"
 #include "byte_manip.h"
 #include "madgwickFilter.h"
+#include <math.h>
 
 #define OFFSET_MEASUREMENTS 200
 #define PI 3.141592653589793f
@@ -83,14 +84,15 @@ void MeasureAndUpdateQuaternion(OS_t *os, Quaternion_t *quaternion){
 	MadgwickAHRSupdateIMU(omega, acc, quaternion);
 }
 
+__attribute__((optimize("O2")))
 void State_Run(uint32_t ticks, OS_t *os){
-	static uint32_t remembered_time_20ms;
+	static uint32_t remembered_time_8ms;
 	static uint32_t remembered_time_3ms;
 	static uint8_t received_bytes[32] = {0};
 	static uint8_t sendbytes[32]={0};
 	static ControlParams_t control_params_container = {
-			.P = 180.0,
-			.D = 18.5,
+			.P = 150.0,
+			.D = 40.5,
 	};
 	static ControlParams_t *control_params = &control_params_container;
 
@@ -110,8 +112,8 @@ void State_Run(uint32_t ticks, OS_t *os){
 		format_float_buf_to_u8_buf(&os->position_quat->q[0], 4, sendbytes);
 	}
 
-	if(overflow_save_diff_u32(ticks, remembered_time_20ms) >= 20){
-		remembered_time_20ms = ticks;
+	if(overflow_save_diff_u32(ticks, remembered_time_8ms) >= 8){
+		remembered_time_8ms = ticks;
 
 		creg = RFM75_Receive_bytes_feedback(received_bytes);
 		if(creg.length == 0){
@@ -129,12 +131,29 @@ void State_Run(uint32_t ticks, OS_t *os){
 		Vect_i32_div_by_const(omega_avg, average_counter, omega_avg);
 		Vect_transform_i32_to_float_with_mult(omega_avg, omega, IMU_TO_RAD);
 
-		Quat_mult(os->base_quat, os->position_quat, err_quat);
+		_FLOAT_ tilt_from_center = sqrt(SQR((float)remote_control_data->x_tilt/2048.0f) + \
+							 	 	 	SQR((float)remote_control_data->y_tilt/2048.0f));
+		_FLOAT_ angle = tilt_from_center * (PI*7/180.0f);
+		_FLOAT_ s = sin(angle);
+
+		err_quat->q[0] = cos(angle);
+		err_quat->q[1] = s*(float)-remote_control_data->x_tilt/(2048.0f * tilt_from_center);
+		err_quat->q[2] = s*(float)remote_control_data->y_tilt/(2048.0f * tilt_from_center);
+		err_quat->q[3] = 0;
+		/* This here produces a uniformed quaternion
+		 * assuming, the values from x_tilt and y_tilt are between -2048 and +2047
+		 */
+
+		Quat_mult(os->base_quat, err_quat, err_quat); // Join all rotations together
+
+		Quat_conjugate(err_quat, err_quat);
+
+		Quat_mult(err_quat, os->position_quat, err_quat);
 
 		if(!ControlLoop_run(err_quat, control_params,
 				    omega, throttle, motors)){
 			Quat_copy(os->position_quat, os->base_quat);
-			Quat_conjugate(os->base_quat, os->base_quat);
+			Quat_write_all(os->position_quat, 1.0f, 0.0f, 0.0f, 0.0f);
 		}
 
 		Vect_i32_set_all_values_to(omega_avg, 0);
