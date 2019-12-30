@@ -19,9 +19,9 @@ void Motionsensor_Init(void){
 	I2C_MASTER_Init(&MotionSensor_I2C);
 
 	Motionsensor_I2C_writeByte(PWR_MGMT_1, (H_RESET));
-	delay_ms(100);
+	_delay_ms(100);
 	Motionsensor_I2C_writeByte(PWR_MGMT_1, (OPTIMAL_CLOCK));
-	delay_ms(200);
+	_delay_ms(200);
 
 	/* This enables the DLPF_CFG ( Digital lowpass filter config) to
 	 * run at a Bandwidth of 8800Hz, With a delay of 64muS

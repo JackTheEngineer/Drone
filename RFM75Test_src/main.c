@@ -25,7 +25,7 @@ int main(void){
 
 	bool initialize = false;
 	while(initialize == 0){
-		delay_ms(25);
+		_delay_ms(25);
 		initialize = RFM75_Init();
 		DIGITAL_IO_ToggleOutput(&LED1);
 	}

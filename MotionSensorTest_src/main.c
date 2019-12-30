@@ -27,7 +27,7 @@ int main(void){
 
 	DIGITAL_IO_SetOutputHigh(&LED1);
 	DIGITAL_IO_SetOutputHigh(&LED2);
-	delay_ms(200);
+	_delay_ms(200);
 	Motion_sensor_init(motion_sensor);
 
 	while(1U){
