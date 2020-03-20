@@ -25,13 +25,19 @@ static inline void Vect_write(Vector_t *vect, uint8_t index, _FLOAT_ value){
 	vect->v[index] = value;
 }
 
+static inline void Vect_write_three_values(Vector_t *vector, _FLOAT_ value_1, _FLOAT_ value_2, _FLOAT_ value_3){
+    Vect_write(vector, 0, value_1);
+    Vect_write(vector, 1, value_2);
+    Vect_write(vector, 2, value_3);
+}
+
 _FLOAT_ Vect_length(const Vector_t *vect);
 _FLOAT_ Vect_dot(const Vector_t *vect_1, const Vector_t *vect_2);
 void Vect_set_all_values_to(Vector_t *vect, _FLOAT_ value);
 void Vect_add_to(Vector_t *sum_vect, const Vector_t *vect);
 void Vect_add(const Vector_t *vect_1, const Vector_t *vect_2, Vector_t *sum_vect);
 void Vect_uniform(const Vector_t *vector, Vector_t *uniformed_vector);
-void Vect_write_three_values(Vector_t *vector, _FLOAT_ value_1, _FLOAT_ value_2, _FLOAT_ value_3);
+
 void Vect_times_const(const Vector_t *vector, _FLOAT_ constant, Vector_t *result_vector);
 void Vect_copy_from_to(const Vector_t *vector_from, Vector_t *vector_to);
 void Vect_cross_multiply(const Vector_t *vector_1, const Vector_t *vector_2, Vector_t *resultvector);

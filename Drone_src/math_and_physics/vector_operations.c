@@ -35,11 +35,6 @@ void Vect_uniform(const Vector_t *vector, Vector_t *uniformed_vector){
     Vect_times_const(uniformed_vector, 1/(Vect_length(vector)), uniformed_vector);
 }
 
-void Vect_write_three_values(Vector_t *vector, _FLOAT_ value_1, _FLOAT_ value_2, _FLOAT_ value_3){
-    Vect_write(vector, 0, value_1);
-    Vect_write(vector, 1, value_2);
-    Vect_write(vector, 2, value_3);
-}
 
 void Vect_times_const(const Vector_t *vector, _FLOAT_ constant, Vector_t* result_vector){
     Vect_write(result_vector, 0, Vect_read(vector, 0) * constant);

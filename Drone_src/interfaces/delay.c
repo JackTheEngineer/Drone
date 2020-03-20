@@ -3,7 +3,7 @@
 extern volatile uint32_t tick_count;
 
 /* Assumes tick count to be 1 tick  = 1 ms */
-void delay_ms(uint32_t ms){
+void _delay_ms(uint32_t ms){
 	/* Overflow - Protected diff calculation */
 	bool hbs;
 	uint32_t dt;

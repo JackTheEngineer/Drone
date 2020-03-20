@@ -34,7 +34,7 @@ int main(void){
 
 	bool initialize = false;
 	while(initialize == false){
-		delay_ms(25);
+		_delay_ms(25);
 		initialize = RFM75_Init();
 		LED_toggle(1);
 	}

@@ -14,7 +14,6 @@ void Joys_BlockingADC_Measurement(uint16_t *results_to_be_filled)
 	ADC_result_t valid_results[NUM_OF_MEASURED_CHANNELS] = {{0}};
 	const uint8_t required_channels[NUM_OF_MEASURED_CHANNELS] = {1,3,0,5};
 
-
 	while(!all_channels_ready){
 		result = ADC_MEASUREMENT_GetGlobalDetailedResult();
 		if((bool)((result & VADC_GLOBRES_VF_Msk) >> VADC_GLOBRES_VF_Pos))

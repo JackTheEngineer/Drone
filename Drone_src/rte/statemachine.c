@@ -109,7 +109,6 @@ void State_Run(uint32_t ticks, OS_t *os){
 		MeasureAndUpdateQuaternion(os, os->position_quat);
 		Vect_i32_add_to(omega_avg, &os->motion_sensor->angle_speed);
 		average_counter++;
-		format_float_buf_to_u8_buf(&os->position_quat->q[0], 4, sendbytes);
 	}
 
 	if(overflow_save_diff_u32(ticks, remembered_time_8ms) >= 8){
@@ -127,33 +126,48 @@ void State_Run(uint32_t ticks, OS_t *os){
 
 		uint16_t throttle = remote_control_data->throttle/4;
 		POINTER_TO_CONTAINER(Quaternion_t, err_quat);
+		POINTER_TO_CONTAINER(Quaternion_t, z_rotation);
 
 		Vect_i32_div_by_const(omega_avg, average_counter, omega_avg);
 		Vect_transform_i32_to_float_with_mult(omega_avg, omega, IMU_TO_RAD);
 
 		_FLOAT_ tilt_from_center = sqrt(SQR((float)remote_control_data->x_tilt/2048.0f) + \
 							 	 	 	SQR((float)remote_control_data->y_tilt/2048.0f));
+		// The 7 is an arbitrary factor, that makes the reaction to the remote
+		// Control more aggressive
 		_FLOAT_ angle = tilt_from_center * (PI*7/180.0f);
 		_FLOAT_ s = sin(angle);
 
-		err_quat->q[0] = cos(angle);
-		err_quat->q[1] = s*(float)-remote_control_data->x_tilt/(2048.0f * tilt_from_center);
-		err_quat->q[2] = s*(float)remote_control_data->y_tilt/(2048.0f * tilt_from_center);
-		err_quat->q[3] = 0;
 		/* This here produces a uniformed quaternion
 		 * assuming, the values from x_tilt and y_tilt are between -2048 and +2047
 		 */
+		err_quat->q[0] = cos(angle);
+		err_quat->q[1] = - s*(float)remote_control_data->x_tilt/(2048.0f * tilt_from_center);
+		err_quat->q[2] = s*(float)remote_control_data->y_tilt/(2048.0f * tilt_from_center);
+		err_quat->q[3] = 0;
 
-		Quat_mult(os->base_quat, err_quat, err_quat); // Join all rotations together
+		Quat_mult(os->base_quat, z_rotation, os->base_quat);
 
+		/*
+		 * Join all rotations together
+		 * err_quat contains up to the next comment the desired position
+		 */
+		Quat_mult(os->base_quat, err_quat, err_quat);
+
+		/*
+		 * Conjugate the desired position to
+		 * achieve the 'relative
+		 */
 		Quat_conjugate(err_quat, err_quat);
 
 		Quat_mult(err_quat, os->position_quat, err_quat);
 
+		format_float_buf_to_u8_buf(&err_quat->q[0], 4, sendbytes);
+
 		if(!ControlLoop_run(err_quat, control_params,
 				    omega, throttle, motors)){
-			Quat_copy(os->position_quat, os->base_quat);
-			Quat_write_all(os->position_quat, 1.0f, 0.0f, 0.0f, 0.0f);
+			// Quat_copy(os->position_quat, os->base_quat);
+			// Quat_write_all(os->position_quat, 1.0f, 0.0f, 0.0f, 0.0f);
 		}
 
 		Vect_i32_set_all_values_to(omega_avg, 0);

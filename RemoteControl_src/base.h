@@ -14,7 +14,7 @@
 #define _INLINE_ inline
 #define _FLOAT_ float
 
-#define TWO_TO_N_MIN_ONE(n) ((1<<(n)) - 1)
+#define BINARY_ONES(n) ((1<<(n)) - 1)
 
 #define GLUE(x,y) x##y
 #define POINTER_TO_CONTAINER(type, name) type GLUE(name,_container); type *name = &(GLUE(name,_container))

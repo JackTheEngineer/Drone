@@ -132,14 +132,14 @@ bool RFM75_initRegisters()
 	RFM75_SPI_write_buffer((uint8_t *)RFM75_cmd_tog1, sizeof(RFM75_cmd_tog1));
 	RFM75_SPI_write_buffer((uint8_t *)RFM75_cmd_tog2, sizeof(RFM75_cmd_tog2));
 
-	delay_ms(50);
+	_delay_ms(50);
 
 	RFM75_selectBank(0);
 	RFM75_set_RX_mode();
 
-	delay_ms(5);
+	_delay_ms(5);
 	RFM75_selectBank(1);
-	delay_ms(5);
+	_delay_ms(5);
 
 	//Check the ChipID
 	uint8_t id = RFM75_SPI_read_reg_value(0x08);
