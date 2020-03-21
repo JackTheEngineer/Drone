@@ -91,8 +91,10 @@ void State_Run(uint32_t ticks, OS_t *os){
 	static uint8_t received_bytes[32] = {0};
 	static uint8_t sendbytes[32]={0};
 	static ControlParams_t control_params_container = {
-			.P = 150.0,
-			.D = 40.5,
+			.P = 50.0,
+			.D = 10.0,
+			.I = 5,
+			.integralErr.v = {0.0, 0.0, 0.0}
 	};
 	static ControlParams_t *control_params = &control_params_container;
 
@@ -164,8 +166,12 @@ void State_Run(uint32_t ticks, OS_t *os){
 
 		format_float_buf_to_u8_buf(&err_quat->q[0], 4, sendbytes);
 
-		if(!ControlLoop_run(err_quat, control_params,
-				    omega, throttle, motors)){
+		if(!ControlLoop_run(err_quat,
+							control_params,
+							omega,
+							throttle,
+							motors)){
+			Vect_write_three_values(&control_params->integralErr, 0.0, 0.0, 0.0);
 			// Quat_copy(os->position_quat, os->base_quat);
 			// Quat_write_all(os->position_quat, 1.0f, 0.0f, 0.0f, 0.0f);
 		}

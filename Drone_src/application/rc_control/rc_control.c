@@ -26,9 +26,11 @@ void RC_Control_decode_message(uint8_t *received_bytes, RC_Data_t* rc_data, Cont
 	first_float = format_u8_buf_to_float(&received_bytes[bytes_position]);
 	if(first_float != 0.0){
 		control_params->P = first_float;
-		bytes_position += 4;
+		bytes_position += 4; // 10
 		control_params->D = format_u8_buf_to_float(&received_bytes[bytes_position]);
-		bytes_position += 4;
+		bytes_position += 4; // 14
+		control_params->I = format_u8_buf_to_float(&received_bytes[bytes_position]);
+		bytes_position += 4; // 18
 		led_toggle(_LED1);
 	}
 }

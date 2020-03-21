@@ -13,6 +13,8 @@
 typedef struct ControlParams{
 	_FLOAT_ P;
 	_FLOAT_ D;
+	_FLOAT_ I;
+	Vector_t integralErr;
 }ControlParams_t;
 
 

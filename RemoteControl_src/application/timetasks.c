@@ -25,18 +25,19 @@ uint8_t count = 0;
 
 void TimeTasks_run(uint32_t ticks, OS_t *os){
 	static uint32_t remembered_time_8_ms;
+	// it seems like it's at least necessary to send 16 bytes for a stable transmission
 #define NUM_RFM75_BYTES 32
-	uint8_t sendbytes[NUM_RFM75_BYTES] = {0}; // it seems like it's at least necessary to send 16 bytes for a stable transmission :( bah.
+	uint8_t sendbytes[NUM_RFM75_BYTES] = {0};
 
-#define NUM_DRONE_TO_BASE_BYTES 33
-	uint8_t droneToBase_bytes[NUM_DRONE_TO_BASE_BYTES] = {0};
-	droneToBase_bytes[NUM_DRONE_TO_BASE_BYTES - 1] = '\n';
 
-#define NUM_BASE_TO_DRONE_BYTES ((4*2) + 2)
+//#define NUM_DRONE_TO_BASE_BYTES 33
+//	uint8_t droneToBase_bytes[NUM_DRONE_TO_BASE_BYTES] = {0};
+//	droneToBase_bytes[NUM_DRONE_TO_BASE_BYTES - 1] = '\n';
+
+	uint8_t droneToBase_bytes[] = "Hello World Out There This is crazy\n";
+
+#define NUM_BASE_TO_DRONE_BYTES ((4*3) + 2)
 	static uint8_t baseToDrone_bytes[NUM_BASE_TO_DRONE_BYTES] = {0};
-
-
-
 
 	Joysticks_get_newest_values(adc_values[count]);
 	count++;
@@ -44,7 +45,7 @@ void TimeTasks_run(uint32_t ticks, OS_t *os){
 		count = 0;
 	}
 
-	if(overflow_save_diff_u32(ticks, remembered_time_8_ms) >= 8){
+	if(overflow_save_diff_u32(ticks, remembered_time_8_ms) >= 100){
 		remembered_time_8_ms = ticks;
 		uint16_t averaged[4] = {0};
 		calculate_average(adc_values, averaged);
@@ -75,7 +76,7 @@ void TimeTasks_run(uint32_t ticks, OS_t *os){
 								NUM_BASE_TO_DRONE_BYTES);
 		}
 
-		UART_STATUS_t uartStatus = UART_Transmit(&DEBUG_UART, droneToBase_bytes, NUM_DRONE_TO_BASE_BYTES);
+		UART_Transmit(&DEBUG_UART, droneToBase_bytes, sizeof(droneToBase_bytes));
 	}
 }
 
