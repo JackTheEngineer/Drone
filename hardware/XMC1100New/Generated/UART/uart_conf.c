@@ -97,7 +97,7 @@ const XMC_UART_CH_CONFIG_t DEBUG_UART_channel_config =
   .data_bits     = 8U,
   .frame_length  = 8U,
   .stop_bits     = 1U,
-  .oversampling  = 8U,
+  .oversampling  = 16U,
   .parity_mode   = XMC_USIC_CH_PARITY_MODE_NONE
 };
 /*Transmit pin configuration*/

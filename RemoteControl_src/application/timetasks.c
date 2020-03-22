@@ -13,14 +13,15 @@
 #include "joystick.h"
 #include "byte_manip.h"
 
-#define NUM_OF_MEASUREMENTS_TAKEN 7
 
 typedef uint16_t* (*Retrieve_function_f)(void *target);
 
+#define NUM_OF_MEASUREMENTS_TAKEN 7
+uint16_t adc_values[NUM_OF_MEASUREMENTS_TAKEN][4];
 void calculate_average(uint16_t v[NUM_OF_MEASUREMENTS_TAKEN][4], uint16_t r[4]);
 int16_t recalculate_joystickValue(uint16_t value, int16_t min, int16_t max, int16_t offset);
 
-uint16_t adc_values[NUM_OF_MEASUREMENTS_TAKEN][4];
+
 uint8_t count = 0;
 
 void TimeTasks_run(uint32_t ticks, OS_t *os){
@@ -30,11 +31,10 @@ void TimeTasks_run(uint32_t ticks, OS_t *os){
 	uint8_t sendbytes[NUM_RFM75_BYTES] = {0};
 
 
-//#define NUM_DRONE_TO_BASE_BYTES 33
-//	uint8_t droneToBase_bytes[NUM_DRONE_TO_BASE_BYTES] = {0};
-//	droneToBase_bytes[NUM_DRONE_TO_BASE_BYTES - 1] = '\n';
+#define NUM_DRONE_TO_BASE_BYTES 33
+	uint8_t droneToBase_bytes[NUM_DRONE_TO_BASE_BYTES] = {0};
+	droneToBase_bytes[NUM_DRONE_TO_BASE_BYTES - 1] = '\n';
 
-	uint8_t droneToBase_bytes[] = "Hello World Out There This is crazy\n";
 
 #define NUM_BASE_TO_DRONE_BYTES ((4*3) + 2)
 	static uint8_t baseToDrone_bytes[NUM_BASE_TO_DRONE_BYTES] = {0};
@@ -45,7 +45,7 @@ void TimeTasks_run(uint32_t ticks, OS_t *os){
 		count = 0;
 	}
 
-	if(overflow_save_diff_u32(ticks, remembered_time_8_ms) >= 100){
+	if(overflow_save_diff_u32(ticks, remembered_time_8_ms) >= 8){
 		remembered_time_8_ms = ticks;
 		uint16_t averaged[4] = {0};
 		calculate_average(adc_values, averaged);
@@ -54,7 +54,6 @@ void TimeTasks_run(uint32_t ticks, OS_t *os){
 		averaged[1] = (recalculate_joystickValue(averaged[1], 5, 4093, 2063) + 2048);
 		averaged[2] = (recalculate_joystickValue(averaged[2], 4080, 150, 2003) + 2048);
 		Joystick_serialize_data(averaged, sendbytes);
-
 
 		UART_Receive(&DEBUG_UART, baseToDrone_bytes, NUM_BASE_TO_DRONE_BYTES);
 		if((baseToDrone_bytes[0] == 1) &&

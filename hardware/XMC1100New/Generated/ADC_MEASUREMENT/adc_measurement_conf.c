@@ -102,7 +102,7 @@
 const  XMC_VADC_GLOBAL_CLASS_t global_iclass_config =
 {
   .conversion_mode_standard  = (uint32_t) XMC_VADC_CONVMODE_12BIT,
-  .sample_time_std_conv	     = (uint32_t) 8,
+  .sample_time_std_conv	     = (uint32_t) 2,
 };
 
 /******************************* CHANNEL CONFIG *******************************/
@@ -190,7 +190,7 @@ const XMC_VADC_BACKGROUND_CONFIG_t backgnd_config =
   .timer_mode        = (uint32_t) 0,							 /*Timer Mode Disabled */
   .external_trigger  = (uint32_t) 0,                               /*Trigger is Disabled*/
   .req_src_interrupt = (uint32_t) 0,                              /*Background Request source interrupt Disabled*/
-  .enable_auto_scan  = (uint32_t) 1,
+  .enable_auto_scan  = (uint32_t) 0,
   .load_mode         = (uint32_t) XMC_VADC_SCAN_LOAD_OVERWRITE
 };
 

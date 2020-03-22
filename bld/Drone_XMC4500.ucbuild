@@ -21,7 +21,7 @@ headerFiles:
 # The replacement rule is not generally supported by YAML,
 # and works only for the 'ccBase' parameter
 
-ccBase: /home/jakov/bin/gcc-arm-none-eabi-4_9-2015q3
+ccBase: /home/jakov/bin/gcc-arm-none-eabi-4_9-2014q4
 cc: <ccBase>/bin/arm-none-eabi-gcc # <ccBase> gets just replaced
 ccObjCopy: <ccBase>/bin/arm-none-eabi-objcopy
 ccSize: <ccBase>/bin/arm-none-eabi-size
