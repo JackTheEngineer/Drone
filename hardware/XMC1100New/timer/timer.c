@@ -1,9 +1,5 @@
 #include "timer.h"
 
-#define MODULE_PTR (XMC_CCU4_MODULE_t*) CCU40
-#define SLICE_PTR (XMC_CCU4_SLICE_t*) CCU40_CC40
-#define SLICE_NUMBER 0
-
 const XMC_CCU4_SLICE_COMPARE_CONFIG_t TIMER_0_config =
 {
 		.timer_mode          = XMC_CCU4_SLICE_TIMER_COUNT_MODE_EA,
@@ -20,7 +16,7 @@ const XMC_CCU4_SLICE_COMPARE_CONFIG_t TIMER_0_config =
 		.timer_concatenation = false
 };
 
-void TIMER_Init_with_params(XMC_CCU4_MODULE_t * const module,
+void Handwritten_TIMER_Init_with_params(XMC_CCU4_MODULE_t * const module,
 		XMC_CCU4_SLICE_t * const slice,
 		XMC_CCU4_SLICE_COMPARE_CONFIG_t * const timer_config,
 		uint8_t slice_number)
@@ -42,25 +38,23 @@ void TIMER_Init_with_params(XMC_CCU4_MODULE_t * const module,
 	XMC_CCU4_SLICE_ClearTimer(slice);
 }
 
-void TIMER_Start(XMC_CCU4_SLICE_t * const slice)
+void Handwritten_TIMER_Start(XMC_CCU4_SLICE_t * const slice)
 {
 	XMC_CCU4_SLICE_StartTimer(slice);
 }
 
-void TIMER_Stop(XMC_CCU4_SLICE_t * const slice)
+void Handwritten_TIMER_Stop(XMC_CCU4_SLICE_t * const slice)
 {
 	XMC_CCU4_SLICE_StopTimer(slice);
 }
 
-void TIMER_ClearEvent(XMC_CCU4_SLICE_t * const slice)
+void Handwritten_TIMER_ClearEvent(XMC_CCU4_SLICE_t * const slice)
 {
 	XMC_CCU4_SLICE_ClearEvent(slice,
 			XMC_CCU4_SLICE_IRQ_ID_PERIOD_MATCH);
 }
 
-void TIMER_Clear(XMC_CCU4_SLICE_t * const slice)
+void Handwritten_TIMER_Clear(XMC_CCU4_SLICE_t * const slice)
 {
 	XMC_CCU4_SLICE_ClearTimer(slice);
 }
-
-

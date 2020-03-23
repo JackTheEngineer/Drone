@@ -350,13 +350,13 @@ static SPI_MASTER_STATUS_t RFM75_SPI_lInit(void)
                                              XMC_USIC_CH_RXFIFO_INTERRUPT_NODE_POINTER_ALTERNATE,
                                              (uint32_t)SPI_MASTER_SR_ID_2);
   /* Set priority of the Transmit interrupt */
-  NVIC_SetPriority((IRQn_Type)13, 3U);
+  NVIC_SetPriority((IRQn_Type)13, 2U);
     
   /* Enable Transmit interrupt */
   NVIC_EnableIRQ((IRQn_Type)13);
              
   /* Set priority of the Receive interrupt */
-  NVIC_SetPriority((IRQn_Type)11, 2U);
+  NVIC_SetPriority((IRQn_Type)11, 1U);
     
   /* Enable Receive interrupt */
   NVIC_EnableIRQ((IRQn_Type)11);

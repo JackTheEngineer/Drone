@@ -202,10 +202,10 @@ UART_STATUS_t DEBUG_UART_init()
   XMC_USIC_CH_RXFIFO_SetInterruptNodePointer(XMC_UART0_CH0, XMC_USIC_CH_RXFIFO_INTERRUPT_NODE_POINTER_ALTERNATE,
        0x1U);
   /*Set priority and enable NVIC node for transmit interrupt*/
-  NVIC_SetPriority((IRQn_Type)12, 3U);
+  NVIC_SetPriority((IRQn_Type)12, 2U);
   NVIC_EnableIRQ((IRQn_Type)12);
   /*Set priority and enable NVIC node for receive interrupt*/
-  NVIC_SetPriority((IRQn_Type)10, 3U);
+  NVIC_SetPriority((IRQn_Type)10, 2U);
   NVIC_EnableIRQ((IRQn_Type)10);
   return status;
 }

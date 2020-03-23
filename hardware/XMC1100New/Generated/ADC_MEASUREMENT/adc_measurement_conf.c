@@ -107,11 +107,11 @@ const  XMC_VADC_GLOBAL_CLASS_t global_iclass_config =
 
 /******************************* CHANNEL CONFIG *******************************/
 
-/*********************** joys_x_left Configurations ************************************/
+/*********************** joystick_left_x Configurations ************************************/
 
 
-/* joys_x_left ADC channel Handle */
-ADC_MEASUREMENT_CHANNEL_t ADC_MEASUREMENT_joys_x_left_handle =
+/* joystick_left_x ADC channel Handle */
+ADC_MEASUREMENT_CHANNEL_t ADC_MEASUREMENT_joystick_left_x_handle =
 {
   .ch_num        = (uint8_t) 0,
   .group_index	 = (uint8_t) 0,
@@ -119,11 +119,11 @@ ADC_MEASUREMENT_CHANNEL_t ADC_MEASUREMENT_joys_x_left_handle =
 };
 
 	
-/*********************** joys_y_left Configurations ************************************/
+/*********************** joystick_left_y Configurations ************************************/
 
 
-/* joys_y_left ADC channel Handle */
-ADC_MEASUREMENT_CHANNEL_t ADC_MEASUREMENT_joys_y_left_handle =
+/* joystick_left_y ADC channel Handle */
+ADC_MEASUREMENT_CHANNEL_t ADC_MEASUREMENT_joystick_left_y_handle =
 {
   .ch_num        = (uint8_t) 5,
   .group_index	 = (uint8_t) 0,
@@ -131,11 +131,11 @@ ADC_MEASUREMENT_CHANNEL_t ADC_MEASUREMENT_joys_y_left_handle =
 };
 
 	
-/*********************** joys_x_right Configurations ************************************/
+/*********************** joystick_right_x Configurations ************************************/
 
 
-/* joys_x_right ADC channel Handle */
-ADC_MEASUREMENT_CHANNEL_t ADC_MEASUREMENT_joys_x_right_handle =
+/* joystick_right_x ADC channel Handle */
+ADC_MEASUREMENT_CHANNEL_t ADC_MEASUREMENT_joystick_right_x_handle =
 {
   .ch_num        = (uint8_t) 1,
   .group_index	 = (uint8_t) 0,
@@ -143,11 +143,11 @@ ADC_MEASUREMENT_CHANNEL_t ADC_MEASUREMENT_joys_x_right_handle =
 };
 
 	
-/*********************** joys_y_right Configurations ************************************/
+/*********************** joystick_right_y Configurations ************************************/
 
 
-/* joys_y_right ADC channel Handle */
-ADC_MEASUREMENT_CHANNEL_t ADC_MEASUREMENT_joys_y_right_handle =
+/* joystick_right_y ADC channel Handle */
+ADC_MEASUREMENT_CHANNEL_t ADC_MEASUREMENT_joystick_right_y_handle =
 {
   .ch_num        = (uint8_t) 3,
   .group_index	 = (uint8_t) 0,
@@ -170,10 +170,10 @@ ADC_MEASUREMENT_CHANNEL_ARRAY_t ADC_MEASUREMENT_channel_array=
 {
   .channel_array =
 	{
-	  (ADC_MEASUREMENT_CHANNEL_t *)&ADC_MEASUREMENT_joys_x_left_handle,
-	  (ADC_MEASUREMENT_CHANNEL_t *)&ADC_MEASUREMENT_joys_y_left_handle,
-	  (ADC_MEASUREMENT_CHANNEL_t *)&ADC_MEASUREMENT_joys_x_right_handle,
-	  (ADC_MEASUREMENT_CHANNEL_t *)&ADC_MEASUREMENT_joys_y_right_handle,
+	  (ADC_MEASUREMENT_CHANNEL_t *)&ADC_MEASUREMENT_joystick_left_x_handle,
+	  (ADC_MEASUREMENT_CHANNEL_t *)&ADC_MEASUREMENT_joystick_left_y_handle,
+	  (ADC_MEASUREMENT_CHANNEL_t *)&ADC_MEASUREMENT_joystick_right_x_handle,
+	  (ADC_MEASUREMENT_CHANNEL_t *)&ADC_MEASUREMENT_joystick_right_y_handle,
 	},
   .res_handle    = (XMC_VADC_RESULT_CONFIG_t*) &global_res_config,
 };

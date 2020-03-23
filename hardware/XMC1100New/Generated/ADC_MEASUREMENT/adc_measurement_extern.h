@@ -101,10 +101,10 @@
  * MACROS
  **********************************************************************************************************************/
 
- extern ADC_MEASUREMENT_CHANNEL_t ADC_MEASUREMENT_joys_x_left_handle;
- extern ADC_MEASUREMENT_CHANNEL_t ADC_MEASUREMENT_joys_y_left_handle;
- extern ADC_MEASUREMENT_CHANNEL_t ADC_MEASUREMENT_joys_x_right_handle;
- extern ADC_MEASUREMENT_CHANNEL_t ADC_MEASUREMENT_joys_y_right_handle;
+ extern ADC_MEASUREMENT_CHANNEL_t ADC_MEASUREMENT_joystick_left_x_handle;
+ extern ADC_MEASUREMENT_CHANNEL_t ADC_MEASUREMENT_joystick_left_y_handle;
+ extern ADC_MEASUREMENT_CHANNEL_t ADC_MEASUREMENT_joystick_right_x_handle;
+ extern ADC_MEASUREMENT_CHANNEL_t ADC_MEASUREMENT_joystick_right_y_handle;
 
 /***********************************************************************************************************************
  * EXTERN DECLARATIONS

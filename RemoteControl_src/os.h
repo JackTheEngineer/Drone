@@ -9,9 +9,5 @@
 #define SRC_OS_H_
 #include "base.h"
 
-typedef struct _os_{
-
-}OS_t;
-
 
 #endif /* SRC_OS_H_ */

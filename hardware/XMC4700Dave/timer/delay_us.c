@@ -16,7 +16,7 @@ static XMC_CCU4_SLICE_t * const slice = (XMC_CCU4_SLICE_t*) CCU40_CC41;
 static volatile uint8_t time_passed;
 
 void DelayTimer_Init(void){
-	TIMER_Init_with_params(module,
+	Handwritten_TIMER_Init_with_params(module,
 			slice,
 			(XMC_CCU4_SLICE_COMPARE_CONFIG_t * const)&PinPulse_slice_config,
 			1);
@@ -35,12 +35,12 @@ void _delay_us(uint16_t us){
 			((uint32_t)XMC_CCU4_SHADOW_TRANSFER_SLICE_1 |
 			(uint32_t)XMC_CCU4_SHADOW_TRANSFER_PRESCALER_SLICE_1));
 	time_passed = 0;
-	TIMER_Start(slice);
+	Handwritten_TIMER_Start(slice);
 	while(time_passed == 0){}
 }
 
 void DelayUsHandler(void){
-	TIMER_ClearEvent(slice);
+	Handwritten_TIMER_ClearEvent(slice);
 	time_passed = 1;
-	TIMER_Stop(slice);
+	Handwritten_TIMER_Stop(slice);
 }

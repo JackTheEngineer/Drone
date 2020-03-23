@@ -1,11 +1,4 @@
-/*
- * tick_.c
- *
- *  Created on: Jul 20, 2017
- *      Author: chocolate
- */
 #include "timer.h"
-
 
 const XMC_CCU4_SLICE_COMPARE_CONFIG_t PinPulse_slice_config =
 {
@@ -23,7 +16,7 @@ const XMC_CCU4_SLICE_COMPARE_CONFIG_t PinPulse_slice_config =
 		.timer_concatenation = (uint32_t) 0
 };
 
-void TIMER_Init_with_params(XMC_CCU4_MODULE_t * const module,
+void Handwritten_TIMER_Init_with_params(XMC_CCU4_MODULE_t * const module,
 		XMC_CCU4_SLICE_t * const slice,
 		XMC_CCU4_SLICE_COMPARE_CONFIG_t * const timer_config,
 		uint8_t slice_number)
@@ -31,7 +24,7 @@ void TIMER_Init_with_params(XMC_CCU4_MODULE_t * const module,
 
 	XMC_CCU4_Init(module, XMC_CCU4_SLICE_MCMS_ACTION_TRANSFER_PR_CR);
 	XMC_CCU4_StartPrescaler(module);
-	XMC_CCU4_EnableClock(module , slice_number);
+	XMC_CCU4_EnableClock(module, slice_number);
 
 	XMC_CCU4_SLICE_CompareInit(slice, timer_config);
 	XMC_CCU4_SLICE_SetTimerPeriodMatch(slice, (uint16_t)36);
@@ -46,26 +39,25 @@ void TIMER_Init_with_params(XMC_CCU4_MODULE_t * const module,
 			(XMC_CCU4_SLICE_SR_ID_t)slice_number);
 	XMC_CCU4_SLICE_EnableEvent(slice, XMC_CCU4_SLICE_IRQ_ID_PERIOD_MATCH);
 	XMC_CCU4_SLICE_ClearTimer(slice);
-
 }
 
-void TIMER_Start(XMC_CCU4_SLICE_t * const slice)
+void Handwritten_TIMER_Start(XMC_CCU4_SLICE_t * const slice)
 {
 	XMC_CCU4_SLICE_StartTimer(slice);
 }
 
-void TIMER_Stop(XMC_CCU4_SLICE_t * const slice)
+void Handwritten_TIMER_Stop(XMC_CCU4_SLICE_t * const slice)
 {
 	XMC_CCU4_SLICE_StopTimer(slice);
 }
 
-void TIMER_ClearEvent(XMC_CCU4_SLICE_t * const slice)
+void Handwritten_TIMER_ClearEvent(XMC_CCU4_SLICE_t * const slice)
 {
 	XMC_CCU4_SLICE_ClearEvent(slice,
 			XMC_CCU4_SLICE_IRQ_ID_PERIOD_MATCH);
 }
 
-void TIMER_Clear(XMC_CCU4_SLICE_t * const slice)
+void Handwritten_TIMER_Clear(XMC_CCU4_SLICE_t * const slice)
 {
 	XMC_CCU4_SLICE_ClearTimer(slice);
 }

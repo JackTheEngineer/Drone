@@ -101,10 +101,10 @@
 
 
 #define ADC_MEASUREMENT_MAXCHANNELS (4U)
-#define ADC_MEASUREMENT_joys_x_left (ADC_MEASUREMENT_joys_x_left_handle)
-#define ADC_MEASUREMENT_joys_y_left (ADC_MEASUREMENT_joys_y_left_handle)
-#define ADC_MEASUREMENT_joys_x_right (ADC_MEASUREMENT_joys_x_right_handle)
-#define ADC_MEASUREMENT_joys_y_right (ADC_MEASUREMENT_joys_y_right_handle)
+#define ADC_MEASUREMENT_joystick_left_x (ADC_MEASUREMENT_joystick_left_x_handle)
+#define ADC_MEASUREMENT_joystick_left_y (ADC_MEASUREMENT_joystick_left_y_handle)
+#define ADC_MEASUREMENT_joystick_right_x (ADC_MEASUREMENT_joystick_right_x_handle)
+#define ADC_MEASUREMENT_joystick_right_y (ADC_MEASUREMENT_joystick_right_y_handle)
 #define ADC_MEASUREMENT_ICLASS_NUM (0U)
 #define ADC_MEASUREMENT_ICLASS_NUM_XMC11 (1U)
 

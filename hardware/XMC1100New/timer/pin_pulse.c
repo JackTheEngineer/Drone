@@ -23,21 +23,21 @@ void PinPulse_Init(void){
 	NVIC_SetPriority(CCU40_0_IRQn, 3);
 	NVIC_EnableIRQ(CCU40_0_IRQn);
 
-	TIMER_Init_with_params((XMC_CCU4_MODULE_t*) CCU40,
+	Handwritten_TIMER_Init_with_params((XMC_CCU4_MODULE_t*) CCU40,
 			(XMC_CCU4_SLICE_t*) CCU40_CC40,
 			(XMC_CCU4_SLICE_COMPARE_CONFIG_t * const)&TIMER_0_config,
 			0);
 }
 
 void PinPulse_Trigger(void){
-	TIMER_Clear((XMC_CCU4_SLICE_t*) CCU40_CC40);
+	Handwritten_TIMER_Clear((XMC_CCU4_SLICE_t*) CCU40_CC40);
 	XMC_GPIO_SetOutputHigh(CE_PORT, CE_PIN);
-	TIMER_Start((XMC_CCU4_SLICE_t*) CCU40_CC40);
+	Handwritten_TIMER_Start((XMC_CCU4_SLICE_t*) CCU40_CC40);
 }
 
 void PinPulseHandler(void){
-	TIMER_ClearEvent((XMC_CCU4_SLICE_t*) CCU40_CC40);
+	Handwritten_TIMER_ClearEvent((XMC_CCU4_SLICE_t*) CCU40_CC40);
 	XMC_GPIO_SetOutputLow(CE_PORT, CE_PIN);
-	TIMER_Stop((XMC_CCU4_SLICE_t*) CCU40_CC40);
+	Handwritten_TIMER_Stop((XMC_CCU4_SLICE_t*) CCU40_CC40);
 }
 
