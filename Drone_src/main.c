@@ -28,12 +28,12 @@ int main(void){
 	uint32_t last_ticks = 0;
 	POINTER_TO_CONTAINER(OS_t, os);
 	POINTER_TO_CONTAINER(Sensordata_t, motion_sensor);
-	Quaternion_t base_quaternion = {{0.9961946980917455f,
-									-0.08715574274765817,
-									0.0,
-									0.0}};
+//	Quaternion_t base_quaternion = {{0.9961946980917455f,
+//									-0.08715574274765817f,
+//									0.0f,
+//									0.0f}};
+	Quaternion_t base_quaternion = {{1.0f, 0.0, 0.0, 0.0}};
 	Quaternion_t position_quaternion = {{1.0f, 0.0, 0.0, 0.0}};
-	State_t state = STATE_CALIBRATE_MOTION_SENSOR;
 	Button_t btn1 = {
 			.btn = _BUTTON1,
 			.laststate = false,
@@ -47,7 +47,7 @@ int main(void){
 	os->motion_sensor = motion_sensor;
 	os->button_1 = &btn1;
 	os->button_2 = &btn2;
-	os->current_state = &state;
+	os->current_state = STATE_CALIBRATE_MOTION_SENSOR;
 	os->base_quat = &base_quaternion;
 	os->position_quat = &position_quaternion;
 
@@ -59,21 +59,20 @@ int main(void){
 	PWM_Motor_Set_Rate(0, 3);
 
 	buttons_init();
-	leds_init();
+	gpio_init();
 	SysTick_Config(SystemCoreClock/1000); /* 1 ms Tick */
 	DelayTimer_Init();
-
-	_delay_ms(250);
-
-	Motion_sensor_init(os->motion_sensor);
 
 	bool initialize = false;
 	while(initialize == false){
 		_delay_ms(25);
 		initialize = RFM75_Init();
-		led_toggle(_LED1);
+		gpio_toggle(_LED1);
 	}
-	led_off(_LED1);
+
+	Motion_sensor_init(os->motion_sensor);
+
+	gpio_off(_LED1);
 	while(1U){
 		if(UpdateTime(&last_ticks)){
 			Statemachine_do(last_ticks, os);

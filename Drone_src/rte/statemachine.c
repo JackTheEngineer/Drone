@@ -43,7 +43,7 @@ Vector_i32_t* select_angle_speed(void *sensordata, uint32_t index);
 Vector_i32_t* select_magnetic_field(void *sensordata, uint32_t index);
 
 void Statemachine_do(uint32_t ticks, OS_t *os){
-	switch(*(os->current_state)){
+	switch(os->current_state){
 		case STATE_INITIALIZE:
 			break;
 		case STATE_CALIBRATE_MOTION_SENSOR:
@@ -66,7 +66,7 @@ void State_CalibrateAngularSpeed(uint32_t ticks, OS_t *os){
 			average_i32_vector_with_selector(offset_measurements, select_angle_speed, OFFSET_MEASUREMENTS, omega_offs);
 			Motion_sensor_set_angular_speed_offset(omega_offs);
 			calibrations_count = 0;
-			*os->current_state = STATE_RUN;
+			os->current_state = STATE_RUN;
 			RFM75_startListening(&default_RFM75_Addr);
 		}
 	}
@@ -84,7 +84,6 @@ void MeasureAndUpdateQuaternion(OS_t *os, Quaternion_t *quaternion){
 	MadgwickAHRSupdateIMU(omega, acc, quaternion);
 }
 
-__attribute__((optimize("O2")))
 void State_Run(uint32_t ticks, OS_t *os){
 	static uint32_t remembered_time_8ms;
 	static uint32_t remembered_time_3ms;
@@ -121,14 +120,15 @@ void State_Run(uint32_t ticks, OS_t *os){
 			rc_no_data_receive_count++;
 		}
 		if(creg.length == 32){
-			led_toggle(_LED2);
+			gpio_toggle(_LED2);
 			RC_Control_decode_message(received_bytes, remote_control_data, control_params);
+			format_set_u8_buf_to(0, received_bytes, 32);
 			rc_no_data_receive_count = 0;
 		}
 
 		uint16_t throttle = remote_control_data->throttle/4;
 		POINTER_TO_CONTAINER(Quaternion_t, err_quat);
-		POINTER_TO_CONTAINER(Quaternion_t, z_rotation);
+		// POINTER_TO_CONTAINER(Quaternion_t, z_rotation);
 
 		Vect_i32_div_by_const(omega_avg, average_counter, omega_avg);
 		Vect_transform_i32_to_float_with_mult(omega_avg, omega, IMU_TO_RAD);
@@ -148,7 +148,7 @@ void State_Run(uint32_t ticks, OS_t *os){
 		err_quat->q[2] = s*(float)remote_control_data->y_tilt/(2048.0f * tilt_from_center);
 		err_quat->q[3] = 0;
 
-		Quat_mult(os->base_quat, z_rotation, os->base_quat);
+		// Quat_mult(os->base_quat, z_rotation, os->base_quat);
 
 		/*
 		 * Join all rotations together
@@ -164,14 +164,14 @@ void State_Run(uint32_t ticks, OS_t *os){
 
 		Quat_mult(err_quat, os->position_quat, err_quat);
 
-		format_float_buf_to_u8_buf(&err_quat->q[0], 4, sendbytes);
+		format_float_buf_to_u8_buf(&os->position_quat->q[0], 4, sendbytes);
 
 		if(!ControlLoop_run(err_quat,
 							control_params,
 							omega,
 							throttle,
 							motors)){
-			Vect_write_three_values(&control_params->integralErr, 0.0, 0.0, 0.0);
+
 			// Quat_copy(os->position_quat, os->base_quat);
 			// Quat_write_all(os->position_quat, 1.0f, 0.0f, 0.0f, 0.0f);
 		}

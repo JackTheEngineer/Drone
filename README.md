@@ -131,5 +131,5 @@ Probably there is a License supporting this kind of configuration.
 I haven't read enought about different types of licences.
 
 #### Thanks to:
-   The awesome [Jakob Holderbaum](http://jakob.io/) who taught me TDD ! (@holderbaum)  
+   The awesome [Jakob Holderbaum](https://holderbaum.io/) who taught me TDD ! (@holderbaum)  
    Mark VanderVoord, Mike Karlesky, and Greg Williams for writing the [Unity Test framework](http://www.throwtheswitch.org/unity/).

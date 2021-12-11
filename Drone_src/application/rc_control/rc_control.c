@@ -22,7 +22,7 @@ void RC_Control_decode_message(uint8_t *received_bytes, RC_Data_t* rc_data, Cont
 	rc_data->y_tilt = joystick_values[0] - 2048;
 
 
-	float first_float;
+	float first_float = 0;
 	first_float = format_u8_buf_to_float(&received_bytes[bytes_position]);
 	if(first_float != 0.0){
 		control_params->P = first_float;
@@ -31,6 +31,6 @@ void RC_Control_decode_message(uint8_t *received_bytes, RC_Data_t* rc_data, Cont
 		bytes_position += 4; // 14
 		control_params->I = format_u8_buf_to_float(&received_bytes[bytes_position]);
 		bytes_position += 4; // 18
-		led_toggle(_LED1);
+		gpio_toggle(_LED1);
 	}
 }

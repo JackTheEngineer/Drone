@@ -9,19 +9,19 @@ const XMC_GPIO_CONFIG_t LED_conf = {
 		.output_strength = XMC_GPIO_OUTPUT_STRENGTH_STRONG_SOFT_EDGE,
 };
 
-void leds_init(void){
+void gpio_init(void){
 	XMC_GPIO_Init(XMC_GPIO_PORT1, 1, &LED_conf);
 	XMC_GPIO_Init(XMC_GPIO_PORT1, 0, &LED_conf);
 }
 
-void led_on(leds_t led){
+void gpio_on(leds_t led){
 	XMC_GPIO_SetOutputHigh(XMC_GPIO_PORT1, led);
 }
 
-void led_off(leds_t led){
+void gpio_off(leds_t led){
 	XMC_GPIO_SetOutputLow(XMC_GPIO_PORT1, led);
 }
 
-void led_toggle(leds_t led){
+void gpio_toggle(leds_t led){
     XMC_GPIO_ToggleOutput(XMC_GPIO_PORT1, led);
 }

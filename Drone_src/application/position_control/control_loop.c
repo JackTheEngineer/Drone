@@ -70,28 +70,29 @@ bool ControlLoop_run(Quaternion_t *errorQuaternion,
 
 		diff = M0_Diff(err, control->P) +
 				M0_Diff(*omega, control->D);
-				//M0_Diff(control->integralErr, control->I);
+				M0_Diff(control->integralErr, control->I);
 		motors->motorspeeds[0] = ClipMotorSpeedValue(motors->motorspeeds[0], diff, throttle);
 
 		diff = M1_Diff(err, control->P) +
 				M1_Diff(*omega, control->D);
-				//M1_Diff(control->integralErr, control->I);
+				M1_Diff(control->integralErr, control->I);
 		motors->motorspeeds[1] = ClipMotorSpeedValue(motors->motorspeeds[1], diff, throttle);
 
 		diff = M2_Diff(err, control->P) +
 				M2_Diff(*omega, control->D);
-				//M2_Diff(control->integralErr, control->I);
+				M2_Diff(control->integralErr, control->I);
 		motors->motorspeeds[2] = ClipMotorSpeedValue(motors->motorspeeds[2], diff, throttle);
 
 		diff = M3_Diff(err, control->P) +
 				M3_Diff(*omega, control->D);
-				//M3_Diff(control->integralErr, control->I);
+				M3_Diff(control->integralErr, control->I);
 		motors->motorspeeds[3] = ClipMotorSpeedValue(motors->motorspeeds[3], diff, throttle);
 
 		Vect_add_to(&control->integralErr, &err);
 
 		return true;
 	}else{
+		Vect_write_three_values(&control->integralErr, 0.0, 0.0, 0.0);
 		Motors_set_all_data_speed(motors, 0);
 		return false;
 	}

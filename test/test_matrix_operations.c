@@ -129,7 +129,7 @@ TEST(matrix_operations, Mat_times_vector_should_use_mathematical_rule){
 }
 
 
-IGNORE_TEST(matrix_operations, Inverse_of_diagonal_matrix_should_be_one_over_diag_value){
+TEST(matrix_operations, Inverse_of_diagonal_matrix_should_be_one_over_diag_value){
   POINTER_TO_CONTAINER(Matrix_t, inverse_matrix);
   POINTER_TO_CONTAINER(Matrix_t, compare_matrix);
 	Mat_set_all_values_to(inverse_matrix, 0.0);
@@ -148,7 +148,7 @@ IGNORE_TEST(matrix_operations, Inverse_of_diagonal_matrix_should_be_one_over_dia
 	Test_Mat_equal(inverse_matrix, compare_matrix);
 }
 
-IGNORE_TEST(matrix_operations, Matrix_inverse_should_give_correct_results_with_zeroes_on_diagonal){
+TEST(matrix_operations, Matrix_inverse_should_give_correct_results_with_zeroes_on_diagonal){
   POINTER_TO_CONTAINER(Matrix_t, inverse_matrix);
   POINTER_TO_CONTAINER(Matrix_t, compare_matrix);
 

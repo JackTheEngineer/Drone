@@ -83,7 +83,27 @@ void Mat_transpose(Matrix_t *M, Matrix_t *result_M){
  * This Function assumes that the determinant of the matrix is not zero
  */
 void Mat_inverse(Matrix_t *M, Matrix_t *Inverse){
-	POINTER_TO_CONTAINER(Matrix_t, Temporary);
+  _FLOAT_ a = Mat_read(M,0,0);
+  _FLOAT_ b = Mat_read(M,0,1);
+  _FLOAT_ c = Mat_read(M,0,2);
+  _FLOAT_ d = Mat_read(M,1,0);
+  _FLOAT_ e = Mat_read(M,1,1);
+  _FLOAT_ f = Mat_read(M,1,2);
+  _FLOAT_ g = Mat_read(M,2,0);
+  _FLOAT_ h = Mat_read(M,2,1);
+  _FLOAT_ i = Mat_read(M,2,2);
+
+  _FLOAT_ detm1 = 1/(a*e*i+b*f*g+c*d*h-g*e*c-h*f*a-i*d*b);
+
+  Mat_write(Inverse,0,0,detm1*(e*i-f*h));
+  Mat_write(Inverse,0,1,detm1*(-b*i + c*h));
+  Mat_write(Inverse,0,2,detm1*(b*f - c*e));
+  Mat_write(Inverse,1,0,detm1*(-d*i + f*g));
+  Mat_write(Inverse,1,1,detm1*(a*i - c*g));
+  Mat_write(Inverse,1,2,detm1*(-a*f+c*d));
+  Mat_write(Inverse,2,0,detm1*(d*h-e*g));
+  Mat_write(Inverse,2,1,detm1*(-a*h+b*g));
+  Mat_write(Inverse,2,2,detm1*(a*e-b*d));
 }
 
 _STATIC_ void Row_vector_from_(Matrix_t *M, uint8_t row_index, Vector_t *result_vect){

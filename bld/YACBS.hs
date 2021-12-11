@@ -3,6 +3,7 @@ import Development.Shake.Command
 import Development.Shake.FilePath
 import Development.Shake.Util
 
+import Control.Monad
 import Text.Parsec.Char hiding (newline)
 import Text.ParserCombinators.Parsec
 import Text.ParserCombinators.Parsec.Char (digit)
@@ -25,53 +26,53 @@ lexeme p = do
            x <- p
            many space
            return x
-cIdentifier = many1 ((satisfy (\char -> (char >= 'A' &&
+cIdentifier = many1 (satisfy (\char -> (char >= 'A' &&
                                          char <= 'Z') ||
                                         (char >= 'a' &&
                                          char <= 'z') ||
                                         (char >= '0' &&
                                          char <= '9') ||
-                                        (char == '_'))))
+                                        (char == '_')))
 skipUntilEOL = do
-  skipMany (satisfy (\c -> ((c /= '\n') && (c /= '\r'))))
+  skipMany (satisfy (\c -> (c /= '\n') && (c /= '\r')))
   endOfLine
-       
+
 tP :: Parser (Maybe (String, String))
 tP = do
   many space
-  lexeme $ (try (string "IGNORE_TEST") <|> string ("TEST"))
+  lexeme (try (string "IGNORE_TEST") <|> string ("TEST"))
   lexeme $ char '('
-  group <- lexeme $ cIdentifier
+  group <- lexeme cIdentifier
   lexeme $ char ','
-  name <- lexeme $ cIdentifier
+  name <- lexeme cIdentifier
   lexeme $ char ')'
   skipUntilEOL
   return $ Just (group, name)
 
-readGroupsAndNames :: Parser ([(String, String)])
+readGroupsAndNames :: Parser [(String, String)]
 readGroupsAndNames = do
-  res <- many ((try tP) <|> (skipUntilEOL >> (return Nothing)))
+  res <- many (try tP <|> (skipUntilEOL >> return Nothing))
   return [m | Just m <- res]
 
 genGroupRunner :: [(String, String)] -> String
 genGroupRunner groupBlock =
-  let gn = fst (groupBlock!!0)
-      runs = (concatMap (\(g, f) ->  "    RUN_TEST_CASE("++g++","++f++");\n") groupBlock) in 
+  let gn = fst (head groupBlock)
+      runs = concatMap (\(g, f) ->  "    RUN_TEST_CASE("++g++","++f++");\n") groupBlock in
     "TEST_GROUP_RUNNER("++gn++"){\n" ++ runs ++ "}\n\n";
 
 genRunAllGroups :: [String] -> String
 genRunAllGroups groups =
-  let runs = (concatMap (\g -> "    RUN_TEST_GROUP("++g++");\n") groups) in
+  let runs = concatMap (\g -> "    RUN_TEST_GROUP("++g++");\n") groups in
     "static void run_all_tests(void){\n" ++ runs ++ "}\n"
 
 genRunAllTests groupsAndNames =
   let groups = nub $ map fst groupsAndNames
-      filterFuncs = map (\g e -> (filter (\e -> (fst e) == g) groupsAndNames)) groups 
+      filterFuncs = map (\g e -> filter (\e -> fst e == g) groupsAndNames) groups
       groupBlocks = map ($ groupsAndNames) filterFuncs
       groupRunners = concatMap genGroupRunner groupBlocks
       allRunner = genRunAllGroups groups in
     groupRunners ++ allRunner
-  
+
 generateRunner :: FilePath -> FilePath -> FilePath -> Action()
 generateRunner testSource runnerTemplate resultname = do
   t <- readFile' testSource
@@ -83,7 +84,7 @@ generateRunner testSource runnerTemplate resultname = do
   let runAllTestsCode = genRunAllTests groupsAndNames
       blocks = splitOn "//CONTENT" rt
   runnerCode <- case length blocks of
-                  2 -> return ((blocks !! 0) ++ runAllTestsCode ++ (blocks !! 1))
+                  2 -> return (head blocks ++ runAllTestsCode ++ blocks !! 1)
                   _ -> error "There was an error with splitting the runner Template on the keyword '//CONTENT'"
   writeFile' resultname runnerCode
 
@@ -127,35 +128,37 @@ unpck = DT.unpack
 fromFilePath :: FilePath -> String
 fromFilePath xs = xs
 
-makeInclude = ((++) "-I ")
+makeInclude = (++) "-I "
 
-runner_to_test r = "test" ++  (((drop 4) . takeBaseName) r)
-test_to_runner t = "run_" ++ (((drop 4) . takeBaseName) t)
+runnerToTest r = "test" ++  (drop 4 . takeBaseName) r
 
-dropPreDir preDir file = let l = length(splitPath preDir) in 
+testToRunner t = "run_" ++ (drop 4 . takeBaseName) t
+
+dropPreDir preDir file = let l = length(splitPath preDir) in
                            foldr1 (</>) (drop l (splitDirectories file))
 
-sieveSourceOfObjFile result_Dir o_file p  = ((dropExtension . (dropPreDir result_Dir)) o_file) == (dropExtension p)
-sieveTestSourceOfRunner r p = (runner_to_test r) == (takeBaseName p)
-sieveForYamlFile r p = (takeBaseName r) == (takeBaseName p)
+sieveSourceOfObjFile result_Dir o_file p  = (dropExtension . (dropPreDir result_Dir)) o_file == dropExtension p
+sieveTestSourceOfRunner r p = runnerToTest r == takeBaseName p
+sieveForYamlFile r p = takeBaseName r == takeBaseName p
 
-findSourceWithFilterOrError ::  FilePath -> (FilePath -> FilePath -> Bool) -> [FilePath] -> Action(FilePath)
+findSourceWithFilterOrError ::  FilePath -> (FilePath -> FilePath -> Bool) -> [FilePath] -> Action FilePath
 findSourceWithFilterOrError key sieve allSources = do
   let res = filter (sieve key) allSources
   case res of
-    (test_source:[]) -> return test_source
+    [test_source] -> return test_source
     _                -> liftIO $ do
                           mapM_ print allSources
                           error ("In the above sources, there was no match, or too many: " ++ key)
 
-(-#>) = findSourceWithFilterOrError 
+infix 2 -#>
+(-#>) = findSourceWithFilterOrError
 
 loadConfig filecontent = do
   cfg <- case Y.decodeEither' (BS.pack filecontent) of
            Right res -> return res
            Left err -> error $ show err
   let rpl = DT.replace
-      rep a = unpck ((rpl (pck "<ccBase>") (pck (ccBase cfg))) (pck a))
+      rep a = unpck (rpl (pck "<ccBase>") (pck (ccBase cfg)) (pck a))
       updated_config c = c { cc = rep (cc cfg)
                            , ccObjCopy = rep (ccObjCopy cfg)
                            , ccSize = rep (ccSize cfg)
@@ -164,10 +167,11 @@ loadConfig filecontent = do
   return $ updated_config cfg
 
 resultDir = "_build"
-uC_Triple buildname = let 
-  elf_file = resultDir </> buildname </> buildname <.> "elf"
-  hex_file = elf_file -<.> "hex"
-  bin_file = elf_file -<.> "bin" in
+
+uC_Triple buildname = let
+    elf_file = resultDir </> buildname </> buildname <.> "elf"
+    hex_file = elf_file -<.> "hex"
+    bin_file = elf_file -<.> "bin" in
     [elf_file, hex_file, bin_file]
 
 
@@ -185,20 +189,20 @@ flags = []
 shakeIT :: IO()
 shakeIT = shakeArgsWith opt flags $ \options args -> return $ Just $ do
 
-  let target = (args !! 0)
-  case ("//*.ucbuild" ?== target ) of
-    True -> do -- Building for microcontroller
-      let buildname = takeBaseName target
-      want $ uC_Triple buildname
-    False -> do -- Building a test
-      want [takeBaseName target]
+  let target = head args
+  if "//*.ucbuild" ?== target
+    then (do -- Building for microcontroller
+             let buildname = takeBaseName target
+             want $ uC_Triple buildname)
+    else (
+             want [takeBaseName target])
 
-  test_yamls <- liftIO $ getDirectoryFilesIO "" ["test/test_*.yml"] 
+  test_yamls <- liftIO $ getDirectoryFilesIO "" ["test/test_*.yml"]
 
-  let allConfigs = case elem target test_yamls of
-                     True -> test_yamls
-                     False -> (target:test_yamls)
-                
+  let allConfigs = if target `elem` test_yamls
+        then test_yamls
+        else target:test_yamls
+
   phony "clean" $ do
     putNormal ("Cleaning files in " ++ resultDir)
     removeFilesAfter resultDir ["//*"]
@@ -208,98 +212,109 @@ shakeIT = shakeArgsWith opt flags $ \options args -> return $ Just $ do
   --   let elf_hex_binfiles = concatMap ( uC_Triple . takeBaseName ) ucfiles
   --   need $ "tests":elf_hex_binfiles
 
-  phony "tests" $ do
-    need $ (map takeBaseName test_yamls)
+  phony "tests" $
+    need $ map takeBaseName test_yamls
 
-  yamlCfg <- newCache $ \f -> (readFile' f >>= loadConfig)
-  getFiles <- newCache $ \f -> do
+  yamlCfg <- newCache (readFile' >=> loadConfig)
+  getFiles <- newCache $ \f ->
     liftIO $ getDirectoryFilesIO "" f
 
---- Helper Functions ---  
-  let configNameFromSource s = (splitDirectories s) !! 1 
-  let configFromSource s = do
-        let configname = configNameFromSource s
-        conf <- (-#>) configname sieveForYamlFile allConfigs
-        yamlCfg conf
-        
-  let _objDir s = resultDir </> configNameFromSource s
-  let _sourceGenDir s = resultDir </> configNameFromSource s </> "sourceGen"
 --- Helper Functions ---
+  let configNameFromSource s = splitDirectories s !! 1
+      _objDir s = resultDir </> configNameFromSource s
+      _sourceGenDir s = resultDir </> configNameFromSource s </> "sourceGen"
+      
+  let configFromSource s = do
+        conf <- (-#>) (configNameFromSource s) sieveForYamlFile allConfigs
+        yamlCfg conf
+
+--- Helper Functions --
+
+-- hex, bin and elf dependencies work in the
+-- fashion, that the 'configuration name' is in the file path of
+-- the 'out' file. Using this it's possible to find the cached results
+-- of parsing the yaml configuration file 
+-- 
+-- This is an ugly design, which passes the
+-- parameter through the filename. This could be fixed by ... 
+-- defining a yaml config variable, that depends on what the input
+-- of the YACBS.hs call is
   
   resultDir <//> "*.hex" %> \out -> do
     let elf_file = out -<.> "elf"
     need [elf_file]
-    c <- configFromSource out :: Action( Config )
+    -- c is the yaml build configuration
+    c <- configFromSource out :: Action Config
     cmd_ (ccObjCopy c) "-O ihex" elf_file [out]
 
   resultDir <//> "*.bin" %> \out -> do
     let elf_file = out -<.> "elf"
     need [elf_file]
-    c <- configFromSource out :: Action( Config )
+    c <- configFromSource out :: Action Config
     cmd_ (ccObjCopy c) "-O binary" elf_file [out]
 
   resultDir <//> "*.elf" %> \out -> do
-    c <- configFromSource out :: Action( Config )
+    c <- configFromSource out :: Action Config
     allSources <- getFiles (sourceFiles c)
     allHeaders <- getFiles (headerFiles c)
-    let os = [(_objDir out) </> source -<.> "o" | source <- allSources]
-        gcc = (cc c)
+    let os = [_objDir out </> source -<.> "o" | source <- allSources]
+        gcc = cc c
         map_file = out -<.> "map"
-    need ((linkerFile c): os)
-    cmd_ gcc "-o" [out] os ("-T" ++ (linkerFile c)) ("-Wl,-Map," ++ map_file) (ccLinkOptions c) (ccLinkLibs c)
+    need (linkerFile c: os)
+    cmd_ gcc "-o" [out] os ("-T" ++ linkerFile c) ("-Wl,-Map," ++ map_file) (ccLinkOptions c) (ccLinkLibs c)
     cmd_ (ccSize c) "--format=berkeley -d" [out]
 
   resultDir <//> "*.o" %> \out -> do
-    c <- configFromSource out :: Action( Config )
+    c <- configFromSource out :: Action Config
     allSources <- getDirectoryFiles "" (sourceFiles c)
     allHeaders <- getDirectoryFiles "" (headerFiles c)
-    sourceFile <- case ((takeDirectory out) == (_sourceGenDir out)) of
-                    True -> return (out -<.> "c")
-                    False -> (-#>) out (sieveSourceOfObjFile (_objDir out)) allSources
+    sourceFile <- if takeDirectory out == _sourceGenDir out
+      then return (out -<.> "c")
+      else (-#>) out (sieveSourceOfObjFile (_objDir out)) allSources
     need [sourceFile]
     let uniqueDirs = reverse $ nub (map dropFileName (allHeaders ++ allSources))
         include_dirs = map (makeInclude . fromFilePath) uniqueDirs
         ending = takeExtension sourceFile
         m = out -<.> "m"
-        asmOpts = intercalate " " ((ccAsmOptions c) ++ include_dirs)
-        cOpts = intercalate " " ((ccCompileOptions c) ++ include_dirs)
-        gcc = (cc c)
+        asmOpts = unwords (ccAsmOptions c ++ include_dirs)
+        cOpts = unwords (ccCompileOptions c ++ include_dirs)
+        gcc = cc c
         asm = cmd_ gcc "-MMD -MF" [m] asmOpts sourceFile "-o" [out]
         cCmd = cmd_ gcc sourceFile "-MMD -MF" [m] cOpts "-o" [out]
     case ending of
-      ".c" -> do
+      ".c" ->
         cCmd
-      ".S" -> do
+      ".S" ->
         asm
-      ".asm" -> do
+      ".asm" ->
         asm
       _ -> error ("Not A Valid FileEnding " ++ show ending)
     neededMakefileDependencies m
 
   resultDir <//> "run_*.c" %> \out -> do
     let runnerTemplate =  "bld" </> "runner_template.c"
-    c <- configFromSource out :: Action( Config )
+    c <- configFromSource out :: Action Config
     allSources <- getDirectoryFiles "" (sourceFiles c)
     test_source <- (-#>) out sieveTestSourceOfRunner allSources
     generateRunner test_source runnerTemplate out
 
   "test_*" %> \out -> do
-    let executable = resultDir </> (takeBaseName out) </> out -<.> exe
+    let executable = resultDir </> takeBaseName out </> out -<.> exe
     need [executable]
     cmd_ executable
 
   -- A rule that matches ("resultDir" <//> "test_*"), but not (resultDir <//> "*.o")
-  (\f -> (((resultDir <//> "test_*" <.> exe) ?== f) && not ((resultDir <//> "*.o") ?== f))) ?> \out -> do
-    c <- configFromSource out :: Action( Config )
+  (\f -> ((resultDir <//> "test_*" <.> exe) ?== f) && not ((resultDir <//> "*.o") ?== f)) ?> \out -> do
+    c <- configFromSource out :: Action Config
     sources <- getDirectoryFiles "" (sourceFiles c)
     let sourceGenDir = _sourceGenDir out
-        runner_c = sourceGenDir </> (test_to_runner out) <.> "c"
-        _objectFiles = [(_objDir out) </> source -<.> "o" | source <- (sources)]
-        objectFiles = ((runner_c -<.> "o"):_objectFiles)
-        gcc = (cc c)
+        runner_c = sourceGenDir </> testToRunner out <.> "c"
+        _objectFiles = [_objDir out </> source -<.> "o" | source <- sources]
+        objectFiles = (runner_c -<.> "o"):_objectFiles
+        gcc = cc c
     need [runner_c]
     need objectFiles
     cmd_ gcc "-o" [out] objectFiles (ccLinkOptions c) (ccLinkLibs c)
 
 main :: IO()
-main = shakeIT 
+main = shakeIT
