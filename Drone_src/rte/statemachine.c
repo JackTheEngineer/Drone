@@ -128,6 +128,7 @@ void State_Run(uint32_t ticks, OS_t *os){
 
 		uint16_t throttle = remote_control_data->throttle/4;
 		POINTER_TO_CONTAINER(Quaternion_t, err_quat);
+		POINTER_TO_CONTAINER(Quaternion_t, z_rotation);
 
 		POINTER_TO_CONTAINER(Quaternion_t, z_rotation);
 
@@ -149,7 +150,6 @@ void State_Run(uint32_t ticks, OS_t *os){
 		err_quat->q[2] = s*(float)remote_control_data->y_tilt/(2048.0f * tilt_from_center);
 		err_quat->q[3] = 0;
 
-
 		Quat_mult(os->base_quat, z_rotation, os->base_quat);
 
 		/*
@@ -166,7 +166,10 @@ void State_Run(uint32_t ticks, OS_t *os){
 
 		Quat_mult(err_quat, os->position_quat, err_quat);
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 17747b865a37071330008ab9454b76dd0fc92346
 		format_float_buf_to_u8_buf(&err_quat->q[0], 4, sendbytes);
 
 		if(!ControlLoop_run(err_quat, control_params,
