@@ -28,11 +28,10 @@ int main(void){
 	uint32_t last_ticks = 0;
 	POINTER_TO_CONTAINER(OS_t, os);
 	POINTER_TO_CONTAINER(Sensordata_t, motion_sensor);
-//	Quaternion_t base_quaternion = {{0.9961946980917455f,
-//									-0.08715574274765817f,
-//									0.0f,
-//									0.0f}};
-	Quaternion_t base_quaternion = {{1.0f, 0.0, 0.0, 0.0}};
+	Quaternion_t base_quaternion = {{0.9961946980917455f,
+									-0.08715574274765817,
+									0.0,
+									0.0}};
 	Quaternion_t position_quaternion = {{1.0f, 0.0, 0.0, 0.0}};
 	Button_t btn1 = {
 			.btn = _BUTTON1,
@@ -63,15 +62,16 @@ int main(void){
 	SysTick_Config(SystemCoreClock/1000); /* 1 ms Tick */
 	DelayTimer_Init();
 
+	_delay_ms(250);
+
+	Motion_sensor_init(os->motion_sensor);
+
 	bool initialize = false;
 	while(initialize == false){
 		_delay_ms(25);
 		initialize = RFM75_Init();
 		gpio_toggle(_LED1);
 	}
-
-	Motion_sensor_init(os->motion_sensor);
-
 	gpio_off(_LED1);
 	while(1U){
 		if(UpdateTime(&last_ticks)){

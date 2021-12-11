@@ -128,7 +128,8 @@ void State_Run(uint32_t ticks, OS_t *os){
 
 		uint16_t throttle = remote_control_data->throttle/4;
 		POINTER_TO_CONTAINER(Quaternion_t, err_quat);
-		// POINTER_TO_CONTAINER(Quaternion_t, z_rotation);
+
+		POINTER_TO_CONTAINER(Quaternion_t, z_rotation);
 
 		Vect_i32_div_by_const(omega_avg, average_counter, omega_avg);
 		Vect_transform_i32_to_float_with_mult(omega_avg, omega, IMU_TO_RAD);
@@ -148,7 +149,8 @@ void State_Run(uint32_t ticks, OS_t *os){
 		err_quat->q[2] = s*(float)remote_control_data->y_tilt/(2048.0f * tilt_from_center);
 		err_quat->q[3] = 0;
 
-		// Quat_mult(os->base_quat, z_rotation, os->base_quat);
+
+		Quat_mult(os->base_quat, z_rotation, os->base_quat);
 
 		/*
 		 * Join all rotations together
@@ -164,14 +166,11 @@ void State_Run(uint32_t ticks, OS_t *os){
 
 		Quat_mult(err_quat, os->position_quat, err_quat);
 
-		format_float_buf_to_u8_buf(&os->position_quat->q[0], 4, sendbytes);
 
-		if(!ControlLoop_run(err_quat,
-							control_params,
-							omega,
-							throttle,
-							motors)){
+		format_float_buf_to_u8_buf(&err_quat->q[0], 4, sendbytes);
 
+		if(!ControlLoop_run(err_quat, control_params,
+				    omega, throttle, motors)){
 			// Quat_copy(os->position_quat, os->base_quat);
 			// Quat_write_all(os->position_quat, 1.0f, 0.0f, 0.0f, 0.0f);
 		}

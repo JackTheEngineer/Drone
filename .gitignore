@@ -4,6 +4,7 @@
 consolelog
 Debug/**
 build/**
+_build/**
 .settings/**
 /vendor/cpputest/
 /vendor/clang-checker/

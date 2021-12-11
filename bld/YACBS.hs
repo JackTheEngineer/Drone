@@ -168,7 +168,7 @@ loadConfig filecontent = do
 
 resultDir = "_build"
 
-uC_Triple buildname = let
+ucTriple buildname = let
     elf_file = resultDir </> buildname </> buildname <.> "elf"
     hex_file = elf_file -<.> "hex"
     bin_file = elf_file -<.> "bin" in
@@ -193,7 +193,7 @@ shakeIT = shakeArgsWith opt flags $ \options args -> return $ Just $ do
   if "//*.ucbuild" ?== target
     then (do -- Building for microcontroller
              let buildname = takeBaseName target
-             want $ uC_Triple buildname)
+             want $ ucTriple buildname)
     else (
              want [takeBaseName target])
 
@@ -207,9 +207,10 @@ shakeIT = shakeArgsWith opt flags $ \options args -> return $ Just $ do
     putNormal ("Cleaning files in " ++ resultDir)
     removeFilesAfter resultDir ["//*"]
 
+  -- -- TODO: fix build of 'all'
   -- phony "all" $ do
   --   ucfiles <- getDirectoryFiles "" ["bld/*.ucbuild"]
-  --   let elf_hex_binfiles = concatMap ( uC_Triple . takeBaseName ) ucfiles
+  --   let elf_hex_binfiles = concatMap ( ucTriple . takeBaseName ) ucfiles
   --   need $ "tests":elf_hex_binfiles
 
   phony "tests" $
