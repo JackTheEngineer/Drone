@@ -29,7 +29,7 @@ thanks to the awesome dependency tracking system of shake.
 
 ## Example Usage( from the 'Drone' directory)
 
-		stack bld/YACBS.hs bld/XMC4500.ucbuild
+    		stack bld/YACBS.hs bld/XMC4500.ucbuild
 		
 		stack bld/YACBS.hs bld/test_dummy.yml
 		

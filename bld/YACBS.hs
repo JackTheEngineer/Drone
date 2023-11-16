@@ -8,6 +8,7 @@ import Text.Parsec.Char hiding (newline)
 import Text.ParserCombinators.Parsec
 import Text.ParserCombinators.Parsec.Char (digit)
 
+import Data.Aeson.Key
 import Data.List
 import Data.List.Split
 import Data.Maybe (fromMaybe)
@@ -65,6 +66,7 @@ genRunAllGroups groups =
   let runs = concatMap (\g -> "    RUN_TEST_GROUP("++g++");\n") groups in
     "static void run_all_tests(void){\n" ++ runs ++ "}\n"
 
+genRunAllTests :: [(String, String)] -> String
 genRunAllTests groupsAndNames =
   let groups = nub $ map fst groupsAndNames
       filterFuncs = map (\g e -> filter (\e -> fst e == g) groupsAndNames) groups
@@ -107,21 +109,21 @@ data Config = Config {
 } deriving Show
 
 instance FromJSON Config where
-  parseJSON (Y.Object v) =
-    Config <$>
-    v .: pck "sourceFiles" <*>
-    v .: pck "headerFiles" <*>
-    v .: pck "ccBase" <*>
-    v .: pck "cc" <*>
-    v .: pck "ccObjCopy" <*>
-    v .: pck "ccSize" <*>
-    v .: pck "ccAsmOptions" <*>
-    v .: pck "ccCompileOptions" <*>
-    v .: pck "ccLinkOptions" <*>
-    v .: pck "ccLinkLibs" <*>
-    v .: pck "linkerFile"
-  parseJSON _ = fail "Expected Object for Config value"
+  parseJSON = Y.withObject "Config" $ \v -> Config <$>
+    v .: packAeson "sourceFiles" <*>
+    v .: packAeson "headerFiles" <*>
+    v .: packAeson "ccBase" <*>
+    v .: packAeson "cc" <*>
+    v .: packAeson "ccObjCopy" <*>
+    v .: packAeson "ccSize" <*>
+    v .: packAeson "ccAsmOptions" <*>
+    v .: packAeson "ccCompileOptions" <*>
+    v .: packAeson "ccLinkOptions" <*>
+    v .: packAeson "ccLinkLibs" <*>
+    v .: packAeson "linkerFile"
 
+
+packAeson = fromText . pck
 pck = DT.pack
 unpck = DT.unpack
 
@@ -263,7 +265,7 @@ shakeIT = shakeArgsWith opt flags $ \options args -> return $ Just $ do
         map_file = out -<.> "map"
     need (linkerFile c: os)
     cmd_ gcc "-o" [out] os ("-T" ++ linkerFile c) ("-Wl,-Map," ++ map_file) (ccLinkOptions c) (ccLinkLibs c)
-    cmd_ (ccSize c) "--format=berkeley -d" [out]
+    cmd_ (ccSize c) "--format=sysv -d" [out]
 
   resultDir <//> "*.o" %> \out -> do
     c <- configFromSource out :: Action Config

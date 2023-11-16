@@ -15,7 +15,7 @@
 #define PinPulseHandler CCU40_0_IRQHandler
 #define DelayUsHandler CCU40_1_IRQHandler
 
-const XMC_CCU4_SLICE_COMPARE_CONFIG_t PinPulse_slice_config;
+extern const XMC_CCU4_SLICE_COMPARE_CONFIG_t PinPulse_slice_config;
 
 void Handwritten_TIMER_Init_with_params(XMC_CCU4_MODULE_t * const module,
 		XMC_CCU4_SLICE_t * const slice,

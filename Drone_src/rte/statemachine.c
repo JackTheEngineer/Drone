@@ -130,8 +130,6 @@ void State_Run(uint32_t ticks, OS_t *os){
 		POINTER_TO_CONTAINER(Quaternion_t, err_quat);
 		POINTER_TO_CONTAINER(Quaternion_t, z_rotation);
 
-		POINTER_TO_CONTAINER(Quaternion_t, z_rotation);
-
 		Vect_i32_div_by_const(omega_avg, average_counter, omega_avg);
 		Vect_transform_i32_to_float_with_mult(omega_avg, omega, IMU_TO_RAD);
 
@@ -166,10 +164,6 @@ void State_Run(uint32_t ticks, OS_t *os){
 
 		Quat_mult(err_quat, os->position_quat, err_quat);
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 17747b865a37071330008ab9454b76dd0fc92346
 		format_float_buf_to_u8_buf(&err_quat->q[0], 4, sendbytes);
 
 		if(!ControlLoop_run(err_quat, control_params,
