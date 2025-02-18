@@ -185,7 +185,7 @@ opt = shakeOptions{ shakeFiles=resultDir
 flags = []
 -- Only with 'shakeArgsWith', there is no automatic "withoutActions"
 -- "withoutActions" makes Rules do nothing, and build the File,
--- which was specified at the commandlineb.
+-- which was specified at the commandline.
 -- (with "withoutActions") If the file already exists,
 -- like with the yamlConfig in our case, it would do nothing
 shakeIT :: IO()
@@ -196,24 +196,21 @@ shakeIT = shakeArgsWith opt flags $ \options args -> return $ Just $ do
     then (do -- Building for microcontroller
              let buildname = takeBaseName target
              want $ ucTriple buildname)
-    else (
-             want [takeBaseName target])
+    else want [takeBaseName target]
 
   test_yamls <- liftIO $ getDirectoryFilesIO "" ["test/test_*.yml"]
-
-  let allConfigs = if target `elem` test_yamls
-        then test_yamls
-        else target:test_yamls
+  ucBuildFiles <- liftIO $ getDirectoryFilesIO "" ["bld/*.ucbuild"] 
+    
+  let allConfigs = test_yamls ++ ucBuildFiles
 
   phony "clean" $ do
     putNormal ("Cleaning files in " ++ resultDir)
     removeFilesAfter resultDir ["//*"]
 
-  -- -- TODO: fix build of 'all'
-  -- phony "all" $ do
-  --   ucfiles <- getDirectoryFiles "" ["bld/*.ucbuild"]
-  --   let elf_hex_binfiles = concatMap ( ucTriple . takeBaseName ) ucfiles
-  --   need $ "tests":elf_hex_binfiles
+  phony "all" $ do
+    ucfiles <- getDirectoryFiles "" ["bld/*.ucbuild"]
+    let elf_hex_binfiles = concatMap ( ucTriple . takeBaseName ) ucfiles
+    need $ "tests":elf_hex_binfiles
 
   phony "tests" $
     need $ map takeBaseName test_yamls
@@ -242,7 +239,8 @@ shakeIT = shakeArgsWith opt flags $ \options args -> return $ Just $ do
 -- parameter through the filename. This could be fixed by ... 
 -- defining a yaml config variable, that depends on what the input
 -- of the YACBS.hs call is
-  
+
+  -- Rule to generate the hex file
   resultDir <//> "*.hex" %> \out -> do
     let elf_file = out -<.> "elf"
     need [elf_file]
@@ -260,13 +258,15 @@ shakeIT = shakeArgsWith opt flags $ \options args -> return $ Just $ do
     c <- configFromSource out :: Action Config
     allSources <- getFiles (sourceFiles c)
     allHeaders <- getFiles (headerFiles c)
-    let os = [_objDir out </> source -<.> "o" | source <- allSources]
+    let objectFiles = [_objDir out </> source -<.> "o" | source <- allSources]
         gcc = cc c
         map_file = out -<.> "map"
-    need (linkerFile c: os)
-    cmd_ gcc "-o" [out] os ("-T" ++ linkerFile c) ("-Wl,-Map," ++ map_file) (ccLinkOptions c) (ccLinkLibs c)
-    cmd_ (ccSize c) "--format=sysv -d" [out]
+    need (linkerFile c: objectFiles)
+    cmd_ gcc "-o" [out] objectFiles ("-T" ++ linkerFile c) ("-Wl,-Map," ++ map_file) (ccLinkOptions c) (ccLinkLibs c)
+    cmd_ (ccSize c) "--format=berkeley -d" [out]
 
+
+  -- Rule to generate the object file for microcontroller compilation
   resultDir <//> "*.o" %> \out -> do
     c <- configFromSource out :: Action Config
     allSources <- getDirectoryFiles "" (sourceFiles c)
@@ -294,6 +294,8 @@ shakeIT = shakeArgsWith opt flags $ \options args -> return $ Just $ do
       _ -> error ("Not A Valid FileEnding " ++ show ending)
     neededMakefileDependencies m
 
+  -- Rule to generate a test runner.c file, by combining the runnerTemplate 
+  -- with the function definitions from the test code
   resultDir <//> "run_*.c" %> \out -> do
     let runnerTemplate =  "bld" </> "runner_template.c"
     c <- configFromSource out :: Action Config
@@ -306,6 +308,8 @@ shakeIT = shakeArgsWith opt flags $ \options args -> return $ Just $ do
     need [executable]
     cmd_ executable
 
+
+  -- Rule to generate the test_executable
   -- A rule that matches ("resultDir" <//> "test_*"), but not (resultDir <//> "*.o")
   (\f -> ((resultDir <//> "test_*" <.> exe) ?== f) && not ((resultDir <//> "*.o") ?== f)) ?> \out -> do
     c <- configFromSource out :: Action Config

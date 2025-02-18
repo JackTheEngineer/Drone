@@ -7,11 +7,13 @@ sourceFiles:
   - Drone_src/interfaces/delay.c
   - Drone_src/math_and_physics/*.c
   - MotionSensorTest_src/*.c
+  - Common_src//*.c
   - hardware/XMC4700Dave//*.c
   - hardware/XMC4700Dave//*.S
 headerFiles:
   - Drone_src//*.h
   - RFM75_src//*.h
+  - Common_src//*.h
   - hardware/XMC4700Dave//*.h
   - <ccBase>/arm-none-eabi/include/*.h
 
@@ -21,9 +23,9 @@ headerFiles:
 # please use absolute paths for ccBase
 # The replacement rule is not generally supported by YAML,
 # and works only for the 'ccBase' parameter
-# ccBase: /home/jakov/bin/gcc-arm-none-eabi-4_9-2014q4
+# ccBase: /nix/store/ra5wly4vbakq66srldxm57lg8qnmb4jr-gcc-arm-embedded-12.3.rel1
 
-ccBase: /home/jakov/bin/gcc-arm-none-eabi-4_9-2014q4
+ccBase: /nix/store/ra5wly4vbakq66srldxm57lg8qnmb4jr-gcc-arm-embedded-12.3.rel1
 cc: <ccBase>/bin/arm-none-eabi-gcc # <ccBase> gets just replaced
 ccObjCopy: <ccBase>/bin/arm-none-eabi-objcopy
 ccSize: <ccBase>/bin/arm-none-eabi-size

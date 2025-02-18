@@ -4,13 +4,13 @@
 sourceFiles:
   - RemoteControl_src//*.c
   - RFM75_src//*.c
-  - Common_src//*.c
+  - Common_src/byte_manip.c
   - hardware/XMC1100New//*.c
   - hardware/XMC1100New//*.S
 headerFiles:
   - RemoteControl_src//*.h
   - RFM75_src//*.h
-  - Common_src//*.h
+# - Common_src//byte_manip.h
   - hardware/XMC1100New//*.h
   - <ccBase>/arm-none-eabi/include/*.h
 
@@ -20,10 +20,11 @@ headerFiles:
 # please use absolute paths for ccBase
 # The replacement rule is not generally supported by YAML,
 # and works only for the 'ccBase' parameter
-# ccBase: /home/jakov/bin/gcc-arm-none-eabi-4_9-2014q4
+# ccBase: /nix/store/ra5wly4vbakq66srldxm57lg8qnmb4jr-gcc-arm-embedded-12.3.rel1
 
-ccBase: /home/jakov/bin/gcc-arm-none-eabi-4_9-2015q3
-cc: <ccBase>/bin/arm-none-eabi-gcc # <ccBase> gets just replaced
+# ccBase: /home/jakov/bin/gcc-arm-none-eabi-4_9-2015q3
+ccBase: /nix/store/ra5wly4vbakq66srldxm57lg8qnmb4jr-gcc-arm-embedded-12.3.rel1
+cc: <ccBase>/bin/arm-none-eabi-gcc # <ccBase> gets just string replaced
 ccObjCopy: <ccBase>/bin/arm-none-eabi-objcopy
 ccSize: <ccBase>/bin/arm-none-eabi-size
 

@@ -20,12 +20,14 @@ headerFiles:
 # please use absolute paths for ccBase
 # The replacement rule is not generally supported by YAML,
 # and works only for the 'ccBase' parameter
-# ccBase: /home/jakov/bin/gcc-arm-none-eabi-4_9-2014q4
+# ccBase: /nix/store/ra5wly4vbakq66srldxm57lg8qnmb4jr-gcc-arm-embedded-12.3.rel1
 
-ccBase: /home/jakov/bin/gcc-arm-none-eabi-4_9-2015q3
+ccBase: /nix/store/ra5wly4vbakq66srldxm57lg8qnmb4jr-gcc-arm-embedded-12.3.rel1
 cc: <ccBase>/bin/arm-none-eabi-gcc # <ccBase> gets just replaced
 ccObjCopy: <ccBase>/bin/arm-none-eabi-objcopy
 ccSize: <ccBase>/bin/arm-none-eabi-size
+
+
 
 ccAsmOptions:
   - -x assembler-with-cpp

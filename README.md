@@ -2,9 +2,14 @@
 A test driven developed Quadrocopter C Code. 
 I know the build Environment to be supported by Windows and Linux. 
 
+## XMC on Linux
+This is an example code which compiles code from Infineon XMC4500, XMC4700 and XMC1100 on Linux. 
+I used the Infineon IDE to generate the hardware layer code for the microcontrollers, and copied it into 
+my linux project. The XMCLib is pretty usable by now, and for some simpler cases sometimes doesn't even need 
+the generated code. If you want to define a new SPI / I2C / QSPI interface, it's probably simpler to use the code generator though.
+
 ## Table of Content
 * Initial idea 
-* The coding philosophy
 * Development environment 
     * The software environment
     * Folder Setup
@@ -12,21 +17,10 @@ I know the build Environment to be supported by Windows and Linux.
 * A note about licensing
 
 ## Initial idea and Motication
-This Code is supposed to fulfill three goals:
+This Code is supposed to fulfil mostly one goal:
 * To share my knowledge, my Environment and the enthusiasm for and about Test Driven Development in C. 
     I am especially refering to the moments where i kept thinking that "There has to be a better way".  
     And there really is: It's called TDD !
-* To help me learn how to write physics simulations in C. Before the Microcontroller gets to contol any hardware stuff,   
-	the code should to prove itself on some Drone Simulation program.
-* To help me get a real good flying Drone. 
-
-## The coding philosophy
-Clean  
-tested  
-expressive  
-As much hardwareindependency as possible.  
-No comments whenever possible, the code should explain itself.
-Good comments if required.  
 
 ## Development environment 
 ### The Software Environment 
@@ -36,7 +30,7 @@ Good comments if required.
 - Haskell Shake:  
   A very cool syntax in haskell to define dependencies.
   [https://shakebuild.com/](https://shakebuild.com/) 
-  Install it with `shake install shake yaml`, to be able to run the build system. 
+  Install it with `stack install shake yaml`, to be able to run the build system. 
   I have do admit that i didn't dive in too deeply into the stack build system and 
   package management, but there is also the option to add the dependencies to 
   `extra-deps` of your `~/.stack/global-project/stack.yaml` as
@@ -71,6 +65,36 @@ Good comments if required.
   [eclipse C\C++ IDE](http://www.eclipse.org/downloads/packages/eclipse-ide-cc-developers/mars2)  
 - [git](https://git-scm.com/)
 
+### Compiling the Project and different Targets
+Once you have installed the haskell `stack` tool, and run `stack install shake yaml`, you need to configure 
+the path to your `arm-none-eabi-gcc` executable. This is done by modifying the yaml files with the `*.ucbuild` 
+extension in the `bld` directory here:
+```
+Drone_XMC4500.ucbuild
+Drone_XMC4700.ucbuild
+MotionSensor_I2C_Test.ucbuild
+RemoteControl_XMC1100.ucbuild
+RFM75_XMC4500_Test.ucbuild
+RFM75_XMC4700_Test.ucbuild
+```
+Each `.ucbuild` represents a uC - (read microcontroller) target / subproject, with it's own compiler settings sources, linker files and compilation flags. 
+You need to supply the  base - path to the arm-none-eabi-gcc project, by setting the `ccBase` to the folder on your system.
+This is needed because some sub-paths from there are needed for the compilation too.  
+``` yaml
+ccBase: /nix/store/ra5wly4vbakq66srldxm57lg8qnmb4jr-gcc-arm-embedded-12.3.rel1  ## change here. Resulting path should be without the '/' at the end
+```
+I recommend you to use your editor and replace that variable in all the files, so all targets can be compiled on your system. This is an open TODO.
+to put those projectwide commonly used variables in a separate file.
+Furthermore, in order to run the tests, you need a more or less recent 'gcc' on your PATH.
+Once you set those variables, you can use the following commands to compile (calling from within the project directory): 
+
+- *a single test* : `stack runghc bld/YACBS.hs test/test_dummy.yml` 
+- *a singgle microcontroller target* : `stack runghc bld/YACBS.hs bld/Drone_XMC4700.ucbuild` 
+- *clean* :`stack runghc bld/YACBS.hs clean` 
+- *all targets* : `stack runghc bld/YACBS.hs all`
+- *all tests* : `stack runghc bld/YACBS.hs tests` , this might run into problems, if any of the `.ucbuild` files 
+  contains a nonexistent, or wrong path
+
 ### Folder setup
 - `hardware/`:  	
   This is the hardware abstraction layer. 
@@ -87,7 +111,7 @@ Good comments if required.
 - `RemoteControl_src`: 
   This is the code For the remote control only
 - `Common_src`: 
-  Some code that is also shared between the projects.			 
+  Some code that is also shared between the projects.
 - `test/`: 
   The code for testing the mikrocontroller Code
 - `vendor/`: 
@@ -98,7 +122,6 @@ Good comments if required.
 As the Code evolved, I was using two Infineon Boards at the same time, the XMC4500 relax kit lite and
 the ARM-M4-Evaluation Board
 [https://www.infineon.com/cms/en/product/evaluation-boards/kit_xmc47_relax_5v_ad_v1/](XMC4700 Relax Kit Lite 5V)  by Infineon with an XMC4700 Mikrocontroller.
-
 The build system builds both of the targets, each with different pinouts. 
 If you would like me to upload the DAVE projects, 
 which generated the 'hardware/XMC4X00/Generated' Code, leave an Issue in the Issuetracker.
@@ -109,7 +132,7 @@ In the XMC4700 and XMC1100 these errors have been fixed, and the SPI works.
 
 Nevertheless, after some magic things happened -- probably some minor modifications 
 to the SPI code -- the SPI started to work on the XMC4500. 
-Yet, i don't know exacly, what the reason was. ( The breaking code change )
+Yet, i don't know exacly, what the reason was, neither the breaking code change.
 For the remote Control I use the Chinese HopeRF RFM75 Chip, Bought at Pollin.
 For the gyroscope and accelerometer I use the MPU 9265 sensor, 
 the most common 9D-Motion Sensor.
